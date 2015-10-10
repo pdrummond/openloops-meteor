@@ -1,0 +1,32 @@
+<template name="app">
+	<div class="sidebar">
+		<ul>
+			<li><a href="#">Link 1</a></li>
+			<li><a href="#">Link 2</a></li>
+			<li><a href="#">Link 3</a></li>
+		</ul>
+	</div>
+	<div class="main">
+		<header>
+			This is where the header stuff goes.
+		</header>
+		{{#if moreResults}}
+		<div id="showMoreResults" data-visible="false">
+			<span class="loading">Loading...</span>
+		</div>
+		{{/if}}
+		<ul id="message-list">
+			{{#each messages}}
+			{{> messageItemView}}
+			{{/each}}
+		</ul>
+		<footer>
+			This is where the edit box will go.
+		</footer>
+	</div>	
+
+</template>
+
+<template name="messageItemView">
+	<li class="user-message">{{title}}</li>
+</template>

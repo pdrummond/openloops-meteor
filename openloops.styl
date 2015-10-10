@@ -1,0 +1,82 @@
+@import 'jeet'
+@import 'variables.import'
+
+*    
+ 	font-family font-main
+
+html, body 
+	padding 0
+	margin 0
+	height 100%	
+  	width 100%
+	overflow hidden	
+	height 100%
+
+#app
+	height 100%
+	.sidebar	
+		height 100%
+		top 0
+		left 0
+		bottom 0
+		position fixed
+		display block
+		width sidebar-width
+		background-color black
+		
+		ul
+			list-style: none
+			li
+				display: block
+				margin: 0 0 10px 0 
+
+		+below(600px)
+			stack()
+			ul
+				center(200px)
+				li
+					display: inline	
+					margin: 0 15px 0 0
+
+	.main
+		height 100%		
+		padding-left sidebar-width
+		padding-bottom footer-height		
+		+below(600px)
+			stack()
+		
+#message-list	
+    top 100px
+    overflow auto
+    position relative
+    height "calc(100% - %s)" % (header-height + footer-height)
+
+.user-message 
+	padding 30px
+
+.anchor-message
+	background-color red
+
+#showMoreResults[data-visible="true"]
+	display: inline-block
+
+#showMoreResults[data-visible="false"]
+	display: none
+
+header
+	position fixed
+	left 0
+	top 0
+	width 100%
+	height header-height
+	background-color blue
+	margin-left: sidebar-width
+
+footer
+	position fixed
+	left 0
+	bottom 0
+	width 100%
+	height footer-height
+	background-color red
+	margin-left: sidebar-width
