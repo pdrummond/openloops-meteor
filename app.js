@@ -8,10 +8,11 @@ if(Meteor.isClient) {
   Meteor.startup(function() {
     Session.setDefault('messagesLimit', MESSAGES_INCREMENT);
     Deps.autorun(function() {
-      Meteor.subscribe('messages', {limit: Session.get('messagesLimit')});      
+      Meteor.subscribe('messages', {
+        limit: Session.get('messagesLimit'),
+        selectedMessageId: Session.get('selectedMessageId')
+      });
     });
-
-    
   });
 
   Template.app.helpers({
@@ -42,11 +43,21 @@ if(Meteor.isClient) {
 
   });
 
+  //message 100: eCuPav8Nfgp5jfwBN
+
   Template.app.onRendered(function() {
-      setTimeout(function() {
-      $("#message-list").scrollTop($("#message-list").height());
+    setTimeout(function() {
+      var selectedMessageId = Session.get('selectedMessageId');
+      if(selectedMessageId) {
+        /*$('#message-list').animate({
+          scrollTop: $("." + selectedMessageId).offset().top
+        }, 1000);*/
+        $(".user-message[data-id='" + selectedMessageId + "']").addClass("selected");
+      } else {
+        $("#message-list").scrollTop($("#message-list").height());
+      }
       $("#message-list").scroll(showMoreVisible);
-      }, 5);
+    }, 2000);
   });
 
   function showMoreVisible() {
@@ -68,23 +79,23 @@ if(Meteor.isClient) {
       //$(".user-message:first").addClass('anchor-message');
       Meteor.setTimeout(function() {
         pageCounter = 0;
-        Session.set("messagesLimit", Session.get("messagesLimit") + MESSAGES_INCREMENT);          
-        //$(window).scrollTo(".anchor-message");          
+        Session.set("messagesLimit", Session.get("messagesLimit") + MESSAGES_INCREMENT);
+        //$(window).scrollTo(".anchor-message");
       }, 5);
-      
+
     } else {
-      if (target.attr("data-visible")) {      
+      if (target.attr("data-visible")) {
         target.attr("data-visible", false);
       }
     }
-  }  
+  }
 }
 
 Messages = new Meteor.Collection('messages');
 
-if(Meteor.isServer) {  
+if(Meteor.isServer) {
 
-  Meteor.startup(function() {
+  /*Meteor.startup(function() {
     Messages.remove({});
     for(var i=1; i<=200; i++) {
       Messages.insert({
@@ -92,9 +103,25 @@ if(Meteor.isServer) {
         timestamp: new Date()
       });
     }
-  });
+  });*/
 
   Meteor.publish("messages", function(opts) {
-    return Messages.find({}, {limit: opts.limit, sort: {timestamp: -1}});
+    if(opts && opts.selectedMessageId) {
+      console.log("selectedMessageId: " + opts.selectedMessageId);
+      var selectedMessage = Messages.findOne(opts.selectedMessageId);
+      filter = {timestamp: {$gte: selectedMessage.timestamp}};
+      options = {limit: opts.limit, sort: {timestamp: 1}};
+    } else {
+      filter = {}
+      options = {limit: opts.limit, sort: {timestamp: -1}};
+    }
+    return Messages.find(filter, options);
   });
 }
+
+FlowRouter.route('/messages/:messageId', {
+  action: function(params, queryParams) {
+    console.log("MESSAGE ID IS " + params.messageId);
+    Session.set('selectedMessageId', params.messageId);
+  }
+});

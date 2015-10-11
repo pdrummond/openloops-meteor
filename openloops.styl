@@ -1,20 +1,20 @@
 @import 'jeet'
 @import 'variables.import'
 
-*    
+*
  	font-family font-main
 
-html, body 
+html, body
 	padding 0
 	margin 0
-	height 100%	
-  	width 100%
-	overflow hidden	
+	height 100%
+  width 100%
+	overflow hidden
 	height 100%
 
 #app
 	height 100%
-	.sidebar	
+	.sidebar
 		height 100%
 		top 0
 		left 0
@@ -23,42 +23,46 @@ html, body
 		display block
 		width sidebar-width
 		background-color black
-		
+
 		ul
 			list-style: none
 			li
 				display: block
-				margin: 0 0 10px 0 
+				margin: 0 0 10px 0
 
 		+below(600px)
 			stack()
 			ul
 				center(200px)
 				li
-					display: inline	
+					display: inline
 					margin: 0 15px 0 0
 
 	.main
-		height 100%		
+		height 100%
 		padding-left sidebar-width
-		padding-bottom footer-height		
+		padding-bottom footer-height
 		+below(600px)
 			stack()
-		
-#message-list	
+
+#message-list
     top 100px
     overflow auto
     position relative
     height "calc(100% - %s)" % (header-height + footer-height)
 
-.user-message 
-	padding 30px
+.user-message
+    padding 30px
+    list-style-type none
+
+.user-message.selected
+    background-color orange
 
 .anchor-message
-	background-color red
+    background-color red
 
 #showMoreResults[data-visible="true"]
-	display: inline-block
+    display: inline-block
 
 #showMoreResults[data-visible="false"]
 	display: none
