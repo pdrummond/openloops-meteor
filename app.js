@@ -31,18 +31,15 @@ if(Meteor.isClient) {
   });
 
   Template.app.onRendered(function() {
-    setTimeout(function() {
       $("#message-list").scrollTop($("#message-list").height());
       $("#message-list").scroll(showMoreVisible);
-    }, 2000);
   });
 
   function showMoreVisible() {
     if($("#message-list").scrollTop() == 0) {
-      Meteor.setTimeout(function() {
         msgCountBeforePaging = Messages.find().count();
         Session.set("messageAgeLimit", Session.get("messageAgeLimit") + MESSAGE_AGE_HOURS_INCREMENT);
-      }, 5);
+
     }
   }
 }
@@ -71,3 +68,5 @@ if(Meteor.isServer) {
     //loadSampleData();
   });
 }
+FlowRouter.route('/', {
+});
