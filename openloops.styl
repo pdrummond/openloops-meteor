@@ -8,7 +8,7 @@ html, body
 	padding 0
 	margin 0
 	height 100%
-  width 100%
+  	width 100%
 	overflow hidden
 	height 100%
 
@@ -22,7 +22,11 @@ html, body
 		position fixed
 		display block
 		width sidebar-width
+		color gray
 		background-color black
+
+		a
+			color: gray
 
 		ul
 			list-style: none
@@ -58,15 +62,6 @@ html, body
 .user-message.selected
     background-color orange
 
-.anchor-message
-    background-color red
-
-#showMoreResults[data-visible="true"]
-    display: inline-block
-
-#showMoreResults[data-visible="false"]
-	display: none
-
 header
 	position fixed
 	left 0
@@ -84,3 +79,42 @@ footer
 	height footer-height
 	background-color white
 	margin-left: sidebar-width
+
+#login-wrapper
+  margin-left 20px
+
+  a
+  	color white
+
+fieldset, input, textarea
+	margin 0
+	padding 0
+	border 0
+	font-size 100%
+	vertical-align baseline
+	resize none
+	margin-bottom 30px
+	outline none
+
+textarea
+	min-height 70px
+
+form
+	padding 30px
+	width 60%
+	margin-bottom:10px
+
+input, textarea
+	border 1px solid lightgray
+	border-radius 4px
+	padding 5px
+	width 100%
+
+label
+	display block
+
+footer
+	padding 10px
+
+#message-box
+	width calc(100% - 340px)

@@ -1,27 +1,74 @@
 <template name="app">
+
+	{{> Template.dynamic template=currentPage}}
+
+</template>
+
+<template name="feedPage">
+	{{> leftSidebar}}
+	{{> feed}}
+</template>
+
+<template name="createPage">
+	{{> leftSidebar}}
+	{{> createForm}}
+</template>
+
+<template name="createForm">
+	<div id="createForm" class="main">
+		<form>
+			<fieldset>
+				<label>Title</label>
+				<input name="title" placeholder="Enter title">
+				<label>Description</label>
+				<textarea name="description" placeholder="Enter description"></textarea>
+			</fieldset>
+			<button id="create-button">Create</button>
+		</form>
+	</div>
+</template>
+
+<template name="leftSidebar">
 	<div class="sidebar">
 		<ul>
-			<li><a href="#">Link 1</a></li>
-			<li><a href="#">Link 2</a></li>
-			<li><a href="#">Link 3</a></li>
+			<li id="create-link"><a href="/create">Create</a></li>
 		</ul>
+		<div id="login-wrapper">
+			{{> loginButtons}}
+		</div>
+		<ul id="item-list">
+			{{#each items}}
+				{{> itemItemView}}
+			{{/each}}
+		</ul>
+
 	</div>
+</template>
+
+<template name="feed">
 	<div class="main">
 		<header>
 			This is where the header stuff goes.
-		</header>		
+		</header>
 		<ul id="message-list">
 			{{#each messages}}
 			{{> messageItemView}}
 			{{/each}}
 		</ul>
 		<footer>
-			This is where the edit box will go.
+			{{> messageBox}}
 		</footer>
 	</div>
+</template>
 
+<template name="messageBox">
+	<textarea id="message-box"></textarea>
 </template>
 
 <template name="messageItemView">
 	<li class="user-message" data-id={{_id}}>{{title}} ({{formatDate timestamp}})</li>
+</template>
+
+<template name="itemItemView">
+	<li class="item" data-id={{_id}}><a href="/item/{{_id}}">{{title}}</a></li>
 </template>
