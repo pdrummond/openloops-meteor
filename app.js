@@ -1,5 +1,5 @@
 
-const MESSAGE_AGE_HOURS_INCREMENT = 3;
+const MESSAGE_AGE_HOURS_INCREMENT = 48;
 
 var pageCounter = 0;
 
@@ -13,7 +13,8 @@ if(Meteor.isClient) {
 
 
   Meteor.startup(function() {
-    Session.setDefault("messageAgeLimit", MESSAGE_AGE_HOURS_INCREMENT);
+    //Session.setDefault("messageAgeLimit", MESSAGE_AGE_HOURS_INCREMENT);
+    Session.set("messageAgeLimit", MESSAGE_AGE_HOURS_INCREMENT);
     Deps.autorun(function() {
       Meteor.subscribe('messages', {
         messageAgeLimit: Session.get('messageAgeLimit')
@@ -102,24 +103,24 @@ Messages = new Meteor.Collection('messages');
 
 if(Meteor.isServer) {
 
-  /*Meteor.startup(function() {
+  Meteor.startup(function() {
     Messages.remove({});
-    for(var i=200; i>=1; i--) {
+    for(var id=200, hour = 1; id>=1; id--, hour++) {
       Messages.insert({
-        title: 'Message ' + i,
-        timestamp: moment().subtract({hours: i}).toDate().getTime()
+        title: 'Message ' + id,
+        timestamp: moment().subtract({hours: hour}).toDate().getTime()
       });
     }
-  });*/
+  });
 
   Meteor.publish("messages", function(opts) {
     console.log("xxx: " + opts.messageAgeLimit);
-    var messageAge = moment(new Date()).subtract({hours: 12});//opts.messageAgeLimit});
+    var messageAge = moment(new Date()).subtract({hours: opts.messageAgeLimit});
     console.log("messageAge: " + messageAge.format('MMMM Do YYYY, h:mm:ss a'));
     var messageAgeTimestamp = messageAge.toDate().getTime();
     //console.log("messageAgeTimestamp: " + messageAgeTimestamp);
-    return Messages.find({timestamp: {$gte: messageAgeTimestamp}}, {sort: {timestamp: -1}});
-    //return Messages.find({}, {sort: {timestamp: -1}});
+    //return Messages.find({timestamp: {$gte: messageAgeTimestamp}}, {sort: {timestamp: -1}});
+    return Messages.find({}, {sort: {timestamp: 1}});
   });
 }
 
