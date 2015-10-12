@@ -9,12 +9,7 @@
 	<div class="main">
 		<header>
 			This is where the header stuff goes.
-		</header>
-		{{#if moreResults}}
-		<div id="showMoreResults" data-visible="false">
-			<span class="loading">Loading...</span>
-		</div>
-		{{/if}}
+		</header>		
 		<ul id="message-list">
 			{{#each messages}}
 			{{> messageItemView}}
