@@ -48,13 +48,15 @@
 <template name="feed">
 	<div class="main">
 		<header>
-			This is where the header stuff goes.
+			<div id="header-main-title">{{currentItemTitle}}</div>
 		</header>
+		<div style="background-color: red;width:100%;height:10px"></div>
 		<ul id="message-list">
 			{{#each messages}}
 			{{> messageItemView}}
 			{{/each}}
 		</ul>
+		<div style="background-color: green;width:100%;height:10px"></div>
 		<footer>
 			{{> messageBox}}
 		</footer>
@@ -66,7 +68,7 @@
 </template>
 
 <template name="messageItemView">
-	<li class="user-message" data-id={{_id}}>{{title}} ({{formatDate timestamp}})</li>
+	<li class="user-message" data-id={{_id}}><strong>{{createdBy}}:</strong> {{title}} <span id="created-at">{{formatDate createdAt}}</span></li>
 </template>
 
 <template name="itemItemView">

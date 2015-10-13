@@ -4,13 +4,19 @@
 *
  	font-family font-main
 
-html, body
+html
+	overflow hidden
 	padding 0
 	margin 0
-	height 100%
-  	width 100%
+	height: 100%;
+	width: 100%;
+
+body
 	overflow hidden
-	height 100%
+	padding 0
+	margin 0
+	height 100% !important
+	width 100% !important
 
 #app
 	height 100%
@@ -50,19 +56,28 @@ html, body
 			stack()
 
 #message-list
-    top 100px
-    overflow auto
+	background-color gray
+    top header-height
     position relative
-    height "calc(100% - %s)" % (header-height + footer-height)
+    /*height "calc(100% - %s)" % (header-height + footer-height + 30)*/
+	height calc(100% - 100px)
+	xheight:500px
+	overflow auto
+	border-top: 1px solid lightgray
+	border-bottom 1px solid lightgray
 
 .user-message
-    padding 30px
+    padding 10px
     list-style-type none
+
+	#created-at
+		color lightgray
 
 .user-message.selected
     background-color orange
 
 header
+	display none
 	position fixed
 	left 0
 	top 0
@@ -70,8 +85,9 @@ header
 	height header-height
 	background-color white
 	margin-left: sidebar-width
+	border-bottom: 1px solid lightgray
 
-footer
+footer	
 	position fixed
 	left 0
 	bottom 0
@@ -118,3 +134,8 @@ footer
 
 #message-box
 	width calc(100% - 340px)
+
+#header-main-title
+	padding:10px
+	font-size 2rem
+	margin-left 50px
