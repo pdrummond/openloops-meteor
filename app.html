@@ -30,12 +30,13 @@
 
 <template name="leftSidebar">
 	<div class="sidebar">
-		<ul>
-			<li id="create-link"><a href="/create">Create</a></li>
-		</ul>
 		<div id="login-wrapper">
 			{{> loginButtons}}
 		</div>
+		<ul>
+			<li id="create-link"><a href="/create">Team Feed</a></li>
+			<li id="create-link"><a href="/create">Create</a></li>
+		</ul>
 		<ul id="item-list">
 			{{#each items}}
 				{{> itemItemView}}
@@ -48,15 +49,16 @@
 <template name="feed">
 	<div class="main">
 		<header>
-			<div id="header-main-title">{{currentItemTitle}}</div>
+			<div id="header-main-title">{{currentItemTitle}} <span id="header-title-msg-count">{{currentItemMessageCount}}</span></div>
+			{{#if hasIncomingMessages}}
+				<a href="" id="header-new-messages-toast">{{numIncomingMessages}} New Messages - click to show</a>
+			{{/if}}
 		</header>
-		<div style="background-color: red;width:100%;height:10px"></div>
 		<ul id="message-list">
 			{{#each messages}}
 			{{> messageItemView}}
 			{{/each}}
 		</ul>
-		<div style="background-color: green;width:100%;height:10px"></div>
 		<footer>
 			{{> messageBox}}
 		</footer>

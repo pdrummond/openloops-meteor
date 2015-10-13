@@ -33,8 +33,10 @@ body
 
 		a
 			color: gray
+			text-decoration: none;
 
 		ul
+			padding-top:10px;
 			list-style: none
 			li
 				display: block
@@ -55,29 +57,29 @@ body
 		+below(600px)
 			stack()
 
-#message-list
-	background-color gray
-    top header-height
-    position relative
-    /*height "calc(100% - %s)" % (header-height + footer-height + 30)*/
-	height calc(100% - 100px)
-	xheight:500px
-	overflow auto
+#message-list {
+	xbackground-color: gray;
+    top: header-height;
+    position: relative;
+    height: "calc(100% - %s)" % (header-height + footer-height + 40);
+	overflow: auto;
 	border-top: 1px solid lightgray
-	border-bottom 1px solid lightgray
+	border-bottom: 1px solid lightgray;
+}
 
 .user-message
     padding 10px
     list-style-type none
 
 	#created-at
-		color lightgray
+		color: lightgray;
+		font-size: 0.8rem;
+
 
 .user-message.selected
     background-color orange
 
 header
-	display none
 	position fixed
 	left 0
 	top 0
@@ -85,9 +87,8 @@ header
 	height header-height
 	background-color white
 	margin-left: sidebar-width
-	border-bottom: 1px solid lightgray
 
-footer	
+footer
 	position fixed
 	left 0
 	bottom 0
@@ -138,4 +139,11 @@ footer
 #header-main-title
 	padding:10px
 	font-size 2rem
-	margin-left 50px
+	margin-left 40px
+
+#header-new-messages-toast
+	margin-left: 50px;
+	color: #3281C4;
+
+#header-title-msg-count
+	color: gray
