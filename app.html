@@ -55,7 +55,9 @@
 			{{/if}}
 		</header>
 		<ul id="message-list">
-			<!--<a href="" id="show-more-link">Show More</a>-->
+			{{#if moreMessagesOnServer}}
+				<a href="" id="loading-more">Loading...</a>
+			{{/if}}
 			{{#each messages}}
 			{{> messageItemView}}
 			{{/each}}

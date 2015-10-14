@@ -9,6 +9,7 @@ var totalNewMessages = 0;
 var initialising = true;
 
 if(Meteor.isClient) {
+	ClientMessages = new Meteor.Collection('client-messages');
 
 	Meteor.startup(function() {
 		Session.setDefault("messageAgeLimit", MESSAGE_AGE_HOURS_INCREMENT);
@@ -19,7 +20,7 @@ if(Meteor.isClient) {
 	}
 
 	OpenLoops.listenForIncomingMessages = function() {
-		var incomingMessagesTs = new Date().getTime();
+		/*var incomingMessagesTs = new Date().getTime();
 		Messages.find({createdBy: {$ne: Meteor.user().username }}).observeChanges({
 			added: function (id, message) {
 				if(!initialising && message.createdAt > incomingMessagesTs) {
@@ -27,7 +28,7 @@ if(Meteor.isClient) {
 					console.log("New message - total is now " + Session.get('numIncomingMessages'));
 				}
 			}
-		});
+		});*/
 	}
 
 	Template.createForm.events({
@@ -62,16 +63,22 @@ if(Meteor.isClient) {
 					e.stopPropagation();
 					if(inputVal.length > 0) {
 						var currentItemId = Session.get('currentItemId');
-						Messages.insert({
+						var newMessage = {
 							title: inputVal,
 							createdAt: new Date().getTime(),
 							createdBy: Meteor.user().username,
 							itemId: currentItemId,
-						});
-						Items.update(currentItemId, {$inc: {numMessages: 1}});
+						};
+						ClientMessages._collection.insert(newMessage);
+						Meteor.call('sendMessage', newMessage, function(err, result) {
+							if(err) {
+								alert("error sending message");
+							} else {
 
-						$("#message-box").val('');
-						OpenLoops.scrollToBottomOfMessages();
+								$("#message-box").val('');
+								OpenLoops.scrollToBottomOfMessages();
+							}
+						});
 					}
 				}
 			}
@@ -84,11 +91,65 @@ if(Meteor.isClient) {
 		}
 	});
 
+	OpenLoops.loadMessages = function(callback) {
+		var olderThanDate;
+		var existingMessages = ClientMessages.find({}, {sort:{createdAt:1}}).fetch();
+		if(existingMessages.length > 0) {
+			olderThanDate = existingMessages[0].createdAt;
+		}
+
+		Meteor.call('loadMessages', {
+			olderThanDate: olderThanDate,
+			itemId: Session.get('currentItemId')
+		}, function(err, messages) {
+			if(err) {
+				alert("Error loading messages");
+				callback(false);
+			} else {
+				console.log("BOOM!!!");
+				_.each(messages, function(message) {
+					ClientMessages._collection.insert(message);
+				});
+				callback(true);
+			}
+		});
+	}
+
+	OpenLoops.loadInitialMessages = function() {
+		OpenLoops.loadMessages(function(ok) {
+			if(ok) {
+				OpenLoops.scrollToBottomOfMessages();
+			}
+		});
+	}
+
+	OpenLoops.loadMoreMessages = function() {
+		Meteor.setTimeout(function() {
+			if(OpenLoops.moreMessagesOnServer()) {
+				OpenLoops.loadMessages(function(ok) {
+					if(ok) {
+						$("#message-list").scrollTop(($(".user-message").outerHeight() * 20));
+					}
+				});
+			}
+		}, 300);
+	}
+
+	OpenLoops.moreMessagesOnServer = function() {
+		var item = Items.findOne(Session.get('currentItemId'));
+		if(item) {
+			return ClientMessages._collection.find().fetch().length < item.numMessages;
+		} else {
+			return true;
+		}
+	}
+
 	Template.feed.onCreated(function() {
 		var self = this;
 		Session.set('numIncomingMessages', 0);
 		this.subscribe('items');
-		this.autorun(function() {
+		OpenLoops.loadInitialMessages();
+		/*this.autorun(function() {
 			self.subscribe('messages', {
 				messageAgeLimit: Session.get('messageAgeLimit'),
 				itemId: Session.get('currentItemId')
@@ -105,13 +166,13 @@ if(Meteor.isClient) {
 					}
 				}
 			});
-		});
+		});*/
 
 	});
 
 	Template.feed.helpers({
 		messages: function() {
-			return Messages.find({}, {sort: {createdAt: 1}});
+			return ClientMessages.find({}, {sort: {createdAt: 1}});
 		},
 
 		numIncomingMessages: function() {
@@ -120,6 +181,10 @@ if(Meteor.isClient) {
 
 		hasIncomingMessages: function() {
 			return Session.get('numIncomingMessages') > 0;
+		},
+
+		moreMessagesOnServer: function() {
+			return OpenLoops.moreMessagesOnServer();
 		}
 	});
 
@@ -151,28 +216,42 @@ if(Meteor.isClient) {
 		}
 	}
 
-	OpenLoops.loadMoreMessages = function() {
-		//Meteor.setTimeout(function() {
-		msgCountBeforePaging = Messages.find().count();
-		Session.set("messageAgeLimit", Session.get("messageAgeLimit") + MESSAGE_AGE_HOURS_INCREMENT);
-		//}, 1000);
-	}
-
 	Accounts.ui.config({
 		passwordSignupFields: "USERNAME_AND_EMAIL"
 	});
 } //isClient
 
 Items = new Meteor.Collection('items');
-Messages = new Meteor.Collection('messages');
 
 if(Meteor.isServer) {
+
+	ServerMessages = new Meteor.Collection('server-messages');
+
+	Meteor.methods({
+		loadMessages: function(opts) {
+			var filter = {itemId: opts.itemId};
+			if(opts.olderThanDate) {
+				filter.createdAt = {$lt: opts.olderThanDate};
+			}
+			var messages = ServerMessages.find(filter, {
+				limit: 20,
+				sort: {createdAt: -1}
+			});
+			return messages.fetch();
+		},
+
+		sendMessage: function(newMessage) {
+			ServerMessages.insert(newMessage);
+			Items.update(newMessage.itemId, {$inc: {numMessages: 1}});
+		}
+	});
+
 
 	Meteor.publish("items", function() {
 		return Items.find();
 	});
 
-	Meteor.publish("messages", function(opts) {
+	/*Meteor.publish("messages", function(opts) {
 		console.log(">> messages publication. opts=" + JSON.stringify(opts));
 		var messageAge = moment(new Date()).subtract({hours: opts.messageAgeLimit});
 		var messageAgeTimestamp = messageAge.toDate().getTime();
@@ -186,7 +265,7 @@ if(Meteor.isServer) {
 		console.log("found " + messages.count() + " messages");
 		console.log("<< messages publication");
 		return messages;
-	});
+	});*/
 
 	Meteor.startup(function() {
 		//loadSampleData();
@@ -202,10 +281,10 @@ if(Meteor.isServer) {
 			createdBy: 'loopy',
 			numMessages: 0
 		});
-		Messages.remove({});
+		ServerMessages.remove({});
 		var minutes = 1;
 		for(var id=200; id>=1; id--) {
-			Messages.insert({
+			ServerMessages.insert({
 				title: 'Message ' + id,
 				createdBy: 'loopy',
 				createdAt: moment().subtract({minutes: minutes++}).toDate().getTime(),
@@ -226,7 +305,7 @@ if(Meteor.isServer) {
 			if(id == 5) {
 				hours += 5;
 			}
-			Messages.insert({
+			ServerMessages.insert({
 				title: 'Message ' + id,
 				createdBy: 'loopy',
 				createdAt: moment().subtract({hours: hours, minutes: minutes++}).toDate().getTime(),
