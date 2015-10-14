@@ -10,78 +10,25 @@ var initialising = true;
 
 if(Meteor.isClient) {
 
+	Meteor.startup(function() {
+		Session.setDefault("messageAgeLimit", MESSAGE_AGE_HOURS_INCREMENT);
+	});
+
 	OpenLoops.scrollToBottomOfMessages = function() {
 		$("#message-list").scrollTop($("#message-list")[0].scrollHeight);
 	}
 
-	Template.registerHelper('formatDate', function (context, options) {
-		if (context) {
-			return moment(context).format('MMMM Do YYYY, h:mm:ss a');
-		}
-	});
-
-	Template.registerHelper('currentItemTitle', function () {
-		var currentItemTitle = '';
-		var currentItemId = Session.get("currentItemId");
-		if(currentItemId) {
-			var currentItem = Items.findOne(currentItemId);
-			if(currentItem) {
-				currentItemTitle = currentItem.title;
-			}
-		}
-		return currentItemTitle;
-	});
-
-	Template.registerHelper('currentItemMessageCount', function (context, options) {
-		var currentItemMessageCount = '';
-		var currentItemId = Session.get("currentItemId");
-		if(currentItemId) {
-			var currentItem = Items.findOne(currentItemId);
-			if(currentItem) {
-				currentItemMessageCount = currentItem.numMessages;
-			}
-		}
-		return currentItemMessageCount;
-	});
-
-	Meteor.startup(function() {
-		Session.setDefault('numIncomingMessages', 0);
-		Session.set("messageAgeLimit", MESSAGE_AGE_HOURS_INCREMENT);
-		Meteor.subscribe('items');
-		Deps.autorun(function() {
-			Meteor.subscribe('messages', {
-				messageAgeLimit: Session.get('messageAgeLimit'),
-				itemId: Session.get('currentItemId')
-			}, {
-				onReady: function() {
-					if(initialising) {
-						OpenLoops.scrollToBottomOfMessages();
-						initialising = false;
-					} else {
-						var numNewMessages = Messages.find().count() - msgCountBeforePaging;
-						console.log("numNewMessages: " + numNewMessages);
-						totalNewMessages += numNewMessages;
-						if(totalNewMessages > 0 && totalNewMessages < FILL_SCREEN_MSG_COUNT) {
-							console.log("Not enough - loading more");
-							OpenLoops.loadMoreMessages();
-						} else {
-							totalNumNewMessages = 0;
-
-						}
-						$("#message-list").scrollTop(($(".user-message").outerHeight() * numNewMessages));
-					}
-				}
-			});
-		});
+	OpenLoops.listenForIncomingMessages = function() {
+		var incomingMessagesTs = new Date().getTime();
 		Messages.find({createdBy: {$ne: Meteor.user().username }}).observeChanges({
-			added: function (id, user) {
-				if(!initialising) {
+			added: function (id, message) {
+				if(!initialising && message.createdAt > incomingMessagesTs) {
 					Session.set('numIncomingMessages', Session.get('numIncomingMessages')+1);
 					console.log("New message - total is now " + Session.get('numIncomingMessages'));
 				}
 			}
 		});
-	});
+	}
 
 	Template.createForm.events({
 		'click #create-button': function(e) {
@@ -135,6 +82,40 @@ if(Meteor.isClient) {
 		currentPage: function() {
 			return Session.get('currentPage');
 		}
+	});
+
+	Template.feed.onCreated(function() {
+		var self = this;
+		Session.set('numIncomingMessages', 0);
+		this.subscribe('items');
+		this.autorun(function() {
+			self.subscribe('messages', {
+				messageAgeLimit: Session.get('messageAgeLimit'),
+				itemId: Session.get('currentItemId')
+			}, {
+				onReady: function() {
+					var numNewMessages = Messages.find().count() - msgCountBeforePaging;
+					console.log("numNewMessages: " + numNewMessages);
+					var itemTotalMessages = Items.findOne(Session.get('currentItemId')).numMessages;
+					console.log("itemTotalMessages: " + itemTotalMessages);
+					totalNewMessages += numNewMessages;
+					if(totalNewMessages < itemTotalMessages && totalNewMessages < FILL_SCREEN_MSG_COUNT) {
+						console.log("Not enough - loading more");
+						OpenLoops.loadMoreMessages();
+					} else {
+						totalNewMessages = 0;
+						if(initialising) {
+							OpenLoops.scrollToBottomOfMessages();
+							initialising = false;
+							OpenLoops.listenForIncomingMessages();
+						} else {
+							$("#message-list").scrollTop(($(".user-message").outerHeight() * numNewMessages));
+						}
+					}
+				}
+			});
+		});
+
 	});
 
 	Template.feed.helpers({
@@ -197,15 +178,19 @@ if(Meteor.isServer) {
 	});
 
 	Meteor.publish("messages", function(opts) {
+		console.log(">> messages publication. opts=" + JSON.stringify(opts));
 		var messageAge = moment(new Date()).subtract({hours: opts.messageAgeLimit});
 		var messageAgeTimestamp = messageAge.toDate().getTime();
 
-		return Messages.find({
+		var messages = Messages.find({
 			itemId: opts.itemId,
 			createdAt: {$gte: messageAgeTimestamp}
 		}, {
 			sort: {createdAt: -1}
 		});
+		console.log("found " + messages.count() + " messages");
+		console.log("<< messages publication");
+		return messages;
 	});
 
 	Meteor.startup(function() {
@@ -213,6 +198,7 @@ if(Meteor.isServer) {
 	});
 
 	function loadSampleData() {
+		console.log(">> LOADING SAMPLE DATA");
 		Items.remove({});
 		var itemOneId = Items.insert({
 			title: 'Item One',
@@ -223,15 +209,17 @@ if(Meteor.isServer) {
 		});
 		console.log("ITEM ONE ID: " + itemOneId);
 		Messages.remove({});
-		for(var id=200, hour = 1; id>=1; id--, hour++) {
+		var minutes = 1;
+		for(var id=200; id>=1; id--) {
 			Messages.insert({
 				title: 'Message ' + id,
 				createdBy: 'loopy',
-				createdAt: moment().subtract({hours: hour}).toDate().getTime(),
+				createdAt: moment().subtract({minutes: minutes++}).toDate().getTime(),
 				itemId: itemOneId
 			});
 			Items.update(itemOneId, {$inc: {numMessages: 1}});
 		}
+		console.log(">> SAMPLE DATA DONE");
 	}
 }
 FlowRouter.route('/', {
@@ -242,6 +230,10 @@ FlowRouter.route('/', {
 
 FlowRouter.route('/item/:itemId', {
 	action: function(params, queryParams) {
+		Session.set("messageAgeLimit", MESSAGE_AGE_HOURS_INCREMENT);
+		msgCountBeforePaging = 0;
+		totalNewMessages = 0;
+		initialising = true;
 		Session.set('currentItemId', params.itemId);
 		Session.set('currentPage', 'feedPage');
 	}
