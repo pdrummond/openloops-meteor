@@ -95,22 +95,13 @@ if(Meteor.isClient) {
 			}, {
 				onReady: function() {
 					var numNewMessages = Messages.find().count() - msgCountBeforePaging;
-					console.log("numNewMessages: " + numNewMessages);
-					var itemTotalMessages = Items.findOne(Session.get('currentItemId')).numMessages;
-					console.log("itemTotalMessages: " + itemTotalMessages);
-					totalNewMessages += numNewMessages;
-					if(totalNewMessages < itemTotalMessages && totalNewMessages < FILL_SCREEN_MSG_COUNT) {
-						console.log("Not enough - loading more");
-						OpenLoops.loadMoreMessages();
+					totalNewMessages = 0;
+					if(initialising) {
+						OpenLoops.scrollToBottomOfMessages();
+						initialising = false;
+						OpenLoops.listenForIncomingMessages();
 					} else {
-						totalNewMessages = 0;
-						if(initialising) {
-							OpenLoops.scrollToBottomOfMessages();
-							initialising = false;
-							OpenLoops.listenForIncomingMessages();
-						} else {
-							$("#message-list").scrollTop(($(".user-message").outerHeight() * numNewMessages));
-						}
+						$("#message-list").scrollTop(($(".user-message").outerHeight() * numNewMessages));
 					}
 				}
 			});
@@ -150,7 +141,7 @@ if(Meteor.isClient) {
 	});
 
 	function showMoreVisible() {
-		//console.log("message-list scrollTop: " + $("#message-list").scrollTop());
+		console.log("message-list scrollTop: " + $("#message-list").scrollTop());
 		if($("#message-list").scrollTop() == 0) {
 			OpenLoops.loadMoreMessages();
 		}
