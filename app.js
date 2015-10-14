@@ -127,6 +127,10 @@ if(Meteor.isClient) {
 		'click #header-new-messages-toast': function() {
 			Session.set("numIncomingMessages", 0);
 			OpenLoops.scrollToBottomOfMessages();
+		},
+
+		'click #show-more-link': function() {
+			OpenLoops.loadMoreMessages();
 		}
 	});
 
@@ -198,7 +202,6 @@ if(Meteor.isServer) {
 			createdBy: 'loopy',
 			numMessages: 0
 		});
-		console.log("ITEM ONE ID: " + itemOneId);
 		Messages.remove({});
 		var minutes = 1;
 		for(var id=200; id>=1; id--) {
@@ -209,6 +212,27 @@ if(Meteor.isServer) {
 				itemId: itemOneId
 			});
 			Items.update(itemOneId, {$inc: {numMessages: 1}});
+		}
+		var itemTwoId = Items.insert({
+			title: 'Item Two',
+			description: 'Item two description',
+			createdAt: new Date().getTime(),
+			createdBy: 'loopy',
+			numMessages: 0
+		});
+		minutes = 1;
+		var hours = 0;
+		for(var id=10; id>=1; id--) {
+			if(id == 5) {
+				hours += 5;
+			}
+			Messages.insert({
+				title: 'Message ' + id,
+				createdBy: 'loopy',
+				createdAt: moment().subtract({hours: hours, minutes: minutes++}).toDate().getTime(),
+				itemId: itemTwoId
+			});
+			Items.update(itemTwoId, {$inc: {numMessages: 1}});
 		}
 		console.log(">> SAMPLE DATA DONE");
 	}
