@@ -12,7 +12,11 @@ if(Meteor.isClient) {
 		Streamy.on('sendMessage', function(incomingMessage) {
 			if(incomingMessage.createdBy != Meteor.user().username) {
 				OpenLoops.insertClientMessage(incomingMessage);
-				Session.set('numIncomingMessages', Session.get('numIncomingMessages')+1);
+				if(OpenLoops.atBottom) {
+					OpenLoops.scrollToBottomOfMessages();
+				} else if(incomingMessage.itemId == Session.get('currentItemId')) {
+					Session.set('numIncomingMessages', Session.get('numIncomingMessages')+1);
+				}
 			} else {
 				OpenLoops.scrollToBottomOfMessages();
 			}
@@ -42,7 +46,6 @@ if(Meteor.isClient) {
 			var title = $("#createForm input[name='title']").val();
 			if(title != null && title.length > 0) {
 				var description = $("#createForm textarea[name='description']").val();
-
 				Items.insert({
 					title: title,
 					description: description,
@@ -89,13 +92,17 @@ if(Meteor.isClient) {
 		}
 	});
 
-	OpenLoops.loadMessages = function(callback) {
-		var olderThanDate;
-		var existingMessages = ClientMessages.find({}, {sort:{createdAt:1}}).fetch();
+	OpenLoops.getOldestClientMessageDate = function() {
+		var date;
+		var existingMessages = ClientMessages.find({itemId: Session.get('currentItemId')}, {sort:{createdAt:1}}).fetch();
 		if(existingMessages.length > 0) {
-			olderThanDate = existingMessages[0].createdAt;
+			date = existingMessages[0].createdAt;
 		}
+		return date;
+	}
 
+	OpenLoops.loadMessages = function(callback) {
+		var olderThanDate = OpenLoops.getOldestClientMessageDate();
 		Meteor.call('loadMessages', {
 			olderThanDate: olderThanDate,
 			itemId: Session.get('currentItemId')
@@ -104,7 +111,6 @@ if(Meteor.isClient) {
 				alert("Error loading messages");
 				callback(false);
 			} else {
-				console.log("BOOM!!!");
 				_.each(messages, function(message) {
 					ClientMessages._collection.insert(message);
 				});
@@ -143,19 +149,19 @@ if(Meteor.isClient) {
 			console.log("clientMsgCount: " + clientMsgCount);
 			console.log("serverMsgCount: " + serverMsgCount);
 		}
-		return result
+		return result;
 	}
 
 	Template.feed.onCreated(function() {
 		var self = this;
-		Session.set('numIncomingMessages', 0);
-		this.subscribe('items');
-		OpenLoops.loadInitialMessages();
+		/*Session.set('numIncomingMessages', 0);
+		Meteor.subscribe('items');
+		OpenLoops.loadInitialMessages();*/
 	});
 
 	Template.feed.helpers({
 		messages: function() {
-			return ClientMessages.find({}, {sort: {createdAt: 1}});
+			return ClientMessages.find({itemId: Session.get('currentItemId')}, {sort: {createdAt: 1}});
 		},
 
 		numIncomingMessages: function() {
@@ -185,14 +191,18 @@ if(Meteor.isClient) {
 	});
 
 	Template.app.onRendered(function() {
-		$("#message-list").scroll(showMoreVisible);
+		$("#message-list").scroll(checkScroll);
 	});
 
-	function showMoreVisible() {
-		console.log("message-list scrollTop: " + $("#message-list").scrollTop());
+	function checkScroll() {
+		console.log("message-list scrollTop: " + ($("#message-list").scrollTop() + $("#message-list").outerHeight()));
+		console.log("message-list scrollTop2: " + ($("#message-list").scrollTop() + $("#message-list").height()));
+		console.log("message list height: " + $("#message-list")[0].scrollHeight);
 		if($("#message-list").scrollTop() == 0) {
 			OpenLoops.loadMoreMessages();
 		}
+		OpenLoops.atBottom = $("#message-list")[0].scrollHeight == ($("#message-list").scrollTop() + $("#message-list").height());
+		console.log("atBottom: " + OpenLoops.atBottom);
 	}
 
 	Accounts.ui.config({

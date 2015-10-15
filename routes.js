@@ -1,3 +1,7 @@
+FlowRouter.subscriptions = function() {
+  this.register('items', Meteor.subscribe('items'));
+};
+
 FlowRouter.route('/', {
 	action: function(params, queryParams) {
 		Session.set('currentPage', 'feedPage');
@@ -8,7 +12,8 @@ FlowRouter.route('/item/:itemId', {
 	action: function(params, queryParams) {
 		Session.set('currentItemId', params.itemId);
 		Session.set('currentPage', 'feedPage');
-		// Attach an handler for a specific message
+		Session.set('numIncomingMessages', 0);
+		OpenLoops.loadInitialMessages();
 	}
 });
 
