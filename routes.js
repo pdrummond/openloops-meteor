@@ -5,6 +5,9 @@ FlowRouter.subscriptions = function() {
 FlowRouter.route('/', {
 	action: function(params, queryParams) {
 		Session.set('currentPage', 'feedPage');
+		Session.set('currentItemId', null);
+		Session.set('numIncomingMessages', 0);
+		OpenLoops.loadInitialMessages();		
 	}
 });
 

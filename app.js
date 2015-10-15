@@ -161,7 +161,12 @@ if(Meteor.isClient) {
 
 	Template.feed.helpers({
 		messages: function() {
-			return ClientMessages.find({itemId: Session.get('currentItemId')}, {sort: {createdAt: 1}});
+			var filter = {};
+			var currentItemId = Session.get('currentItemId');
+			if(currentItemId) {
+				filter.itemId = currentItemId;
+			}
+			return ClientMessages.find(filter, {sort: {createdAt: 1}});
 		},
 
 		numIncomingMessages: function() {
@@ -219,7 +224,10 @@ if(Meteor.isServer) {
 
 	Meteor.methods({
 		loadMessages: function(opts) {
-			var filter = {itemId: opts.itemId};
+			var filter = {};
+			if(opts.itemId) {
+				filter.itemId = opts.itemId;
+			}
 			if(opts.olderThanDate) {
 				filter.createdAt = {$lt: opts.olderThanDate};
 			}
