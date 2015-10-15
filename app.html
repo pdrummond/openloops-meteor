@@ -51,13 +51,11 @@
 		<header>
 			<div id="header-main-title">{{currentItemTitle}} <span id="header-title-msg-count">{{currentItemMessageCount}}</span></div>
 			{{#if hasIncomingMessages}}
-				<a href="" id="header-new-messages-toast">{{numIncomingMessages}} New Messages - click to show</a>
+				<a href="" id="header-new-messages-toast"><i class="fa fa-comments-o"></i> {{numIncomingMessages}} New Messages - click to show</a>
 			{{/if}}
 		</header>
 		<ul id="message-list">
-			{{#if moreMessagesOnServer}}
-				<a href="" id="loading-more">Loading...</a>
-			{{/if}}
+			<a href="" id="loading-more" style="visibility:{{#if moreMessagesOnServer}}visible{{else}}hidden{{/if}}"><i id="loading-more-icon" class="fa fa-spinner fa-pulse"></i></a>
 			{{#each messages}}
 			{{> messageItemView}}
 			{{/each}}
