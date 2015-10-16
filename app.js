@@ -112,6 +112,10 @@ if(Meteor.isClient) {
 
 		showItemLink: function() {
 			return Session.get('currentItemId')?'hide':'';
+		},
+
+		messageDate: function() {
+			return moment(this.createdAt).date();
 		}
 	})
 
@@ -205,6 +209,10 @@ if(Meteor.isClient) {
 
 		moreMessagesOnServer: function() {
 			return OpenLoops.moreMessagesOnServer();
+		},
+
+		isTeamFeed: function() {
+			return !Session.get('currentItemId');
 		}
 	});
 

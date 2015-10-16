@@ -20,7 +20,7 @@ body
 
 #app
 	height 100%
-	.sidebar
+	.left-sidebar
 		height 100%
 		top 0
 		left 0
@@ -29,33 +29,62 @@ body
 		display block
 		width sidebar-width
 		color gray
-		background-color black
+		background-color white
+		border-right: 1px solid lightgray;
+		z-index:999
 
-		a
-			color: gray
-			text-decoration: none;
-
-		ul
-			padding-top:10px;
-			list-style: none
+		#top-list
+			padding:0;
+			margin:0;
+			display:flex;
+			a
+				display:block
+				text-decoration:none;
+				color:white;
+				text-align:center
+				padding:10px;
+			a:active
+				background-color:black !important;
 			li
+				list-style-type:none
+
+				width:50%
+				border:5px solid white;
+
+			#team-feed-link
+				background-color: blue;
+			#create-link
+				background-color: #1E8F3C;
+
+
+		#item-list > :first-child {
+			border-top: 1px solid lightgray;
+		}
+		#item-list
+			margin:0
+			padding: 0
+			list-style: none
+
+			.item
+				border-bottom: 1px solid lightgray;
 				display: block
-				margin: 0 0 10px 0
+				padding:10px;
+				padding-bottom:20px;
+			.item:hover
+				background-color:lightgray;
 
-		+below(600px)
-			stack()
-			ul
-				center(200px)
-				li
-					display: inline
-					margin: 0 15px 0 0
-
+			#title
+				font-size: 1.1em;
+				color:black;
+			#description
+				font-size:0.9em;
+				color:gray;
+			a
+				text-decoration: none;
 	.main
 		height 100%
 		padding-left sidebar-width
 		padding-bottom footer-height
-		+below(600px)
-			stack()
 
 #message-list {
 	xbackground-color: gray;
@@ -174,10 +203,10 @@ footer
 #header-main-title
 	padding:10px
 	font-size 2rem
-	margin-left 40px
+	margin-left 10px
 
 #header-new-messages-toast
-	margin-left: 50px;
+	margin-left: 10px;
 	background-color: #FF5B5B;
 	padding: 5px 10px 5px 10px;
 	color: white;
@@ -198,3 +227,7 @@ footer
 
 .hide
 	display:none
+
+.team-feed-banner
+	background-color:black;
+	color:whitesmoke;

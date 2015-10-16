@@ -28,10 +28,10 @@
 </template>
 
 <template name="leftSidebar">
-	<div class="sidebar">
-		<ul>
-			<li id="create-link"><a href="/">Team Feed</a></li>
-			<li id="create-link"><a href="/create">Create</a></li>
+	<div class="left-sidebar">
+		<ul id="top-list">
+			<li><a id="team-feed-link" href="/">Team Feed</a></li>
+			<li><a id="create-link" href="/create">Create</a></li>
 		</ul>
 		<ul id="item-list">
 			{{#each items}}
@@ -45,9 +45,13 @@
 <template name="feed">
 	<div class="main">
 		<header>
+			{{#if isTeamFeed}}
+				<div id="header-main-title">Team Feed</div>
+			{{else}}
 			<div id="header-main-title">{{currentItemTitle}} <span id="header-title-msg-count">{{currentItemMessageCount}}</span></div>
 			{{#if hasIncomingMessages}}
 				<a href="" id="header-new-messages-toast"><i class="fa fa-comments-o"></i> {{numIncomingMessages}} New Messages - click to show</a>
+			{{/if}}
 			{{/if}}
 		</header>
 		<ul id="message-list">
@@ -56,8 +60,14 @@
 			{{> messageItemView}}
 			{{/each}}
 		</ul>
-		<footer>
-			{{> messageBox}}
+		<footer class="{{#if isTeamFeed}}team-feed-banner{{/if}}">
+			{{#if isTeamFeed}}
+					<p>This is the team feed which is read only. To add a message select an item first.</p>
+					<p>Eventually this will contain statistics about the project, but for now it's just a placeholder</p>
+			{{else}}
+
+				{{> messageBox}}
+			{{/if}}
 		</footer>
 	</div>
 </template>
@@ -68,7 +78,7 @@
 
 <template name="messageItemView">
 	<li class="user-message" data-id={{_id}}>
-		<strong>{{createdBy}}:</strong> {{title}}
+		<strong>{{createdBy}}:</strong> {{title}} ({{messageDate}})
 		<span id="meta">
 			<span id="created-at">{{formatDate createdAt}}</span> <span id="item-link" class="{{showItemLink}}">in <a href="/item/{{itemId}}">{{itemTitle}}</a></span>
 		</span>
@@ -76,5 +86,10 @@
 </template>
 
 <template name="itemItemView">
-	<li class="item" data-id={{_id}}><a href="/item/{{_id}}">{{title}}</a></li>
+	<li  data-id={{_id}}>
+		<a class="item" href="/item/{{_id}}">
+		<span id="title">{{title}}</span>
+		<div id="description">{{description}}</div>
+		</a>
+	</li>
 </template>
