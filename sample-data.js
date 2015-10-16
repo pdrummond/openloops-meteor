@@ -1,6 +1,6 @@
 if(Meteor.isServer) {
 	Meteor.startup(function() {
-		loadSampleData();
+		//loadSampleData();
 	});
 
 	function loadSampleData() {
@@ -22,7 +22,7 @@ if(Meteor.isServer) {
 		});
 
 		var minutes = 1;
-		for(var id=30; id>=1; id--) {
+		for(var id=200; id>=1; id--) {
 			ServerMessages.insert({
 				title: 'Message ' + id,
 				createdBy: 'loopy',

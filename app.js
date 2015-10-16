@@ -92,6 +92,19 @@ if(Meteor.isClient) {
 		}
 	});
 
+	//TODO: Where should this live?
+	var previousMessageDate = null;
+
+	Template.messageItemView.onRendered(function() {
+		var messageDate = moment(this.data.createdAt).date();
+		if(previousMessageDate && (messageDate < previousMessageDate)) {
+			this.$(".user-message").addClass('new-day');
+			this.$(".user-message").attr('data-date', moment(this.data.createdAt).format('MMMM Do YYYY'));
+		}
+		previousMessageDate = messageDate;
+		console.log("previousMessageDate: " + previousMessageDate);
+	});
+
 	Template.messageItemView.helpers({
 		itemTitle: function() {
 			return Items.findOne(this.itemId).title;
