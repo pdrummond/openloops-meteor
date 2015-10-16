@@ -102,7 +102,7 @@ body
     margin-left: 10px;
 }
 
-.user-message
+.message
     padding 10px
     list-style-type none
 
@@ -113,7 +113,7 @@ body
 		a
 			color: lightgray;
 
-.user-message.new-day:before {
+.message.new-day:before {
 	content: attr(data-date);
 	display: block;
 	font-size: 12px;
@@ -129,12 +129,13 @@ body
 	margin-top: 30px;
 }
 
-.user-message.new-day:after {
+.message.new-day:after {
 	border-top-color: #ddd;
 }
 
-.user-message.selected
+.message.selected
     background-color orange
+
 
 header
 	position fixed
@@ -229,5 +230,51 @@ footer
 	display:none
 
 .team-feed-banner
+	display:flex;
+	xjustify-content: space-around;
 	background-color:black;
 	color:whitesmoke;
+	padding-top:10px;
+
+	.feed-box
+		width:150px;
+		height:80px;
+		xborder: 1px solid white;
+		padding-top:10px;
+		xmargin-right:10px;
+
+	.feed-box a
+		color:white;
+
+
+	.feed-box .title
+		padding:5px;
+		font-size: 1.0rem;
+		text-align:center;
+		text-transform: uppercase;
+
+	.feed-box .stat
+		text-align:center
+		font-size: 2rem;
+		padding:0;
+		margin:0;
+
+.item-message {
+	border: 1px solid lightgray;
+	margin-top:10px;
+	margin-bottom:10px;
+	margin-right: 10px;
+
+	#type-icon {
+ 		color:#38A6BF;
+	}
+
+	#item-desc {
+		margin-top:5px;
+		color:gray;
+	}
+}
+
+a
+	text-decoration:none;
+	color: black;

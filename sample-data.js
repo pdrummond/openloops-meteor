@@ -25,6 +25,7 @@ if(Meteor.isServer) {
 		for(var id=200; id>=1; id--) {
 			ServerMessages.insert({
 				title: 'Message ' + id,
+				type: 'MSG_TYPE_CHAT',
 				createdBy: 'loopy',
 				createdAt: moment().subtract({minutes: minutes++}).toDate().getTime(),
 				itemId: itemOneId
@@ -47,6 +48,7 @@ if(Meteor.isServer) {
 			}
 			ServerMessages.insert({
 				title: 'XXMessage ' + id,
+				type: 'MSG_TYPE_CHAT',
 				createdBy: 'loopy',
 				createdAt: moment().subtract({hours: hours, minutes: minutes++}).toDate().getTime(),
 				itemId: itemTwoId

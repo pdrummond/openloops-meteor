@@ -1,6 +1,13 @@
 
 OpenLoops = {};
 
+const ITEM_TYPE_DISCUSSION = 'discussion';
+const ITEM_TYPE_ISSUE = 'issue';
+const ITEM_TYPE_ARTICLE = 'article';
+
+const MSG_TYPE_CHAT = 'MSG_TYPE_CHAT';
+const MSG_TYPE_ITEM = 'MSG_TYPE_ITEM';
+
 const MESSAGE_PAGE_SIZE = 20;
 const MESSAGE_AGE_HOURS_INCREMENT = 1;
 const FILL_SCREEN_MSG_COUNT = 30;
@@ -30,6 +37,7 @@ if(Meteor.isClient) {
 	OpenLoops.insertClientMessage = function(attrs) {
 		var currentItemId = Session.get('currentItemId');
 		var defaultAttrs = {
+			type: MSG_TYPE_CHAT,
 			createdAt: new Date().getTime(),
 			createdBy: Meteor.user().username,
 			itemId: currentItemId,
@@ -46,12 +54,10 @@ if(Meteor.isClient) {
 			var title = $("#createForm input[name='title']").val();
 			if(title != null && title.length > 0) {
 				var description = $("#createForm textarea[name='description']").val();
-				Items.insert({
+				Meteor.call('insertItem', {
 					title: title,
 					description: description,
-					createdAt: new Date().getTime(),
-					createdBy: Meteor.user().username,
-					numMessages: 0
+					type: $("#createForm select[name='type']").val()
 				});
 				FlowRouter.go("/");
 			}
@@ -92,9 +98,8 @@ if(Meteor.isClient) {
 		}
 	});
 
-	//TODO: Where should this live?
+	/*
 	var previousMessageDate = null;
-
 	Template.messageItemView.onRendered(function() {
 		var messageDate = moment(this.data.createdAt).date();
 		if(previousMessageDate && (messageDate < previousMessageDate)) {
@@ -103,9 +108,22 @@ if(Meteor.isClient) {
 		}
 		previousMessageDate = messageDate;
 		console.log("previousMessageDate: " + previousMessageDate);
-	});
+	});*/
 
 	Template.messageItemView.helpers({
+
+		messageTemplate: function() {
+			var t;
+			switch(this.type) {
+				case MSG_TYPE_CHAT: t = 'userMessageItemView'; break;
+				case MSG_TYPE_ITEM: t = 'itemMessageItemView'; break;
+			}
+			return t;
+		}
+	});
+
+	Template.userMessageItemView.helpers({
+
 		itemTitle: function() {
 			return Items.findOne(this.itemId).title;
 		},
@@ -117,7 +135,32 @@ if(Meteor.isClient) {
 		messageDate: function() {
 			return moment(this.createdAt).date();
 		}
-	})
+	});
+
+	Template.itemMessageItemView.helpers({
+
+		itemTitle: function() {
+			return Items.findOne(this.itemId).title;
+		},
+
+		itemTypeIcon: function() {
+			var icon = 'fa-square';
+			switch(Items.findOne(this.itemId).type) {
+				case ITEM_TYPE_DISCUSSION: icon = 'fa-comments-o'; break;
+				case ITEM_TYPE_ISSUE: icon = 'fa-exclamation-circle'; break;
+				case ITEM_TYPE_ARTICLE: icon = 'fa-book'; break;
+			}
+			return icon;
+		},
+
+		showItemLink: function() {
+			return Session.get('currentItemId')?'hide':'';
+		},
+
+		messageDate: function() {
+			return moment(this.createdAt).date();
+		}
+	});
 
 	OpenLoops.getOldestClientMessageDate = function() {
 		var date;
@@ -137,7 +180,9 @@ if(Meteor.isClient) {
 		var olderThanDate = OpenLoops.getOldestClientMessageDate();
 		Meteor.call('loadMessages', {
 			olderThanDate: olderThanDate,
-			itemId: Session.get('currentItemId')
+			itemId: Session.get('currentItemId'),
+			type: Session.get('currentTypeFilter'),
+			itemType: Session.get('currentItemTypeFilter'),
 		}, function(err, messages) {
 			if(err) {
 				alert("Error loading messages");
@@ -195,6 +240,14 @@ if(Meteor.isClient) {
 			var currentItemId = Session.get('currentItemId');
 			if(currentItemId) {
 				filter.itemId = currentItemId;
+			}
+			var currentTypeFilter = Session.get('currentTypeFilter');
+			if(currentTypeFilter) {
+				filter.type = currentTypeFilter;
+			}
+			var currentItemTypeFilter = Session.get('currentItemTypeFilter');
+			if(currentItemTypeFilter) {
+				filter.itemType = currentItemTypeFilter;
 			}
 			return ClientMessages.find(filter, {sort: {createdAt: 1}});
 		},
@@ -266,6 +319,12 @@ if(Meteor.isServer) {
 			if(opts.olderThanDate) {
 				filter.createdAt = {$lt: opts.olderThanDate};
 			}
+			if(opts.type) {
+				filter.type = opts.type;
+			}
+			if(opts.itemType) {
+				filter.itemType = opts.itemType;
+			}
 			var messages = ServerMessages.find(filter, {
 				limit: MESSAGE_PAGE_SIZE,
 				sort: {createdAt: -1}
@@ -276,6 +335,33 @@ if(Meteor.isServer) {
 		saveMessage: function(newMessage) {
 			ServerMessages.insert(newMessage);
 			Items.update(newMessage.itemId, {$inc: {numMessages: 1}});
+		},
+
+		insertMessage: function(newMessage) {
+			newMessage = _.extend({
+				createdAt: new Date().getTime(),
+				createdBy: Meteor.user().username,
+			}, newMessage);
+			Meteor.call('saveMessage', newMessage);
+			Streamy.broadcast('sendMessage', newMessage);
+		},
+
+		insertItem: function(newItem) {
+			console.log("INSERT ITEM");
+			newItem = _.extend({
+				createdAt: new Date().getTime(),
+				createdBy: Meteor.user().username,
+				numMessages: 0,
+			}, newItem);
+
+			var newItemId = Items.insert(newItem);
+			Meteor.call('insertMessage', {
+				type: MSG_TYPE_ITEM,
+				itemType: newItem.type,
+				title: newItem.description,
+				itemId: newItemId
+
+			});
 		}
 	});
 
@@ -286,6 +372,8 @@ if(Meteor.isServer) {
 	Meteor.publish("items", function() {
 		return Items.find();
 	});
+
+
 
 } //isServer
 

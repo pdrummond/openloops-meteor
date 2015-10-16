@@ -21,6 +21,12 @@
 				<input name="title" placeholder="Enter title">
 				<label>Description</label>
 				<textarea name="description" placeholder="Enter description"></textarea>
+				<label>Type</label>
+				<select name="type" placeholder="Enter type">
+					<option value="discussion">Discussion</option>
+					<option value="issue">Issue</option>
+					<option value="article">Article</option>
+				</select>
 			</fieldset>
 			<button id="create-button">Create</button>
 		</form>
@@ -62,8 +68,10 @@
 		</ul>
 		<footer class="{{#if isTeamFeed}}team-feed-banner{{/if}}">
 			{{#if isTeamFeed}}
-					<p>This is the team feed which is read only. To add a message select an item first.</p>
-					<p>Eventually this will contain statistics about the project, but for now it's just a placeholder</p>
+			<div class="feed-box" style="background: #00b5ad"><a href="/"><div class="title">News Feed</div><div class="stat">5000</div></a></div>
+			<div class="feed-box" style="background: #fbbd08"><a href="/feed/discussions"><div class="title">Discussions</div><div class="stat">10</div></a></div>
+			<div class="feed-box" style="background: #6435c9"><a href="/feed/open-issues"><div class="title">Issues</div><div class="stat">30</div></a></div>
+			<div class="feed-box" style="background: pink"><a href="/feed/articles"><div class="title">Articles</div><div class="stat">2</div></a></div>
 			{{else}}
 
 				{{> messageBox}}
@@ -77,11 +85,27 @@
 </template>
 
 <template name="messageItemView">
-	<li class="user-message" data-id={{_id}}>
+	{{> Template.dynamic template=messageTemplate}}
+</template>
+
+<template name="userMessageItemView">
+	<li class="user-message message" data-id={{_id}}>
 		<strong>{{createdBy}}:</strong> {{title}} ({{messageDate}})
 		<span id="meta">
 			<span id="created-at">{{formatDate createdAt}}</span> <span id="item-link" class="{{showItemLink}}">in <a href="/item/{{itemId}}">{{itemTitle}}</a></span>
 		</span>
+	</li>
+</template>
+
+<template name ="itemMessageItemView">
+	<li class="item-message message" data-id={{_id}}>
+
+		<i id="type-icon" class="fa {{itemTypeIcon}}"></i>
+		<strong><a href="/item/{{itemId}}">{{itemTitle}}</a></strong>
+		<span id="meta">
+			<span id="created-by">{{createdBy}}</span> at <span id="created-at">{{formatDate createdAt}}</span> <span id="item-link" class="{{showItemLink}}">in </span>
+		</span>
+		<div id="item-desc">{{title}}</div>
 	</li>
 </template>
 
