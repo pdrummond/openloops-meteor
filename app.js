@@ -92,9 +92,24 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.messageItemView.helpers({
+		itemTitle: function() {
+			return Items.findOne(this.itemId).title;
+		},
+
+		showItemLink: function() {
+			return Session.get('currentItemId')?'hide':'';
+		}
+	})
+
 	OpenLoops.getOldestClientMessageDate = function() {
 		var date;
-		var existingMessages = ClientMessages.find({itemId: Session.get('currentItemId')}, {sort:{createdAt:1}}).fetch();
+		var filter = {};
+		var currentItemId = Session.get('currentItemId');
+		if(currentItemId) {
+			filter.itemId = currentItemId;
+		}
+		var existingMessages = ClientMessages.find(filter, {sort:{createdAt:1}}).fetch();
 		if(existingMessages.length > 0) {
 			date = existingMessages[0].createdAt;
 		}
@@ -136,19 +151,17 @@ if(Meteor.isClient) {
 					}
 				});
 			}
-		}, 1000);
+		}, 500);
 	}
 
 	OpenLoops.moreMessagesOnServer = function() {
 		var result = true;
-		var item = Items.findOne(Session.get('currentItemId'));
-		if(item) {
-			var clientMsgCount = ClientMessages._collection.find().fetch().length;
-			var serverMsgCount = item.numMessages;
-			result = (clientMsgCount < serverMsgCount);
-			console.log("clientMsgCount: " + clientMsgCount);
-			console.log("serverMsgCount: " + serverMsgCount);
-		}
+		var currentItemId = Session.get('currentItemId');
+		var serverMsgCount = (currentItemId?Items.findOne(currentItemId).numMessages:Boards.find({}).fetch()[0].numMessages);
+		var clientMsgCount = ClientMessages._collection.find().fetch().length;
+		result = (clientMsgCount < serverMsgCount);
+		console.log("clientMsgCount: " + clientMsgCount);
+		console.log("serverMsgCount: " + serverMsgCount);
 		return result;
 	}
 
@@ -216,6 +229,7 @@ if(Meteor.isClient) {
 
 } //isClient
 
+Boards = new Meteor.Collection("boards");
 Items = new Meteor.Collection('items');
 
 if(Meteor.isServer) {
@@ -244,9 +258,14 @@ if(Meteor.isServer) {
 		}
 	});
 
+	Meteor.publish("boards", function() {
+		return Boards.find();
+	});
+
 	Meteor.publish("items", function() {
 		return Items.find();
 	});
+
 } //isServer
 
 // Override Meteor._debug to filter for custom msgs - as used

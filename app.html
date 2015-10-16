@@ -71,7 +71,12 @@
 </template>
 
 <template name="messageItemView">
-	<li class="user-message" data-id={{_id}}><strong>{{createdBy}}:</strong> {{title}} <span id="created-at">{{formatDate createdAt}}</span></li>
+	<li class="user-message" data-id={{_id}}>
+		<strong>{{createdBy}}:</strong> {{title}}
+		<span id="meta">
+			<span id="created-at">{{formatDate createdAt}}</span> <span id="item-link" class="{{showItemLink}}">in <a href="/item/{{itemId}}">{{itemTitle}}</a></span>
+		</span>
+	</li>
 </template>
 
 <template name="itemItemView">

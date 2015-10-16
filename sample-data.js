@@ -1,11 +1,18 @@
 if(Meteor.isServer) {
 	Meteor.startup(function() {
-		//loadSampleData();
+		loadSampleData();
 	});
 
 	function loadSampleData() {
 		console.log(">> LOADING SAMPLE DATA");
+		Boards.remove({});
 		Items.remove({});
+		ServerMessages.remove({});
+
+		var boardOneId = Boards.insert({
+			numMessages: 0,
+		});
+
 		var itemOneId = Items.insert({
 			title: 'Item One',
 			description: 'Item one description',
@@ -13,9 +20,9 @@ if(Meteor.isServer) {
 			createdBy: 'loopy',
 			numMessages: 0
 		});
-		ServerMessages.remove({});
+
 		var minutes = 1;
-		for(var id=200; id>=1; id--) {
+		for(var id=30; id>=1; id--) {
 			ServerMessages.insert({
 				title: 'Message ' + id,
 				createdBy: 'loopy',
@@ -23,6 +30,7 @@ if(Meteor.isServer) {
 				itemId: itemOneId
 			});
 			Items.update(itemOneId, {$inc: {numMessages: 1}});
+			Boards.update(boardOneId, {$inc: {numMessages: 1}});
 		}
 		var itemTwoId = Items.insert({
 			title: 'Item Two',
@@ -38,13 +46,14 @@ if(Meteor.isServer) {
 				hours += 5;
 			}
 			ServerMessages.insert({
-				title: 'Message ' + id,
+				title: 'XXMessage ' + id,
 				createdBy: 'loopy',
 				createdAt: moment().subtract({hours: hours, minutes: minutes++}).toDate().getTime(),
 				itemId: itemTwoId
 			});
 			Items.update(itemTwoId, {$inc: {numMessages: 1}});
+			Boards.update(boardOneId, {$inc: {numMessages: 1}});
 		}
-		console.log(">> SAMPLE DATA DONE");
+		console.log("<< SAMPLE DATA DONE");
 	}
 }

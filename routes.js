@@ -1,5 +1,6 @@
 FlowRouter.subscriptions = function() {
-  this.register('items', Meteor.subscribe('items'));
+	this.register('boards', Meteor.subscribe('boards'));
+  	this.register('items', Meteor.subscribe('items'));
 };
 
 FlowRouter.route('/', {
@@ -7,7 +8,7 @@ FlowRouter.route('/', {
 		Session.set('currentPage', 'feedPage');
 		Session.set('currentItemId', null);
 		Session.set('numIncomingMessages', 0);
-		OpenLoops.loadInitialMessages();		
+		OpenLoops.loadInitialMessages();
 	}
 });
 
