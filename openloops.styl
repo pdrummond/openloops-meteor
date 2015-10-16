@@ -65,6 +65,7 @@ body
 	overflow: auto;
 	border-top: 1px solid lightgray
 	border-bottom: 1px solid lightgray;
+	padding-left:10px;
 }
 
 #show-more-link {
@@ -94,7 +95,7 @@ body
 	background-color: whitesmoke;
 	xborder-top: 1px solid black;
 	xborder-bottom: 1px solid black;
-	border: 1px solid black;
+	border: 1px solid lightgray;
 	margin-bottom: 30px;
 	margin-top: 30px;
 }
@@ -124,11 +125,18 @@ footer
 	background-color white
 	margin-left: sidebar-width
 
-#login-wrapper
-  margin-left 20px
+#login-buttons
+  z-index:2;
+  position:absolute;
+  top:10px;
+  right:10px;
 
-  a
-  	color white
+#login-buttons #login-dropdown-list {
+	left:auto;
+	top:5px;
+	right:10px;
+}
+
 
 fieldset, input, textarea
 	margin 0

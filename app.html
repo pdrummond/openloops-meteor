@@ -1,7 +1,6 @@
 <template name="app">
-
+	{{> loginButtons}}
 	{{> Template.dynamic template=currentPage}}
-
 </template>
 
 <template name="feedPage">
@@ -30,9 +29,6 @@
 
 <template name="leftSidebar">
 	<div class="sidebar">
-		<div id="login-wrapper">
-			{{> loginButtons}}
-		</div>
 		<ul>
 			<li id="create-link"><a href="/">Team Feed</a></li>
 			<li id="create-link"><a href="/create">Create</a></li>
