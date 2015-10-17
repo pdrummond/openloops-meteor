@@ -137,6 +137,12 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.itemItemView.helpers({
+		typeIcon: function() {
+			return OpenLoops.getItemTypeIcon(this);
+		}
+	});
+
 	Template.itemMessageItemView.helpers({
 
 		itemTitle: function() {
@@ -144,13 +150,7 @@ if(Meteor.isClient) {
 		},
 
 		itemTypeIcon: function() {
-			var icon = 'fa-square';
-			switch(Items.findOne(this.itemId).type) {
-				case ITEM_TYPE_DISCUSSION: icon = 'fa-comments-o'; break;
-				case ITEM_TYPE_ISSUE: icon = 'fa-exclamation-circle'; break;
-				case ITEM_TYPE_ARTICLE: icon = 'fa-book'; break;
-			}
-			return icon;
+			return OpenLoops.getItemTypeIcon(Items.findOne(this.itemId));
 		},
 
 		showItemLink: function() {
@@ -161,6 +161,16 @@ if(Meteor.isClient) {
 			return moment(this.createdAt).date();
 		}
 	});
+
+	OpenLoops.getItemTypeIcon = function(item) {
+		var icon = 'fa-square';
+		switch(item.type) {
+			case ITEM_TYPE_DISCUSSION: icon = 'fa-comments-o'; break;
+			case ITEM_TYPE_ISSUE: icon = 'fa-exclamation-circle'; break;
+			case ITEM_TYPE_ARTICLE: icon = 'fa-book'; break;
+		}
+		return icon;
+	}
 
 	OpenLoops.getOldestClientMessageDate = function() {
 		var date;
