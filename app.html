@@ -59,6 +59,7 @@
 				<a href="" id="header-new-messages-toast"><i class="fa fa-comments-o"></i> {{numIncomingMessages}} New Messages - click to show</a>
 			{{/if}}
 			{{/if}}
+
 		</header>
 		<ul id="message-list">
 			<a href="" id="loading-more" style="visibility:{{#if moreMessagesOnServer}}visible{{else}}hidden{{/if}}"><i id="loading-more-icon" class="fa fa-spinner fa-pulse"></i></a>
@@ -90,31 +91,44 @@
 
 <template name="userMessageItemView">
 	<li class="user-message message" data-id={{_id}}>
-		<strong>{{createdBy}}:</strong> {{title}} ({{messageDate}})
-		<span id="meta">
-			<span id="created-at">{{formatDate createdAt}}</span> <span id="item-link" class="{{showItemLink}}">in <a href="/item/{{itemId}}">{{itemTitle}}</a></span>
+		<span class="meta">
+			<strong>{{createdBy}}</strong>
+			<span id="created-at">{{timeAgo createdAt}}</span>
+			<span id="item-link" class="{{showItemLink}}">in <a class="item-link" href="/item/{{itemId}}">{{itemTitle}}</a></span>
 		</span>
+		<div id="text">
+			{{#markdown}}{{title}}{{/markdown}}
+		</div>
+		<div class="meta">
+
+		</div>
 	</li>
 </template>
 
-<template name ="itemMessageItemView">
+<template name="itemMessageItemView">
 	<li class="item-message message" data-id={{_id}}>
 
-		<i id="type-icon" class="fa {{itemTypeIcon}}"></i>
+		<i id="type-icon" class="fa {{itemTypeIcon}}" style="color:{{typeIconColor}}"></i>
 		<strong><a href="/item/{{itemId}}">{{itemTitle}}</a></strong>
-		<span id="meta">
-			<span id="created-by">{{createdBy}}</span> at <span id="created-at">{{formatDate createdAt}}</span> <span id="item-link" class="{{showItemLink}}">in </span>
+		<span class="meta">
+			<span id="created-by">created by {{createdBy}}</span> at <span id="created-at">{{formatDate createdAt}}</span> <span id="item-link" class="{{showItemLink}}">in </span>
 		</span>
-		<div id="item-desc">{{title}}</div>
+		<div id="item-desc">{{#markdown}}{{title}}{{/markdown}}</div>
 	</li>
 </template>
 
 <template name="itemItemView">
 	<li  data-id={{_id}}>
-		<a class="item" href="/item/{{_id}}">
-		<i class="fa {{typeIcon}}"></i>
-		<span id="title">{{title}}</span>
-		<div id="description">{{description}}</div>
+		<a class="item {{isActive}}" href="/item/{{_id}}">
+		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
+		<div id="content">
+			<span id="title">{{title}}</span>
+			<div id="meta"> <strong>{{createdBy}}</strong> {{timeAgo createdAt}}</div>
+			<div id="meta"> {{description}}</div>
+		</div>
+		<div id="item-msg-count">
+			<i class="fa fa-comment-o"></i> {{numMessages}}
+		</div>
 		</a>
 	</li>
 </template>

@@ -24,11 +24,24 @@ if(Meteor.isClient) {
 				} else if(incomingMessage.itemId == Session.get('currentItemId')) {
 					Session.set('numIncomingMessages', Session.get('numIncomingMessages')+1);
 				}
+
+				if(incomingMessage.itemId != Session.get('currentItemId')) {
+					$(".left-sidebar #item-list li[data-id='" + incomingMessage.itemId + "'] #item-msg-count").addClass("new-messages");
+				}
+
 			} else {
 				OpenLoops.scrollToBottomOfMessages();
 			}
 		});
 	});
+
+	OpenLoops.removeSidebarNewMessages = function(itemId) {
+		if(itemId) {
+			$(".left-sidebar #item-list li[data-id='" + itemId + "'] #item-msg-count").removeClass("new-messages");
+		} else {
+			$(".left-sidebar #item-list li .new-messages").removeClass("new-messages");
+		}
+	}
 
 	OpenLoops.scrollToBottomOfMessages = function() {
 		$("#message-list").scrollTop($("#message-list")[0].scrollHeight);
@@ -140,6 +153,14 @@ if(Meteor.isClient) {
 	Template.itemItemView.helpers({
 		typeIcon: function() {
 			return OpenLoops.getItemTypeIcon(this);
+		},
+
+		typeIconColor: function() {
+			return OpenLoops.getItemTypeIconColor(this);
+		},
+
+		isActive: function() {
+			return this._id == Session.get('currentItemId')?'active':'';
 		}
 	});
 
@@ -151,6 +172,10 @@ if(Meteor.isClient) {
 
 		itemTypeIcon: function() {
 			return OpenLoops.getItemTypeIcon(Items.findOne(this.itemId));
+		},
+
+		itemTypeIconColor: function() {
+			return OpenLoops.getItemTypeIconColor(Items.findOne(this.itemId));
 		},
 
 		showItemLink: function() {
@@ -170,6 +195,16 @@ if(Meteor.isClient) {
 			case ITEM_TYPE_ARTICLE: icon = 'fa-book'; break;
 		}
 		return icon;
+	},
+
+	OpenLoops.getItemTypeIconColor = function(item) {
+		var color = '#ccc';
+		switch(item.type) {
+			case ITEM_TYPE_DISCUSSION: color = '#90BEF2'; break;
+			case ITEM_TYPE_ISSUE: color = '#6cc644'; break;
+			case ITEM_TYPE_ARTICLE: color = 'orange'; break;
+		}
+		return color;
 	}
 
 	OpenLoops.getOldestClientMessageDate = function() {
@@ -288,7 +323,7 @@ if(Meteor.isClient) {
 
 	Template.leftSidebar.helpers({
 		items: function() {
-			return Items.find();
+			return Items.find({}, {sort: {createdAt: -1}});
 		}
 	});
 

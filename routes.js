@@ -10,7 +10,7 @@ FlowRouter.route('/', {
 		Session.set('numIncomingMessages', 0);
 
 		Session.set('currentTypeFilter', null);
-		Session.set('currentItemTypeFilter', null);
+		Session.set('currentItemTypeFilter', null);		
 
 		OpenLoops.loadInitialMessages();
 	}
@@ -62,6 +62,7 @@ FlowRouter.route('/item/:itemId', {
 		Session.set('currentPage', 'feedPage');
 		Session.set('numIncomingMessages', 0);
 		OpenLoops.loadInitialMessages();
+		OpenLoops.removeSidebarNewMessages(params.itemId);
 	}
 });
 

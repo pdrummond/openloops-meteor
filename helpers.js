@@ -5,6 +5,12 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.registerHelper('timeAgo', function (context, options) {
+		if (context) {
+			return moment(context).fromNow();
+		}
+	});
+
 	Template.registerHelper('currentItemTitle', function () {
 		var currentItemTitle = '';
 		var currentItemId = Session.get("currentItemId");
