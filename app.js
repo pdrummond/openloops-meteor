@@ -392,6 +392,9 @@ if(Meteor.isServer) {
 		saveMessage: function(newMessage) {
 			ServerMessages.insert(newMessage);
 			Items.update(newMessage.itemId, {$inc: {numMessages: 1}});
+
+			//detectMentionsInMessage(newMessage);
+
 		},
 
 		insertMessage: function(newMessage) {
@@ -419,7 +422,29 @@ if(Meteor.isServer) {
 				itemId: newItemId
 
 			});
-		}
+		},
+
+		//TODO Implement this using Streamy
+		/*detectMentionsInMessage: function(message) {
+
+			/*var re = /@([\w\.-]+)/g;
+			var matches;
+
+			do {
+				matches = re.exec(message.title);
+				if (matches) {
+					var toUser = Meteor.users.findOne({username: matches[1]});
+					if(toUser != null) {
+						Streamy.broadcast('mention', {
+							type: 'new-message-mention',
+							fromUserId: Meteor.userId(),
+							toUserId: toUser._id,
+							messageId: messageId
+						});
+					}
+				}
+			} while (matches);*
+		}*/
 	});
 
 	Meteor.publish("boards", function() {

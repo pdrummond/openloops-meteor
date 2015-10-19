@@ -142,9 +142,15 @@ body
     margin-left: 10px;
 }
 
-.message
-    padding 10px
-    list-style-type none
+.message {
+	padding-left: 10px;
+	padding-bottom: 5px;
+	list-style-type none;
+}
+
+.message p:first-child
+	margin-top:0;
+	margin-bottom:5px;
 
 .message.new-day:before {
 	content: attr(data-date);
@@ -245,7 +251,7 @@ footer
 	padding 10px
 
 #message-box
-	width calc(100% - 340px)
+	width calc(100% - 440px)
 
 #header-main-title
 	padding:10px
