@@ -50,11 +50,11 @@
 
 <template name="feed">
 	<div class="main">
-		<header>
+		<header class="{{currentItemType}}">
 			{{#if isTeamFeed}}
 				<div id="header-main-title">Team Feed</div>
 			{{else}}
-			<div id="header-main-title">{{currentItemTitle}} <span id="header-title-msg-count">{{currentItemMessageCount}}</span></div>
+			<div id="header-main-title"><i class="fa fa-x2 {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}} <span id="header-title-msg-count">{{currentItemMessageCount}}</span></div>
 			{{#if hasIncomingMessages}}
 				<a href="" id="header-new-messages-toast"><i class="fa fa-comments-o"></i> {{numIncomingMessages}} New Messages - click to show</a>
 			{{/if}}
@@ -111,7 +111,7 @@
 		<i id="type-icon" class="fa {{itemTypeIcon}}" style="color:{{typeIconColor}}"></i>
 		<strong><a href="/item/{{itemId}}">{{itemTitle}}</a></strong>
 		<span class="meta">
-			<span id="created-by">created by {{createdBy}}</span> at <span id="created-at">{{formatDate createdAt}}</span> <span id="item-link" class="{{showItemLink}}">in </span>
+			<span id="created-by">created by {{createdBy}}</span> <span id="created-at">{{timeAgo createdAt}}</span> <span id="item-link" class="{{showItemLink}}">in </span>
 		</span>
 		<div id="item-desc">{{#markdown}}{{title}}{{/markdown}}</div>
 	</li>

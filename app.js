@@ -311,6 +311,18 @@ if(Meteor.isClient) {
 
 		isTeamFeed: function() {
 			return !Session.get('currentItemId');
+		},
+
+		currentItemIcon: function() {
+			return OpenLoops.getItemTypeIcon(Items.findOne(Session.get('currentItemId')));
+		},
+
+		currentItemIconColor: function() {
+			return OpenLoops.getItemTypeIconColor(Items.findOne(Session.get('currentItemId')));
+		},
+
+		currentItemType: function() {
+			return Items.findOne(Session.get('currentItemId')).type;
 		}
 	});
 
