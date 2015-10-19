@@ -35,10 +35,10 @@
 
 <template name="leftSidebar">
 	<div class="left-sidebar">
-		<ul id="top-list">
-			<li><a id="team-feed-link" href="/">Team Feed</a></li>
-			<li><a id="create-link" href="/create">Create</a></li>
-		</ul>
+		<div id="top-header">
+			<a id="board-title" href="/">Team Feed</a>
+			<a id="create-link" href="/create"><i class="fa fa-plus fx-2x"></i></a>
+		</div>
 		<ul id="item-list">
 			{{#each items}}
 				{{> itemItemView}}
