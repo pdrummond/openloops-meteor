@@ -49,7 +49,7 @@
 </template>
 
 <template name="feed">
-	<div class="main">
+	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}}">
 		<header class="{{currentItemType}}">
 			{{#if isTeamFeed}}
 				<div id="header-main-title">Team Feed</div>
@@ -107,11 +107,14 @@
 
 <template name="itemMessageItemView">
 	<li class="item-message message" data-id={{_id}}>
-
-		<i id="type-icon" class="fa {{itemTypeIcon}}" style="color:{{typeIconColor}}"></i>
-		<strong><a href="/item/{{itemId}}">{{itemTitle}}</a></strong>
+		<div class="title">
+			<i id="type-icon" class="fa {{itemTypeIcon}}" style="color:{{typeIconColor}}"></i>
+			<strong><a href="/item/{{itemId}}">{{itemTitle}}</a></strong>
+		</div>
 		<span class="meta">
-			<span id="created-by">created by {{createdBy}}</span> <span id="created-at">{{timeAgo createdAt}}</span> <span id="item-link" class="{{showItemLink}}">in </span>
+			<span id="created-by">created by {{createdBy}}</span>
+			<span id="created-at">{{timeAgo createdAt}}</span>
+			<span id="item-link" class="{{showItemLink}}"> in <a class="item-link" href="/item/{{itemId}}">{{itemTitle}}</a></span>
 		</span>
 		<div id="item-desc">{{#markdown}}{{title}}{{/markdown}}</div>
 	</li>
