@@ -389,7 +389,7 @@ if(Meteor.isClient) {
 
 	Template.leftSidebar.helpers({
 		items: function() {
-			return Items.find({}, {sort: {createdAt: -1}});
+			return Items.find({}, {sort: {updatedAt: -1}});
 		}
 	});
 
@@ -443,7 +443,10 @@ if(Meteor.isServer) {
 
 		saveMessage: function(newMessage) {
 			ServerMessages.insert(newMessage);
-			Items.update(newMessage.itemId, {$inc: {numMessages: 1}});
+			Items.update(newMessage.itemId, {
+				$inc: {numMessages: 1},
+				$set: {updatedAt: new Date().getTime()},
+			});
 
 			//detectMentionsInMessage(newMessage);
 
@@ -460,9 +463,11 @@ if(Meteor.isServer) {
 
 		insertItem: function(newItem) {
 			console.log("INSERT ITEM");
+			var now = new Date().getTime();
 			newItem = _.extend({
-				createdAt: new Date().getTime(),
+				createdAt: now,
 				createdBy: Meteor.user().username,
+				updatedAt: now,
 				numMessages: 0,
 			}, newItem);
 
