@@ -61,6 +61,47 @@ if(Meteor.isClient) {
 		return newMessage;
 	}
 
+	OpenLoops.onSearchInput = function() {
+		var self = this;
+		if(this.searchInputKeyTimer) {
+			clearTimeout(this.searchInputKeyTimer);
+		}
+		this.searchInputKeyTimer = setTimeout(function() {
+			FlowRouter.go("/feed/search?query=" + encodeURIComponent($("#search-input").val()));
+		}, 500);
+	}
+
+
+	OpenLoops.getFilterQuery = function(filterString) {
+		var filter = {};
+		var remainingText = filterString;
+		var re = new RegExp("([\\w\\.-]+)\\s*:\\s*([\\w\\.-]+)", "g");
+		var match = re.exec(filterString);
+		while (match != null) {
+			var field = match[1].trim();
+			var value = match[2].trim();
+			remainingText = remainingText.replace(field, '');
+			remainingText = remainingText.replace(value, '');
+			remainingText = remainingText.replace(/:/g, '');
+			if(field == 'type') {
+				field = 'itemType';
+			}
+			if(value == "true") {
+				value = true;
+			} else if(value == "false") {
+				value = false;
+			}
+			filter[field] = value;
+			match = re.exec(filterString);
+		}
+		if(remainingText && remainingText.length > 0) {
+			//console.log("REMAINING TEXT: " + remainingText);
+			filter["$or"] = [{title: {$regex:remainingText}}];
+		}
+		console.log("Current filter is: " + JSON.stringify(filter));
+		return filter;
+	}
+
 	Template.createForm.events({
 		'click #create-button': function(e) {
 			e.preventDefault();
@@ -224,6 +265,7 @@ if(Meteor.isClient) {
 	OpenLoops.loadMessages = function(callback) {
 		var olderThanDate = OpenLoops.getOldestClientMessageDate();
 		Meteor.call('loadMessages', {
+			filter: OpenLoops.getFilterQuery(Session.get('filterQuery')),
 			olderThanDate: olderThanDate,
 			itemId: Session.get('currentItemId'),
 			type: Session.get('currentTypeFilter'),
@@ -281,20 +323,28 @@ if(Meteor.isClient) {
 
 	Template.feed.helpers({
 		messages: function() {
-			var filter = {};
+			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
 			var currentItemId = Session.get('currentItemId');
 			if(currentItemId) {
 				filter.itemId = currentItemId;
 			}
-			var currentTypeFilter = Session.get('currentTypeFilter');
-			if(currentTypeFilter) {
-				filter.type = currentTypeFilter;
-			}
-			var currentItemTypeFilter = Session.get('currentItemTypeFilter');
-			if(currentItemTypeFilter) {
-				filter.itemType = currentItemTypeFilter;
-			}
 			return ClientMessages.find(filter, {sort: {createdAt: 1}});
+		},
+
+		filterQuery: function() {
+			return Session.get('filterQuery');
+		},
+
+		isActive: function(tabName) {
+			var active = false;
+			var query = Session.get('filterQuery');
+			switch(tabName) {
+				case '': active = (!query || query.length == 0); break;
+				case 'discussion': active = (query == 'type:discussion'); break;
+				case 'issue': active = (query == 'type:issue'); break;
+				case 'article': active = (query == 'type:article'); break;
+			}
+			return active?'active':'';
 		},
 
 		numIncomingMessages: function() {
@@ -331,6 +381,10 @@ if(Meteor.isClient) {
 			Session.set("numIncomingMessages", 0);
 			OpenLoops.scrollToBottomOfMessages();
 		},
+
+		'keyup #search-input': function() {
+			OpenLoops.onSearchInput();
+		}
 	});
 
 	Template.leftSidebar.helpers({
@@ -370,18 +424,16 @@ if(Meteor.isServer) {
 	Meteor.methods({
 		loadMessages: function(opts) {
 			var filter = {};
+			if(opts.filter) {
+				filter = opts.filter;
+			}
 			if(opts.itemId) {
 				filter.itemId = opts.itemId;
 			}
 			if(opts.olderThanDate) {
 				filter.createdAt = {$lt: opts.olderThanDate};
 			}
-			if(opts.type) {
-				filter.type = opts.type;
-			}
-			if(opts.itemType) {
-				filter.itemType = opts.itemType;
-			}
+			console.log("SERVER FILTER: " + JSON.stringify(filter));
 			var messages = ServerMessages.find(filter, {
 				limit: MESSAGE_PAGE_SIZE,
 				sort: {createdAt: -1}

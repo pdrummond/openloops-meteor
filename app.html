@@ -5,7 +5,7 @@
 <template name="feedPage">
 	<div id="top-banner">
 		<div class="left">
-			<div id="main-title">OpenLoops</div>
+			<div id="main-title"><a href="/">OpenLoops</a></div>
 		</div>
 		<div class="right">
 			{{> loginButtons}}
@@ -30,8 +30,8 @@
 				<textarea name="description" placeholder="Enter description"></textarea>
 				<label>Type</label>
 				<select name="type" placeholder="Enter type">
-					<option value="discussion">Discussion</option>
 					<option value="issue">Issue</option>
+					<option value="discussion">Discussion</option>
 					<option value="article">Article</option>
 				</select>
 			</fieldset>
@@ -43,7 +43,7 @@
 <template name="leftSidebar">
 	<div class="left-sidebar">
 		<div id="top-header">
-			<a id="board-title" href="/">Team Feed</a>
+			<a id="board-title" href="/">Dev Board</a>
 			<a id="create-link" href="/create"><i class="fa fa-plus fx-2x"></i></a>
 		</div>
 		<ul id="item-list">
@@ -59,7 +59,14 @@
 	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}}">
 		<header class="{{currentItemType}}">
 			{{#if isTeamFeed}}
-				<div id="header-main-title">Team Feed</div>
+				<div id="header-main-title">Dev Board</div>
+				<ul id="header-feed-links">
+					<li class="{{isActive ''}}"><a href="/"><i class="fa fa-home"></i> Feed</a></li>
+					<li class="{{isActive 'discussion'}}"><a href="/feed/search?query=type:discussion"><i class="fa fa-comments-o"></i> Discussions</a></li>
+					<li class="{{isActive 'issue'}}"><a href="/feed/search?query=type:issue"><i class="fa fa-exclamation-circle"></i> Issues</a></li>
+					<li class="{{isActive 'article'}}"><a href="/feed/search?query=type:article"><i class="fa fa-book"></i> Articles</a></li>
+					<li><input id="search-input" placeholder="Type here to search" value={{filterQuery}}></li>
+				</ul>
 			{{else}}
 			<div id="header-main-title"><i class="fa fa-x2 {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}}</div>
 			{{#if hasIncomingMessages}}
