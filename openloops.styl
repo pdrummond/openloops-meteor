@@ -21,11 +21,25 @@ body
 	height 100% !important
 	width 100% !important
 
+#app #top-banner {
+	height:top-banner-height;
+	background-color: black;
+	color:white;
+
+	#main-title {
+		font-size:20px;
+		font-weight:bold;
+		padding-top:10px;
+		padding-left:10px;
+	}
+
+}
+
 #app
 	height 100%
 	.left-sidebar
-		height 100%
-		top 0
+		height "calc(100% - %s)" % top-baner-height;
+		top top-banner-height;
 		left 0
 		bottom 0
 		position fixed
@@ -132,7 +146,7 @@ body
 	xbackground-color: gray;
     top: header-height;
     position: relative;
-    height: "calc(100% - %s)" % (header-height + footer-height + 40);
+    height: "calc(100% - %s)" % (top-banner-height+header-height+footer-height+40);
 	overflow: auto;
 	padding-left:10px;
 }
@@ -179,7 +193,7 @@ body
 header
 	position fixed
 	left 0
-	top 0
+	top top-banner-height
 	width 100%
 	height header-height
 	background-color #4E89DA;

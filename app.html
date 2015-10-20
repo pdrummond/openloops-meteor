@@ -1,9 +1,16 @@
 <template name="app">
-	{{> loginButtons}}
 	{{> Template.dynamic template=currentPage}}
 </template>
 
 <template name="feedPage">
+	<div id="top-banner">
+		<div class="left">
+			<div id="main-title">OpenLoops</div>
+		</div>
+		<div class="right">
+			{{> loginButtons}}
+		</div>
+	</div>
 	{{> leftSidebar}}
 	{{> feed}}
 </template>
