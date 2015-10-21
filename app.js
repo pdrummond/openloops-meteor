@@ -61,17 +61,6 @@ if(Meteor.isClient) {
 		return newMessage;
 	}
 
-	OpenLoops.onSearchInput = function() {
-		var self = this;
-		if(this.searchInputKeyTimer) {
-			clearTimeout(this.searchInputKeyTimer);
-		}
-		this.searchInputKeyTimer = setTimeout(function() {
-			FlowRouter.go("/feed/search?query=" + encodeURIComponent($("#search-input").val()));
-		}, 500);
-	}
-
-
 	OpenLoops.getFilterQuery = function(filterString) {
 		var filter = {};
 		var remainingText = filterString;
@@ -83,9 +72,6 @@ if(Meteor.isClient) {
 			remainingText = remainingText.replace(field, '');
 			remainingText = remainingText.replace(value, '');
 			remainingText = remainingText.replace(/:/g, '');
-			if(field == 'type') {
-				field = 'itemType';
-			}
 			if(value == "true") {
 				value = true;
 			} else if(value == "false") {
@@ -112,6 +98,21 @@ if(Meteor.isClient) {
 					title: title,
 					description: description,
 					type: $("#createForm select[name='type']").val()
+				});
+				FlowRouter.go("/");
+			}
+		}
+	});
+
+	Template.createFilterForm.events({
+		'click #create-button': function(e) {
+			e.preventDefault();
+			var title = $("#createFilterForm input[name='title']").val();
+			if(title != null && title.length > 0) {
+				var query = $("#createFilterForm input[name='query']").val();
+				Meteor.call('insertFilter', {
+					title: title,
+					query: query
 				});
 				FlowRouter.go("/");
 			}
@@ -265,11 +266,8 @@ if(Meteor.isClient) {
 	OpenLoops.loadMessages = function(callback) {
 		var olderThanDate = OpenLoops.getOldestClientMessageDate();
 		Meteor.call('loadMessages', {
-			filter: OpenLoops.getFilterQuery(Session.get('filterQuery')),
 			olderThanDate: olderThanDate,
-			itemId: Session.get('currentItemId'),
-			type: Session.get('currentTypeFilter'),
-			itemType: Session.get('currentItemTypeFilter'),
+			itemId: Session.get('currentItemId')
 		}, function(err, messages) {
 			if(err) {
 				alert("Error loading messages");
@@ -323,7 +321,7 @@ if(Meteor.isClient) {
 
 	Template.feed.helpers({
 		messages: function() {
-			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
+			var filter = {};
 			var currentItemId = Session.get('currentItemId');
 			if(currentItemId) {
 				filter.itemId = currentItemId;
@@ -380,16 +378,58 @@ if(Meteor.isClient) {
 		'click #header-new-messages-toast': function() {
 			Session.set("numIncomingMessages", 0);
 			OpenLoops.scrollToBottomOfMessages();
-		},
-
-		'keyup #search-input': function() {
-			OpenLoops.onSearchInput();
 		}
+	});
+
+	Template.leftSidebar.onCreated(function() {
+		var self = this;
+		this.autorun(function() {
+			self.subscribe('items', {
+				filter: OpenLoops.getFilterQuery(Session.get('filterQuery'))
+			}, function(err, result) {
+				if(err) {
+					alert("Items Subscription error: " + err);
+				}
+			});
+		});
 	});
 
 	Template.leftSidebar.helpers({
 		items: function() {
 			return Items.find({}, {sort: {updatedAt: -1}});
+		},
+
+		filters: function() {
+			return Filters.find();
+		},
+
+		activeListLabel: function() {
+			var label = "Inbox";
+			var activeFilterLabel = Session.get('activeFilterLabel');
+			if(activeFilterLabel) {
+				label = activeFilterLabel;
+			}
+			return label;
+		}
+	});
+
+	Template.leftSidebar.events({
+		'click #inbox-menu-item': function() {
+			Session.set('filterQuery', null);
+			Session.set('activeFilterLabel', 'Inbox');
+			$("#list-menu").slideUp();
+		},
+
+		'click #active-list': function() {
+			$("#list-menu").slideToggle();
+		}
+	});
+
+	Template.filterItem.events({
+		'click': function() {
+			Session.set('filterQuery', this.query);
+			Session.set('activeFilterLabel', this.title);
+			$("#list-menu").slideUp();
 		}
 	});
 
@@ -416,6 +456,7 @@ if(Meteor.isClient) {
 
 Boards = new Meteor.Collection("boards");
 Items = new Meteor.Collection('items');
+Filters = new Meteor.Collection('filters');
 
 if(Meteor.isServer) {
 
@@ -424,9 +465,6 @@ if(Meteor.isServer) {
 	Meteor.methods({
 		loadMessages: function(opts) {
 			var filter = {};
-			if(opts.filter) {
-				filter = opts.filter;
-			}
 			if(opts.itemId) {
 				filter.itemId = opts.itemId;
 			}
@@ -462,7 +500,6 @@ if(Meteor.isServer) {
 		},
 
 		insertItem: function(newItem) {
-			console.log("INSERT ITEM");
 			var now = new Date().getTime();
 			newItem = _.extend({
 				createdAt: now,
@@ -479,6 +516,16 @@ if(Meteor.isServer) {
 				itemId: newItemId
 
 			});
+		},
+
+		insertFilter: function(newFilter) {
+			var now = new Date().getTime();
+			newFilter = _.extend({
+				createdAt: now,
+				createdBy: Meteor.user().username,
+				updatedAt: now
+			}, newFilter);
+			return Filters.insert(newFilter);
 		},
 
 		//TODO Implement this using Streamy
@@ -508,11 +555,17 @@ if(Meteor.isServer) {
 		return Boards.find();
 	});
 
-	Meteor.publish("items", function() {
-		return Items.find();
+	Meteor.publish("items", function(opts) {
+		var filter = {};
+		if(opts && opts.filter) {
+			filter = opts.filter;
+		}
+		return Items.find(filter, {sort: {updatedAt: -1}});
 	});
 
-
+	Meteor.publish("filters", function() {
+		return Filters.find();
+	});
 
 } //isServer
 

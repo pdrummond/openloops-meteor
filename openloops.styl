@@ -54,6 +54,31 @@ body
 		border-right: 1px solid lightgray;
 		box-shadow: 0 6px 6px rgba(0,0,0,0.35);
 
+		#active-list {
+			cursor:pointer;
+			padding-left:10px;
+			font-size:16px;
+		}
+
+		#list-menu {
+			margin:0;
+			padding:0;
+			background: whitesmoke;
+
+			li {
+				margin:0;
+				list-style-type:none;
+				padding:20px;
+				a {
+					font-size:1
+				}
+			}
+
+			li:hover {
+				background:lightgray;
+			}
+		}
+
 		#top-header
 			width: 100%;
 			height: 60px;
@@ -61,7 +86,7 @@ body
 			justify-content: space-between;
 
 			#board-title {
-				padding:5px;
+				padding-top:5px;
 				color: #4A4949;
     			font-weight: bold;
 				font-size:18px;
@@ -217,7 +242,7 @@ header
 			height:20px;
 		}
 		li.active {
-			border-bottom:2px solid white;			
+			border-bottom:2px solid white;
 		}
 
 
@@ -395,11 +420,11 @@ a
 	color: black;
 
 .meta
-	color: lightgray;
+	color: meta-text-color;
 	font-size: 12px;
 
 	a
-		color: lightgray;
+		color: meta-text-color;
 
 .item-link
 	font-style: italic;

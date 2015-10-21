@@ -20,6 +20,26 @@
 	{{> createForm}}
 </template>
 
+<template name="createFilterPage">
+	{{> leftSidebar}}
+	{{> createFilterForm}}
+</template>
+
+<template name="createFilterForm">
+	<div id="createFilterForm" class="main">
+		<form>
+			<fieldset>
+				<label>Title</label>
+				<input name="title" placeholder="Enter title for filter">
+				<label>Description</label>
+				<input name="query" placeholder="Enter filter query">
+			</fieldset>
+			<button id="create-button">Create Filter</button>
+		</form>
+	</div>
+</template>
+
+
 <template name="createForm">
 	<div id="createForm" class="main">
 		<form>
@@ -46,6 +66,14 @@
 			<a id="board-title" href="/">Dev Board</a>
 			<a id="create-link" href="/create"><i class="fa fa-plus fx-2x"></i></a>
 		</div>
+		<div id="active-list">{{activeListLabel}} <i class="fa fa-caret-down"></i></div>
+		<ul id="list-menu" style="display:none">
+			<li id="create-filter"><a href="/create-filter"><i class="fa fa-plus"></i> Add List</a></li>
+			<li id="inbox-menu-item"><a href="">Inbox</a></li>
+			{{#each filters}}
+			{{> filterItem}}
+			{{/each}}
+		</ul>
 		<ul id="item-list">
 			{{#each items}}
 				{{> itemItemView}}
@@ -60,13 +88,13 @@
 		<header class="{{currentItemType}}">
 			{{#if isTeamFeed}}
 				<div id="header-main-title">Dev Board</div>
-				<ul id="header-feed-links">
+				<!--<ul id="header-feed-links">
 					<li class="{{isActive ''}}"><a href="/"><i class="fa fa-home"></i> Feed</a></li>
 					<li class="{{isActive 'discussion'}}"><a href="/feed/search?query=type:discussion"><i class="fa fa-comments-o"></i> Discussions</a></li>
 					<li class="{{isActive 'issue'}}"><a href="/feed/search?query=type:issue"><i class="fa fa-exclamation-circle"></i> Issues</a></li>
 					<li class="{{isActive 'article'}}"><a href="/feed/search?query=type:article"><i class="fa fa-book"></i> Articles</a></li>
 					<li><input id="search-input" placeholder="Type here to search" value={{filterQuery}}></li>
-				</ul>
+				</ul>-->
 			{{else}}
 			<div id="header-main-title"><i class="fa fa-x2 {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}}</div>
 			{{#if hasIncomingMessages}}
@@ -148,4 +176,8 @@
 		</div>
 		</a>
 	</li>
+</template>
+
+<template name="filterItem">
+	<li><a href="">{{title}}</a></li>
 </template>
