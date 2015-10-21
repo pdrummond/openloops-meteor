@@ -6,7 +6,7 @@
 		<div class="right">
 			{{> loginButtons}}
 		</div>
-	</div>	
+	</div>
 	{{> Template.dynamic template=currentPage}}
 </template>
 
@@ -19,6 +19,12 @@
 	{{> leftSidebar}}
 	{{> createForm}}
 </template>
+
+<template name="editPage">
+	{{> leftSidebar}}
+	{{> editForm}}
+</template>
+
 
 <template name="createFilterPage">
 	{{> leftSidebar}}
@@ -58,6 +64,28 @@
 			<button id="create-button">Create</button>
 		</form>
 	</div>
+</template>
+
+<template name="editForm">
+	{{#with currentItem}}
+	<div id="editForm" class="main">
+		<form>
+			<fieldset>
+				<label>Title</label>
+				<input name="title" placeholder="Enter title" value={{title}}>
+				<label>Description</label>
+				<textarea name="description" placeholder="Enter description" value={{description}}></textarea>
+				<label>Type</label>
+				<select name="type" value={{type}} placeholder="Enter type">
+					<option value="issue">Issue</option>
+					<option value="discussion">Discussion</option>
+					<option value="article">Article</option>
+				</select>
+			</fieldset>
+			<button id="save-button">Save</button>
+		</form>
+	</div>
+	{{/with}}
 </template>
 
 <template name="leftSidebar">
@@ -156,7 +184,7 @@
 		</div>
 		<span class="meta">
 			<span id="created-by">created by {{createdBy}}</span>
-			<span id="created-at">{{timeAgo createdAt}}</span>
+			<span id="created-at">{{timeAgo createdAt}}</span> <a id="edit-link" href="/edit">Edit</a>
 			<span id="item-link" class="{{showItemLink}}"> in <a class="item-link" href="/item/{{itemId}}">{{itemTitle}}</a></span>
 		</span>
 		<div id="item-desc">{{#markdown}}{{title}}{{/markdown}}</div>
@@ -169,7 +197,7 @@
 		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
 		<div id="content">
 			<span id="title">{{title}}</span>
-			<div id="meta"> <strong>{{createdBy}}</strong> {{timeAgo createdAt}}</div>
+			<div id="meta"> <strong>{{createdBy}}</strong> {{timeAgo createdAt}} </div>
 			<div id="meta"> {{description}}</div>
 		</div>
 		<div id="item-msg-count">

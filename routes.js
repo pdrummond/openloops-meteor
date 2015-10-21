@@ -1,5 +1,5 @@
 FlowRouter.subscriptions = function() {
-	this.register('boards', Meteor.subscribe('boards'));  	
+	this.register('boards', Meteor.subscribe('boards'));
 	this.register('filters', Meteor.subscribe('filters'));
 };
 
@@ -41,6 +41,13 @@ FlowRouter.route('/create', {
 		Session.set('currentPage', 'createPage');
 	}
 });
+
+FlowRouter.route('/edit', {
+	action: function(params, queryParams) {
+		Session.set('currentPage', 'editPage');
+	}
+});
+
 
 FlowRouter.route('/create-filter', {
 	action: function(params, queryParams) {

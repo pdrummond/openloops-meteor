@@ -104,6 +104,28 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.editForm.helpers({
+		currentItem: function() {
+			return Items.findOne(Session.get('currentItemId'));
+		}
+	});
+
+	Template.editForm.events({
+		'click #save-button': function(e) {
+			e.preventDefault();
+			var title = $("#editForm input[name='title']").val();
+			if(title != null && title.length > 0) {
+				var description = $("#editForm textarea[name='description']").val();
+				Meteor.call('updateItem', Session.get('currentItemId'), {
+					title: title,
+					description: description,
+					type: $("#editForm select[name='type']").val()
+				});
+				FlowRouter.go("/");
+			}
+		}
+	});
+
 	Template.createFilterForm.events({
 		'click #create-button': function(e) {
 			e.preventDefault();
@@ -525,6 +547,14 @@ if(Meteor.isServer) {
 				itemId: newItemId
 
 			});
+		},
+
+		updateItem: function(itemId, item) {
+			Items.update(itemId, {$set: item});
+			var descMessage = ServerMessages.findOne({itemId: itemId, type: MSG_TYPE_ITEM});
+			console.log("descMessage: " + descMessage.title);
+			console.log("item new description:" + item.description);
+			ServerMessages.update(descMessage._id, {$set: {title: item.description}});
 		},
 
 		toggleItemOpenStatus: function(itemId) {
