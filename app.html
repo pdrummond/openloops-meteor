@@ -76,7 +76,7 @@
 				<label>Description</label>
 				<textarea name="description" placeholder="Enter description" value={{description}}></textarea>
 				<label>Type</label>
-				<select name="type" value={{type}} placeholder="Enter type">
+				<select name="type" placeholder="Enter type">
 					<option value="issue">Issue</option>
 					<option value="discussion">Discussion</option>
 					<option value="article">Article</option>
@@ -138,16 +138,8 @@
 			{{> messageItemView}}
 			{{/each}}
 		</ul>
-		<footer class="{{#if isTeamFeed}}team-feed-banner{{/if}}">
-			{{#if isTeamFeed}}
-			<div class="feed-box" style="background: #00b5ad"><a href="/"><div class="title">News Feed</div><div class="stat">5000</div></a></div>
-			<div class="feed-box" style="background: #fbbd08"><a href="/feed/discussions"><div class="title">Discussions</div><div class="stat">10</div></a></div>
-			<div class="feed-box" style="background: #6435c9"><a href="/feed/open-issues"><div class="title">Issues</div><div class="stat">30</div></a></div>
-			<div class="feed-box" style="background: pink"><a href="/feed/articles"><div class="title">Articles</div><div class="stat">2</div></a></div>
-			{{else}}
-
-				{{> messageBox}}
-			{{/if}}
+		<footer>
+			{{> messageBox}}
 		</footer>
 	</div>
 </template>
@@ -165,7 +157,7 @@
 		<span class="meta">
 			<strong>{{createdBy}}</strong>
 			<span id="created-at">{{timeAgo createdAt}}</span>
-			<span id="item-link" class="{{showItemLink}}">in <a class="item-link" href="/item/{{itemId}}">{{itemTitle}}</a></span>
+			<span id="item-link" class="{{showItemLink}}"><a class="item-link" href="/item/{{itemId}}">{{itemTitle}}</a></span>
 		</span>
 		<div id="text">
 			{{#markdown}}{{title}}{{/markdown}}

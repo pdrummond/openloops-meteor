@@ -202,7 +202,8 @@ if(Meteor.isClient) {
 	Template.userMessageItemView.helpers({
 
 		itemTitle: function() {
-			return Items.findOne(this.itemId).title;
+			var item = Items.findOne(this.itemId);
+			return item?'in ' + item.title:'';
 		},
 
 		showItemLink: function() {
