@@ -371,6 +371,10 @@ if(Meteor.isClient) {
 
 		currentItemType: function() {
 			return Items.findOne(Session.get('currentItemId')).type;
+		},
+
+		openStatus: function() {
+			return Items.findOne(Session.get('currentItemId')).isOpen?'open':'closed';
 		}
 	});
 
@@ -378,6 +382,10 @@ if(Meteor.isClient) {
 		'click #header-new-messages-toast': function() {
 			Session.set("numIncomingMessages", 0);
 			OpenLoops.scrollToBottomOfMessages();
+		},
+
+		'click #open-status-link': function() {
+			Meteor.call('toggleItemOpenStatus', Session.get('currentItemId'));
 		}
 	});
 
@@ -396,7 +404,7 @@ if(Meteor.isClient) {
 
 	Template.leftSidebar.helpers({
 		items: function() {
-			return Items.find({}, {sort: {updatedAt: -1}});
+			return Items.find({isOpen: true}, {sort: {updatedAt: -1}});
 		},
 
 		filters: function() {
@@ -505,6 +513,7 @@ if(Meteor.isServer) {
 				createdAt: now,
 				createdBy: Meteor.user().username,
 				updatedAt: now,
+				isOpen: true,
 				numMessages: 0,
 			}, newItem);
 
@@ -515,6 +524,13 @@ if(Meteor.isServer) {
 				title: newItem.description,
 				itemId: newItemId
 
+			});
+		},
+
+		toggleItemOpenStatus: function(itemId) {
+			var item = Items.findOne(itemId);
+			Items.update(itemId, {
+				$set: {isOpen: !item.isOpen},
 			});
 		},
 
@@ -558,7 +574,7 @@ if(Meteor.isServer) {
 	Meteor.publish("items", function(opts) {
 		var filter = {};
 		if(opts && opts.filter) {
-			filter = opts.filter;
+			filter = _.extend(filter, opts.filter);
 		}
 		return Items.find(filter, {sort: {updatedAt: -1}});
 	});

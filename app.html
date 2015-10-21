@@ -1,8 +1,4 @@
 <template name="app">
-	{{> Template.dynamic template=currentPage}}
-</template>
-
-<template name="feedPage">
 	<div id="top-banner">
 		<div class="left">
 			<div id="main-title"><a href="/">OpenLoops</a></div>
@@ -10,7 +6,11 @@
 		<div class="right">
 			{{> loginButtons}}
 		</div>
-	</div>
+	</div>	
+	{{> Template.dynamic template=currentPage}}
+</template>
+
+<template name="feedPage">
 	{{> leftSidebar}}
 	{{> feed}}
 </template>
@@ -68,7 +68,7 @@
 		</div>
 		<div id="active-list">{{activeListLabel}} <i class="fa fa-caret-down"></i></div>
 		<ul id="list-menu" style="display:none">
-			<li id="create-filter"><a href="/create-filter"><i class="fa fa-plus"></i> Add List</a></li>
+			<a id="create-filter" href="/create-filter"><i class="fa fa-plus"></i></a>
 			<li id="inbox-menu-item"><a href="">Inbox</a></li>
 			{{#each filters}}
 			{{> filterItem}}
@@ -96,7 +96,8 @@
 					<li><input id="search-input" placeholder="Type here to search" value={{filterQuery}}></li>
 				</ul>-->
 			{{else}}
-			<div id="header-main-title"><i class="fa fa-x2 {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}}</div>
+			<div id="header-main-title"><i class="fa {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}}</div>
+			<div id="header-open-status"> <i class="fa fa-adjust"></i> This {{currentItemType}} is <strong id="open-status-link">{{openStatus}}</strong></div>
 			{{#if hasIncomingMessages}}
 				<a href="" id="header-new-messages-toast"><i class="fa fa-comments-o"></i> {{numIncomingMessages}} New Messages - click to show</a>
 			{{/if}}
