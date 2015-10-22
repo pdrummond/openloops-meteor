@@ -36,10 +36,12 @@ if(Meteor.isClient) {
 	});
 
 	Template.registerHelper('currentBoardId', function () {
-		return Boards.findOne(Session.get('currentBoardId'))._id;
+		var board = Boards.findOne(Session.get('currentBoardId'));
+		return board?board._id:null;
 	});
 
 	Template.registerHelper('currentBoardTitle', function () {
-		return Boards.findOne(Session.get('currentBoardId')).title;
+		var board = Boards.findOne(Session.get('currentBoardId'));
+		return board?board.title:'';
 	});
 }

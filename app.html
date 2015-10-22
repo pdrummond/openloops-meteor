@@ -185,7 +185,7 @@
 		</div>
 		<span class="meta">
 			<span id="created-by">created by {{createdBy}}</span>
-			<span id="created-at">{{timeAgo createdAt}}</span> <a id="edit-link" href="/edit">Edit</a>
+			<span id="created-at">{{timeAgo createdAt}}</span> <a id="edit-link" href="/board/{{currentBoardId}}/edit-item">Edit</a>
 			<span id="item-link" class="{{showItemLink}}"> in <a class="item-link" href="/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
 		</span>
 		<div id="item-desc">{{#markdown}}{{text}}{{/markdown}}</div>

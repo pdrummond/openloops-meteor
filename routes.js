@@ -40,7 +40,7 @@ FlowRouter.route('/board/:boardId/create-item', {
 	}
 });
 
-FlowRouter.route('/board/:boardId/edit', {
+FlowRouter.route('/board/:boardId/edit-item', {
 	action: function(params, queryParams) {
 		Session.set('currentBoardId', params.boardId);
 		Session.set('currentPage', 'editPage');

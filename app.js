@@ -100,8 +100,14 @@ if(Meteor.isClient) {
 					title: title,
 					description: description,
 					type: $("#createForm select[name='type']").val()
+				}, function(err, result) {
+					if(err) {
+						alert("Error creating item: " + err);
+					} else {
+						FlowRouter.go("/board/" + Session.get('currentBoardId') + "/item/" + result._id);
+					}
 				});
-				FlowRouter.go("/board/" + Session.get('currentBoardId'));
+
 			}
 		}
 	});
@@ -398,7 +404,8 @@ if(Meteor.isClient) {
 		},
 
 		currentItemType: function() {
-			return Items.findOne(Session.get('currentItemId')).type;
+			var item = Items.findOne(Session.get('currentItemId'));
+			return item?item.type:'';
 		},
 
 		openStatus: function() {
@@ -557,6 +564,7 @@ if(Meteor.isServer) {
 		},
 
 		insertItem: function(newItem) {
+			console.log("insertItem - boardId:" + newItem.boardId);
 			var now = new Date().getTime();
 			newItem = _.extend({
 				createdAt: now,
@@ -570,10 +578,12 @@ if(Meteor.isServer) {
 			Meteor.call('insertMessage', {
 				type: MSG_TYPE_ITEM,
 				itemType: newItem.type,
-				title: newItem.description,
+				text: newItem.description,
+				boardId: newItem.boardId,
 				itemId: newItemId
-
 			});
+
+			return _.extend(newItem, {_id: newItemId});
 		},
 
 		updateItem: function(itemId, item) {
