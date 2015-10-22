@@ -1,7 +1,7 @@
 <template name="app">
 	<div id="top-banner">
 		<div class="left">
-			<div id="main-title"><a href="/">OpenLoops</a></div>
+			<div id="main-title"><a href="/">{{currentBoardTitle}}</a></div>
 		</div>
 		<div class="right">
 			{{> loginButtons}}
@@ -91,12 +91,12 @@
 <template name="leftSidebar">
 	<div class="left-sidebar">
 		<div id="top-header">
-			<a id="board-title" href="/">Dev Board</a>
-			<a id="create-link" href="/create"><i class="fa fa-plus fx-2x"></i></a>
+			<a id="board-title" href="/">Home</a>
+			<a id="create-link" href="/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
 		</div>
 		<div id="active-list">{{activeListLabel}} <i class="fa fa-caret-down"></i></div>
 		<ul id="list-menu" style="display:none">
-			<a id="create-filter" href="/create-filter"><i class="fa fa-plus"></i></a>
+			<a id="create-filter" href="/board/{{currentBoardId}}/create-filter"><i class="fa fa-plus"></i></a>
 			<li id="inbox-menu-item"><a href="">Inbox</a></li>
 			{{#each filters}}
 			{{> filterItem}}
@@ -115,7 +115,7 @@
 	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}}">
 		<header class="{{currentItemType}}">
 			{{#if isTeamFeed}}
-				<div id="header-main-title">Dev Board</div>
+				<div id="header-main-title">{{currentBoardTitle}}</div>
 				<!--<ul id="header-feed-links">
 					<li class="{{isActive ''}}"><a href="/"><i class="fa fa-home"></i> Feed</a></li>
 					<li class="{{isActive 'discussion'}}"><a href="/feed/search?query=type:discussion"><i class="fa fa-comments-o"></i> Discussions</a></li>
@@ -160,7 +160,7 @@
 			<span id="item-link" class="{{showItemLink}}"><a class="item-link" href="/item/{{itemId}}">{{itemTitle}}</a></span>
 		</span>
 		<div id="text">
-			{{#markdown}}{{title}}{{/markdown}}
+			{{#markdown}}{{text}}{{/markdown}}
 		</div>
 		<div class="meta">
 
@@ -179,7 +179,7 @@
 			<span id="created-at">{{timeAgo createdAt}}</span> <a id="edit-link" href="/edit">Edit</a>
 			<span id="item-link" class="{{showItemLink}}"> in <a class="item-link" href="/item/{{itemId}}">{{itemTitle}}</a></span>
 		</span>
-		<div id="item-desc">{{#markdown}}{{title}}{{/markdown}}</div>
+		<div id="item-desc">{{#markdown}}{{text}}{{/markdown}}</div>
 	</li>
 </template>
 

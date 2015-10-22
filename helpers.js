@@ -34,4 +34,12 @@ if(Meteor.isClient) {
 		}
 		return currentItemMessageCount;
 	});
+
+	Template.registerHelper('currentBoardId', function () {
+		return Boards.findOne(Session.get('currentBoardId'))._id;
+	});
+
+	Template.registerHelper('currentBoardTitle', function () {
+		return Boards.findOne(Session.get('currentBoardId')).title;
+	});
 }

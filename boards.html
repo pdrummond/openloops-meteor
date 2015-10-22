@@ -1,0 +1,27 @@
+<template name="boardList">
+	<a href="/boards/create">Create Board</a>
+	<ul>
+		{{#each boards}}
+			{{> boardItem}}
+		{{/each}}
+	</ul>
+</template>
+
+<template name="boardItem">
+	<li><a href="/board/{{_id}}">{{title}}</a></li>
+</template>
+
+
+<template name="createBoardForm">
+	<div id="createBoardForm" class="main">
+		<form>
+			<fieldset>
+				<label>Title</label>
+				<input name="title" placeholder="Enter title">
+				<label>Description</label>
+				<textarea name="description" placeholder="Enter description"></textarea>				
+			</fieldset>
+			<button id="create-button">Create Board</button>
+		</form>
+	</div>
+</template>

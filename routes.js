@@ -5,7 +5,14 @@ FlowRouter.subscriptions = function() {
 
 FlowRouter.route('/', {
 	action: function(params, queryParams) {
+		Session.set('currentPage', 'welcomePage');
+	}
+});
+
+FlowRouter.route('/board/:boardId', {
+	action: function(params, queryParams) {
 		Session.set('currentPage', 'feedPage');
+		Session.set('currentBoardId', params.boardId);
 		Session.set('currentItemId', null);
 		Session.set('numIncomingMessages', 0);
 		Session.set('filterQuery', null);
@@ -14,19 +21,9 @@ FlowRouter.route('/', {
 	}
 });
 
-FlowRouter.route('/feed/search', {
+FlowRouter.route('/board/:boardId/item/:itemId', {
 	action: function(params, queryParams) {
-		Session.set('currentPage', 'feedPage');
-		Session.set('currentItemId', null);
-		Session.set('numIncomingMessages', 0);
-		Session.set('filterQuery', queryParams.query);
-
-		OpenLoops.loadInitialMessages();
-	}
-});
-
-FlowRouter.route('/item/:itemId', {
-	action: function(params, queryParams) {
+		Session.set('currentBoardId', params.boardId);
 		Session.set('currentItemId', params.itemId);
 		Session.set('currentPage', 'feedPage');
 		Session.set('numIncomingMessages', 0);
@@ -36,21 +33,35 @@ FlowRouter.route('/item/:itemId', {
 	}
 });
 
-FlowRouter.route('/create', {
+FlowRouter.route('/board/:boardId/create-item', {
 	action: function(params, queryParams) {
+		Session.set('currentBoardId', params.boardId);
 		Session.set('currentPage', 'createPage');
 	}
 });
 
-FlowRouter.route('/edit', {
+FlowRouter.route('/board/:boardId/edit', {
 	action: function(params, queryParams) {
+		Session.set('currentBoardId', params.boardId);
 		Session.set('currentPage', 'editPage');
 	}
 });
 
-
-FlowRouter.route('/create-filter', {
+FlowRouter.route('/board/:boardId/create-filter', {
 	action: function(params, queryParams) {
+		Session.set('currentBoardId', params.boardId);
 		Session.set('currentPage', 'createFilterPage');
+	}
+});
+
+FlowRouter.route('/boards', {
+	action: function(params, queryParams) {
+		Session.set('currentPage', 'boardList');
+	}
+});
+
+FlowRouter.route('/boards/create', {
+	action: function(params, queryParams) {
+		Session.set('currentPage', 'createBoardForm');
 	}
 });

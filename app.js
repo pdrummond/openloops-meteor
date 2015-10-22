@@ -53,7 +53,8 @@ if(Meteor.isClient) {
 			type: MSG_TYPE_CHAT,
 			createdAt: new Date().getTime(),
 			createdBy: Meteor.user().username,
-			itemId: currentItemId,
+			boardId: Session.get('currentBoardId'),
+			itemId: currentItemId
 		};
 		var newMessage = _.extend(defaultAttrs, attrs);
 		var newMessageId = ClientMessages._collection.insert(newMessage);
@@ -95,11 +96,12 @@ if(Meteor.isClient) {
 			if(title != null && title.length > 0) {
 				var description = $("#createForm textarea[name='description']").val();
 				Meteor.call('insertItem', {
+					boardId: Session.get('currentBoardId'),
 					title: title,
 					description: description,
 					type: $("#createForm select[name='type']").val()
 				});
-				FlowRouter.go("/");
+				FlowRouter.go("/board/" + Session.get('currentBoardId'));
 			}
 		}
 	});
@@ -133,10 +135,11 @@ if(Meteor.isClient) {
 			if(title != null && title.length > 0) {
 				var query = $("#createFilterForm input[name='query']").val();
 				Meteor.call('insertFilter', {
+					boardId: Session.get('currentBoardId'),
 					title: title,
 					query: query
 				});
-				FlowRouter.go("/");
+				FlowRouter.go("/board/" + Session.get('currentBoardId'));
 			}
 		}
 	});
@@ -153,7 +156,7 @@ if(Meteor.isClient) {
 					e.preventDefault();
 					e.stopPropagation();
 					if(inputVal.length > 0) {
-						var newMessage = OpenLoops.insertClientMessage({title:inputVal});
+						var newMessage = OpenLoops.insertClientMessage({text:inputVal});
 						Meteor.call('saveMessage', newMessage, function(err, result) {
 							if(err) {
 								alert("error sending message");
@@ -290,6 +293,7 @@ if(Meteor.isClient) {
 		var olderThanDate = OpenLoops.getOldestClientMessageDate();
 		Meteor.call('loadMessages', {
 			olderThanDate: olderThanDate,
+			boardId: Session.get('currentBoardId'),
 			itemId: Session.get('currentItemId')
 		}, function(err, messages) {
 			if(err) {
@@ -344,7 +348,7 @@ if(Meteor.isClient) {
 
 	Template.feed.helpers({
 		messages: function() {
-			var filter = {};
+			var filter = {boardId: Session.get('currentBoardId')};
 			var currentItemId = Session.get('currentItemId');
 			if(currentItemId) {
 				filter.itemId = currentItemId;
@@ -427,11 +431,11 @@ if(Meteor.isClient) {
 
 	Template.leftSidebar.helpers({
 		items: function() {
-			return Items.find({isOpen: true}, {sort: {updatedAt: -1}});
+			return Items.find({boardId: Session.get('currentBoardId'), isOpen: true}, {sort: {updatedAt: -1}});
 		},
 
 		filters: function() {
-			return Filters.find();
+			return Filters.find({boardId: Session.get('currentBoardId')});
 		},
 
 		activeListLabel: function() {
@@ -485,7 +489,6 @@ if(Meteor.isClient) {
 
 } //isClient
 
-Boards = new Meteor.Collection("boards");
 Items = new Meteor.Collection('items');
 Filters = new Meteor.Collection('filters');
 
@@ -570,7 +573,7 @@ if(Meteor.isServer) {
 			newFilter = _.extend({
 				createdAt: now,
 				createdBy: Meteor.user().username,
-				updatedAt: now
+				updatedAt: now,
 			}, newFilter);
 			return Filters.insert(newFilter);
 		},
@@ -596,10 +599,6 @@ if(Meteor.isServer) {
 				}
 			} while (matches);*
 		}*/
-	});
-
-	Meteor.publish("boards", function() {
-		return Boards.find();
 	});
 
 	Meteor.publish("items", function(opts) {
