@@ -45,7 +45,6 @@
 	</div>
 </template>
 
-
 <template name="createForm">
 	<div id="createForm" class="main">
 		<form>
@@ -59,6 +58,12 @@
 					<option value="issue">Issue</option>
 					<option value="discussion">Discussion</option>
 					<option value="article">Article</option>
+				</select>
+				<label>Issue Type</label>
+				<select name="issueType">
+					<option value="task">Task</option>
+					<option value="bug">Bug</option>
+					<option value="enhancement">Enhancement</option>
 				</select>
 			</fieldset>
 			<button id="create-button">Create</button>
@@ -114,7 +119,7 @@
 <template name="feed">
 	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}}">
 		{{> moveToBoardList}}
-		<header class="{{currentItemType}}">
+		<header class="{{currentItemType}} {{currentItemIssueType}}">
 			{{#if isTeamFeed}}
 				<div id="header-main-title">{{currentBoardTitle}}</div>
 				<!--<ul id="header-feed-links">

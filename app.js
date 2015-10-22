@@ -5,6 +5,10 @@ const ITEM_TYPE_DISCUSSION = 'discussion';
 const ITEM_TYPE_ISSUE = 'issue';
 const ITEM_TYPE_ARTICLE = 'article';
 
+const ISSUE_TYPE_BUG = 'bug';
+const ISSUE_TYPE_TASK = 'task';
+const ISSUE_TYPE_ENHANCEMENT = 'enhancement';
+
 const MSG_TYPE_CHAT = 'MSG_TYPE_CHAT';
 const MSG_TYPE_ITEM = 'MSG_TYPE_ITEM';
 
@@ -99,7 +103,8 @@ if(Meteor.isClient) {
 					boardId: Session.get('currentBoardId'),
 					title: title,
 					description: description,
-					type: $("#createForm select[name='type']").val()
+					type: $("#createForm select[name='type']").val(),
+					issueType: $("#createForm select[name='issueType']").val()
 				}, function(err, result) {
 					if(err) {
 						alert("Error creating item: " + err);
@@ -268,6 +273,13 @@ if(Meteor.isClient) {
 			case ITEM_TYPE_ISSUE: icon = 'fa-exclamation-circle'; break;
 			case ITEM_TYPE_ARTICLE: icon = 'fa-book'; break;
 		}
+		if(item.type == ITEM_TYPE_ISSUE && item.issueType != null) {
+			switch(item.issueType) {
+				case ISSUE_TYPE_BUG: icon = 'fa-bug'; break;
+				case ISSUE_TYPE_TASK: icon = 'fa-exclamation-circle'; break;
+				case ISSUE_TYPE_ENHANCEMENT: icon = 'fa-bullseye'; break;
+			}
+		}
 		return icon;
 	},
 
@@ -277,6 +289,12 @@ if(Meteor.isClient) {
 			case ITEM_TYPE_DISCUSSION: color = '#90BEF2'; break;
 			case ITEM_TYPE_ISSUE: color = '#6cc644'; break;
 			case ITEM_TYPE_ARTICLE: color = 'orange'; break;
+		}
+		if(item.type == ITEM_TYPE_ISSUE && item.issueType != null) {
+			switch(item.issueType) {
+				case ISSUE_TYPE_BUG: color = 'brown'; break;
+				case ISSUE_TYPE_ENHANCEMENT: color = 'purple'; break;
+			}
 		}
 		return color;
 	}
@@ -406,6 +424,11 @@ if(Meteor.isClient) {
 		currentItemType: function() {
 			var item = Items.findOne(Session.get('currentItemId'));
 			return item?item.type:'';
+		},
+
+		currentItemIssueType: function() {
+			var item = Items.findOne(Session.get('currentItemId'));
+			return item?item.issueType:'';
 		},
 
 		openStatus: function() {
