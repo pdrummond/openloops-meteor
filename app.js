@@ -309,6 +309,7 @@ if(Meteor.isClient) {
 	}
 
 	OpenLoops.loadInitialMessages = function() {
+		ClientMessages._collection.remove({});
 		OpenLoops.loadMessages(function(ok) {
 			if(ok) {
 				OpenLoops.scrollToBottomOfMessages();
@@ -402,6 +403,10 @@ if(Meteor.isClient) {
 
 		openStatus: function() {
 			return Items.findOne(Session.get('currentItemId')).isOpen?'open':'closed';
+		},
+
+		boardTitle: function() {
+			return Boards.findOne(Items.findOne(Session.get('currentItemId')).boardId).title;
 		}
 	});
 
@@ -413,6 +418,10 @@ if(Meteor.isClient) {
 
 		'click #open-status-link': function() {
 			Meteor.call('toggleItemOpenStatus', Session.get('currentItemId'));
+		},
+
+		'click #item-board-link': function() {
+			$("#move-to-board-list").slideToggle();
 		}
 	});
 
@@ -467,6 +476,20 @@ if(Meteor.isClient) {
 			$("#list-menu").slideUp();
 		}
 	});
+
+	Template.moveToBoardList.helpers({
+		boards: function() {
+			return Boards.find({_id: {$ne: Session.get('currentBoardId')}});
+		}
+	});
+
+	Template.moveToBoardItem.events({
+		'click': function() {
+			$("#move-to-board-list").slideUp();
+			Meteor.call('moveItem', Session.get('currentItemId'), this._id);
+			FlowRouter.go("/board/" + Session.get('currentBoardId'));
+		}
+	})
 
 	Template.app.onRendered(function() {
 		$("#message-list").scroll(checkScroll);
@@ -559,6 +582,23 @@ if(Meteor.isServer) {
 			console.log("descMessage: " + descMessage.title);
 			console.log("item new description:" + item.description);
 			ServerMessages.update(descMessage._id, {$set: {title: item.description}});
+		},
+
+		moveItem: function(itemId, toBoardId) {
+			console.log("MOVE ITEM");
+			var item = Items.findOne(itemId);
+
+			Items.update(itemId, {
+				$set: {
+					boardId: toBoardId,
+					updatedAt: Date.now(),
+					updatedBy: Meteor.userId(),
+				}
+			});
+			var i = ServerMessages.find({itemId: itemId}).count();
+			console.log("i=" + i);
+			var num = ServerMessages.update({itemId: itemId}, {$set: {boardId: toBoardId}}, {multi:true});
+			console.log("MOVED " + num + " MESSAGES");
 		},
 
 		toggleItemOpenStatus: function(itemId) {

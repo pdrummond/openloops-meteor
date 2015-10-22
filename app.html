@@ -91,7 +91,7 @@
 <template name="leftSidebar">
 	<div class="left-sidebar">
 		<div id="top-header">
-			<a id="board-title" href="/">Home</a>
+			<a id="board-title" href="/board/{{currentBoardId}}">Home</a>
 			<a id="create-link" href="/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
 		</div>
 		<div id="active-list">{{activeListLabel}} <i class="fa fa-caret-down"></i></div>
@@ -113,6 +113,7 @@
 
 <template name="feed">
 	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}}">
+		{{> moveToBoardList}}
 		<header class="{{currentItemType}}">
 			{{#if isTeamFeed}}
 				<div id="header-main-title">{{currentBoardTitle}}</div>
@@ -125,7 +126,15 @@
 				</ul>-->
 			{{else}}
 			<div id="header-main-title"><i class="fa {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}}</div>
-			<div id="header-open-status"> <i class="fa fa-adjust"></i> This {{currentItemType}} is <strong id="open-status-link">{{openStatus}}</strong></div>
+			<div id="header-status-bar">
+				<div id="header-open-status">
+					<i class="fa fa-adjust"></i> This {{currentItemType}} is <strong id="open-status-link" class="black-underline">{{openStatus}}</strong>
+				</div>
+				<div id="header-board-status">
+					<i class="fa fa-pencil-square-o"></i> This {{currentItemType}} is in <strong id="item-board-link" class="black-underline">{{boardTitle}}</strong>
+				</div>
+			</div>
+
 			{{#if hasIncomingMessages}}
 				<a href="" id="header-new-messages-toast"><i class="fa fa-comments-o"></i> {{numIncomingMessages}} New Messages - click to show</a>
 			{{/if}}
@@ -157,7 +166,7 @@
 		<span class="meta">
 			<strong>{{createdBy}}</strong>
 			<span id="created-at">{{timeAgo createdAt}}</span>
-			<span id="item-link" class="{{showItemLink}}"><a class="item-link" href="/item/{{itemId}}">{{itemTitle}}</a></span>
+			<span id="item-link" class="{{showItemLink}}"><a class="item-link" href="/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
 		</span>
 		<div id="text">
 			{{#markdown}}{{text}}{{/markdown}}
@@ -172,12 +181,12 @@
 	<li class="item-message message" data-id={{_id}}>
 		<div class="title">
 			<i id="type-icon" class="fa {{itemTypeIcon}}" style="color:{{typeIconColor}}"></i>
-			<strong><a href="/item/{{itemId}}">{{itemTitle}}</a></strong>
+			<strong><a href="/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></strong>
 		</div>
 		<span class="meta">
 			<span id="created-by">created by {{createdBy}}</span>
 			<span id="created-at">{{timeAgo createdAt}}</span> <a id="edit-link" href="/edit">Edit</a>
-			<span id="item-link" class="{{showItemLink}}"> in <a class="item-link" href="/item/{{itemId}}">{{itemTitle}}</a></span>
+			<span id="item-link" class="{{showItemLink}}"> in <a class="item-link" href="/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
 		</span>
 		<div id="item-desc">{{#markdown}}{{text}}{{/markdown}}</div>
 	</li>
@@ -185,7 +194,7 @@
 
 <template name="itemItemView">
 	<li  data-id={{_id}}>
-		<a class="item {{isActive}}" href="/item/{{_id}}">
+		<a class="item {{isActive}}" href="/board/{{currentBoardId}}/item/{{_id}}">
 		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
 		<div id="content">
 			<span id="title">{{title}}</span>
@@ -201,4 +210,17 @@
 
 <template name="filterItem">
 	<li><a href="">{{title}}</a></li>
+</template>
+
+<template name="moveToBoardList">
+	<ul id="move-to-board-list" style="display:none">
+		<div class="menu-item-header">Move to</div>
+		{{#each boards}}
+			{{> moveToBoardItem}}
+		{{/each}}
+	</ul>
+</template>
+
+<template name="moveToBoardItem">
+	<li class="menu-item">{{title}}</li>
 </template>

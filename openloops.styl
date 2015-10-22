@@ -222,7 +222,7 @@ header
 	position fixed
 	left 0
 	top top-banner-height
-	width 100%
+	width "calc(100% - %s)" % sidebar-width;
 	height header-height
 	background-color #4E89DA;
 	border-bottom #7089a9;
@@ -456,4 +456,49 @@ a
 	margin-right:5px;
 	margin-top:5px;
 	color:gray;
+}
+
+#header-board-status {
+	position:absolute;
+	right:10px;
+	bottom:10px;
+}
+
+.black-underline {
+	border-bottom:2px solid black;
+	color:white;
+	cursor:pointer;
+}
+
+
+.menu-item {
+	list-style-type:none;
+	margin:0;
+	padding:10px;
+	cursor:pointer;
+}
+
+.menu-item:hover {
+	background:lightgray;
+}
+
+.menu-item-header {
+	background:gray;
+	text-transform:uppercase;
+	color:white;
+	padding:10px 5px 10px 5px;
+	text-align:center;
+}
+
+#move-to-board-list {
+	min-width:200px;
+	border:1px solid lightgray;
+	margin:0;
+	padding:0;
+	z-index: 99999999;
+	position: absolute;
+	top: 150px;
+	right: 10px;
+	background: whitesmoke;
+	box-shadow: 5px 5px 20px lightgray;
 }
