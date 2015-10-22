@@ -132,7 +132,8 @@ if(Meteor.isClient) {
 				Meteor.call('updateItem', Session.get('currentItemId'), {
 					title: title,
 					description: description,
-					type: $("#editForm select[name='type']").val()
+					type: $("#editForm select[name='type']").val(),
+					issueType: $("#editForm select[name='issueType']").val()
 				});
 				FlowRouter.go("/");
 			}
