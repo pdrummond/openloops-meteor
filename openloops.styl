@@ -85,14 +85,28 @@ body
 			display: flex;
 			justify-content: space-between;
 
-			#board-title {
-				padding-top:5px;
-				color: #4A4949;
-    			font-weight: bold;
-				font-size:18px;
-				margin-top:15px;
+			#top-header-tabs {
+				display:flex;
 				margin-left:10px;
+				margin-top:10px;
+
+				.tab-item {
+					color: #4A4949;
+	    			font-weight: bold;
+					font-size:18px;
+					display:block;
+					padding:10px
+					color:gray;
+				}
+
+				.tab-item.active {
+					color:black;
+					border-bottom:2px solid black;
+				}
+
 			}
+
+
 			#create-link
 				padding:5px;
 				background-color: #1E8F3C;

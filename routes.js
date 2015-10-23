@@ -1,5 +1,6 @@
 FlowRouter.subscriptions = function() {
 	this.register('boards', Meteor.subscribe('boards'));
+	this.register('labels', Meteor.subscribe('labels'));
 	this.register('filters', Meteor.subscribe('filters'));
 };
 
@@ -63,5 +64,12 @@ FlowRouter.route('/boards', {
 FlowRouter.route('/boards/create', {
 	action: function(params, queryParams) {
 		Session.set('currentPage', 'createBoardForm');
+	}
+});
+
+FlowRouter.route('/board/:boardId/create-label', {
+	action: function(params, queryParams) {
+		Session.set('currentBoardId', params.boardId);
+		Session.set('currentPage', 'editLabelPage');
 	}
 });

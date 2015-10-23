@@ -530,6 +530,14 @@ if(Meteor.isClient) {
 				label = activeFilterLabel;
 			}
 			return label;
+		},
+
+		isActiveTab: function(tabName) {
+			return tabName == Session.get('leftSidebarActiveTab') ? 'active' : '';
+		},
+
+		isActiveTabBody: function(tabName) {
+			return tabName == Session.get('leftSidebarActiveTab') ? '' : 'hide';
 		}
 	});
 
@@ -542,7 +550,19 @@ if(Meteor.isClient) {
 
 		'click #active-list': function() {
 			$("#list-menu").slideToggle();
-		}
+		},
+
+		'click #inbox-tab': function() {
+			Session.set('leftSidebarActiveTab', 'inboxTab');
+		},
+
+		'click #labels-tab': function() {
+			Session.set('leftSidebarActiveTab', 'labelsTab');
+		},
+
+		'click #searches-tab': function() {
+			Session.set('leftSidebarActiveTab', 'searchesTab');
+		},
 	});
 
 	Template.filterItem.events({

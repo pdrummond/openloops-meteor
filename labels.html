@@ -1,0 +1,33 @@
+<template name="labelsList">
+	<a href="/board/{{currentBoardId}}/create-label">Create Label</a>
+	<ul style="padding:10px">
+		{{#each labels}}
+			{{> labelListItem}}
+		{{/each}}
+	</ul>
+</template>
+
+<template name="labelListItem">
+	<li style="display:block;list-style-type:none;padding:10px;"><a href="" style="padding:5px 20px 5px 20px;border-radius:5px;color:white;background-color:{{color}}">{{title}}</a></li>
+</template>
+
+<template name="editLabelPage">
+	{{> leftSidebar}}
+	{{> editLabelForm}}
+</template>
+
+<template name="editLabelForm">
+	<div id="editLabelForm" class="main">
+		<form>
+			<fieldset>
+				<label>Title</label>
+				<input name="title" placeholder="Enter title" value={{title}}>
+				<label>Description</label>
+				<textarea name="description" placeholder="Enter description" value={{description}}></textarea>
+				<label>Color</label>
+				<input name="color" placeholder="Enter color" value="{{color}}">
+			</fieldset>
+			<button id="save-button">Save Label</button>
+		</form>
+	</div>
+</template>

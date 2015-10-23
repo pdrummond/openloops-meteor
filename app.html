@@ -71,22 +71,31 @@
 <template name="leftSidebar">
 	<div class="left-sidebar">
 		<div id="top-header">
-			<a id="board-title" href="/board/{{currentBoardId}}">Home</a>
+			<div id="top-header-tabs">
+				<a id="inbox-tab" class="tab-item {{isActiveTab 'inboxTab'}}" href="/board/{{currentBoardId}}">Inbox</a>
+				<a id="labels-tab" class="tab-item {{isActiveTab 'labelsTab'}}" href="/board/{{currentBoardId}}">Labels</a>
+				<a id="searches-tab" class="tab-item {{isActiveTab 'searchesTab'}}" href="/board/{{currentBoardId}}">Searches</a>
+			</div>
 			<a id="create-link" href="/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
 		</div>
-		<div id="active-list">{{activeListLabel}} <i class="fa fa-caret-down"></i></div>
-		<ul id="list-menu" style="display:none">
+		<div id="inbox-tab-body" class="{{isActiveTabBody 'inboxTab'}}">
+			<ul id="item-list">
+				{{#each items}}
+					{{> itemItemView}}
+				{{/each}}
+			</ul>
+		</div>
+		<div id="labels-tab-body" class="{{isActiveTabBody 'labelsTab'}}">
+			{{>labelsList}}
+		</div>
+		<ul id="searches-tab-body" class="{{isActiveTabBody 'searchesTab'}}">
 			<a id="create-filter" href="/board/{{currentBoardId}}/create-filter"><i class="fa fa-plus"></i></a>
 			<li id="inbox-menu-item"><a href="">Inbox</a></li>
 			{{#each filters}}
 			{{> filterItem}}
 			{{/each}}
 		</ul>
-		<ul id="item-list">
-			{{#each items}}
-				{{> itemItemView}}
-			{{/each}}
-		</ul>
+
 
 	</div>
 </template>
