@@ -1,14 +1,20 @@
 <template name="labelsList">
-	<a href="/board/{{currentBoardId}}/create-label">Create Label</a>
-	<ul style="padding:10px">
+	<ul id="labels-list">
 		{{#each labels}}
 			{{> labelListItem}}
 		{{/each}}
 	</ul>
+	<a id="create-label" href="/board/{{currentBoardId}}/create-label"><i class="fa fa-plus"> Create Label</i></a>
 </template>
 
 <template name="labelListItem">
-	<li style="display:block;list-style-type:none;padding:10px;"><a href="" style="padding:5px 20px 5px 20px;border-radius:5px;color:white;background-color:{{color}}">{{title}}</a></li>
+	<li class="label-list-item">
+		<div id="label-list-item-header">
+			<a id="label-link" style="background-color:{{color}}" class="label-tag" href="">{{title}}</a>
+			<span class="label-counts"> <strong>10 open</strong> / 20 closed</span>
+		</div>
+		<span class="meta">{{description}}</span> <a href="/board/{{currentBoardId}}/label/{{_id}}/edit" style="font-size:12px">Edit</a>
+	</li>
 </template>
 
 <template name="editLabelPage">

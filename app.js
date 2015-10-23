@@ -17,6 +17,8 @@ const MESSAGE_AGE_HOURS_INCREMENT = 1;
 const FILL_SCREEN_MSG_COUNT = 30;
 
 if(Meteor.isClient) {
+	Session.setDefault('leftSidebarActiveTab', 'inboxTab');
+	Session.setDefault('showSidebarTabs', true);
 	ClientMessages = new Meteor.Collection('client-messages');
 
 	Meteor.startup(function() {
@@ -538,18 +540,17 @@ if(Meteor.isClient) {
 
 		isActiveTabBody: function(tabName) {
 			return tabName == Session.get('leftSidebarActiveTab') ? '' : 'hide';
+		},
+
+		showSidebarTabs: function() {
+			return Session.get('showSidebarTabs');
 		}
 	});
 
 	Template.leftSidebar.events({
-		'click #inbox-menu-item': function() {
-			Session.set('filterQuery', null);
-			Session.set('activeFilterLabel', 'Inbox');
-			$("#list-menu").slideUp();
-		},
 
-		'click #active-list': function() {
-			$("#list-menu").slideToggle();
+		'click #search-link': function() {
+			Session.set('showSidebarTabs', false);
 		},
 
 		'click #inbox-tab': function() {
@@ -563,6 +564,11 @@ if(Meteor.isClient) {
 		'click #searches-tab': function() {
 			Session.set('leftSidebarActiveTab', 'searchesTab');
 		},
+
+		'click #back-arrow-link': function() {
+			Session.set('showSidebarTabs', true);
+			Session.set('filterQuery', null);
+		}
 	});
 
 	Template.filterItem.events({

@@ -31,6 +31,15 @@ if(Meteor.isClient) {
 			}
 		}
 	});
+
+	Template.labelListItem.events({
+		'click #label-link': function() {
+			Session.set('showSidebarTabs', false);
+			Session.set('leftSidebarActiveTab', 'inboxTab');
+			Session.set('filterQuery', 'labels:' + this.title);
+
+		}
+	})
 }
 
 Labels = new Meteor.Collection("labels");
@@ -51,6 +60,7 @@ if(Meteor.isServer) {
 				numOpenMessages: 0,
 				numClosedMessage: 0
 			}, newLabel);
+			newLabel.title = slugify(newLabel.title);
 			var result = Labels.upsert(newLabel._id, newLabel);
 			console.log("upsertLabel: " + JSON.stringify(result));
 		}

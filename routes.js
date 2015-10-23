@@ -16,7 +16,6 @@ FlowRouter.route('/board/:boardId', {
 		Session.set('currentBoardId', params.boardId);
 		Session.set('currentItemId', null);
 		Session.set('numIncomingMessages', 0);
-		Session.set('filterQuery', null);
 
 		OpenLoops.loadInitialMessages();
 	}
@@ -28,7 +27,6 @@ FlowRouter.route('/board/:boardId/item/:itemId', {
 		Session.set('currentItemId', params.itemId);
 		Session.set('currentPage', 'feedPage');
 		Session.set('numIncomingMessages', 0);
-		Session.set('filterQuery', null);
 		OpenLoops.loadInitialMessages();
 		OpenLoops.removeSidebarNewMessages(params.itemId);
 	}
@@ -70,6 +68,14 @@ FlowRouter.route('/boards/create', {
 FlowRouter.route('/board/:boardId/create-label', {
 	action: function(params, queryParams) {
 		Session.set('currentBoardId', params.boardId);
+		Session.set('currentPage', 'editLabelPage');
+	}
+});
+
+FlowRouter.route('/board/:boardId/label/:labelId/edit', {
+	action: function(params, queryParams) {
+		Session.set('currentBoardId', params.boardId);
+		Session.set('currentLabelId', params.labelId);
 		Session.set('currentPage', 'editLabelPage');
 	}
 });

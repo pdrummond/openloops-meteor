@@ -71,12 +71,21 @@
 <template name="leftSidebar">
 	<div class="left-sidebar">
 		<div id="top-header">
+			{{#if showSidebarTabs}}
 			<div id="top-header-tabs">
 				<a id="inbox-tab" class="tab-item {{isActiveTab 'inboxTab'}}" href="/board/{{currentBoardId}}">Inbox</a>
 				<a id="labels-tab" class="tab-item {{isActiveTab 'labelsTab'}}" href="/board/{{currentBoardId}}">Labels</a>
 				<a id="searches-tab" class="tab-item {{isActiveTab 'searchesTab'}}" href="/board/{{currentBoardId}}">Searches</a>
 			</div>
+			{{else}}
+				<div id="top-header-title"><i id="back-arrow-link" class="fa fa-arrow-left"></i>
+					<input id="search-input" placeholder="Type here to search" value="{{filterQuery}}">
+				</div>
+			{{/if}}
+			<a id="search-link" href=""><i class="fa fa-search fx-2x"></i></a>
 			<a id="create-link" href="/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
+
+
 		</div>
 		<div id="inbox-tab-body" class="{{isActiveTabBody 'inboxTab'}}">
 			<ul id="item-list">
@@ -196,13 +205,13 @@
 		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
 		<div id="content">
 			<span id="title">{{title}}</span>
+			<div id="meta"> <strong>{{createdBy}}</strong> {{timeAgo createdAt}} </div>
+			<div id="meta"> {{description}}</div>
 			<div id="item-labels">
 				{{#each itemLabels}}
 					<span class="label-item">{{this}}</span>
 				{{/each}}
 			</div>
-			<div id="meta"> <strong>{{createdBy}}</strong> {{timeAgo createdAt}} </div>
-			<div id="meta"> {{description}}</div>
 		</div>
 		<div id="item-msg-count">
 			<i class="fa fa-comment-o"></i> {{numMessages}}

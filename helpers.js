@@ -49,4 +49,8 @@ if(Meteor.isClient) {
 		var board = Boards.findOne(Session.get('currentBoardId'));
 		return board?board.title:'';
 	});
+
+	Template.registerHelper('filterQuery', function () {
+		return Session.get('filterQuery');
+	});
 }
