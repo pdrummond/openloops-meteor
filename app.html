@@ -15,17 +15,6 @@
 	{{> feed}}
 </template>
 
-<template name="createPage">
-	{{> leftSidebar}}
-	{{> createForm}}
-</template>
-
-<template name="editPage">
-	{{> leftSidebar}}
-	{{> editForm}}
-</template>
-
-
 <template name="createFilterPage">
 	{{> leftSidebar}}
 	{{> createFilterForm}}
@@ -45,58 +34,38 @@
 	</div>
 </template>
 
-<template name="createForm">
-	<div id="createForm" class="main">
-		<form>
-			<fieldset>
-				<label>Title</label>
-				<input name="title" placeholder="Enter title">
-				<label>Description</label>
-				<textarea name="description" placeholder="Enter description"></textarea>
-				<label>Type</label>
-				<select name="type" placeholder="Enter type">
-					<option value="issue">Issue</option>
-					<option value="discussion">Discussion</option>
-					<option value="article">Article</option>
-				</select>
-				<label>Issue Type</label>
-				<select name="issueType">
-					<option value="task">Task</option>
-					<option value="bug">Bug</option>
-					<option value="enhancement">Enhancement</option>
-				</select>
-			</fieldset>
-			<button id="create-button">Create</button>
-		</form>
-	</div>
+<template name="editItemPage">
+	{{> leftSidebar}}
+	{{> editItemForm}}
 </template>
 
-<template name="editForm">
-	{{#with currentItem}}
-	<div id="editForm" class="main">
+<template name="editItemForm">
+	<div id="editItemForm" class="main">
 		<form>
 			<fieldset>
 				<label>Title</label>
 				<input name="title" placeholder="Enter title" value={{title}}>
 				<label>Description</label>
 				<textarea name="description" placeholder="Enter description" value={{description}}></textarea>
-				<label>Type</label>
+				<label>Labels</label>
+				<input name="labels" placeholder="Add labels here" value="{{labels}}">
+				<label style="display:inline">Type</label>
 				<select name="type" placeholder="Enter type">
-					<option value="issue">Issue</option>
-					<option value="discussion">Discussion</option>
-					<option value="article">Article</option>
+					<option {{isSelectedType 'issue'}} value="issue">Issue</option>
+					<option {{isSelectedType 'discussion'}} value="discussion">Discussion</option>
+					<option {{isSelectedType 'article'}} value="article">Article</option>
 				</select>
-				<label>Issue Type</label>
+				<label style="margin-top:30px;display:inline">Issue Type</label>
 				<select name="issueType">
-					<option value="task">Task</option>
-					<option value="bug">Bug</option>
-					<option value="enhancement">Enhancement</option>
+					<option {{isSelectedIssueType 'task'}} value="task">Task</option>
+					<option {{isSelectedIssueType 'bug'}} value="bug">Bug</option>
+					<option {{isSelectedIssueType 'enhancement'}} value="enhancement">Enhancement</option>
 				</select>
+
 			</fieldset>
 			<button id="save-button">Save</button>
 		</form>
 	</div>
-	{{/with}}
 </template>
 
 <template name="leftSidebar">
@@ -137,6 +106,9 @@
 				</ul>-->
 			{{else}}
 			<div id="header-main-title"><i class="fa {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}}</div>
+			<div id="header-labels">
+				{{> itemLabels}}
+			</div>
 			<div id="header-status-bar">
 				<div id="header-open-status">
 					<i class="fa fa-adjust"></i> This {{currentItemType}} is <strong id="open-status-link" class="black-underline">{{openStatus}}</strong>
@@ -162,6 +134,12 @@
 			{{> messageBox}}
 		</footer>
 	</div>
+</template>
+
+<template name="itemLabels">
+	{{#each currentItemLabels}}
+		<span class="label-item">{{this}}</span>
+	{{/each}}
 </template>
 
 <template name="messageBox">
@@ -209,6 +187,11 @@
 		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
 		<div id="content">
 			<span id="title">{{title}}</span>
+			<div id="item-labels">
+				{{#each itemLabels}}
+					<span class="label-item">{{this}}</span>
+				{{/each}}
+			</div>
 			<div id="meta"> <strong>{{createdBy}}</strong> {{timeAgo createdAt}} </div>
 			<div id="meta"> {{description}}</div>
 		</div>

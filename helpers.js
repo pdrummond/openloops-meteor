@@ -35,6 +35,11 @@ if(Meteor.isClient) {
 		return currentItemMessageCount;
 	});
 
+	Template.registerHelper('currentItemLabels', function () {
+		var item = Items.findOne(Session.get('currentItemId'));
+		return item?item.labels:[];
+	});
+
 	Template.registerHelper('currentBoardId', function () {
 		var board = Boards.findOne(Session.get('currentBoardId'));
 		return board?board._id:null;

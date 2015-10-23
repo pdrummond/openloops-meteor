@@ -36,14 +36,14 @@ FlowRouter.route('/board/:boardId/item/:itemId', {
 FlowRouter.route('/board/:boardId/create-item', {
 	action: function(params, queryParams) {
 		Session.set('currentBoardId', params.boardId);
-		Session.set('currentPage', 'createPage');
+		Session.set('currentPage', 'editItemPage');
 	}
 });
 
 FlowRouter.route('/board/:boardId/edit-item', {
 	action: function(params, queryParams) {
 		Session.set('currentBoardId', params.boardId);
-		Session.set('currentPage', 'editPage');
+		Session.set('currentPage', 'editItemPage');
 	}
 });
 

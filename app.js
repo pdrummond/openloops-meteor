@@ -93,49 +93,84 @@ if(Meteor.isClient) {
 		return filter;
 	}
 
-	Template.createForm.events({
-		'click #create-button': function(e) {
-			e.preventDefault();
-			var title = $("#createForm input[name='title']").val();
-			if(title != null && title.length > 0) {
-				var description = $("#createForm textarea[name='description']").val();
-				Meteor.call('insertItem', {
-					boardId: Session.get('currentBoardId'),
-					title: title,
-					description: description,
-					type: $("#createForm select[name='type']").val(),
-					issueType: $("#createForm select[name='issueType']").val()
-				}, function(err, result) {
-					if(err) {
-						alert("Error creating item: " + err);
-					} else {
-						FlowRouter.go("/board/" + Session.get('currentBoardId') + "/item/" + result._id);
-					}
-				});
+	Template.editItemForm.helpers({
+		currentItem: function() {
+			return Items.findOne(Session.get('currentItemId'));
+		},
 
+		title: function() {
+			var item = Items.findOne(Session.get('currentItemId'));
+			return item?item.title:'';
+		},
+
+		description: function() {
+			var item = Items.findOne(Session.get('currentItemId'));
+			return item?item.description:'';
+		},
+
+		labels: function() {
+			var item = Items.findOne(Session.get('currentItemId'));
+			return item?item.labels:'';
+		},
+
+		isSelectedType: function(type) {
+			var item = Items.findOne(Session.get('currentItemId'));
+			if(item) {
+				return type == item.type?'selected':'';
+			} else {
+				return '';
+			}
+		},
+
+		isSelectedIssueType: function(issueType) {
+			var item = Items.findOne(Session.get('currentItemId'));
+			if(item) {
+				return issueType == item.issueType?'selected':'';
+			} else {
+				return '';
 			}
 		}
 	});
 
-	Template.editForm.helpers({
-		currentItem: function() {
-			return Items.findOne(Session.get('currentItemId'));
-		}
-	});
-
-	Template.editForm.events({
+	Template.editItemForm.events({
 		'click #save-button': function(e) {
 			e.preventDefault();
-			var title = $("#editForm input[name='title']").val();
+			var title = $("#editItemForm input[name='title']").val();
 			if(title != null && title.length > 0) {
-				var description = $("#editForm textarea[name='description']").val();
-				Meteor.call('updateItem', Session.get('currentItemId'), {
+				var description = $("#editItemForm textarea[name='description']").val();
+
+				var labelList = [];
+				var labels = $("#editItemForm input[name='labels']").val();
+				if(labels != null && labels.length > 0) {
+					labelList = labels.split(",");
+				}
+
+				var item = {
 					title: title,
 					description: description,
-					type: $("#editForm select[name='type']").val(),
-					issueType: $("#editForm select[name='issueType']").val()
-				});
-				FlowRouter.go("/");
+					type: $("#editItemForm select[name='type']").val(),
+					issueType: $("#editItemForm select[name='issueType']").val(),
+					labels: labelList
+				};
+				var currentItemId = Session.get('currentItemId');
+				if(currentItemId == null) {
+					item.boardId = Session.get('currentBoardId');
+					Meteor.call('insertItem', item, function(err, result) {
+						if(err) {
+							alert("Error adding item: " + err);
+						} else {
+							FlowRouter.go("/board/" + Session.get('currentBoardId') + "/item/" + result._id);
+						}
+					});
+				} else {
+					Meteor.call('updateItem', currentItemId, item, function(err, result) {
+						if(err) {
+							alert("Error editing item: " + err);
+						} else {
+							FlowRouter.go("/board/" + Session.get('currentBoardId') + "/item/" + result._id);
+						}
+					});
+				}
 			}
 		}
 	});
@@ -237,6 +272,11 @@ if(Meteor.isClient) {
 
 		typeIconColor: function() {
 			return OpenLoops.getItemTypeIconColor(this);
+		},
+
+		itemLabels: function() {
+			var item = Items.findOne(this._id);
+			return item?item.labels:[];
 		},
 
 		isActive: function() {
@@ -432,6 +472,11 @@ if(Meteor.isClient) {
 			return item?item.issueType:'';
 		},
 
+		currentItemLabels: function() {
+			var item = Items.findOne(Session.get('currentItemId'));
+			return item?item.labels:[];
+		},
+
 		openStatus: function() {
 			return Items.findOne(Session.get('currentItemId')).isOpen?'open':'closed';
 		},
@@ -616,6 +661,7 @@ if(Meteor.isServer) {
 			console.log("descMessage: " + descMessage.title);
 			console.log("item new description:" + item.description);
 			ServerMessages.update(descMessage._id, {$set: {title: item.description}});
+			return _.extend(item, {_id: itemId});
 		},
 
 		moveItem: function(itemId, toBoardId) {
