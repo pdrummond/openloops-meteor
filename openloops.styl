@@ -92,7 +92,6 @@ body
 
 				.tab-item {
 					color: #4A4949;
-	    			font-weight: bold;
 					font-size:18px;
 					display:block;
 					padding:10px
@@ -102,13 +101,11 @@ body
 
 				.tab-item.active {
 					color:black;
-					border-bottom:2px solid black;
 				}
 
 			}
 
 			#top-header-title {
-    			font-weight: bold;
 				font-size:18px;
 				display:block;
 				padding:20px
@@ -363,6 +360,7 @@ footer
 	padding 10px
 
 #message-box
+	border: 2px solid #d3d3d3;
 	margin-top:5px;
 	width calc(100% - 440px)
 
@@ -568,8 +566,6 @@ footer
 }
 
 .label-list-item {
-	border-top: 1px solid lightgray;
-	border-bottom: 1px solid lightgray;
 	list-style-type:none;
 	padding:10px;
 	#label-list-item-header {
@@ -577,14 +573,19 @@ footer
 		justify-content: space-between;
 
 		.label-tag {
-			padding:5px 20px 5px 20px;
+			padding:5px;
 			border-radius:5px;
 			color:white;
 		}
 
 		.label-counts {
+			font-size:12px;
 			position:relative;
 			top:5px;
+
+			i {
+				font-size:1.2em;
+			}
 		}
 	}
 }
@@ -597,6 +598,8 @@ footer
 }
 
 #label-link {
+	text-decoration:none;
 	overflow: ellipsis;
 	max-width:180px;
+	font-size:12px;
 }

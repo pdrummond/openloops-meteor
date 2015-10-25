@@ -31,10 +31,16 @@ if(Meteor.isClient) {
 			}
 		}
 	});
+	Template.labelListItem.helpers({
+		description: function() {
+			return this.description || "No Description";
+		}
+	});
 
 	Template.labelListItem.events({
 		'click #label-link': function() {
 			Session.set('showSidebarTabs', false);
+			Session.set('currentLabelId', this._id);
 			Session.set('leftSidebarActiveTab', 'inboxTab');
 			Session.set('filterQuery', 'labels:' + this.title);
 

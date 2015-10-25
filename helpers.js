@@ -53,4 +53,9 @@ if(Meteor.isClient) {
 	Template.registerHelper('filterQuery', function () {
 		return Session.get('filterQuery');
 	});
+
+	Template.registerHelper('currentLabelTitle', function () {
+		var label = Labels.findOne(Session.get('currentLabelId'));
+		return label?label.title:'';
+	});
 }

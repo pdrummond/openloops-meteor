@@ -78,11 +78,10 @@
 				<a id="searches-tab" class="tab-item {{isActiveTab 'searchesTab'}}" href="/board/{{currentBoardId}}">Searches</a>
 			</div>
 			{{else}}
-				<div id="top-header-title"><i id="back-arrow-link" class="fa fa-arrow-left"></i>
-					<input id="search-input" placeholder="Type here to search" value="{{filterQuery}}">
+				<div id="top-header-title"><i id="back-arrow-link" class="fa fa-arrow-left" style="margin-right:20px"></i>
+					{{currentLabelTitle}}
 				</div>
 			{{/if}}
-			<a id="search-link" href=""><i class="fa fa-search fx-2x"></i></a>
 			<a id="create-link" href="/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
 
 
