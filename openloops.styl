@@ -335,7 +335,6 @@ fieldset, input, textarea
 	border 0
 	font-size 100%
 	vertical-align baseline
-	resize none
 	margin-bottom 30px
 	outline none
 
@@ -362,7 +361,8 @@ footer
 #message-box
 	border: 2px solid #d3d3d3;
 	margin-top:5px;
-	width calc(100% - 440px)
+	width calc(100% - 440px);
+	resize none
 
 #header-main-title
 	padding:10px
@@ -590,7 +590,7 @@ footer
 	}
 }
 
-#search-input {
+.search-input {
 	font-size:14px;
 	margin-left:20px;
 	width: calc(100% - 42px);
@@ -601,4 +601,29 @@ footer
 	overflow: ellipsis;
 	max-width:180px;
 	font-size:12px;
+}
+
+
+.main.item-feed.readTab #message-list {
+	width:800px;
+	margin:auto auto;
+	text-align: justify;
+	color: #383838;
+}
+
+.main.item-feed.readTab header {
+	background-color: white;
+
+	#header-main-title {
+		width:800px;
+		margin:auto auto;
+		padding-left:50px;
+		margin-top:50px;
+		color:black;
+		font-size:35px;
+	}
+
+	#header-status-bar, #header-labels {
+		display:none;
+	}
 }

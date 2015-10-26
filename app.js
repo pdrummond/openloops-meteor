@@ -79,6 +79,11 @@ if(Meteor.isClient) {
 			remainingText = remainingText.replace(field, '');
 			remainingText = remainingText.replace(value, '');
 			remainingText = remainingText.replace(/:/g, '');
+			if(field == 'type') {
+				field = 'issueType';
+			} else if(field == 'label') {
+				field = 'labels';
+			}
 			if(value == "true") {
 				value = true;
 			} else if(value == "false") {
@@ -379,7 +384,10 @@ if(Meteor.isClient) {
 		ClientMessages._collection.remove({});
 		OpenLoops.loadMessages(function(ok) {
 			if(ok) {
-				OpenLoops.scrollToBottomOfMessages();
+				//Don't scroll to bottom when in read-mode.
+				if(Session.get('leftSidebarActiveTab') != 'readTab') {					
+					OpenLoops.scrollToBottomOfMessages();
+				}
 			}
 		});
 	}
@@ -485,6 +493,10 @@ if(Meteor.isClient) {
 
 		boardTitle: function() {
 			return Boards.findOne(Items.findOne(Session.get('currentItemId')).boardId).title;
+		},
+
+		leftSidebarActiveTab: function() {
+			return Session.get('leftSidebarActiveTab');
 		}
 	});
 
@@ -504,16 +516,12 @@ if(Meteor.isClient) {
 	});
 
 	Template.leftSidebar.onCreated(function() {
-		var self = this;
-		this.autorun(function() {
-			self.subscribe('items', {
-				filter: OpenLoops.getFilterQuery(Session.get('filterQuery'))
-			}, function(err, result) {
-				if(err) {
-					alert("Items Subscription error: " + err);
-				}
-			});
+		this.subscribe('items', {}, function(err, result) {
+			if(err) {
+				alert("Items Subscription error: " + err);
+			}
 		});
+
 	});
 
 	Template.leftSidebar.helpers({
@@ -752,6 +760,24 @@ if(Meteor.isServer) {
 		if(opts && opts.filter) {
 			filter = _.extend(filter, opts.filter);
 		}
+		return Items.find(filter, {sort: {updatedAt: -1}});
+	});
+
+	Meteor.publish("articles", function(opts) {
+		var filter = {};
+		if(opts && opts.filter) {
+			filter = _.extend(filter, opts.filter);
+		}
+		filter.type = 'article';
+		return Items.find(filter, {sort: {updatedAt: -1}});
+	});
+
+	Meteor.publish("issues", function(opts) {
+		var filter = {};
+		if(opts && opts.filter) {
+			filter = _.extend(filter, opts.filter);
+		}
+		filter.type = 'issue';
 		return Items.find(filter, {sort: {updatedAt: -1}});
 	});
 

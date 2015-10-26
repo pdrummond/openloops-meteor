@@ -34,6 +34,7 @@ FlowRouter.route('/board/:boardId/item/:itemId', {
 
 FlowRouter.route('/board/:boardId/create-item', {
 	action: function(params, queryParams) {
+		Session.set('currentItemId', null);
 		Session.set('currentBoardId', params.boardId);
 		Session.set('currentPage', 'editItemPage');
 	}

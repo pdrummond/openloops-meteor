@@ -46,7 +46,7 @@
 				<label>Title</label>
 				<input name="title" placeholder="Enter title" value={{title}}>
 				<label>Description</label>
-				<textarea name="description" placeholder="Enter description" value={{description}}></textarea>
+				<textarea name="description" placeholder="Enter description" rows="20" value={{description}}></textarea>
 				<label>Labels</label>
 				<input name="labels" placeholder="Add labels here" value="{{labels}}">
 				<label style="display:inline">Type</label>
@@ -92,22 +92,17 @@
 			</ul>
 		</div>
 		<div id="manage-tab-body" class="{{isActiveTabBody 'manageTab'}}">
-			{{>manageList}}
+			{{> manageList}}
 		</div>
-		<ul id="read-tab-body" class="{{isActiveTabBody 'readTab'}}">
-			<a id="create-filter" href="/board/{{currentBoardId}}/create-filter"><i class="fa fa-plus"></i></a>
-			<li id="inbox-menu-item"><a href="">Inbox</a></li>
-			{{#each filters}}
-			{{> filterItem}}
-			{{/each}}
-		</ul>
-
+		<div id="read-tab-body" class="{{isActiveTabBody 'readTab'}}">
+			{{> articleList}}
+		</div>
 
 	</div>
 </template>
 
 <template name="feed">
-	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}}">
+	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}} {{leftSidebarActiveTab}}">
 		{{> moveToBoardList}}
 		<header class="{{currentItemType}} {{currentItemIssueType}}">
 			{{#if isTeamFeed}}
