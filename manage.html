@@ -1,0 +1,8 @@
+<template name="manageList">
+	<input id="search-input" placeholder="Type here to search" value={{filterQuery}}>
+	<ul id="issues-list" class="item-list">
+		{{#each issues}}
+			{{> itemItemView}}
+		{{/each}}
+	</ul>
+</template>

@@ -17,7 +17,7 @@ const MESSAGE_AGE_HOURS_INCREMENT = 1;
 const FILL_SCREEN_MSG_COUNT = 30;
 
 if(Meteor.isClient) {
-	Session.setDefault('leftSidebarActiveTab', 'inboxTab');
+	Session.setDefault('leftSidebarActiveTab', 'discussTab');
 	Session.setDefault('showSidebarTabs', true);
 	ClientMessages = new Meteor.Collection('client-messages');
 
@@ -553,16 +553,16 @@ if(Meteor.isClient) {
 			Session.set('showSidebarTabs', false);
 		},
 
-		'click #inbox-tab': function() {
-			Session.set('leftSidebarActiveTab', 'inboxTab');
+		'click #discuss-tab': function() {
+			Session.set('leftSidebarActiveTab', 'discussTab');
 		},
 
-		'click #labels-tab': function() {
-			Session.set('leftSidebarActiveTab', 'labelsTab');
+		'click #manage-tab': function() {
+			Session.set('leftSidebarActiveTab', 'manageTab');
 		},
 
-		'click #searches-tab': function() {
-			Session.set('leftSidebarActiveTab', 'searchesTab');
+		'click #read-tab': function() {
+			Session.set('leftSidebarActiveTab', 'readTab');
 		},
 
 		'click #back-arrow-link': function() {

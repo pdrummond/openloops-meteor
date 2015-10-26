@@ -73,9 +73,9 @@
 		<div id="top-header">
 			{{#if showSidebarTabs}}
 			<div id="top-header-tabs">
-				<a id="inbox-tab" class="tab-item {{isActiveTab 'inboxTab'}}" href="/board/{{currentBoardId}}">Inbox</a>
-				<a id="labels-tab" class="tab-item {{isActiveTab 'labelsTab'}}" href="/board/{{currentBoardId}}">Labels</a>
-				<a id="searches-tab" class="tab-item {{isActiveTab 'searchesTab'}}" href="/board/{{currentBoardId}}">Searches</a>
+				<a id="discuss-tab" class="tab-item {{isActiveTab 'discussTab'}}" href="/board/{{currentBoardId}}">Discuss</a>
+				<a id="manage-tab" class="tab-item {{isActiveTab 'manageTab'}}" href="/board/{{currentBoardId}}">Manage</a>
+				<a id="read-tab" class="tab-item {{isActiveTab 'readTab'}}" href="/board/{{currentBoardId}}">Read</a>
 			</div>
 			{{else}}
 				<div id="top-header-title"><i id="back-arrow-link" class="fa fa-arrow-left" style="margin-right:20px"></i>
@@ -83,20 +83,18 @@
 				</div>
 			{{/if}}
 			<a id="create-link" href="/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
-
-
 		</div>
-		<div id="inbox-tab-body" class="{{isActiveTabBody 'inboxTab'}}">
-			<ul id="item-list">
+		<div id="discuss-tab-body" class="{{isActiveTabBody 'discussTab'}}">
+			<ul id="discuss-list" class="item-list">
 				{{#each items}}
 					{{> itemItemView}}
 				{{/each}}
 			</ul>
 		</div>
-		<div id="labels-tab-body" class="{{isActiveTabBody 'labelsTab'}}">
-			{{>labelsList}}
+		<div id="manage-tab-body" class="{{isActiveTabBody 'manageTab'}}">
+			{{>manageList}}
 		</div>
-		<ul id="searches-tab-body" class="{{isActiveTabBody 'searchesTab'}}">
+		<ul id="read-tab-body" class="{{isActiveTabBody 'readTab'}}">
 			<a id="create-filter" href="/board/{{currentBoardId}}/create-filter"><i class="fa fa-plus"></i></a>
 			<li id="inbox-menu-item"><a href="">Inbox</a></li>
 			{{#each filters}}
