@@ -32,7 +32,7 @@ if(Meteor.isClient) {
 				}
 
 				if(incomingMessage.itemId != Session.get('currentItemId')) {
-					$(".left-sidebar #item-list li[data-id='" + incomingMessage.itemId + "'] #item-msg-count").addClass("new-messages");
+					$(".left-sidebar .item-list li[data-id='" + incomingMessage.itemId + "'] .item-msg-count").addClass("new-messages");
 				}
 
 			} else {
@@ -43,9 +43,9 @@ if(Meteor.isClient) {
 
 	OpenLoops.removeSidebarNewMessages = function(itemId) {
 		if(itemId) {
-			$(".left-sidebar #item-list li[data-id='" + itemId + "'] #item-msg-count").removeClass("new-messages");
+			$(".left-sidebar .item-list li[data-id='" + itemId + "'] .item-msg-count").removeClass("new-messages");
 		} else {
-			$(".left-sidebar #item-list li .new-messages").removeClass("new-messages");
+			$(".left-sidebar .item-list li .new-messages").removeClass("new-messages");
 		}
 	}
 
