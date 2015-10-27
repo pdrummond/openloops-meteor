@@ -85,17 +85,17 @@
 			{{/if}}
 			<a id="create-link" href="/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
 		</div>
-		<div id="discuss-tab-body" class="{{isActiveTabBody 'discussTab'}}">
+		<div id="discuss-tab-body" class="tab-body {{isActiveTabBody 'discussTab'}}">
 			<ul id="discuss-list" class="item-list">
 				{{#each items}}
 					{{> itemItemView}}
 				{{/each}}
 			</ul>
 		</div>
-		<div id="manage-tab-body" class="{{isActiveTabBody 'manageTab'}}">
+		<div id="manage-tab-body" class="tab-body {{isActiveTabBody 'manageTab'}}">
 			{{> manageList}}
 		</div>
-		<div id="read-tab-body" class="{{isActiveTabBody 'readTab'}}">
+		<div id="read-tab-body" class="tab-body {{isActiveTabBody 'readTab'}}">
 			{{> articleList}}
 		</div>
 
