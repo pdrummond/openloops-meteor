@@ -385,7 +385,7 @@ if(Meteor.isClient) {
 		OpenLoops.loadMessages(function(ok) {
 			if(ok) {
 				//Don't scroll to bottom when in read-mode.
-				if(Session.get('leftSidebarActiveTab') != 'readTab') {					
+				if(Session.get('leftSidebarActiveTab') != 'readTab') {
 					OpenLoops.scrollToBottomOfMessages();
 				}
 			}

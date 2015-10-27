@@ -1,82 +1,127 @@
-FlowRouter.subscriptions = function() {
-	this.register('boards', Meteor.subscribe('boards'));
-	this.register('labels', Meteor.subscribe('labels'));
-	this.register('filters', Meteor.subscribe('filters'));
-};
-
-FlowRouter.route('/', {
-	action: function(params, queryParams) {
-		Session.set('currentPage', 'welcomePage');
+if(Meteor.isClient) {
+	FlowRouter.subscriptions = function() {
+		this.register('boards', Meteor.subscribe('boards'));
+		this.register('labels', Meteor.subscribe('labels'));
+		this.register('filters', Meteor.subscribe('filters'));
 	}
-});
 
-FlowRouter.route('/board/:boardId', {
-	action: function(params, queryParams) {
-		Session.set('currentPage', 'feedPage');
-		Session.set('currentBoardId', params.boardId);
-		Session.set('currentItemId', null);
-		Session.set('numIncomingMessages', 0);
+	noauthGroup = FlowRouter.group({});
 
-		OpenLoops.loadInitialMessages();
-	}
-});
+	noauthGroup.route('/login', {
+		name: 'login',
+		action: function(params, queryParams) {
+			Session.set('currentPage', 'loginPage');
+		}
+	});
 
-FlowRouter.route('/board/:boardId/item/:itemId', {
-	action: function(params, queryParams) {
-		Session.set('currentBoardId', params.boardId);
-		Session.set('currentItemId', params.itemId);
-		Session.set('currentPage', 'feedPage');
-		Session.set('numIncomingMessages', 0);
-		OpenLoops.loadInitialMessages();
-		OpenLoops.removeSidebarNewMessages(params.itemId);
-	}
-});
+	noauthGroup.route('/signup', {
+		name: 'signup',
+		action: function(params, queryParams) {
+			Session.set('currentPage', 'signupPage');
+		}
+	});
 
-FlowRouter.route('/board/:boardId/create-item', {
-	action: function(params, queryParams) {
-		Session.set('currentItemId', null);
-		Session.set('currentBoardId', params.boardId);
-		Session.set('currentPage', 'editItemPage');
-	}
-});
+	loggedInGroup = FlowRouter.group({
+		triggersEnter: [ function() {
+			if(Meteor.loggingIn() == false && !Meteor.userId()) {
+				route = FlowRouter.current();
+				if(route.route.name != 'login') {
+					Session.set('redirectAfterLogin', route.path);
+				}
+				FlowRouter.go('login');
+			}
+		}]
+	});
 
-FlowRouter.route('/board/:boardId/edit-item', {
-	action: function(params, queryParams) {
-		Session.set('currentBoardId', params.boardId);
-		Session.set('currentPage', 'editItemPage');
-	}
-});
+	Accounts.onLogin(function() {
+		var redirect = Session.get('redirectAfterLogin');
+		if(redirect) {
+			if(redirect != '/login') {
+				FlowRouter.go(redirect);
+			}
+		} else if(Meteor.userId()){
+			var route = FlowRouter.current();
+			if(route.path == "/login") {
+				FlowRouter.go("home");
+			}
+		}
+	});
 
-FlowRouter.route('/board/:boardId/create-filter', {
-	action: function(params, queryParams) {
-		Session.set('currentBoardId', params.boardId);
-		Session.set('currentPage', 'createFilterPage');
-	}
-});
+	loggedInGroup.route('/', {
+		name: "home",
+		action: function(params, queryParams) {
+			Session.set('currentPage', 'welcomePage');
+		}
+	});
 
-FlowRouter.route('/boards', {
-	action: function(params, queryParams) {
-		Session.set('currentPage', 'boardList');
-	}
-});
+	loggedInGroup.route('/board/:boardId', {
+		action: function(params, queryParams) {
+			Session.set('currentPage', 'feedPage');
+			Session.set('currentBoardId', params.boardId);
+			Session.set('currentItemId', null);
+			Session.set('numIncomingMessages', 0);
 
-FlowRouter.route('/boards/create', {
-	action: function(params, queryParams) {
-		Session.set('currentPage', 'createBoardForm');
-	}
-});
+			OpenLoops.loadInitialMessages();
+		}
+	});
 
-FlowRouter.route('/board/:boardId/create-label', {
-	action: function(params, queryParams) {
-		Session.set('currentBoardId', params.boardId);
-		Session.set('currentPage', 'editLabelPage');
-	}
-});
+	loggedInGroup.route('/board/:boardId/item/:itemId', {
+		action: function(params, queryParams) {
+			Session.set('currentBoardId', params.boardId);
+			Session.set('currentItemId', params.itemId);
+			Session.set('currentPage', 'feedPage');
+			Session.set('numIncomingMessages', 0);
+			OpenLoops.loadInitialMessages();
+			OpenLoops.removeSidebarNewMessages(params.itemId);
+		}
+	});
 
-FlowRouter.route('/board/:boardId/label/:labelId/edit', {
-	action: function(params, queryParams) {
-		Session.set('currentBoardId', params.boardId);
-		Session.set('currentLabelId', params.labelId);
-		Session.set('currentPage', 'editLabelPage');
-	}
-});
+	loggedInGroup.route('/board/:boardId/create-item', {
+		action: function(params, queryParams) {
+			Session.set('currentItemId', null);
+			Session.set('currentBoardId', params.boardId);
+			Session.set('currentPage', 'editItemPage');
+		}
+	});
+
+	loggedInGroup.route('/board/:boardId/edit-item', {
+		action: function(params, queryParams) {
+			Session.set('currentBoardId', params.boardId);
+			Session.set('currentPage', 'editItemPage');
+		}
+	});
+
+	loggedInGroup.route('/board/:boardId/create-filter', {
+		action: function(params, queryParams) {
+			Session.set('currentBoardId', params.boardId);
+			Session.set('currentPage', 'createFilterPage');
+		}
+	});
+
+	loggedInGroup.route('/boards', {
+		action: function(params, queryParams) {
+			Session.set('currentPage', 'boardList');
+		}
+	});
+
+	loggedInGroup.route('/boards/create', {
+		action: function(params, queryParams) {
+			Session.set('currentPage', 'createBoardForm');
+		}
+	});
+
+	loggedInGroup.route('/board/:boardId/create-label', {
+		action: function(params, queryParams) {
+			Session.set('currentBoardId', params.boardId);
+			Session.set('currentPage', 'editLabelPage');
+		}
+	});
+
+	loggedInGroup.route('/board/:boardId/label/:labelId/edit', {
+		action: function(params, queryParams) {
+			Session.set('currentBoardId', params.boardId);
+			Session.set('currentLabelId', params.labelId);
+			Session.set('currentPage', 'editLabelPage');
+		}
+	});
+}
