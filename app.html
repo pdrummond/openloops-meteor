@@ -1,7 +1,8 @@
 <template name="app">
 	<div id="top-banner">
 		<div class="left">
-			<div id="main-title"><a href="/">{{currentBoardTitle}}</a></div>
+			<a href="/"><img src="/images/openloops-o.png" style="position:relative;top:8px;left:10px;width:30px"/></a>
+			<span style="margin-left:10px" id="main-title"><a href="/" style="text-decoration:none">{{currentBoardTitle}}</a></span>
 		</div>
 		<div class="right">
 			{{> loginButtons}}
@@ -153,7 +154,7 @@
 </template>
 
 <template name="messageBox">
-	<textarea id="message-box"></textarea>
+	<textarea id="message-box" placeholder="Type here to comment"></textarea>
 </template>
 
 <template name="messageItemView">

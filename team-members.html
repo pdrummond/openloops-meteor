@@ -1,0 +1,37 @@
+<template name="teamMembersList">
+	<a href="/team-members/create">Add Team Member</a>
+	<ul>
+		{{#each teamMembers}}
+			{{> teamMemberItem}}
+		{{/each}}
+	</ul>
+</template>
+
+<template name="teamMemberItem">
+	<li>
+		{{firstName}} {{surname}} ({{role}} - {{email}})
+		<a href="/team-member/{{_id}}/edit">Edit</a>
+		<a id="delete-link" href="">Delete</a>
+	</li>
+</template>
+
+<template name="editTeamMemberForm">
+	<div id="editTeamMemberForm" class="main">
+		<form>
+			<fieldset>
+				<label>Email</label>
+				<input name="email" type="email" placeholder="Enter email" value="{{email}}">
+				<label>First name</label>
+				<input name="firstName" placeholder="Enter first name" value="{{firstName}}">
+				<label>Surname</label>
+				<input name="surname" placeholder="Enter surname" value = "{{surname}}">
+				<label>Role</label>
+				<select name="role">
+					<option {{isSelectedRole 'user'}} value="user">User</option>
+					<option {{isSelectedRole 'admin'}} value="admin">Admin</option>
+				</select>
+			</fieldset>
+			<button id="save-button">Save Member</button>
+		</form>
+	</div>
+</template>

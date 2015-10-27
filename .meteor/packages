@@ -20,9 +20,9 @@ insecure                # Allow all DB writes from clients (for prototyping)
 mquandalle:stylus
 kadira:flow-router
 momentjs:moment
-accounts-ui
 accounts-password
 yuukan:streamy
 fortawesome:fontawesome
 markdown
 yasaricli:slugify
+accounts-ui

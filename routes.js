@@ -1,23 +1,26 @@
 if(Meteor.isClient) {
+
+	Meteor.startup(function() {
+		Tracker.autorun(function () {
+			if (!Meteor.user()) {
+				FlowRouter.go("welcome");
+			}
+		});
+	});
+
 	FlowRouter.subscriptions = function() {
 		this.register('boards', Meteor.subscribe('boards'));
+		this.register('team-members', Meteor.subscribe('team-members'));
 		this.register('labels', Meteor.subscribe('labels'));
 		this.register('filters', Meteor.subscribe('filters'));
 	}
 
 	noauthGroup = FlowRouter.group({});
 
-	noauthGroup.route('/login', {
-		name: 'login',
+	noauthGroup.route('/', {
+		name: "welcome",
 		action: function(params, queryParams) {
-			Session.set('currentPage', 'loginPage');
-		}
-	});
-
-	noauthGroup.route('/signup', {
-		name: 'signup',
-		action: function(params, queryParams) {
-			Session.set('currentPage', 'signupPage');
+			Session.set('currentPage', 'welcomePage');
 		}
 	});
 
@@ -28,7 +31,7 @@ if(Meteor.isClient) {
 				if(route.route.name != 'login') {
 					Session.set('redirectAfterLogin', route.path);
 				}
-				FlowRouter.go('login');
+				FlowRouter.go('welcome');
 			}
 		}]
 	});
@@ -42,15 +45,8 @@ if(Meteor.isClient) {
 		} else if(Meteor.userId()){
 			var route = FlowRouter.current();
 			if(route.path == "/login") {
-				FlowRouter.go("home");
+				FlowRouter.go("welcome");
 			}
-		}
-	});
-
-	loggedInGroup.route('/', {
-		name: "home",
-		action: function(params, queryParams) {
-			Session.set('currentPage', 'welcomePage');
 		}
 	});
 
@@ -110,6 +106,26 @@ if(Meteor.isClient) {
 		}
 	});
 
+	loggedInGroup.route('/team-members', {
+		action: function(params, queryParams) {
+			Session.set('currentPage', 'teamMembersList');
+		}
+	});
+
+	loggedInGroup.route('/team-members/create', {
+		action: function(params, queryParams) {
+			Session.set('currentTeamMemberId', null);
+			Session.set('currentPage', 'editTeamMemberForm');
+		}
+	});
+
+	loggedInGroup.route('/team-member/:teamMemberId/edit', {
+		action: function(params, queryParams) {
+			Session.set('currentTeamMemberId', params.teamMemberId);
+			Session.set('currentPage', 'editTeamMemberForm');
+		}
+	});
+
 	loggedInGroup.route('/board/:boardId/create-label', {
 		action: function(params, queryParams) {
 			Session.set('currentBoardId', params.boardId);
@@ -124,4 +140,10 @@ if(Meteor.isClient) {
 			Session.set('currentPage', 'editLabelPage');
 		}
 	});
+
+	FlowRouter.notFound = {
+		action: function() {
+			Session.set('currentPage', 'notFoundPage');
+		}
+	}
 }
