@@ -226,6 +226,13 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.app.events({
+		'click #logged-in-user': function() {
+			Meteor.logout();
+			FlowRouter.go("/");
+		}
+	})
+
 	Template.app.helpers({
 		currentPage: function() {
 			return Session.get('currentPage');
@@ -615,10 +622,6 @@ if(Meteor.isClient) {
 		OpenLoops.atBottom = $("#message-list")[0].scrollHeight == ($("#message-list").scrollTop() + $("#message-list").height());
 		console.log("atBottom: " + OpenLoops.atBottom);
 	}
-
-	Accounts.ui.config({
-		passwordSignupFields: "USERNAME_AND_EMAIL"
-	});
 
 } //isClient
 

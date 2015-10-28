@@ -2,10 +2,10 @@
 	<div id="top-banner">
 		<div class="left">
 			<a href="/"><img src="/images/openloops-o.png" style="position:relative;top:8px;left:10px;width:30px"/></a>
-			<span style="margin-left:10px" id="main-title"><a href="/" style="text-decoration:none">{{currentBoardTitle}}</a></span>
+			<span style="margin-left:10px" id="main-title"><a href="/board/{{currentBoardId}}" style="text-decoration:none">{{currentBoardTitle}}</a></span>
 		</div>
 		<div class="right">
-			{{> loginButtons}}
+			<div id="logged-in-user">{{currentUser.username}}</div>
 		</div>
 	</div>
 	{{> Template.dynamic template=currentPage}}

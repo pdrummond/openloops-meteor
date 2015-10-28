@@ -1,13 +1,5 @@
 if(Meteor.isClient) {
 
-	Meteor.startup(function() {
-		Tracker.autorun(function () {
-			if (!Meteor.user()) {
-				FlowRouter.go("welcome");
-			}
-		});
-	});
-
 	FlowRouter.subscriptions = function() {
 		this.register('boards', Meteor.subscribe('boards'));
 		this.register('team-members', Meteor.subscribe('team-members'));
@@ -17,9 +9,25 @@ if(Meteor.isClient) {
 
 	noauthGroup = FlowRouter.group({});
 
+	noauthGroup.route("/login", {
+		name: "login",
+		action: function() {
+			Session.set('currentPage', 'loginPage');
+		}
+	});
+
+	noauthGroup.route("/signup", {
+		name: "signup",
+		action: function() {
+			Session.set('currentPage', 'signupPage');
+		}
+	});
+
 	noauthGroup.route('/', {
 		name: "welcome",
 		action: function(params, queryParams) {
+			Session.set('currentBoardId', null);
+			Session.set('currentItemId', null);
 			Session.set('currentPage', 'welcomePage');
 		}
 	});
@@ -31,7 +39,7 @@ if(Meteor.isClient) {
 				if(route.route.name != 'login') {
 					Session.set('redirectAfterLogin', route.path);
 				}
-				FlowRouter.go('welcome');
+				FlowRouter.go('login');
 			}
 		}]
 	});
