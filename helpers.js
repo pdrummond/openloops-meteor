@@ -1,4 +1,14 @@
 if(Meteor.isClient) {
+
+	Template.registerHelper('isTeamFeed', function (context, options) {
+		return !Session.get('currentItemId');
+	});
+
+	Template.registerHelper('isIssue', function (context, options) {
+		var item = Items.findOne(Session.get('currentItemId'));
+		return item?item.type == 'issue':false;
+	});
+
 	Template.registerHelper('formatDate', function (context, options) {
 		if (context) {
 			return moment(context).format('MMMM Do YYYY, h:mm:ss a');

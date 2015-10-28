@@ -40,6 +40,75 @@ body
 
 #app
 	height 100%
+	.right-sidebar
+		height "calc(100% - %s)" % (top-baner-height + header-height);
+		top top-banner-height + header-height + 20;
+		right 0
+		bottom footer-height + 42px;
+		position fixed
+		display block
+		width right-sidebar-width
+		color black
+		background-color white;
+		z-index:999
+		border-left: 1px solid lightgray;
+
+		.header-text {
+			padding-left:10px;
+			font-weight:bold;
+			color:gray;
+		}
+
+		.action-buttons {
+			margin:0;
+			padding:10px;
+		}
+		.action-button {
+			list-style-type:none;
+			margin:0;
+			padding:0;
+			background: -webkit-linear-gradient(top,#fff 0,#f8f9f9 100%);
+			background: linear-gradient(to bottom,#fff 0,#f8f9f9 100%);
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+			border: 1px solid #e2e4e6;
+			border-bottom-color: #cdd2d4;
+			cursor: pointer;
+			display: block;
+			font-weight: 700;
+			height: 34px;
+			margin-top: 6px;
+			max-width: 300px;
+			overflow: hidden;
+			padding: 7px;
+			position: relative;
+			text-overflow: ellipsis;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			white-space: nowrap;
+			border-radius:5px;
+
+			a {
+				text-decoration:none;
+				color: #6C6C6C;
+			}
+
+			i {
+				color:gray;
+			}
+		}
+
+		.action-button:active, .action-button:hover {
+    		background: #0079bf;
+    		border-color: #0079bf #0079bf #055a8c;
+
+			a {
+				color:white;
+			}
+		}
+
 	.left-sidebar
 		height "calc(100% - %s)" % top-baner-height;
 		top top-banner-height;
@@ -47,7 +116,7 @@ body
 		bottom 0
 		position fixed
 		display block
-		width sidebar-width
+		width left-sidebar-width
 		color gray
 		background-color white
 		z-index:999
@@ -199,7 +268,8 @@ body
 				text-decoration: none;
 	.main
 		height 100%
-		padding-left sidebar-width
+		padding-left left-sidebar-width
+		padding-right right-sidebar-width
 		padding-bottom footer-height
 
 #message-list {
@@ -250,16 +320,17 @@ body
     background-color orange
 
 
-header
+header {
 	position fixed
 	left 0
 	top top-banner-height
-	width "calc(100% - %s)" % sidebar-width;
+	width "calc(100% - %s)" % left-sidebar-width;
 	height header-height
 	background-color #4E89DA;
 	border-bottom #7089a9;
 	color:white;
-	margin-left: sidebar-width
+	margin-left: left-sidebar-width
+	margin-right: right-sidebar-width
 
 	#header-feed-links {
 		display:flex;
@@ -287,6 +358,7 @@ header
 			margin-top:-5px;
 		}
 	}
+}
 
 header.article
 	background-color: #C9932E
@@ -312,7 +384,7 @@ footer
 	bottom 0
 	width 100%
 	height footer-height
-	margin-left: sidebar-width
+	margin-left: left-sidebar-width
 
 #login-buttons
   z-index:2;
@@ -609,6 +681,9 @@ footer
 	font-size:12px;
 }
 
+.main.item-feed.readTab .right-sidebar {
+	display:none;
+}
 
 .main.item-feed.readTab #message-list {
 	width:800px;

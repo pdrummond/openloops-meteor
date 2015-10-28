@@ -467,10 +467,6 @@ if(Meteor.isClient) {
 			return OpenLoops.moreMessagesOnServer();
 		},
 
-		isTeamFeed: function() {
-			return !Session.get('currentItemId');
-		},
-
 		currentItemIcon: function() {
 			return OpenLoops.getItemTypeIcon(Items.findOne(Session.get('currentItemId')));
 		},

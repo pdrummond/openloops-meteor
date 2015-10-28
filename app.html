@@ -14,6 +14,7 @@
 <template name="feedPage">
 	{{> leftSidebar}}
 	{{> feed}}
+	{{> rightSidebar}}
 </template>
 
 <template name="createFilterPage">
@@ -83,7 +84,6 @@
 					{{currentLabelTitle}}
 				</div>
 			{{/if}}
-			<a id="create-link" href="/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
 		</div>
 		<div id="discuss-tab-body" class="tab-body {{isActiveTabBody 'discussTab'}}">
 			<ul id="discuss-list" class="item-list">
@@ -99,6 +99,40 @@
 			{{> articleList}}
 		</div>
 
+	</div>
+</template>
+
+<template name="rightSidebar">
+	<div class="right-sidebar">
+		{{#if isTeamFeed}}
+		<span class="header-text">ACTIONS</span>
+		<ul class="action-buttons">
+			<li id="create-discussion-link" class="action-button"><a href="/board/{{currentBoardId}}/create-item"><i class="fa fa-comments-o"></i> New Discussion</a></li>
+			<li id="create-issue-link" class="action-button"><a href="/board/{{currentBoardId}}/create-item"><i class="fa fa-exclamation-circle"></i> New Issue</a></li>
+			<li id="create-article-link" class="action-button"><a href="/board/{{currentBoardId}}/create-item"><i class="fa fa-book"></i> New Article</a></li>
+		</ul>
+		{{else}}
+		<span class="header-text">ACTIONS</span>
+		<ul class="action-buttons">
+			<li id="open-close-link" class="action-button"><i class="fa fa-times"></i> Close</li>
+			<li id="move-link" class="action-button"><i class="fa fa-arrow-right"></i> Move</li>
+		</ul>
+		<span class="header-text">LABELS</span>
+		<ul class="label-buttons">
+			No Labels
+		</ul>
+		{{#if isIssue}}
+			<span class="header-text">ASSIGNEE</span>
+			<ul class="assignee-buttons">
+				Noone is assigned
+			</ul>
+			<span class="header-text">ESTIMATES</span>
+			<ul class="estimate-buttons">
+				No Estimates
+			</ul>
+		{{/if}}
+
+		{{/if}}
 	</div>
 </template>
 
