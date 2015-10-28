@@ -83,6 +83,8 @@ if(Meteor.isClient) {
 				field = 'issueType';
 			} else if(field == 'label') {
 				field = 'labels';
+			} else if(field == 'open') {
+				field = "isOpen";
 			}
 			if(value == "true") {
 				value = true;
@@ -136,6 +138,10 @@ if(Meteor.isClient) {
 			} else {
 				return '';
 			}
+		},
+
+		showIssueType: function() {
+			return true;//FIXME: only show issue type if issue is selected
 		}
 	});
 
@@ -491,7 +497,7 @@ if(Meteor.isClient) {
 		},
 
 		openStatus: function() {
-			return Items.findOne(Session.get('currentItemId')).isOpen?'open':'closed';
+			return Items.findOne(Session.get('currentItemId')).isOpen?'Open':'Closed';
 		},
 
 		boardTitle: function() {
@@ -509,13 +515,17 @@ if(Meteor.isClient) {
 			OpenLoops.scrollToBottomOfMessages();
 		},
 
-		'click #open-status-link': function() {
-			Meteor.call('toggleItemOpenStatus', Session.get('currentItemId'));
-		},
+
 
 		'click #item-board-link': function() {
 			$("#move-to-board-list").slideToggle();
 		}
+	});
+
+	Template.rightSidebar.events({
+		'click #open-close-link': function() {
+			Meteor.call('toggleItemOpenStatus', Session.get('currentItemId'));
+		},
 	});
 
 	Template.leftSidebar.onCreated(function() {

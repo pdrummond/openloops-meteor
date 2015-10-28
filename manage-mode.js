@@ -17,6 +17,15 @@ if(Meteor.isClient) {
 		issues: function() {
 			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
 			filter.type = 'issue';
+			if(!filter.hasOwnProperty('isOpen')) {
+				filter.isOpen = true;
+			}
+			if(filter.hasOwnProperty('show')) {
+				if(filter.show == 'all') {
+					delete filter.isOpen;
+					delete filter.show;
+				}
+			}
 			return Items.find(filter);
 		}
 	});

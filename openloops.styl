@@ -103,7 +103,7 @@ body
 		.action-button:active, .action-button:hover {
     		background: #0079bf;
     		border-color: #0079bf #0079bf #055a8c;
-
+			color: white;
 			a {
 				color:white;
 			}
@@ -279,6 +279,7 @@ body
     height: "calc(100% - %s)" % (top-banner-height+header-height+footer-height+40);
 	overflow: auto;
 	padding-left:10px;
+	padding-right:10px;
 }
 
 #show-more-link {
@@ -326,7 +327,7 @@ header {
 	top top-banner-height
 	width "calc(100% - %s)" % left-sidebar-width;
 	height header-height
-	background-color #4E89DA;
+	background-color gray;
 	border-bottom #7089a9;
 	color:white;
 	margin-left: left-sidebar-width
@@ -447,15 +448,6 @@ footer
 	font-size 2rem
 	margin-left 10px
 
-#header-open-status
-	padding-left:20px;
-
-	strong {
-		border-bottom:2px solid black;
-		color:white;
-		cursor:pointer;
-	}
-
 #header-new-messages-toast
 	margin-left: 10px;
 	background-color: #FF5B5B;
@@ -544,6 +536,8 @@ footer
 
 	#item-desc {
 		margin-top:5px;
+		max-height: 100px;
+		overflow-y: hidden;
 		p {
 			font-size:16px;
 		}
@@ -576,11 +570,23 @@ footer
 	color:blue;
 }
 
-#header-board-status {
-	position:absolute;
-	right:10px;
-	bottom:10px;
-}
+#header-open-status
+	display:inline;
+	padding-left:20px;
+
+	strong {
+		padding:5px;
+		border-radius:5px;
+		color:white;
+	}
+
+	strong.closed {
+		background-color:red;
+	}
+
+	strong.open {
+		background-color:green;
+	}
 
 #header-labels {
 	margin-left:20px;
