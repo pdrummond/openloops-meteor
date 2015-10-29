@@ -41,6 +41,17 @@ if(Meteor.isClient) {
 		});
 	});
 
+	OpenLoops.onSearchInput = function() {
+		var self = this;
+		if(this.searchInputKeyTimer) {
+			console.log("CANCELLED KEY TIMER");
+			clearTimeout(this.searchInputKeyTimer);
+		}
+		this.searchInputKeyTimer = setTimeout(function() {
+			Session.set('filterQuery', $('#search-input').val());
+		}, 500);
+	}
+
 	OpenLoops.removeSidebarNewMessages = function(itemId) {
 		if(itemId) {
 			$(".left-sidebar .item-list li[data-id='" + itemId + "'] .item-msg-count").removeClass("new-messages");
@@ -515,8 +526,6 @@ if(Meteor.isClient) {
 			OpenLoops.scrollToBottomOfMessages();
 		},
 
-
-
 		'click #item-board-link': function() {
 			$("#move-to-board-list").slideToggle();
 		}
@@ -529,17 +538,29 @@ if(Meteor.isClient) {
 	});
 
 	Template.leftSidebar.onCreated(function() {
-		this.subscribe('items', {}, function(err, result) {
+		var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
+		this.subscribe('items', filter, function(err, result) {
 			if(err) {
 				alert("Items Subscription error: " + err);
 			}
 		});
-
 	});
 
 	Template.leftSidebar.helpers({
 		items: function() {
-			return Items.find({boardId: Session.get('currentBoardId'), isOpen: true}, {sort: {updatedAt: -1}});
+			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
+			filter.boardId = Session.get('currentBoardId');
+			filter.type = 'issue';
+			if(!filter.hasOwnProperty('isOpen')) {
+				filter.isOpen = true;
+			}
+			if(filter.hasOwnProperty('show')) {
+				if(filter.show == 'all') {
+					delete filter.isOpen;
+					delete filter.show;
+				}
+			}
+			return Items.find(filter, {sort: {updatedAt: -1}});
 		},
 
 		filters: function() {
@@ -569,7 +590,9 @@ if(Meteor.isClient) {
 	});
 
 	Template.leftSidebar.events({
-
+		'keyup #search-input': function() {
+			OpenLoops.onSearchInput();
+		},
 		'click #search-link': function() {
 			Session.set('showSidebarTabs', false);
 		},

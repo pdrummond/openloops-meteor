@@ -73,32 +73,14 @@
 <template name="leftSidebar">
 	<div class="left-sidebar">
 		<div id="top-header">
-			{{#if showSidebarTabs}}
-			<div id="top-header-tabs">
-				<a id="discuss-tab" class="tab-item {{isActiveTab 'discussTab'}}" href="/board/{{currentBoardId}}">Discuss</a>
-				<a id="manage-tab" class="tab-item {{isActiveTab 'manageTab'}}" href="/board/{{currentBoardId}}">Manage</a>
-				<!--<a id="read-tab" class="tab-item {{isActiveTab 'readTab'}}" href="/board/{{currentBoardId}}">Read</a>-->
-			</div>
-			{{else}}
-				<div id="top-header-title"><i id="back-arrow-link" class="fa fa-arrow-left" style="margin-right:20px"></i>
-					{{currentLabelTitle}}
-				</div>
-			{{/if}}
+			<input id="search-input" class="search-input" placeholder="Type here to filter" value={{filterQuery}}>
+			<a id="create-link" href="/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
 		</div>
-		<div id="discuss-tab-body" class="tab-body {{isActiveTabBody 'discussTab'}}">
-			<ul id="discuss-list" class="item-list">
-				{{#each items}}
-					{{> itemItemView}}
-				{{/each}}
-			</ul>
-		</div>
-		<div id="manage-tab-body" class="tab-body {{isActiveTabBody 'manageTab'}}">
-			{{> manageList}}
-		</div>
-		<div id="read-tab-body" class="tab-body {{isActiveTabBody 'readTab'}}">
-			{{> articleList}}
-		</div>
-
+		<ul class="item-list">
+			{{#each items}}
+				{{> itemItemView}}
+			{{/each}}
+		</ul>
 	</div>
 </template>
 
