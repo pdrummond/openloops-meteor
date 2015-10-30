@@ -39,6 +39,7 @@ if(Meteor.isClient) {
 					OpenLoops.scrollToBottomOfMessages();
 				} else if(incomingMessage.itemId == Session.get('currentItemId')) {
 					Session.set('numIncomingMessages', Session.get('numIncomingMessages')+1);
+
 				}
 
 				if(incomingMessage.itemId != Session.get('currentItemId')) {
@@ -72,6 +73,7 @@ if(Meteor.isClient) {
 
 	OpenLoops.scrollToBottomOfMessages = function() {
 		$("#message-list").scrollTop($("#message-list")[0].scrollHeight);
+		OpenLoops.atBottom = true;
 	}
 
 	OpenLoops.insertClientMessage = function(attrs) {
@@ -499,6 +501,15 @@ if(Meteor.isClient) {
 
 		numIncomingMessages: function() {
 			return Session.get('numIncomingMessages');
+		},
+
+		incomingMessagesText: function() {
+			var numMessages = Session.get('numIncomingMessages');
+			if(numMessages == 1) {
+				return 'New Message - click to show';
+			} else if(numMessages > 0) {
+				return 'New Messages - click to show';
+			}
 		},
 
 		hasIncomingMessages: function() {

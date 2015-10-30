@@ -230,10 +230,6 @@
 					<strong id="open-status-link" class="{{#if currentItemIsOpen}}open{{else}}closed{{/if}}"><i class="fa {{currentItemIcon}}"></i> {{openStatus}}</strong>
 				</div>
 			</div>
-
-			{{#if hasIncomingMessages}}
-				<a href="" id="header-new-messages-toast"><i class="fa fa-comments-o"></i> {{numIncomingMessages}} New Messages - click to show</a>
-			{{/if}}
 			{{/if}}
 
 		</header>
@@ -246,6 +242,9 @@
 		<footer>
 			{{> messageBox}}
 		</footer>
+		{{#if hasIncomingMessages}}
+			<a href="" id="header-new-messages-toast"><i class="fa fa-arrow-down"></i> {{numIncomingMessages}} {{incomingMessagesText}}</a>
+		{{/if}}
 	</div>
 </template>
 

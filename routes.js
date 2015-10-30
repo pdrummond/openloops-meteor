@@ -97,6 +97,7 @@
 			Session.set('numIncomingMessages', 0);
 			OpenLoops.loadInitialMessages();
 			OpenLoops.removeSidebarNewMessages(params.itemId);
+			OpenLoops.scrollToBottomOfMessages();
 		}
 	});
 
