@@ -6,7 +6,12 @@
 		</div>
 		<div class="right">
 			<div id="connection-status" class="{{connectionStatus.status}}" title="Server {{connectionStatus.status}}"></div>
-			<div id="logged-in-user">{{currentUser.username}}</div>
+			<div style="position:relative;top:-10px">
+				<div id="logged-in-user"><strong>{{currentUser.username}}</strong></div>
+				{{#if currentUser}}
+					<a href="" id="logout-link" style="display:block;text-align:right;color:white;font-size:12px">logout</a>
+				{{/if}}
+			</div>
 		</div>
 	</div>
 	{{> Template.dynamic template=currentPage}}
@@ -124,7 +129,15 @@
 		{{> moveToBoardList}}
 		<header class="{{currentItemType}} {{currentItemIssueType}}">
 			{{#if isTeamFeed}}
-				<div id="header-main-title">{{currentBoardTitle}}</div>
+				<div class="user-cards" style="margin:0;padding:0;margin-left:10px">
+					<div class="user-card" style="width:150px;padding:5px;background-color:black">
+						<img src="http://semantic-ui.com/images/avatar2/large/kristy.png" style="float-left;width:30px;"/>
+						<span style="color:white;text-transform:uppercase">Paul</span>
+						<div class="content" style="padding-left:10px">
+							<p class="meta">Working on #OLS-42</p>
+						</div>
+					</div>
+				</div>
 				<!--<ul id="header-feed-links">
 					<li class="{{isActive ''}}"><a href="/"><i class="fa fa-home"></i> Feed</a></li>
 					<li class="{{isActive 'discussion'}}"><a href="/feed/search?query=type:discussion"><i class="fa fa-comments-o"></i> Discussions</a></li>

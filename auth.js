@@ -12,10 +12,7 @@ if(Meteor.isClient) {
 			// Meteor.loginWithPassword() function.
 			Meteor.loginWithPassword(email, password, function(err){
 				if (err) {
-					// The user might not have been found, or their passwword
-					// could be incorrect. Inform the user that their
-					// login attempt has failed.
-					alert("Error logging in: " + err);
+					Session.set("errorMessage", err.reason);
 				} else {
 					FlowRouter.go("welcome");
 				}
@@ -36,7 +33,7 @@ if(Meteor.isClient) {
 				email: email,
 				password : password}, function(err) {
 				if (err) {
-					alert("Error logging in: " + err);
+					Session.set("errorMessage", err.reason);
 				} else {
 					FlowRouter.go("welcome");
 				}
@@ -65,7 +62,7 @@ if(Meteor.isServer) {
 			var teamMember = TeamMembers.findOne({email:email});
 			if(teamMember == null) {
 				throw new Meteor.Error("create-user-failed-001", "Sorry, but you aren't a member of this OpenLoops Team yet");
-			}		
+			}
 		}
 
 		//user.profileImage = Gravatar.imageUrl(email, {size: 34,default: 'retro'});

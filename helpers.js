@@ -4,6 +4,10 @@ if(Meteor.isClient) {
 		return Meteor.status();
 	});
 
+	Template.registerHelper('errorMessage', function (context, options) {
+		return Session.get('errorMessage');
+	});
+
 	Template.registerHelper('isTeamFeed', function (context, options) {
 		return !Session.get('currentItemId');
 	});

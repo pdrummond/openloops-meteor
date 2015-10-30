@@ -3,11 +3,13 @@
 		<div>
 			<h1>Login</h1>
 			<label>Username or Email</label>
-			<input type="text" id="login-email" />
+			<input type="text" id="login-email" autofocus/>
 			<label>Password</label>
 			<input type="password" id="login-password" />
 			<input type="submit" id="login-button" value="Sign in" />
 		</div>
+		<p style="text-align:center">If you don't have an account, create one <a href="/signup">here</a></p>
+		<p class="error-message">{{errorMessage}}</p>
 	</form>
 </template>
 
@@ -16,10 +18,12 @@
 		<div>
 			<h1>Sign up</h1>
 			<label>Email</label>
-			<input type="email" id="account-email" />
+			<input type="email" id="account-email" autofocus/>
 			<label>Password</label>
 			<input type="password" id="account-password" />
 			<input type="submit" id="create-account" value="Create an Account" />
 		</div>
+		<p style="text-align:center">If you wlaready have an account, log in <a href="/login">here</a></p>
+		<p class="error-message">{{errorMessage}}</p>
 	</form>
 </template>

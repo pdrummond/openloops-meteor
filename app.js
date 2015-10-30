@@ -244,7 +244,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.app.events({
-		'click #logged-in-user': function() {
+		'click #logout-link': function() {
 			Meteor.logout();
 			FlowRouter.go("/");
 		}
