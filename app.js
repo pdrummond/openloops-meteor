@@ -27,7 +27,7 @@ if(Meteor.isClient) {
 		if(permissionLevel == notify.PERMISSION_DEFAULT) {
 			notify.requestPermission();
 		}
-		notify.config({pageVisibility: true, autoClose: 5000});
+		notify.config({pageVisibility: false, autoClose: 5000});
 
 		Tracker.autorun(function() {
 			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
