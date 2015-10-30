@@ -72,7 +72,10 @@ if(Meteor.isClient) {
 	}
 
 	OpenLoops.scrollToBottomOfMessages = function() {
-		$("#message-list").scrollTop($("#message-list")[0].scrollHeight);
+		var $messageList = $("#message-list");
+		if($messageList.length > 0) {
+			$messageList.scrollTop($messageList[0].scrollHeight);
+		}
 		OpenLoops.atBottom = true;
 	}
 
