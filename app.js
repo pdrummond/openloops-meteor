@@ -123,6 +123,10 @@ if(Meteor.isClient) {
 		return filter;
 	}
 
+	Template.editItemForm.onRendered(function() {
+		this.$('input[name="title"]').focus();
+	});
+
 	Template.editItemForm.helpers({
 		currentItem: function() {
 			return Items.findOne(Session.get('currentItemId'));
