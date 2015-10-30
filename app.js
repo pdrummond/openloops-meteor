@@ -22,6 +22,12 @@ if(Meteor.isClient) {
 	ClientMessages = new Meteor.Collection('client-messages');
 
 	Meteor.startup(function() {
+		var permissionLevel = notify.permissionLevel();
+		console.log("Desktop Notifications: " + permissionLevel);
+		if(permissionLevel == notify.PERMISSION_DEFAULT) {
+			notify.requestPermission();
+		}
+		notify.config({pageVisibility: true, autoClose: 5000});
 
 		Tracker.autorun(function() {
 			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
@@ -48,6 +54,21 @@ if(Meteor.isClient) {
 
 			} else {
 				OpenLoops.scrollToBottomOfMessages();
+			}
+		});
+
+		Streamy.on('mention', function(data) {
+			//TODO: Once mention uses direct message we won't have to
+			//check for the user id.
+			if(Meteor.userId() == data.toUserId) {
+				var body = data.messageText;
+				//notify.createNotification("Mentioned", {body: data.messageId});
+				notify.createNotification("@" + data.fromUsername + " mentioned you", {
+					icon: 'https://www.openloopz.com/images/openloopz-o.png',
+					body: body,
+					tag: data.messageId
+				});
+				console.log("Mention notification created")
 			}
 		});
 	});
@@ -683,6 +704,9 @@ if(Meteor.isClient) {
 		}
 		OpenLoops.atBottom = $("#message-list")[0].scrollHeight == ($("#message-list").scrollTop() + $("#message-list").height());
 		console.log("atBottom: " + OpenLoops.atBottom);
+		if(OpenLoops.atBottom) {
+			$("#header-new-messages-toast").hide();
+		}
 	}
 
 } //isClient
@@ -718,7 +742,7 @@ if(Meteor.isServer) {
 				$set: {updatedAt: new Date().getTime()},
 			});
 
-			//detectMentionsInMessage(newMessage);
+			Meteor.call('detectMentionsInMessage', newMessage);
 
 		},
 
@@ -797,27 +821,33 @@ if(Meteor.isServer) {
 			return Filters.insert(newFilter);
 		},
 
-		//TODO Implement this using Streamy
-		/*detectMentionsInMessage: function(message) {
-
-			/*var re = /@([\w\.-]+)/g;
+		detectMentionsInMessage: function(message) {
+			console.log("detectMentionsInMessage");
+			var re = /@([\w\.-]+)/g;
 			var matches;
 
 			do {
-				matches = re.exec(message.title);
+				matches = re.exec(message.text);
 				if (matches) {
 					var toUser = Meteor.users.findOne({username: matches[1]});
 					if(toUser != null) {
-						Streamy.broadcast('mention', {
+						console.log("MENTION DETECTED: " + JSON.stringify(toUser));
+
+						var data = {
 							type: 'new-message-mention',
 							fromUserId: Meteor.userId(),
+							fromUsername: Meteor.user().username,
 							toUserId: toUser._id,
-							messageId: messageId
-						});
+							messageId: message._id,
+							messageText: message.text
+						};
+						//TODO: Once sessionForUsers is released, use it
+						//Streamy.sessionsForUsers(toUser._id).emit('mention', data);
+						Streamy.broadcast('mention', data);
 					}
 				}
-			} while (matches);*
-		}*/
+			} while (matches);
+		}
 	});
 
 	Meteor.publish("items", function(opts) {

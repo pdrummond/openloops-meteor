@@ -7,6 +7,8 @@
 		this.register('filters', Meteor.subscribe('filters'));
 	}
 
+	if(Meteor.isClient) {
+
 	noauthGroup = FlowRouter.group({});
 
 	noauthGroup.route("/login", {
@@ -176,3 +178,4 @@
 			Session.set('currentPage', 'notFoundPage');
 		}
 	}
+}
