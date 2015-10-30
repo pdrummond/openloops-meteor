@@ -22,6 +22,16 @@ if(Meteor.isClient) {
 	ClientMessages = new Meteor.Collection('client-messages');
 
 	Meteor.startup(function() {
+
+		Tracker.autorun(function() {
+			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
+			Meteor.subscribe('items', filter, function(err, result) {
+				if(err) {
+					alert("Items Subscription error: " + err);
+				}
+			});
+		});
+
 		Streamy.on('sendMessage', function(incomingMessage) {
 			if(incomingMessage.createdBy != Meteor.user().username) {
 				OpenLoops.insertClientMessage(incomingMessage);
@@ -318,7 +328,8 @@ if(Meteor.isClient) {
 	Template.itemMessageItemView.helpers({
 
 		itemTitle: function() {
-			return Items.findOne(this.itemId).title;
+			var item = Items.findOne(this.itemId);
+			return item?item.title:'';
 		},
 
 		itemTypeIcon: function() {
@@ -340,16 +351,18 @@ if(Meteor.isClient) {
 
 	OpenLoops.getItemTypeIcon = function(item) {
 		var icon = 'fa-square';
-		switch(item.type) {
-			case ITEM_TYPE_DISCUSSION: icon = 'fa-comments-o'; break;
-			case ITEM_TYPE_ISSUE: icon = 'fa-exclamation-circle'; break;
-			case ITEM_TYPE_ARTICLE: icon = 'fa-book'; break;
-		}
-		if(item.type == ITEM_TYPE_ISSUE && item.issueType != null) {
-			switch(item.issueType) {
-				case ISSUE_TYPE_BUG: icon = 'fa-bug'; break;
-				case ISSUE_TYPE_TASK: icon = 'fa-exclamation-circle'; break;
-				case ISSUE_TYPE_ENHANCEMENT: icon = 'fa-bullseye'; break;
+		if(item) {
+			switch(item.type) {
+				case ITEM_TYPE_DISCUSSION: icon = 'fa-comments-o'; break;
+				case ITEM_TYPE_ISSUE: icon = 'fa-exclamation-circle'; break;
+				case ITEM_TYPE_ARTICLE: icon = 'fa-book'; break;
+			}
+			if(item.type == ITEM_TYPE_ISSUE && item.issueType != null) {
+				switch(item.issueType) {
+					case ISSUE_TYPE_BUG: icon = 'fa-bug'; break;
+					case ISSUE_TYPE_TASK: icon = 'fa-exclamation-circle'; break;
+					case ISSUE_TYPE_ENHANCEMENT: icon = 'fa-bullseye'; break;
+				}
 			}
 		}
 		return icon;
@@ -357,15 +370,17 @@ if(Meteor.isClient) {
 
 	OpenLoops.getItemTypeIconColor = function(item) {
 		var color = '#ccc';
-		switch(item.type) {
-			case ITEM_TYPE_DISCUSSION: color = '#90BEF2'; break;
-			case ITEM_TYPE_ISSUE: color = '#6cc644'; break;
-			case ITEM_TYPE_ARTICLE: color = 'orange'; break;
-		}
-		if(item.type == ITEM_TYPE_ISSUE && item.issueType != null) {
-			switch(item.issueType) {
-				case ISSUE_TYPE_BUG: color = 'brown'; break;
-				case ISSUE_TYPE_ENHANCEMENT: color = 'purple'; break;
+		if(item) {
+			switch(item.type) {
+				case ITEM_TYPE_DISCUSSION: color = '#90BEF2'; break;
+				case ITEM_TYPE_ISSUE: color = '#6cc644'; break;
+				case ITEM_TYPE_ARTICLE: color = 'orange'; break;
+			}
+			if(item.type == ITEM_TYPE_ISSUE && item.issueType != null) {
+				switch(item.issueType) {
+					case ISSUE_TYPE_BUG: color = 'brown'; break;
+					case ISSUE_TYPE_ENHANCEMENT: color = 'purple'; break;
+				}
 			}
 		}
 		return color;
@@ -431,20 +446,26 @@ if(Meteor.isClient) {
 	OpenLoops.moreMessagesOnServer = function() {
 		var result = true;
 		var currentItemId = Session.get('currentItemId');
-		var serverMsgCount = (currentItemId?Items.findOne(currentItemId).numMessages:Boards.find({}).fetch()[0].numMessages);
+		var serverMsgCount;
+		if(currentItemId) {
+			var item = Items.findOne(currentItemId);
+			if(item) {
+				serverMsgCount = item.numMessages;
+			}
+		}
+		if(!serverMsgCount) {
+			var board = Boards.findOne(Session.get('currentBoardId'));
+			if(board) {
+				serverMsgCount = board.numMessages;
+			}
+		}
 		var clientMsgCount = ClientMessages._collection.find().fetch().length;
+
 		result = (clientMsgCount < serverMsgCount);
 		console.log("clientMsgCount: " + clientMsgCount);
 		console.log("serverMsgCount: " + serverMsgCount);
 		return result;
 	}
-
-	Template.feed.onCreated(function() {
-		var self = this;
-		/*Session.set('numIncomingMessages', 0);
-		Meteor.subscribe('items');
-		OpenLoops.loadInitialMessages();*/
-	});
 
 	Template.feed.helpers({
 		messages: function() {
@@ -508,7 +529,8 @@ if(Meteor.isClient) {
 		},
 
 		openStatus: function() {
-			return Items.findOne(Session.get('currentItemId')).isOpen?'Open':'Closed';
+			var item = Items.findOne(Session.get('currentItemId'));
+			return item?(item.isOpen?'Open':'Closed'):'Open';
 		},
 
 		boardTitle: function() {
@@ -537,14 +559,7 @@ if(Meteor.isClient) {
 		},
 	});
 
-	Template.leftSidebar.onCreated(function() {
-		var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
-		this.subscribe('items', filter, function(err, result) {
-			if(err) {
-				alert("Items Subscription error: " + err);
-			}
-		});
-	});
+
 
 	Template.leftSidebar.helpers({
 		items: function() {

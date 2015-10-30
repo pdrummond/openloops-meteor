@@ -1,4 +1,4 @@
-if(Meteor.isClient) {	
+if(Meteor.isClient) {
 	Template.registerHelper('connectionStatus', function (context, options) {
 		return Meteor.status();
 	});
@@ -54,12 +54,22 @@ if(Meteor.isClient) {
 
 	Template.registerHelper('currentItemIsOpen', function () {
 		var item = Items.findOne(Session.get('currentItemId'));
-		return item?item.isOpen:false;
+		return item?item.isOpen:true;
+	});
+
+	Template.registerHelper('currentItemLabelsEmpty', function () {
+		var item = Items.findOne(Session.get('currentItemId'));
+		return item?item.labels.length == 0:true;
 	});
 
 	Template.registerHelper('currentItemLabels', function () {
 		var item = Items.findOne(Session.get('currentItemId'));
 		return item?item.labels:[];
+	});
+
+	Template.registerHelper('currentItemId', function () {
+		var item = Items.findOne(Session.get('currentItemId'));
+		return item?item._id:null;
 	});
 
 	Template.registerHelper('currentBoardId', function () {

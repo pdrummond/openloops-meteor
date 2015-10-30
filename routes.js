@@ -88,9 +88,10 @@ if(Meteor.isClient) {
 		}
 	});
 
-	loggedInGroup.route('/board/:boardId/edit-item', {
+	loggedInGroup.route('/board/:boardId/item/:itemId/edit', {
 		action: function(params, queryParams) {
 			Session.set('currentBoardId', params.boardId);
+			Session.set('currentItemId', params.itemId);
 			Session.set('currentPage', 'editItemPage');
 		}
 	});

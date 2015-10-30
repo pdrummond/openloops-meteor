@@ -47,7 +47,7 @@
 </template>
 
 <template name="editItemForm">
-	<div id="editItemForm" class="main">
+	<div id="editItemForm" class="main form">
 		<form>
 			<fieldset>
 				<label>Title</label>
@@ -102,12 +102,13 @@
 		{{else}}
 		<span class="header-text">ACTIONS</span>
 		<ul class="action-buttons">
-			<li id="open-close-link" class="action-button"><i class="fa fa-times"></i> {{#if currentItemIsOpen}}Close{{else}}Open{{/if}}</li>
-			<li id="move-link" class="action-button"><i class="fa fa-arrow-right"></i> Move</li>
+			<li id="edit-link" class="action-button"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/edit"><i class="fa fa-pencil"></i> Edit</a></li>
+			<li id="open-close-link" class="action-button"><a href=""><i class="fa fa-times"></i> {{#if currentItemIsOpen}}Close{{else}}Open{{/if}}</a></li>
+			<li id="move-link" class="action-button"><a href=""><i class="fa fa-arrow-right"></i> Move</a></li>
 		</ul>
 		<span class="header-text">LABELS</span>
 		<ul class="label-buttons">
-			No Labels
+			{{> itemLabels}}
 		</ul>
 		{{#if isIssue}}
 			<span class="header-text">ASSIGNEE</span>
@@ -224,9 +225,6 @@
 				</ul>-->
 			{{else}}
 			<div id="header-main-title"><i class="fa {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}}</div>
-			<div id="header-labels">
-				{{> itemLabels}}
-			</div>
 			<div id="header-status-bar">
 				<div id="header-open-status">
 					<strong id="open-status-link" class="{{#if currentItemIsOpen}}open{{else}}closed{{/if}}"><i class="fa {{currentItemIcon}}"></i> {{openStatus}}</strong>
@@ -252,9 +250,13 @@
 </template>
 
 <template name="itemLabels">
-	{{#each currentItemLabels}}
-		<span class="label-item">{{this}}</span>
-	{{/each}}
+	{{#if currentItemLabelsEmpty}}
+		<span class="empty-item-msg">No labels</span>
+	{{else}}
+		{{#each currentItemLabels}}
+			<div class="label-item">{{this}}</div>
+		{{/each}}
+	{{/if}}
 </template>
 
 <template name="messageBox">
@@ -289,7 +291,7 @@
 		</div>
 		<span class="meta">
 			<span id="created-by">created by {{createdBy}}</span>
-			<span id="created-at">{{timeAgo createdAt}}</span> <a id="edit-link" href="/board/{{currentBoardId}}/edit-item">Edit</a>
+			<span id="created-at">{{timeAgo createdAt}}</span>
 			<span id="item-link" class="{{showItemLink}}"> in <a class="item-link" href="/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
 		</span>
 		<div id="item-desc">{{#markdown}}{{text}}{{/markdown}}</div>
