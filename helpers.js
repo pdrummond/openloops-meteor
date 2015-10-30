@@ -1,5 +1,4 @@
-if(Meteor.isClient) {
-
+if(Meteor.isClient) {	
 	Template.registerHelper('connectionStatus', function (context, options) {
 		return Meteor.status();
 	});
