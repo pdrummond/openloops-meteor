@@ -1,5 +1,9 @@
 if(Meteor.isClient) {
 
+	Template.registerHelper('connectionStatus', function (context, options) {
+		return Meteor.status();
+	});
+
 	Template.registerHelper('isTeamFeed', function (context, options) {
 		return !Session.get('currentItemId');
 	});

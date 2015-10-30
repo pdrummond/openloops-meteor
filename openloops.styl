@@ -36,6 +36,37 @@ body
 		padding-left:10px;
 	}
 
+	.right {
+		color: white;
+    	margin-top: -20px;
+    	margin-right: 10px;
+		display:flex;
+		float:right;
+
+		#connection-status {
+			width: 5px;
+    		height: 5px;
+    		margin-right: 20px;
+    		padding: 5px;
+    		border-radius: 20px;
+    		margin-top: 3px;
+		}
+
+		#connection-status.connecting {
+			background-color: white;
+		}
+
+		#connection-status.connected {
+			background-color: green;
+		}
+		#connection-status.failed {
+			background-color: red;
+		}
+
+		#connection-status.waiting {
+			background-color: orange;
+		}
+	}
 }
 
 #app
@@ -680,7 +711,7 @@ footer
 	width: calc(100% - 42px);
 	height: 28px;
     margin-top: 10px;
-    margin-left: 5px;	
+    margin-left: 5px;
 }
 
 #label-link {
@@ -723,17 +754,24 @@ footer
 	height:100%;
 }
 
-#logged-in-user {
-	position:absolute;
-	top:5px;
-	right:5px;
-	color:white;
-}
-
 #login-form, #signup-form {
 	width:800px;
 	margin:auto auto;
 	margin-top:50px;
 	background: whitesmoke;
 	border-radius:10px;
+}
+
+
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background:white;
+}
+
+::-webkit-scrollbar-thumb {
+    background:lightgray;
 }
