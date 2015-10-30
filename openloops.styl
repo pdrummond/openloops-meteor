@@ -42,30 +42,6 @@ body
     	margin-right: 10px;
 		display:flex;
 		float:right;
-
-		#connection-status {
-			width: 5px;
-    		height: 5px;
-    		margin-right: 20px;
-    		padding: 5px;
-    		border-radius: 20px;
-    		margin-top: 3px;
-		}
-
-		#connection-status.connecting {
-			background-color: white;
-		}
-
-		#connection-status.connected {
-			background-color: green;
-		}
-		#connection-status.failed {
-			background-color: red;
-		}
-
-		#connection-status.waiting {
-			background-color: orange;
-		}
 	}
 }
 
@@ -902,4 +878,29 @@ footer
     font-weight: 300;
     color: #656565;
 	text-align:center;
+}
+
+#connection-status {
+	position:absolute;
+	left: 17.1px;
+	top: 15.5px;
+	width: 5px;
+	height: 5px;
+    padding: 5px;
+    border-radius: 20px;
+}
+
+#connection-status.connecting {
+	background-color: white;
+}
+
+#connection-status.connected {
+	background-color: green;
+}
+#connection-status.failed {
+	background-color: red;
+}
+
+#connection-status.waiting {
+	background-color: orange;
 }

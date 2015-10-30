@@ -1,11 +1,14 @@
 <template name="app">
 	<div id="top-banner">
 		<div class="left">
-			<a href="/"><img src="/images/openloops-o.png" style="position:relative;top:8px;left:10px;width:30px"/></a>
+
+			<a href="/">
+				<img src="/images/openloops-o.png" style="position:relative;top:8px;left:10px;width:30px"/>
+				<div id="connection-status" class="{{connectionStatus.status}}" title="Server {{connectionStatus.status}}"></div>
+			</a>
 			<span style="margin-left:10px" id="main-title"><a href="/board/{{currentBoardId}}" style="text-decoration:none">{{currentBoardTitle}}</a></span>
 		</div>
 		<div class="right">
-			<div id="connection-status" class="{{connectionStatus.status}}" title="Server {{connectionStatus.status}}"></div>
 			<div style="position:relative;top:-10px">
 				<div id="logged-in-user"><strong>{{currentUser.username}}</strong></div>
 				{{#if currentUser}}
