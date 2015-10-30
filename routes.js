@@ -1,4 +1,4 @@
-if(Meteor.isClient) {
+
 
 	FlowRouter.subscriptions = function() {
 		this.register('boards', Meteor.subscribe('boards'));
@@ -32,6 +32,13 @@ if(Meteor.isClient) {
 		}
 	});
 
+	noauthGroup.route('/notAllowed', {
+		name: "notAllowed",
+		action: function(params, queryParams) {
+			Session.set('currentPage', 'notAllowed');
+		}
+	});
+
 	loggedInGroup = FlowRouter.group({
 		triggersEnter: [ function() {
 			if(Meteor.loggingIn() == false && !Meteor.userId()) {
@@ -40,6 +47,19 @@ if(Meteor.isClient) {
 					Session.set('redirectAfterLogin', route.path);
 				}
 				FlowRouter.go('login');
+			}
+		}]
+	});
+
+	adminGroup = FlowRouter.group({
+		triggersEnter: [ function() {
+			var user = Meteor.user();
+			if(user) {
+				var email = user.emails[0].address;
+				var teamMember = TeamMembers.findOne({email: email});
+				if(teamMember.role != 'ADMIN') {
+					FlowRouter.go('notAllowed');
+				}
 			}
 		}]
 	});
@@ -109,40 +129,40 @@ if(Meteor.isClient) {
 		}
 	});
 
-	loggedInGroup.route('/boards/create', {
+	adminGroup.route('/boards/create', {
 		action: function(params, queryParams) {
 			Session.set('currentPage', 'createBoardForm');
 		}
 	});
 
-	loggedInGroup.route('/team-members', {
+	adminGroup.route('/team-members', {
 		action: function(params, queryParams) {
 			Session.set('currentPage', 'teamMembersList');
 		}
 	});
 
-	loggedInGroup.route('/team-members/create', {
+	adminGroup.route('/team-members/create', {
 		action: function(params, queryParams) {
 			Session.set('currentTeamMemberId', null);
 			Session.set('currentPage', 'editTeamMemberForm');
 		}
 	});
 
-	loggedInGroup.route('/team-member/:teamMemberId/edit', {
+	adminGroup.route('/team-member/:teamMemberId/edit', {
 		action: function(params, queryParams) {
 			Session.set('currentTeamMemberId', params.teamMemberId);
 			Session.set('currentPage', 'editTeamMemberForm');
 		}
 	});
 
-	loggedInGroup.route('/board/:boardId/create-label', {
+	adminGroup.route('/board/:boardId/create-label', {
 		action: function(params, queryParams) {
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentPage', 'editLabelPage');
 		}
 	});
 
-	loggedInGroup.route('/board/:boardId/label/:labelId/edit', {
+	adminGroup.route('/board/:boardId/label/:labelId/edit', {
 		action: function(params, queryParams) {
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentLabelId', params.labelId);
@@ -155,4 +175,3 @@ if(Meteor.isClient) {
 			Session.set('currentPage', 'notFoundPage');
 		}
 	}
-}

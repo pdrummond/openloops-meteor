@@ -335,3 +335,27 @@
 <template name="moveToBoardItem">
 	<li class="menu-item">{{title}}</li>
 </template>
+
+<template name="notAllowed">
+	<div class="alert message"><i class="fa fa-exclamation-triangle"></i> Ooops, sorry - only admins are allowed here</div>
+</template>
+
+
+<template name="welcomePage">
+	<div class="alert message">
+	<h1>Welcome</h1>
+	{{#if currentUser}}
+		This screen is a work in progres - eventually it will say great things about OLS.
+		<p>Click <a href="/boards">here</a> for your boards</p>
+		<p>Click <a href="/team-members">here</a> to configure your team</p>
+	{{else}}
+		<p>Please <a href="/login">login</a> or <a href="/signup">sign-up</a> to continue</p>
+	{{/if}}
+	</div>
+</template>
+
+<template name="notFoundPage">
+	<div class="alert message">
+		<i class="fa fa-exclamation-triangle"></i> 404: Oops, this page doesn't exist, sorry.  Click <a href="/">here</a> to find your way home.
+	</div>
+</template>
