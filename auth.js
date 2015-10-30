@@ -22,7 +22,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.signupPage.events({
-		'submit #register-form' : function(e, t) {
+		'submit #signup-form' : function(e, t) {
 			e.preventDefault();
 			var email = t.find('#account-email').value
 			, password = t.find('#account-password').value;
