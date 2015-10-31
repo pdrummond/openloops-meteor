@@ -474,6 +474,7 @@ if(Meteor.isClient) {
 	}
 
 	OpenLoops.moreMessagesOnServer = function() {
+		console.log("> moreMessagesOnServer");
 		var result = true;
 		var currentItemId = Session.get('currentItemId');
 		var serverMsgCount;
@@ -492,8 +493,9 @@ if(Meteor.isClient) {
 		var clientMsgCount = ClientMessages._collection.find().fetch().length;
 
 		result = (clientMsgCount < serverMsgCount);
-		console.log("clientMsgCount: " + clientMsgCount);
-		console.log("serverMsgCount: " + serverMsgCount);
+		console.log("    clientMsgCount: " + clientMsgCount);
+		console.log("    serverMsgCount: " + serverMsgCount);
+		console.log("< moreMessagesOnServer");
 		return result;
 	}
 
@@ -779,6 +781,7 @@ if(Meteor.isServer) {
 		},
 
 		updateItem: function(itemId, item) {
+			console.log("> updateItem");
 			Items.update(itemId, {$set: item});
 			var descMessage = ServerMessages.findOne({itemId: itemId, type: MSG_TYPE_ITEM});
 			console.log("descMessage: " + descMessage.title);
