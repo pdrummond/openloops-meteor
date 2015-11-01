@@ -414,8 +414,7 @@ if(Meteor.isClient) {
 	Template.leftSidebar.helpers({
 		items: function() {
 			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
-			filter.boardId = Session.get('currentBoardId');
-			filter.type = 'issue';
+			filter.boardId = Session.get('currentBoardId');			
 			if(!filter.hasOwnProperty('isOpen')) {
 				filter.isOpen = true;
 			}
