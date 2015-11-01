@@ -1,0 +1,19 @@
+<template name="messageHistory">
+	<ul id="message-list">
+		<a href="" id="loading-more" style="visibility:{{#if moreMessagesOnServer}}visible{{else}}hidden{{/if}}"><i id="loading-more-icon" class="fa fa-spinner fa-pulse"></i></a>
+		{{#each messages}}
+		{{> messageItemView}}
+		{{/each}}
+	</ul>
+	<footer>
+		{{> messageBox}}
+	</footer>
+	{{#if hasIncomingMessages}}
+		<a href="" id="header-new-messages-toast"><i class="fa fa-arrow-down"></i>
+		{{numIncomingMessages}} {{incomingMessagesText}}</a>
+	{{/if}}
+</template>
+
+<template name="messageBox">
+	<textarea id="message-box" placeholder="Type here to comment"></textarea>
+</template>

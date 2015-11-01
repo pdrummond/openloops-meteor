@@ -28,5 +28,5 @@ yasaricli:slugify
 accounts-base
 oaf:html5-desktop-notifications
 babrahams:constellation
-sanjo:jasmine
-velocity:html-reporter
+ols:lib
+ols:message-history

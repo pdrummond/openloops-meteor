@@ -1,21 +1,6 @@
 
 OpenLoops = {};
 
-const ITEM_TYPE_DISCUSSION = 'discussion';
-const ITEM_TYPE_ISSUE = 'issue';
-const ITEM_TYPE_ARTICLE = 'article';
-
-const ISSUE_TYPE_BUG = 'bug';
-const ISSUE_TYPE_TASK = 'task';
-const ISSUE_TYPE_ENHANCEMENT = 'enhancement';
-
-const MSG_TYPE_CHAT = 'MSG_TYPE_CHAT';
-const MSG_TYPE_ITEM = 'MSG_TYPE_ITEM';
-
-const MESSAGE_PAGE_SIZE = 20;
-const MESSAGE_AGE_HOURS_INCREMENT = 1;
-const FILL_SCREEN_MSG_COUNT = 30;
-
 if(Meteor.isClient) {
 	Session.setDefault('leftSidebarActiveTab', 'discussTab');
 	Session.setDefault('showSidebarTabs', true);
@@ -36,25 +21,6 @@ if(Meteor.isClient) {
 					alert("Items Subscription error: " + err);
 				}
 			});
-		});
-
-		Streamy.on('sendMessage', function(incomingMessage) {
-			if(incomingMessage.createdBy != Meteor.user().username) {
-				OpenLoops.insertClientMessage(incomingMessage);
-				if(OpenLoops.atBottom) {
-					OpenLoops.scrollToBottomOfMessages();
-				} else if(incomingMessage.itemId == Session.get('currentItemId')) {
-					Session.set('numIncomingMessages', Session.get('numIncomingMessages')+1);
-
-				}
-
-				if(incomingMessage.itemId != Session.get('currentItemId')) {
-					$(".left-sidebar .item-list li[data-id='" + incomingMessage.itemId + "'] .item-msg-count").addClass("new-messages");
-				}
-
-			} else {
-				OpenLoops.scrollToBottomOfMessages();
-			}
 		});
 
 		Streamy.on('mention', function(data) {
@@ -90,29 +56,6 @@ if(Meteor.isClient) {
 		} else {
 			$(".left-sidebar .item-list li .new-messages").removeClass("new-messages");
 		}
-	}
-
-	OpenLoops.scrollToBottomOfMessages = function() {
-		var $messageList = $("#message-list");
-		if($messageList.length > 0) {
-			$messageList.scrollTop($messageList[0].scrollHeight);
-		}
-		OpenLoops.atBottom = true;
-	}
-
-	OpenLoops.insertClientMessage = function(attrs) {
-		var currentItemId = Session.get('currentItemId');
-		var defaultAttrs = {
-			type: MSG_TYPE_CHAT,
-			createdAt: new Date().getTime(),
-			createdBy: Meteor.user().username,
-			boardId: Session.get('currentBoardId'),
-			itemId: currentItemId
-		};
-		var newMessage = _.extend(defaultAttrs, attrs);
-		var newMessageId = ClientMessages._collection.insert(newMessage);
-		newMessage._id = newMessageId;
-		return newMessage;
 	}
 
 	OpenLoops.getFilterQuery = function(filterString) {
@@ -186,17 +129,22 @@ if(Meteor.isClient) {
 			var item = Items.findOne(Session.get('currentItemId'));
 			if(item) {
 				return issueType == item.issueType?'selected':'';
+
 			} else {
 				return '';
 			}
 		},
 
 		showIssueType: function() {
-			return true;//FIXME: only show issue type if issue is selected
+			var selectedType = Session.get('editItemForm.selectedType') || 'issue';
+			return selectedType == 'issue'?'':'hide';
 		}
 	});
 
 	Template.editItemForm.events({
+		'change select[name="type"]': function() {
+			Session.set('editItemForm.selectedType', $('select[name="type"]').val());
+		},
 		'click #save-button': function(e) {
 			e.preventDefault();
 			var title = $("#editItemForm input[name='title']").val();
@@ -255,33 +203,6 @@ if(Meteor.isClient) {
 		}
 	});
 
-	Template.messageBox.events({
-		'keypress #message-box': function(e) {
-			var inputVal = $('#message-box').val();
-			var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
-			if(charCode == 13 && (inputVal == null || inputVal.length == 0)) {
-				e.preventDefault();
-				e.stopPropagation();
-			} else {
-				if (charCode == 13 && e.shiftKey == false) {
-					e.preventDefault();
-					e.stopPropagation();
-					if(inputVal.length > 0) {
-						var newMessage = OpenLoops.insertClientMessage({text:inputVal});
-						Meteor.call('saveMessage', newMessage, function(err, result) {
-							if(err) {
-								alert("error sending message");
-							} else {
-								$("#message-box").val('');
-								OpenLoops.scrollToBottomOfMessages();
-								Streamy.broadcast('sendMessage', newMessage);
-							}
-						});
-					}
-				}
-			}
-		}
-	});
 
 	Template.app.events({
 		'click #logout-link': function() {
@@ -313,8 +234,8 @@ if(Meteor.isClient) {
 		messageTemplate: function() {
 			var t;
 			switch(this.type) {
-				case MSG_TYPE_CHAT: t = 'userMessageItemView'; break;
-				case MSG_TYPE_ITEM: t = 'itemMessageItemView'; break;
+				case Ols.MSG_TYPE_CHAT: t = 'userMessageItemView'; break;
+				case Ols.MSG_TYPE_ITEM: t = 'itemMessageItemView'; break;
 			}
 			return t;
 		}
@@ -324,7 +245,7 @@ if(Meteor.isClient) {
 
 		itemTitle: function() {
 			var item = Items.findOne(this.itemId);
-			return item?'in ' + item.title:'';
+			return item ? 'in ' + item.title:'';
 		},
 
 		showItemLink: function() {
@@ -383,15 +304,15 @@ if(Meteor.isClient) {
 		var icon = 'fa-square';
 		if(item) {
 			switch(item.type) {
-				case ITEM_TYPE_DISCUSSION: icon = 'fa-comments-o'; break;
-				case ITEM_TYPE_ISSUE: icon = 'fa-exclamation-circle'; break;
-				case ITEM_TYPE_ARTICLE: icon = 'fa-book'; break;
+				case Ols.ITEM_TYPE_DISCUSSION: icon = 'fa-comments-o'; break;
+				case Ols.ITEM_TYPE_ISSUE: icon = 'fa-exclamation-circle'; break;
+				case Ols.ITEM_TYPE_ARTICLE: icon = 'fa-book'; break;
 			}
-			if(item.type == ITEM_TYPE_ISSUE && item.issueType != null) {
+			if(item.type == Ols.ITEM_TYPE_ISSUE && item.issueType != null) {
 				switch(item.issueType) {
-					case ISSUE_TYPE_BUG: icon = 'fa-bug'; break;
-					case ISSUE_TYPE_TASK: icon = 'fa-exclamation-circle'; break;
-					case ISSUE_TYPE_ENHANCEMENT: icon = 'fa-bullseye'; break;
+					case Ols.ISSUE_TYPE_BUG: icon = 'fa-bug'; break;
+					case Ols.ISSUE_TYPE_TASK: icon = 'fa-exclamation-circle'; break;
+					case Ols.ISSUE_TYPE_ENHANCEMENT: icon = 'fa-bullseye'; break;
 				}
 			}
 		}
@@ -402,112 +323,21 @@ if(Meteor.isClient) {
 		var color = '#ccc';
 		if(item) {
 			switch(item.type) {
-				case ITEM_TYPE_DISCUSSION: color = '#90BEF2'; break;
-				case ITEM_TYPE_ISSUE: color = '#6cc644'; break;
-				case ITEM_TYPE_ARTICLE: color = 'orange'; break;
+				case Ols.ITEM_TYPE_DISCUSSION: color = '#90BEF2'; break;
+				case Ols.ITEM_TYPE_ISSUE: color = '#6cc644'; break;
+				case Ols.ITEM_TYPE_ARTICLE: color = 'orange'; break;
 			}
-			if(item.type == ITEM_TYPE_ISSUE && item.issueType != null) {
+			if(item.type == Ols.ITEM_TYPE_ISSUE && item.issueType != null) {
 				switch(item.issueType) {
-					case ISSUE_TYPE_BUG: color = 'brown'; break;
-					case ISSUE_TYPE_ENHANCEMENT: color = 'purple'; break;
+					case Ols.ISSUE_TYPE_BUG: color = 'brown'; break;
+					case Ols.ISSUE_TYPE_ENHANCEMENT: color = 'purple'; break;
 				}
 			}
 		}
 		return color;
 	}
 
-	OpenLoops.getOldestClientMessageDate = function() {
-		var date;
-		var filter = {};
-		var currentItemId = Session.get('currentItemId');
-		if(currentItemId) {
-			filter.itemId = currentItemId;
-		}
-		var existingMessages = ClientMessages.find(filter, {sort:{createdAt:1}}).fetch();
-		if(existingMessages.length > 0) {
-			date = existingMessages[0].createdAt;
-		}
-		return date;
-	}
-
-	OpenLoops.loadMessages = function(callback) {
-		var olderThanDate = OpenLoops.getOldestClientMessageDate();
-		Meteor.call('loadMessages', {
-			olderThanDate: olderThanDate,
-			boardId: Session.get('currentBoardId'),
-			itemId: Session.get('currentItemId')
-		}, function(err, messages) {
-			if(err) {
-				alert("Error loading messages");
-				callback(false);
-			} else {
-				_.each(messages, function(message) {
-					ClientMessages._collection.insert(message);
-				});
-				callback(true);
-			}
-		});
-	}
-
-	OpenLoops.loadInitialMessages = function() {
-		ClientMessages._collection.remove({});
-		OpenLoops.loadMessages(function(ok) {
-			if(ok) {
-				//Don't scroll to bottom when in read-mode.
-				if(Session.get('leftSidebarActiveTab') != 'readTab') {
-					OpenLoops.scrollToBottomOfMessages();
-				}
-			}
-		});
-	}
-
-	OpenLoops.loadMoreMessages = function() {
-		Meteor.setTimeout(function() {
-			if(OpenLoops.moreMessagesOnServer()) {
-				OpenLoops.loadMessages(function(ok) {
-					if(ok) {
-						$("#message-list").scrollTop(($(".user-message").outerHeight() * MESSAGE_PAGE_SIZE));
-					}
-				});
-			}
-		}, 500);
-	}
-
-	OpenLoops.moreMessagesOnServer = function() {
-		console.log("> moreMessagesOnServer");
-		var result = true;
-		var currentItemId = Session.get('currentItemId');
-		var serverMsgCount;
-		if(currentItemId) {
-			var item = Items.findOne(currentItemId);
-			if(item) {
-				serverMsgCount = item.numMessages;
-			}
-		}
-		if(!serverMsgCount) {
-			var board = Boards.findOne(Session.get('currentBoardId'));
-			if(board) {
-				serverMsgCount = board.numMessages;
-			}
-		}
-		var clientMsgCount = ClientMessages._collection.find().fetch().length;
-
-		result = (clientMsgCount < serverMsgCount);
-		console.log("    clientMsgCount: " + clientMsgCount);
-		console.log("    serverMsgCount: " + serverMsgCount);
-		console.log("< moreMessagesOnServer");
-		return result;
-	}
-
 	Template.feed.helpers({
-		messages: function() {
-			var filter = {boardId: Session.get('currentBoardId')};
-			var currentItemId = Session.get('currentItemId');
-			if(currentItemId) {
-				filter.itemId = currentItemId;
-			}
-			return ClientMessages.find(filter, {sort: {createdAt: 1}});
-		},
 
 		filterQuery: function() {
 			return Session.get('filterQuery');
@@ -523,27 +353,6 @@ if(Meteor.isClient) {
 				case 'article': active = (query == 'type:article'); break;
 			}
 			return active?'active':'';
-		},
-
-		numIncomingMessages: function() {
-			return Session.get('numIncomingMessages');
-		},
-
-		incomingMessagesText: function() {
-			var numMessages = Session.get('numIncomingMessages');
-			if(numMessages == 1) {
-				return 'New Message - click to show';
-			} else if(numMessages > 0) {
-				return 'New Messages - click to show';
-			}
-		},
-
-		hasIncomingMessages: function() {
-			return Session.get('numIncomingMessages') > 0;
-		},
-
-		moreMessagesOnServer: function() {
-			return OpenLoops.moreMessagesOnServer();
 		},
 
 		currentItemIcon: function() {
@@ -586,7 +395,7 @@ if(Meteor.isClient) {
 	Template.feed.events({
 		'click #header-new-messages-toast': function() {
 			Session.set("numIncomingMessages", 0);
-			OpenLoops.scrollToBottomOfMessages();
+			Ols.HistoryManager.scrollBottom();
 		},
 
 		'click #item-board-link': function() {
@@ -691,25 +500,7 @@ if(Meteor.isClient) {
 			Meteor.call('moveItem', Session.get('currentItemId'), this._id);
 			FlowRouter.go("/board/" + Session.get('currentBoardId'));
 		}
-	})
-
-	Template.app.onRendered(function() {
-		$("#message-list").scroll(checkScroll);
 	});
-
-	function checkScroll() {
-		console.log("message-list scrollTop: " + ($("#message-list").scrollTop() + $("#message-list").outerHeight()));
-		console.log("message-list scrollTop2: " + ($("#message-list").scrollTop() + $("#message-list").height()));
-		console.log("message list height: " + $("#message-list")[0].scrollHeight);
-		if($("#message-list").scrollTop() == 0) {
-			OpenLoops.loadMoreMessages();
-		}
-		OpenLoops.atBottom = $("#message-list")[0].scrollHeight == ($("#message-list").scrollTop() + $("#message-list").height());
-		console.log("atBottom: " + OpenLoops.atBottom);
-		if(OpenLoops.atBottom) {
-			$("#header-new-messages-toast").hide();
-		}
-	}
 
 } //isClient
 
@@ -718,45 +509,7 @@ Filters = new Meteor.Collection('filters');
 
 if(Meteor.isServer) {
 
-	ServerMessages = new Meteor.Collection('server-messages');
-
 	Meteor.methods({
-		loadMessages: function(opts) {
-			var filter = {};
-			if(opts.itemId) {
-				filter.itemId = opts.itemId;
-			}
-			if(opts.olderThanDate) {
-				filter.createdAt = {$lt: opts.olderThanDate};
-			}
-			console.log("SERVER FILTER: " + JSON.stringify(filter));
-			var messages = ServerMessages.find(filter, {
-				limit: MESSAGE_PAGE_SIZE,
-				sort: {createdAt: -1}
-			});
-			return messages.fetch();
-		},
-
-		saveMessage: function(newMessage) {
-			ServerMessages.insert(newMessage);
-			Items.update(newMessage.itemId, {
-				$inc: {numMessages: 1},
-				$set: {updatedAt: new Date().getTime()},
-			});
-
-			Meteor.call('detectMentionsInMessage', newMessage);
-
-		},
-
-		insertMessage: function(newMessage) {
-			newMessage = _.extend({
-				createdAt: new Date().getTime(),
-				createdBy: Meteor.user().username,
-			}, newMessage);
-			Meteor.call('saveMessage', newMessage);
-			Streamy.broadcast('sendMessage', newMessage);
-		},
-
 		insertItem: function(newItem) {
 			console.log("insertItem - boardId:" + newItem.boardId);
 			var now = new Date().getTime();
@@ -770,7 +523,7 @@ if(Meteor.isServer) {
 
 			var newItemId = Items.insert(newItem);
 			Meteor.call('insertMessage', {
-				type: MSG_TYPE_ITEM,
+				type: Ols.MSG_TYPE_ITEM,
 				itemType: newItem.type,
 				text: newItem.description,
 				boardId: newItem.boardId,
@@ -783,10 +536,10 @@ if(Meteor.isServer) {
 		updateItem: function(itemId, item) {
 			console.log("> updateItem");
 			Items.update(itemId, {$set: item});
-			var descMessage = ServerMessages.findOne({itemId: itemId, type: MSG_TYPE_ITEM});
+			var descMessage = ServerMessages.findOne({itemId: itemId, type: Ols.MSG_TYPE_ITEM});
 			console.log("descMessage: " + descMessage.title);
 			console.log("item new description:" + item.description);
-			ServerMessages.update(descMessage._id, {$set: {title: item.description}});
+			ServerMessages.update(descMessage._id, {$set: {text: item.description}});
 			return _.extend(item, {_id: itemId});
 		},
 

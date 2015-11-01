@@ -87,7 +87,7 @@
 			Session.set('currentItemId', null);
 			Session.set('numIncomingMessages', 0);
 
-			OpenLoops.loadInitialMessages();
+			Ols.HistoryManager.loadInitialMessages();
 		}
 	});
 
@@ -97,9 +97,9 @@
 			Session.set('currentItemId', params.itemId);
 			Session.set('currentPage', 'feedPage');
 			Session.set('numIncomingMessages', 0);
-			OpenLoops.loadInitialMessages();
+			Ols.HistoryManager.loadInitialMessages();
 			OpenLoops.removeSidebarNewMessages(params.itemId);
-			OpenLoops.scrollToBottomOfMessages();
+			Ols.HistoryManager.scrollBottom();
 		}
 	});
 

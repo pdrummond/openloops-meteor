@@ -53,26 +53,28 @@
 	<div id="editItemForm" class="main form">
 		<form>
 			<fieldset>
-				<label>Title</label>
-				<input name="title" placeholder="Enter title" value={{title}} autofocus>
-				<label>Description</label>
-				<textarea name="description" placeholder="Enter description" rows="20" value={{description}}></textarea>
-				<label>Labels</label>
-				<input name="labels" placeholder="Add labels here" value="{{labels}}">
-				<label style="display:inline">Type</label>
+				<label style="display:inline;margin-right:10px">Type</label>
 				<select name="type" placeholder="Enter type">
 					<option {{isSelectedType 'issue'}} value="issue">Issue</option>
 					<option {{isSelectedType 'discussion'}} value="discussion">Discussion</option>
 					<option {{isSelectedType 'article'}} value="article">Article</option>
 				</select>
-				<span class="{{showIssueType}}" style="margin-left:50px">
-					<label style="margin-top:30px;display:inline">Issue Type</label>
+				<span class="{{showIssueType}}" style="margin-left:50px;">
+					<label style="margin-top:30px;display:inline;margin-right:10px">Issue Type</label>
 					<select name="issueType">
 						<option {{isSelectedIssueType 'task'}} value="task">Task</option>
 						<option {{isSelectedIssueType 'bug'}} value="bug">Bug</option>
 						<option {{isSelectedIssueType 'enhancement'}} value="enhancement">Enhancement</option>
 					</select>
 				</span>
+
+				<label style="margin-top:30px">Title</label>
+				<input name="title" placeholder="Enter title" value={{title}} autofocus>
+				<label>Description</label>
+				<textarea name="description" placeholder="Enter description" value={{description}}></textarea>
+				<label>Labels</label>
+				<input name="labels" placeholder="Add labels here, e.g: #important, #milestone1, #in-progress" value="{{labels}}">
+
 			</fieldset>
 			<button id="save-button">Save</button>
 		</form>
@@ -236,18 +238,7 @@
 			{{/if}}
 
 		</header>
-		<ul id="message-list">
-			<a href="" id="loading-more" style="visibility:{{#if moreMessagesOnServer}}visible{{else}}hidden{{/if}}"><i id="loading-more-icon" class="fa fa-spinner fa-pulse"></i></a>
-			{{#each messages}}
-			{{> messageItemView}}
-			{{/each}}
-		</ul>
-		<footer>
-			{{> messageBox}}
-		</footer>
-		{{#if hasIncomingMessages}}
-			<a href="" id="header-new-messages-toast"><i class="fa fa-arrow-down"></i> {{numIncomingMessages}} {{incomingMessagesText}}</a>
-		{{/if}}
+		{{> messageHistory}}
 	</div>
 </template>
 
@@ -259,10 +250,6 @@
 			<div class="label-item">{{this}}</div>
 		{{/each}}
 	{{/if}}
-</template>
-
-<template name="messageBox">
-	<textarea id="message-box" placeholder="Type here to comment"></textarea>
 </template>
 
 <template name="messageItemView">
