@@ -1,13 +1,10 @@
-
-
+if(Meteor.isClient) {
 	FlowRouter.subscriptions = function() {
 		this.register('boards', Meteor.subscribe('boards'));
 		this.register('team-members', Meteor.subscribe('team-members'));
 		this.register('labels', Meteor.subscribe('labels'));
 		this.register('filters', Meteor.subscribe('filters'));
 	}
-
-	if(Meteor.isClient) {
 
 	noauthGroup = FlowRouter.group({});
 
@@ -97,7 +94,7 @@
 			Session.set('currentItemId', params.itemId);
 			Session.set('currentPage', 'feedPage');
 			Session.set('numIncomingMessages', 0);
-			OpenLoops.loadInitialMessages();
+			Ols.MessageHistory.loadInitialMessages();
 			OpenLoops.removeSidebarNewMessages(params.itemId);
 			OpenLoops.scrollToBottomOfMessages();
 		}

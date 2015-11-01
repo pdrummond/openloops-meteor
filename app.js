@@ -296,6 +296,12 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.messageHistoryView.helpers({
+	  MessageHistoryView() {
+	    return MessageHistoryView;
+	  }
+  	});
+
 	/*
 	var previousMessageDate = null;
 	Template.messageItemView.onRendered(function() {

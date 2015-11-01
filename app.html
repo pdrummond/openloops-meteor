@@ -236,12 +236,13 @@
 			{{/if}}
 
 		</header>
-		<ul id="message-list">
+		{{> messageHistoryView}}
+		<!--<ul id="message-list">
 			<a href="" id="loading-more" style="visibility:{{#if moreMessagesOnServer}}visible{{else}}hidden{{/if}}"><i id="loading-more-icon" class="fa fa-spinner fa-pulse"></i></a>
 			{{#each messages}}
 			{{> messageItemView}}
 			{{/each}}
-		</ul>
+		</ul>-->
 		<footer>
 			{{> messageBox}}
 		</footer>
@@ -249,6 +250,10 @@
 			<a href="" id="header-new-messages-toast"><i class="fa fa-arrow-down"></i> {{numIncomingMessages}} {{incomingMessagesText}}</a>
 		{{/if}}
 	</div>
+</template>
+
+<template name="messageHistoryView">
+	<div class="react-wrapper" style="height:100%;">{{> React component=MessageHistoryView}}</div>
 </template>
 
 <template name="itemLabels">

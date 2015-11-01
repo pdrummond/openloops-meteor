@@ -1,0 +1,13 @@
+@import 'jeet'
+@import 'nib'
+@import 'variables.import'
+
+.message-list {
+	xbackground-color: gray;
+    top: header-height;
+    position: relative;
+    height: "calc(100% - %s)" % (top-banner-height+header-height+footer-height+40);
+	overflow: auto;
+	padding-left:10px;
+	padding-right:10px;
+}
