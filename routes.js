@@ -2,7 +2,7 @@
 
 	FlowRouter.subscriptions = function() {
 		this.register('boards', Meteor.subscribe('boards'));
-		this.register('team-members', Meteor.subscribe('team-members'));
+		this.register('teamMembers', Meteor.subscribe('teamMembers'));
 		this.register('labels', Meteor.subscribe('labels'));
 		this.register('filters', Meteor.subscribe('filters'));
 	}
@@ -53,13 +53,13 @@
 		}]
 	});
 
-	adminGroup = FlowRouter.group({
+	adminGroup = loggedInGroup.group({
 		triggersEnter: [ function() {
 			var user = Meteor.user();
 			if(user) {
 				var email = user.emails[0].address;
 				var teamMember = TeamMembers.findOne({email: email});
-				if(teamMember.role != 'ADMIN') {
+				if(teamMember.role != Ols.ROLE_ADMIN) {
 					FlowRouter.go('notAllowed');
 				}
 			}

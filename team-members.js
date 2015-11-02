@@ -64,11 +64,11 @@ if(Meteor.isClient) {
 	})
 }
 
-TeamMembers = new Meteor.Collection('team-members');
+TeamMembers = new Meteor.Collection('teamMembers');
 
 if(Meteor.isServer) {
 
-	Meteor.publish("team-members", function() {
+	Meteor.publish("teamMembers", function() {
 		return TeamMembers.find();
 	});
 
@@ -89,7 +89,7 @@ if(Meteor.isServer) {
 		},
 
 		removeTeamMember: function(teamMemberId) {
-			if(TeamMembers.find({role:'admin'}).count() == 1) {
+			if(TeamMembers.find({role:Ols.ROLE_ADMIN}).count() == 1) {
 				throw new Meteor.Error('delete-failed-001', 'Must have at least one ADMIN user');
 			}
 			TeamMembers.remove(teamMemberId);

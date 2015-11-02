@@ -24,12 +24,16 @@ if(Meteor.isClient) {
 	Template.signupPage.events({
 		'submit #signup-form' : function(e, t) {
 			e.preventDefault();
-			var email = t.find('#account-email').value
-			, password = t.find('#account-password').value;
+			var username = t.find('#account-username').value;
+			var email = t.find('#account-email').value;
+			var password = t.find('#account-password').value;
 
-			// Trim and validate the input
+			username = username.trim();
+			email = email.trim();
+			password = password.trim();
 
 			Accounts.createUser({
+				username: username,
 				email: email,
 				password : password}, function(err) {
 				if (err) {
@@ -53,11 +57,11 @@ if(Meteor.isServer) {
 		var email = user.emails[0].address;
 		console.log("number of team members: " + TeamMembers.find({}).count());
 		if(TeamMembers.find({}).count() == 0) {
-			TeamMembers.insert({
+			var id = TeamMembers.insert({
 				email: email,
-				role: 'admin'
+				role: Ols.ROLE_ADMIN,
 			});
-			console.log("Added Team Member " + email);
+			console.log("Added Team Member " + email + "(" + id + ")");
 		} else {
 			var teamMember = TeamMembers.findOne({email:email});
 			if(teamMember == null) {
@@ -65,7 +69,7 @@ if(Meteor.isServer) {
 			}
 		}
 
-		user.profileImage = Gravatar.imageUrl(email, {size: 34,default: 'retro'});
+		//user.profileImage = Gravatar.imageUrl(email, {size: 34,default: 'retro'});
 
 		// We still want the default hook's 'profile' behavior.
 		if (options.profile) {

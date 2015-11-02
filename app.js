@@ -125,6 +125,10 @@ if(Meteor.isClient) {
 			}
 		},
 
+		selectedType: function() {
+			return Session.set('editItemForm.selectedType') || 'Issue';
+		},
+
 		isSelectedIssueType: function(issueType) {
 			var item = Items.findOne(Session.get('currentItemId'));
 			if(item) {
@@ -414,7 +418,7 @@ if(Meteor.isClient) {
 	Template.leftSidebar.helpers({
 		items: function() {
 			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
-			filter.boardId = Session.get('currentBoardId');			
+			filter.boardId = Session.get('currentBoardId');
 			if(!filter.hasOwnProperty('isOpen')) {
 				filter.isOpen = true;
 			}
