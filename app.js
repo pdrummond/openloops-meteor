@@ -207,6 +207,11 @@ if(Meteor.isClient) {
 		}
 	});
 
+	/*Template.app.onCreated(function() {
+		this.subscribe('boards');
+		this.subscribe('teamMembers');
+		this.subscribe('labels');
+	});*/
 
 	Template.app.events({
 		'click #logout-link': function() {
@@ -238,18 +243,50 @@ if(Meteor.isClient) {
 		messageTemplate: function() {
 			var t;
 			switch(this.type) {
-				case Ols.MSG_TYPE_CHAT: t = 'userMessageItemView'; break;
-				case Ols.MSG_TYPE_ITEM: t = 'itemMessageItemView'; break;
+				case Ols.MSG_TYPE_CHAT: t = 'chatMessageItemView'; break;
+				case Ols.MSG_TYPE_ACTIVITY: t = 'activityMessageItemView'; break;
 			}
 			return t;
 		}
 	});
 
-	Template.userMessageItemView.helpers({
+	Template.chatMessageItemView.helpers({
 
 		itemTitle: function() {
 			var item = Items.findOne(this.itemId);
 			return item ? 'in ' + item.title:'';
+		},
+
+		showItemLink: function() {
+			return Session.get('currentItemId')?'hide':'';
+		},
+
+		messageDate: function() {
+			return moment(this.createdAt).date();
+		}
+	});
+
+	Template.activityMessageItemView.helpers({
+
+		activityMessage: function() {
+
+			var ctx = Session.get('currentItemId')?'this item':'<span id="item-link"><a class="item-link" href="/board/' + Session.get('currentBoardId') + '/item/' + this.itemId + '">' + this.itemTitle + '</a></span>';
+			var msg = '???';
+			switch(this.activityType) {
+				case Ols.ACTIVITY_TYPE_NEW_ITEM:
+					msg = 'created ' + ctx;
+					break;
+				case Ols.ACTIVITY_TYPE_ITEM_TYPE_CHANGE:
+					msg = ('changed ' + ctx + ' to ' + OpenLoops.getItemTypePhrase(this.itemType, this.issueType));
+					break;
+				case Ols.ACTIVITY_TYPE_ITEM_OPENED:
+					msg = "re-opened " + ctx;
+					break;
+				case Ols.ACTIVITY_TYPE_ITEM_CLOSED:
+					msg = "closed " + ctx;
+					break;
+			}
+			return msg;
 		},
 
 		showItemLink: function() {
@@ -280,29 +317,22 @@ if(Meteor.isClient) {
 		}
 	});
 
-	Template.itemMessageItemView.helpers({
-
-		itemTitle: function() {
-			var item = Items.findOne(this.itemId);
-			return item?item.title:'';
-		},
-
-		itemTypeIcon: function() {
-			return OpenLoops.getItemTypeIcon(Items.findOne(this.itemId));
-		},
-
-		itemTypeIconColor: function() {
-			return OpenLoops.getItemTypeIconColor(Items.findOne(this.itemId));
-		},
-
-		showItemLink: function() {
-			return Session.get('currentItemId')?'hide':'';
-		},
-
-		messageDate: function() {
-			return moment(this.createdAt).date();
+	OpenLoops.getItemTypePhrase = function(itemType, issueType) {
+		var type = 'an item';
+		switch(itemType) {
+			case Ols.ITEM_TYPE_DISCUSSION: type = 'a discussion'; break;
+			case Ols.ITEM_TYPE_ISSUE: type = 'an issue'; break;
+			case Ols.ITEM_TYPE_ARTICLE: type = 'an article'; break;
 		}
-	});
+		if(itemType == Ols.ITEM_TYPE_ISSUE && issueType != null) {
+			switch(issueType) {
+				case Ols.ISSUE_TYPE_BUG: type = 'a bug'; break;
+				case Ols.ISSUE_TYPE_TASK: type = 'a task'; break;
+				case Ols.ISSUE_TYPE_ENHANCEMENT: type = 'an enhancement'; break;
+			}
+		}
+		return type;
+	},
 
 	OpenLoops.getItemTypeIcon = function(item) {
 		var icon = 'fa-square';
@@ -409,7 +439,11 @@ if(Meteor.isClient) {
 
 	Template.rightSidebar.events({
 		'click #open-close-link': function() {
-			Meteor.call('toggleItemOpenStatus', Session.get('currentItemId'));
+			Meteor.call('toggleItemOpenStatus', Session.get('currentItemId'), function(err, result) {
+				if(err) {
+					alert("Error toggling item status: " + err.reason);
+				}
+			});
 		},
 	});
 
@@ -526,9 +560,9 @@ if(Meteor.isServer) {
 
 			var newItemId = Items.insert(newItem);
 			Meteor.call('insertMessage', {
-				type: Ols.MSG_TYPE_ITEM,
+				type: Ols.MSG_TYPE_ACTIVITY,
+				activityType: Ols.ACTIVITY_TYPE_NEW_ITEM,
 				itemType: newItem.type,
-				text: newItem.description,
 				boardId: newItem.boardId,
 				itemId: newItemId
 			});
@@ -536,14 +570,25 @@ if(Meteor.isServer) {
 			return _.extend(newItem, {_id: newItemId});
 		},
 
-		updateItem: function(itemId, item) {
-			console.log("> updateItem");
-			Items.update(itemId, {$set: item});
-			var descMessage = ServerMessages.findOne({itemId: itemId, type: Ols.MSG_TYPE_ITEM});
-			console.log("descMessage: " + descMessage.title);
-			console.log("item new description:" + item.description);
-			ServerMessages.update(descMessage._id, {$set: {text: item.description}});
-			return _.extend(item, {_id: itemId});
+		updateItem: function(itemId, attrs) {
+			console.log("> updateItem: " + JSON.stringify(attrs));
+
+			var item = Items.findOne(itemId);
+			Items.update(itemId, {$set: attrs});
+
+			if(attrs.type != item.type) {
+				Meteor.call('insertMessage', {
+					type: Ols.MSG_TYPE_ACTIVITY,
+					activityType: Ols.ACTIVITY_TYPE_ITEM_TYPE_CHANGE,
+					itemTitle: item.title,
+					itemType: item.type,
+					issueType: item.issueType,
+					boardId: item.boardId,
+					itemId: itemId
+				});
+			}
+
+			return {_id: itemId};
 		},
 
 		moveItem: function(itemId, toBoardId) {
@@ -565,8 +610,21 @@ if(Meteor.isServer) {
 
 		toggleItemOpenStatus: function(itemId) {
 			var item = Items.findOne(itemId);
+
 			Items.update(itemId, {
 				$set: {isOpen: !item.isOpen},
+			});
+
+			var activityType = item.isOpen?Ols.ACTIVITY_TYPE_ITEM_CLOSED:Ols.ACTIVITY_TYPE_ITEM_OPENED;
+
+			Meteor.call('insertMessage', {
+				type: Ols.MSG_TYPE_ACTIVITY,
+				activityType: activityType,
+				itemTitle: item.title,
+				itemType: item.type,
+				issueType: item.issueType,
+				boardId: item.boardId,
+				itemId: itemId
 			});
 		},
 

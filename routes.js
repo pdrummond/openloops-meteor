@@ -1,13 +1,11 @@
+FlowRouter.subscriptions = function() {
+	this.register('boards', Meteor.subscribe('boards'));
+	this.register('teamMembers', Meteor.subscribe('teamMembers'));
+	this.register('labels', Meteor.subscribe('labels'));
+	this.register('filters', Meteor.subscribe('filters'));
+}
 
-
-	FlowRouter.subscriptions = function() {
-		this.register('boards', Meteor.subscribe('boards'));
-		this.register('teamMembers', Meteor.subscribe('teamMembers'));
-		this.register('labels', Meteor.subscribe('labels'));
-		this.register('filters', Meteor.subscribe('filters'));
-	}
-
-	if(Meteor.isClient) {
+if(Meteor.isClient) {
 
 	noauthGroup = FlowRouter.group({});
 
