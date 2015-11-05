@@ -83,11 +83,11 @@ if(Meteor.isClient) {
 					e.stopPropagation();
 					if(inputVal.length > 0) {
 						var newMessage = Ols.HistoryManager.insertClientMessage({text:inputVal});
+						$("#message-box").val('');
 						Meteor.call('saveMessage', newMessage, function(err, result) {
 							if(err) {
 								alert("error sending message");
 							} else {
-								$("#message-box").val('');
 								Ols.HistoryManager.scrollBottom();
 								Streamy.broadcast('sendMessage', newMessage);
 							}
