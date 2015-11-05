@@ -930,3 +930,51 @@ footer
 	margin-bottom:10px;
 	font-style:italic;
 }
+
+.tab-body {
+	height:100%;
+	display:none;
+
+
+}
+
+.tab-body.active {
+	display:block;
+}
+
+.item-tab-bar-wrapper {
+	display:inline-block;
+	.item-tab-bar {
+		display:flex;
+		padding:10px;
+
+		.tab-item {
+			text-transform:uppercase;
+			margin-right:30px;
+			cursor:pointer;
+			padding:3px;
+
+			a {
+				text-decoration:none;
+				color:white;
+			}
+		}
+
+		.tab-item:hover, .tab-item.active {
+			border-bottom: 2px solid white;
+		}
+	}
+}
+
+.current-item-description, .current-item-todos, .current-item-activity {
+	position:relative;
+	top: header-height;
+    padding: 10px 200px 10px 200px;
+	text-align:justify;
+	height:100%;
+	overflow-y:auto;
+	p {
+		font-size: 18px;
+		color:#656565
+	}
+}

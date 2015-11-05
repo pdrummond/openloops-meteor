@@ -40,6 +40,18 @@ if(Meteor.isClient) {
 		return currentItemTitle;
 	});
 
+	Template.registerHelper('currentItemDescription', function () {
+		var currentItemDescription = '';
+		var currentItemId = Session.get("currentItemId");
+		if(currentItemId) {
+			var currentItem = Items.findOne(currentItemId);
+			if(currentItem) {
+				currentItemDescription = currentItem.description;
+			}
+		}
+		return currentItemDescription;
+	});
+
 	Template.registerHelper('currentItemMessageCount', function (context, options) {
 		var currentItemMessageCount = '';
 		var currentItemId = Session.get("currentItemId");

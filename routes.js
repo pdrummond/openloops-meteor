@@ -90,7 +90,19 @@ if(Meteor.isClient) {
 	});
 
 	loggedInGroup.route('/board/:boardId/item/:itemId', {
+		triggersEnter: [function(ctx, redirect) {
+			var url = '/board/' + ctx.params.boardId + '/item/' + ctx.params.itemId + '/messages';
+    		redirect(url);
+  		}],
+	});
+
+	loggedInGroup.route('/board/:boardId/item/:itemId/:tabName', {
 		action: function(params, queryParams) {
+			var tabName = params.tabName;
+			if(tabName == null || tabName.length == 0) {
+				tabName = 'messages';
+			}
+			Session.set('activeItemTab', tabName);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', params.itemId);
 			Session.set('currentPage', 'feedPage');
@@ -109,7 +121,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	loggedInGroup.route('/board/:boardId/item/:itemId/edit', {
+	loggedInGroup.route('/board/:boardId/edit-item/:itemId', {
 		action: function(params, queryParams) {
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', params.itemId);

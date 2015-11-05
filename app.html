@@ -123,7 +123,7 @@
 		{{else}}
 		<span class="header-text">ACTIONS</span>
 		<ul class="action-buttons">
-			<li id="edit-link" class="action-button"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/edit"><i class="fa fa-pencil"></i> Edit</a></li>
+			<li id="edit-link" class="action-button"><a href="/board/{{currentBoardId}}/edit-item/{{currentItemId}}"><i class="fa fa-pencil"></i> Edit</a></li>
 			<li id="open-close-link" class="action-button"><a href=""><i class="fa fa-times"></i> {{#if currentItemIsOpen}}Close{{else}}Open{{/if}}</a></li>
 			<li id="move-link" class="action-button"><a href=""><i class="fa fa-arrow-right"></i> Move</a></li>
 		</ul>
@@ -250,11 +250,29 @@
 				<div id="header-open-status">
 					<strong id="open-status-link" class="{{#if currentItemIsOpen}}open{{else}}closed{{/if}}"><i class="fa {{currentItemIcon}}"></i> {{openStatus}}</strong>
 				</div>
+				<div class="item-tab-bar-wrapper">
+					<div class="item-tab-bar">
+						<div class="tab-item {{isTabActive 'messages'}}"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/messages"><i class="fa fa-comments-o"></i> Messages</a></div>
+						<div class="tab-item {{isTabActive 'description'}}"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/description"><i class="fa fa-info-circle"></i> Description</a></div>
+						<div class="tab-item {{isTabActive 'todos'}}"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/todos"><i class="fa fa-list"></i> Todo Items</a></div>
+						<div class="tab-item {{isTabActive 'activity'}}"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/activity"><i class="fa fa-exchange"></i> Activity</a></div>
+					</div>
+				</div>
 			</div>
 			{{/if}}
-
 		</header>
-		{{> messageHistory}}
+		<div class="tab-body {{isTabActive 'messages'}}">
+			{{> messageHistory}}
+		</div>
+		<div class="tab-body {{isTabActive 'description'}}">
+			<div class="current-item-description">{{#markdown}}{{currentItemDescription}}{{/markdown}}</div>
+		</div>
+		<div class="tab-body {{isTabActive 'todos'}}">
+			<div class="current-item-todos"><p><i>Not yet implemented - TODOS will go here</i></p></div>
+		</div>
+		<div class="tab-body {{isTabActive 'activity'}}">
+			<div class="current-item-activity"><p><i>Not yet implemented - all item-specific activity will be listed here</i></p></div>
+		</div>
 	</div>
 </template>
 
