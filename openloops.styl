@@ -225,62 +225,79 @@ body
 			padding: 0
 			list-style: none
 			overflow: auto;
-			height: calc(100% - 60px);
-
-			.item
-				position:relative;
-				display: block
-				padding:10px;
-				padding-bottom:20px;
-
-				#type-icon {
-    				float: left;
-					font-size:2.5rem;
-    				margin-right: 10px;
-    				color: #ccc;
-				}
-
-				.item-msg-count {
-					position:absolute;
-					top:5px;
-					right:10px;
-					font-size:14px;
-					color:gray;
-
-					i {
-						font-size:1.2em;
-					}
-				}
-
-				.item-msg-count.new-messages {
-					color: orange;
-					font-weight:bold;
-				}
-
-
-			.item:hover
-				background-color:#e7edf3;
-			.item.active
-				background-color:#e7edf3;
-
-			#content
-				padding-left:50px;
-				padding-right:50px;
-
-			#title
-				font-size: 14px;
-				color:black;
-			#meta
-				font-size: 12px;
-				color:gray;
-				overflow: ellipsis;
-			a
-				text-decoration: none;
+			height: calc(100% - 117px);
 	.main
 		height 100%
 		padding-left left-sidebar-width
 		padding-right right-sidebar-width
 		padding-bottom footer-height
+
+#app .left-sidebar #board-item .item-msg-count {
+	top: 20px;
+	right: 20px;
+}
+
+#app .left-sidebar #board-item {
+	height: 57px;
+	border-bottom: 1px solid lightgray;
+	#title {
+		overflow:ellipsis;
+		font-size:20px;
+		position: relative;
+    	top: 5px;
+	}
+}
+
+#app .left-sidebar a.item
+	text-decoration: none;
+
+#app .left-sidebar .item
+	position:relative;
+	display: block
+	padding:10px;
+	padding-bottom:20px;
+
+	#type-icon {
+		float: left;
+		font-size:2.5rem;
+		margin-right: 10px;
+		color: #ccc;
+	}
+
+	.item-msg-count {
+		position:absolute;
+		top:5px;
+		right:10px;
+		font-size:14px;
+		color:gray;
+
+		i {
+			font-size:1.2em;
+		}
+	}
+
+	.item-msg-count.new-messages {
+		color: orange;
+		font-weight:bold;
+	}
+
+	#content
+		padding-left:50px;
+		padding-right:50px;
+
+	#title
+		font-size: 14px;
+		color:black;
+	#meta
+		font-size: 12px;
+		color:gray;
+		overflow: ellipsis;
+
+
+#app .left-sidebar .item:hover
+	background-color:#e7edf3;
+#app .left-sidebar .item.active
+	background-color:#e7edf3;
 
 #message-list {
 	xbackground-color: gray;

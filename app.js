@@ -478,6 +478,10 @@ if(Meteor.isClient) {
 			return label;
 		},
 
+		isBoardItemActive: function() {
+			return Session.get('currentItemId')?'':'active';
+		},
+
 		isActiveTab: function(tabName) {
 			return tabName == Session.get('leftSidebarActiveTab') ? 'active' : '';
 		},
@@ -488,7 +492,7 @@ if(Meteor.isClient) {
 
 		showSidebarTabs: function() {
 			return Session.get('showSidebarTabs');
-		}
+		},		
 	});
 
 	Template.leftSidebar.events({

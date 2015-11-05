@@ -11,7 +11,12 @@ if(Meteor.isClient) {
 
 			//FIXME: An event should be fired here which the sidebar can handle.
 			if(incomingMessage.itemId != Session.get('currentItemId')) {
-				$(".left-sidebar .item-list li[data-id='" + incomingMessage.itemId + "'] .item-msg-count").addClass("new-messages");
+				if(incomingMessage.itemId != null) {
+					$(".left-sidebar .item-list li[data-id='" + incomingMessage.itemId + "'] .item-msg-count").addClass("new-messages");
+				} else {					
+					$(".left-sidebar #board-item .item-msg-count").addClass("new-messages");
+				}
+
 			}
 
 		} else {

@@ -7,7 +7,7 @@
 				<img src="/images/openloops-o.png" style="position:relative;top:8px;left:10px;width:30px"/>
 				<div id="connection-status" class="{{connectionStatus.status}}" title="Server {{connectionStatus.status}}"></div>
 			</a>
-			<span style="margin-left:10px" id="main-title"><a href="/board/{{currentBoardId}}" style="text-decoration:none">{{currentBoardTitle}}</a></span>
+			<span style="margin-left:10px" id="main-title"><a href="/" style="text-decoration:none">OpenLoops</a></span>
 		</div>
 		<div class="right">
 			<div style="position:relative;top:-10px">
@@ -88,6 +88,17 @@
 
 <template name="leftSidebar">
 	<div class="left-sidebar">
+		<div id="board-item">
+			<a class="item {{isBoardItemActive}}" href="/board/{{currentBoardId}}">
+				<i id="type-icon" class="fa fa-home" style="color:black"></i>
+				<div id="content">
+					<span id="title">{{currentBoardTitle}}</span>
+				</div>
+				<div class="item-msg-count">
+					<i class="fa fa-comment-o"></i> {{numBoardMessages}}
+				</div>
+			</a>
+		</div>
 		<div id="top-header">
 			<input id="search-input" class="search-input" placeholder="Type here to filter" value={{filterQuery}}>
 			<a id="create-link" href="/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
