@@ -14,7 +14,13 @@ if(Meteor.isClient) {
 		}
 		notify.config({pageVisibility: false, autoClose: 5000});
 
-		Tracker.autorun(function() {
+		Meteor.autorun(function () {
+			var status = Meteor.status().status;
+			console.log("** STATUS CHANGE: " + status);
+		    Session.set('connectionStatus', status);
+		});
+
+		Meteor.autorun(function() {
 			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
 			Meteor.subscribe('items', filter, function(err, result) {
 				if(err) {
