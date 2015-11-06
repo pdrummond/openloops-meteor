@@ -1,20 +1,23 @@
 Ols.HistoryManager = {
 
-	insertClientMessage: function(attrs) {
-		var currentItemId = Session.get('currentItemId');
-		var defaultAttrs = {
-			type: Ols.MSG_TYPE_CHAT,
-			createdAt: new Date().getTime(),
-			createdBy: Meteor.user().username,
-			boardId: Session.get('currentBoardId'),
-			itemId: currentItemId
-		};
-		var newMessage = _.extend(defaultAttrs, attrs);
-		var newMessageId = ClientMessages._collection.insert(newMessage);
-		newMessage._id = newMessageId;
-		return newMessage;
-	},
+	loadingMessages: false,
 
+	checkScroll: function() {
+		if(Ols.HistoryManager.loadingMessages == false) {
+			/*console.log("message-list scrollTop: " + ($("#message-list").scrollTop() + $("#message-list").outerHeight()));
+			console.log("message-list scrollTop2: " + ($("#message-list").scrollTop() + $("#message-list").height()));
+			console.log("message list height: " + $("#message-list")[0].scrollHeight);*/
+			if($("#message-list").scrollTop() == 0) {
+				console.log(">> SCROLL IS AT TOP");
+				Ols.HistoryManager.loadMoreMessages();
+			}
+			Ols.HistoryManager.atBottom = $("#message-list")[0].scrollHeight == ($("#message-list").scrollTop() + $("#message-list").height());
+			console.log("atBottom: " + Ols.HistoryManager.atBottom);
+			if(Ols.HistoryManager.atBottom) {
+				$("#header-new-messages-toast").hide();
+			}
+		}
+	},
 
 	getOldestClientMessageDate: function() {
 		var date;
@@ -31,12 +34,14 @@ Ols.HistoryManager = {
 	},
 
 	loadMessages: function(callback) {
+		console.log(">>>> LOAD MESSAGES");
 		var olderThanDate = this.getOldestClientMessageDate();
 		Meteor.call('loadMessages', {
 			olderThanDate: olderThanDate,
 			boardId: Session.get('currentBoardId'),
 			itemId: Session.get('currentItemId')
 		}, function(err, messages) {
+			console.log(" >> load messages returned: " + messages.length);
 			if(err) {
 				alert("Error loading messages: " + err);
 				callback(false);
@@ -50,27 +55,45 @@ Ols.HistoryManager = {
 	},
 
 	loadInitialMessages: function() {
+		this.loadingMessages = true;
+		$("#message-list").css({'opacity': 0});
+		$("#loading-messages-spinner").animate({'opacity': 1});
+		console.log(">>>> LOAD INITIAL MESSAGES");
 		ClientMessages._collection.remove({});
 
 		var self = this;
 		this.loadMessages(function(ok) {
 			if(ok) {
-				self.scrollBottom();
+				Meteor.setTimeout(function() {
+					self.scrollBottom();
+					$("#message-list").animate({'opacity': 1});
+					$("#loading-messages-spinner").animate({'opacity': 0});
+					self.loadingMessages = false;
+				}, 500);
 			}
 		});
 	},
 
 	loadMoreMessages: function() {
+		this.loadingMessages = true;
+		console.log(">>>> LOAD MORE MESSAGES");
 		var self = this;
 		Meteor.setTimeout(function() {
 			if(self.moreMessagesOnServer()) {
+				console.log(">>>> STILL LOAD MORE MESSAGES");
 				self.loadMessages(function(ok) {
 					if(ok) {
-						$("#message-list").scrollTop(($(".user-message").outerHeight() * Ols.MESSAGE_PAGE_SIZE));
+						var scrollTopAmount = 300; //So this is temporary - need to somehow calculate the height of the new page to scroll by
+						console.log("SCROLLING AWAY FROM TOP!!!!! by " + scrollTopAmount);
+						$("#message-list").scrollTop(scrollTopAmount);
+						self.loadingMessages = false;
 					}
 				});
+			} else {
+				console.log(">>>> NO MORE MESSAGES ON SERVER");
+
 			}
-		}, 200);
+		}, 1000);
 	},
 
 	moreMessagesOnServer: function() {
@@ -100,6 +123,7 @@ Ols.HistoryManager = {
 	},
 
 	scrollBottom: function() {
+		console.log("SCROLL BOTTOM !!!!");
 		var $messageList = $("#message-list");
 		if($messageList.length > 0) {
 			$messageList.scrollTop($messageList[0].scrollHeight);

@@ -36,9 +36,19 @@ if(Meteor.isServer) {
 			newBoard = _.extend({
 				createdAt: now,
 				createdBy: Meteor.user().username,
-				updatedAt: now
+				updatedAt: now,
+				numMessages: 0
 			}, newBoard);
-			return Boards.insert(newBoard);
+
+			var boardId = Boards.insert(newBoard);
+
+			Meteor.call('insertMessage', {
+				type: Ols.MSG_TYPE_ACTIVITY,
+				activityType: Ols.ACTIVITY_TYPE_NEW_BOARD,
+				boardId: boardId
+			});
+
+			return boardId;
 		},
 	})
 }

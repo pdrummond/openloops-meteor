@@ -41,12 +41,14 @@ if(Meteor.isClient) {
 	});
 
 	Template.registerHelper('currentItemDescription', function () {
-		var currentItemDescription = '';
+		var currentItemDescription = 'No Description';
 		var currentItemId = Session.get("currentItemId");
 		if(currentItemId) {
 			var currentItem = Items.findOne(currentItemId);
 			if(currentItem) {
-				currentItemDescription = currentItem.description;
+				if(currentItem.description && currentItem.description.length > 0) {
+					currentItemDescription = currentItem.description;
+				}
 			}
 		}
 		return currentItemDescription;

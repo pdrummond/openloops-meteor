@@ -252,8 +252,8 @@
 				</div>
 				<div class="item-tab-bar-wrapper">
 					<div class="item-tab-bar">
-						<div class="tab-item {{isTabActive 'messages'}}"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/messages"><i class="fa fa-comments-o"></i> Messages</a></div>
 						<div class="tab-item {{isTabActive 'description'}}"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/description"><i class="fa fa-info-circle"></i> Description</a></div>
+						<div class="tab-item {{isTabActive 'messages'}}"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/messages"><i class="fa fa-comments-o"></i> Messages</a></div>
 						<div class="tab-item {{isTabActive 'todos'}}"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/todos"><i class="fa fa-list"></i> Todo Items</a></div>
 						<div class="tab-item {{isTabActive 'activity'}}"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/activity"><i class="fa fa-exchange"></i> Activity</a></div>
 					</div>
@@ -318,8 +318,8 @@
 
 
 <template name="itemItemView">
-	<li  data-id={{_id}}>
-		<a class="item {{isActive}}" href="/board/{{currentBoardId}}/item/{{_id}}">
+	<li  data-id={{_id}} >
+		<a class="item {{isActive}} {{isClosedClass}}" href="/board/{{currentBoardId}}/item/{{_id}}">
 		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
 		<div id="content">
 			<span id="title">{{title}}</span>

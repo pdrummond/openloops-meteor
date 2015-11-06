@@ -1,8 +1,8 @@
 if(Meteor.isClient) {
-
 	Streamy.on('sendMessage', function(incomingMessage) {
+		console.log(">>> RECEIVED SEND_MESSAGE STREAMY");
 		if(incomingMessage.createdBy != Meteor.user().username) {
-			Ols.HistoryManager.insertClientMessage(incomingMessage);
+			OpenLoops.insertClientMessage(incomingMessage);
 			if(Ols.HistoryManager.atBottom) {
 				Ols.HistoryManager.scrollBottom();
 			} else if(incomingMessage.itemId == Session.get('currentItemId')) {
@@ -13,33 +13,19 @@ if(Meteor.isClient) {
 			if(incomingMessage.itemId != Session.get('currentItemId')) {
 				if(incomingMessage.itemId != null) {
 					$(".left-sidebar .item-list li[data-id='" + incomingMessage.itemId + "'] .item-msg-count").addClass("new-messages");
-				} else {					
+				} else {
 					$(".left-sidebar #board-item .item-msg-count").addClass("new-messages");
 				}
 
 			}
-
 		} else {
 			Ols.HistoryManager.scrollBottom();
 		}
 	});
 
-	function checkScroll() {
-		console.log("message-list scrollTop: " + ($("#message-list").scrollTop() + $("#message-list").outerHeight()));
-		console.log("message-list scrollTop2: " + ($("#message-list").scrollTop() + $("#message-list").height()));
-		console.log("message list height: " + $("#message-list")[0].scrollHeight);
-		if($("#message-list").scrollTop() == 0) {
-			Ols.HistoryManager.loadMoreMessages();
-		}
-		Ols.HistoryManager.atBottom = $("#message-list")[0].scrollHeight == ($("#message-list").scrollTop() + $("#message-list").height());
-		console.log("atBottom: " + Ols.HistoryManager.atBottom);
-		if(Ols.HistoryManager.atBottom) {
-			$("#header-new-messages-toast").hide();
-		}
-	}
-
 	Template.messageHistory.onRendered(function() {
-		$("#message-list").scroll(checkScroll);
+		console.log("MESSAGE HISTORY onRendered - should be called once");
+		$("#message-list").scroll(Ols.HistoryManager.checkScroll);
 	});
 
 	Template.messageHistory.helpers({
@@ -87,7 +73,7 @@ if(Meteor.isClient) {
 					e.preventDefault();
 					e.stopPropagation();
 					if(inputVal.length > 0) {
-						var newMessage = Ols.HistoryManager.insertClientMessage({text:inputVal});
+						var newMessage = OpenLoops.insertClientMessage({text:inputVal});
 						$("#message-box").val('');
 						Meteor.call('saveMessage', newMessage, function(err, result) {
 							if(err) {
@@ -110,6 +96,7 @@ if(Meteor.isServer) {
 
 	Meteor.methods({
 		loadMessages: function(opts) {
+			console.log("loadMessages: " + JSON.stringify(opts));
 			var filter = {};
 			if(opts.itemId) {
 				filter.itemId = opts.itemId;
@@ -127,11 +114,12 @@ if(Meteor.isServer) {
 
 		saveMessage: function(newMessage) {
 			ServerMessages.insert(newMessage);
+
 			Items.update(newMessage.itemId, {
 				$inc: {numMessages: 1},
 				$set: {updatedAt: new Date().getTime()},
 			});
-
+			Boards.update(newMessage.boardId, {$inc: {numMessages: 1}});
 			Meteor.call('detectMentionsInMessage', newMessage);
 
 		},
