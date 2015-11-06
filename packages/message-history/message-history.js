@@ -11,12 +11,17 @@ if(Meteor.isClient) {
 
 			//FIXME: An event should be fired here which the sidebar can handle.
 			if(incomingMessage.itemId != Session.get('currentItemId')) {
+				var $itemMsgCount;
 				if(incomingMessage.itemId != null) {
-					$(".left-sidebar .item-list li[data-id='" + incomingMessage.itemId + "'] .item-msg-count").addClass("new-messages");
+					$itemMsgCount = $(".left-sidebar .item-list li[data-id='" + incomingMessage.itemId + "'] .item-msg-count");
 				} else {
-					$(".left-sidebar #board-item .item-msg-count").addClass("new-messages");
+					$itemMsgCount = $(".left-sidebar #board-item .item-msg-count");
 				}
-
+				var numNewMessages = $itemMsgCount.attr('data-msg-count');
+				numNewMessages = parseInt(numNewMessages) + 1;
+				$itemMsgCount.attr('data-msg-count', numNewMessages);
+				$itemMsgCount.text(numNewMessages);
+				$itemMsgCount.addClass("new-messages");
 			}
 		} else {
 			Ols.HistoryManager.scrollBottom();

@@ -234,7 +234,7 @@ body
 
 #app .left-sidebar #board-item .item-msg-count {
 	top: 20px;
-	right: 20px;
+	right: 8px;
 }
 
 #app .left-sidebar #board-item {
@@ -270,11 +270,17 @@ body
 	}
 
 	.item-msg-count {
+		background:#FF4100;
+		border-radius:20px;
+		text-align:center;
+		min-width:10px;
+		padding:3px 5px 3px 5px;
+		color:white;
 		position:absolute;
-		top:5px;
+		top:15px;
 		right:10px;
-		font-size:14px;
-		color:gray;
+		font-size:10px;
+		display:none;
 
 		i {
 			font-size:1.2em;
@@ -282,8 +288,9 @@ body
 	}
 
 	.item-msg-count.new-messages {
-		color: orange;
+		color:white;
 		font-weight:bold;
+		display:block;
 	}
 
 	#content
@@ -974,7 +981,7 @@ footer
 .current-item-description, .current-item-todos, .current-item-activity {
 	position:relative;
 	top: header-height;
-    padding: 10px 200px 10px 200px;
+    padding: 10px 20px 10px 20px;
 	text-align:justify;
 	height:100%;
 	overflow-y:auto;

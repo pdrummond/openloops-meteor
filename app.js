@@ -73,11 +73,15 @@ if(Meteor.isClient) {
 	}
 
 	OpenLoops.removeSidebarNewMessages = function(itemId) {
+		var $itemMsgCount;
 		if(itemId) {
-			$(".left-sidebar .item-list li[data-id='" + itemId + "'] .item-msg-count").removeClass("new-messages");
+			$itemMsgCount = $(".left-sidebar .item-list li[data-id='" + itemId + "'] .item-msg-count");
+
 		} else {
-			$(".left-sidebar .item-list li .new-messages").removeClass("new-messages");
+			$itemMsgCount = $(".left-sidebar #board-item .new-messages")
 		}
+		$itemMsgCount.attr("data-msg-count", 0);
+		$itemMsgCount.removeClass("new-messages");
 	}
 
 	OpenLoops.getFilterQuery = function(filterString) {
@@ -338,7 +342,7 @@ if(Meteor.isClient) {
 		isClosedClass: function() {
 			return this.isOpen?'':'closed';
 		},
-		
+
 		numMessages: function() {
 			return this.numMessages - 1; //to remove the description
 		},

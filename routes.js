@@ -77,7 +77,7 @@ if(Meteor.isClient) {
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', null);
 			Session.set('numIncomingMessages', 0);
-
+			OpenLoops.removeSidebarNewMessages();
 			Ols.HistoryManager.loadInitialMessages();
 		}
 	});
@@ -102,7 +102,7 @@ if(Meteor.isClient) {
 			Session.set('currentPage', 'feedPage');
 			Session.set('numIncomingMessages', 0);
 			OpenLoops.removeSidebarNewMessages(params.itemId);
-			Ols.HistoryManager.loadInitialMessages();			
+			Ols.HistoryManager.loadInitialMessages();
 		}
 	});
 
