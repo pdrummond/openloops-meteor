@@ -107,7 +107,7 @@ if(Meteor.isClient) {
 				field = "isOpen";
 				value = (value=="true" ? "false" : "true");
 			}
-			
+
 			if(value == "true") {
 				value = true;
 			} else if(value == "false") {
@@ -527,7 +527,7 @@ if(Meteor.isClient) {
 					alert("Error toggling item status: " + err.reason);
 				} else {
 					var item = Items.findOne(Session.get('currentItemId'));
-					var activityType = item.isOpen?Ols.ACTIVITY_TYPE_ITEM_CLOSED:Ols.ACTIVITY_TYPE_ITEM_OPENED;
+					var activityType = item.isOpen?Ols.ACTIVITY_TYPE_ITEM_OPENED:Ols.ACTIVITY_TYPE_ITEM_CLOSED;
 					var activityMessage = {
 						type: Ols.MSG_TYPE_ACTIVITY,
 						activityType: activityType,
