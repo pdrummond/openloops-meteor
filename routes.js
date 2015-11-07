@@ -84,7 +84,16 @@ if(Meteor.isClient) {
 
 	loggedInGroup.route('/board/:boardId/item/:itemId', {
 		triggersEnter: [function(ctx, redirect) {
-			var url = '/board/' + ctx.params.boardId + '/item/' + ctx.params.itemId + '/messages';
+			/*
+				The active tab uses persistent sessions so if it's persisted
+				then use it, otherwise default to messages.
+			*/
+			var tabName = 'messages';
+			var activeItemTab = Session.get('activeItemTab')
+			if(activeItemTab) {
+				tabName = activeItemTab;
+			}
+			var url = '/board/' + ctx.params.boardId + '/item/' + ctx.params.itemId + "/" + tabName;
     		redirect(url);
   		}],
 	});
@@ -96,7 +105,7 @@ if(Meteor.isClient) {
 			if(tabName == null || tabName.length == 0) {
 				tabName = 'messages';
 			}
-			Session.set('activeItemTab', tabName);
+			Session.setPersistent('activeItemTab', tabName);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', params.itemId);
 			Session.set('currentPage', 'feedPage');
@@ -108,7 +117,7 @@ if(Meteor.isClient) {
 
 	loggedInGroup.route('/board/:boardId/create-item', {
 		action: function(params, queryParams) {
-			Session.set('createItemType', queryParams.type);			
+			Session.set('createItemType', queryParams.type);
 			Session.set('currentItemId', null);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentPage', 'editItemPage');

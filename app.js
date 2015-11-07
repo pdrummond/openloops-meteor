@@ -14,13 +14,13 @@ if(Meteor.isClient) {
 		}
 		notify.config({pageVisibility: false, autoClose: 5000});
 
-		Meteor.autorun(function () {
+		Tracker.autorun(function () {
 			var status = Meteor.status().status;
 			console.log("** STATUS CHANGE: " + status);
 		    Session.set('connectionStatus', status);
 		});
 
-		Meteor.autorun(function() {
+		Tracker.autorun(function() {
 			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
 			Meteor.subscribe('items', filter, function(err, result) {
 				if(err) {
@@ -68,7 +68,7 @@ if(Meteor.isClient) {
 			clearTimeout(this.searchInputKeyTimer);
 		}
 		this.searchInputKeyTimer = setTimeout(function() {
-			Session.set('filterQuery', $('#search-input').val());
+			Session.setPersistent('filterQuery', $('#search-input').val());
 		}, 500);
 	}
 
@@ -371,7 +371,7 @@ if(Meteor.isClient) {
 
 	Template.itemItemView.events({
 		'click': function() {
-			FlowRouter.go('/board/' + this.boardId + '/item/' + this._id + '/messages');
+			FlowRouter.go('/board/' + this.boardId + '/item/' + this._id);
 		}
 	})
 
