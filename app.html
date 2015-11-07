@@ -318,7 +318,7 @@
 
 <template name="itemItemView">
 	<li  data-id={{_id}} >
-		<a class="item {{isActive}} {{isClosedClass}}" href="/board/{{currentBoardId}}/item/{{_id}}">
+		<a class="item {{isActive}} {{isClosedClass}}" href="">
 		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
 		<div id="content">
 			<span id="title">{{title}}</span>
@@ -330,7 +330,7 @@
 				{{/each}}
 			</div>
 		</div>
-		<div class="item-msg-count" data-msg-count="0">			
+		<div class="item-msg-count" data-msg-count="0">
 		</div>
 		</a>
 	</li>

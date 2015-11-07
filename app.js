@@ -364,6 +364,12 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.itemItemView.events({
+		'click': function() {
+			FlowRouter.go('/board/' + this.boardId + '/item/' + this._id + '/messages');
+		}
+	})
+
 	OpenLoops.insertActivityMessage = function(item, activityMessage) {
 		activityMessage = _.extend({
 			itemType: item.type,
