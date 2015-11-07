@@ -96,12 +96,18 @@ if(Meteor.isClient) {
 			remainingText = remainingText.replace(value, '');
 			remainingText = remainingText.replace(/:/g, '');
 			if(field == 'type') {
-				field = 'issueType';
+				if(value == 'bug' || value == 'enhancement' || value == 'task') {
+					field = 'issueType';
+				}
 			} else if(field == 'label') {
 				field = 'labels';
 			} else if(field == 'open') {
 				field = "isOpen";
+			} else if(field == 'closed') {
+				field = "isOpen";
+				value = (value=="true" ? "false" : "true");
 			}
+			
 			if(value == "true") {
 				value = true;
 			} else if(value == "false") {
