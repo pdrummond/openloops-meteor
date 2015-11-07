@@ -119,6 +119,11 @@ if(Meteor.isClient) {
 	}
 
 	Template.editItemForm.onRendered(function() {
+		var createItemType = Session.get('createItemType');
+		if(createItemType) {
+			this.$("#editItemForm select[name='type']").val(createItemType);
+			Session.set('createItemType', null);
+		}
 		this.$('input[name="title"]').focus();
 	});
 

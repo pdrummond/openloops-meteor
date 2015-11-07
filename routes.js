@@ -108,6 +108,7 @@ if(Meteor.isClient) {
 
 	loggedInGroup.route('/board/:boardId/create-item', {
 		action: function(params, queryParams) {
+			Session.set('createItemType', queryParams.type);			
 			Session.set('currentItemId', null);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentPage', 'editItemPage');
