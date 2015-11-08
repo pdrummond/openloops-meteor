@@ -213,7 +213,6 @@ if(Meteor.isClient) {
 							alert("Error adding item: " + err);
 						} else {
 							OpenLoops.insertActivityMessage(newItem, {
-								type: Ols.MSG_TYPE_ACTIVITY,
 								activityType: Ols.ACTIVITY_TYPE_NEW_ITEM
 							});
 							FlowRouter.go("/board/" + Session.get('currentBoardId') + "/item/" + newItem._id);
@@ -329,6 +328,14 @@ if(Meteor.isClient) {
 					case Ols.ACTIVITY_TYPE_ITEM_CLOSED:
 					msg = "closed " + ctx;
 					break;
+					case Ols.ACTIVITY_TYPE_ITEM_MOVED_TO:
+					var toBoard = Boards.findOne(this.toBoardId);
+					msg = 'moved ' + ctx + ' to <a href="/board/' + this.toBoardId + '" class="board-link">' + toBoard.title + '</a>';
+					break;
+					case Ols.ACTIVITY_TYPE_ITEM_MOVED_FROM:
+					var fromBoard = Boards.findOne(this.fromBoardId);
+					msg = 'moved ' + ctx + ' here from <a href="/board/' + this.fromBoardId + '" class="board-link">' + fromBoard.title + '</a>';
+					break;
 				}
 			} else {
 				switch(this.activityType) {
@@ -383,6 +390,7 @@ if(Meteor.isClient) {
 
 	OpenLoops.insertActivityMessage = function(item, activityMessage) {
 		activityMessage = _.extend({
+			type: Ols.MSG_TYPE_ACTIVITY,
 			itemType: item.type,
 			boardId: item.boardId,
 			itemId: item._id
@@ -513,10 +521,6 @@ if(Meteor.isClient) {
 		'click #header-new-messages-toast': function() {
 			Session.set("numIncomingMessages", 0);
 			Ols.HistoryManager.scrollBottom();
-		},
-
-		'click #item-board-link': function() {
-			$("#move-to-board-list").slideToggle();
 		}
 	});
 
@@ -529,7 +533,6 @@ if(Meteor.isClient) {
 					var item = Items.findOne(Session.get('currentItemId'));
 					var activityType = item.isOpen?Ols.ACTIVITY_TYPE_ITEM_OPENED:Ols.ACTIVITY_TYPE_ITEM_CLOSED;
 					var activityMessage = {
-						type: Ols.MSG_TYPE_ACTIVITY,
 						activityType: activityType,
 						itemTitle: item.title,
 						itemType: item.type,
@@ -541,11 +544,12 @@ if(Meteor.isClient) {
 					Ols.HistoryManager.scrollBottom();
 				}
 			});
-
 		},
+
+		'click #move-link': function() {
+			$("#move-to-board-list").slideToggle();
+		}
 	});
-
-
 
 	Template.leftSidebar.helpers({
 		items: function() {
@@ -633,8 +637,26 @@ if(Meteor.isClient) {
 
 	Template.moveToBoardItem.events({
 		'click': function() {
+			var self = this;
 			$("#move-to-board-list").slideUp();
-			Meteor.call('moveItem', Session.get('currentItemId'), this._id);
+			var item = Items.findOne(Session.get('currentItemId'));
+			Meteor.call('moveItem', Session.get('currentItemId'), this._id, function(err, result) {
+				if(err) {
+					alert('Error moving item: ' + err.reason);
+				} else {
+					OpenLoops.insertActivityMessage(item, {
+						boardId: Session.get('currentBoardId'),
+						activityType: Ols.ACTIVITY_TYPE_ITEM_MOVED_TO,
+						toBoardId: self._id,
+					});
+					OpenLoops.insertActivityMessage(item, {
+						boardId: self._id,
+						activityType: Ols.ACTIVITY_TYPE_ITEM_MOVED_FROM,
+						fromBoardId: Session.get('currentBoardId'),
+					});
+
+				}
+			});
 			FlowRouter.go("/board/" + Session.get('currentBoardId'));
 		}
 	});

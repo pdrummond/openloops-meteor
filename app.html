@@ -126,6 +126,7 @@
 			<li id="open-close-link" class="action-button"><a href=""><i class="fa fa-times"></i> {{#if currentItemIsOpen}}Close{{else}}Open{{/if}}</a></li>
 			<li id="move-link" class="action-button"><a href=""><i class="fa fa-arrow-right"></i> Move</a></li>
 		</ul>
+		{{> moveToBoardList}}
 		<span class="header-text">LABELS</span>
 		<ul class="label-buttons">
 			{{> itemLabels}}
@@ -147,7 +148,6 @@
 
 <template name="feed">
 	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}} {{leftSidebarActiveTab}}">
-		{{> moveToBoardList}}
 		<header class="{{currentItemType}} {{currentItemIssueType}}">
 			{{#if isTeamFeed}}
 				<div class="user-cards">
