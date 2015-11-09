@@ -188,6 +188,7 @@ if(Meteor.isClient) {
 		},
 		'click #save-button': function(e) {
 			e.preventDefault();
+			var currentItem = Items.findOne(Session.get('currentItemId'));
 			var title = $("#editItemForm input[name='title']").val();
 			if(title != null && title.length > 0) {
 				var description = $("#editItemForm textarea[name='description']").val();
@@ -220,10 +221,15 @@ if(Meteor.isClient) {
 					});
 
 				} else {
-					Meteor.call('updateItem', currentItemId, item, function(err, result) {
+					Meteor.call('updateItem', currentItemId, item, function(err, newItem) {
 						if(err) {
 							alert("Error editing item: " + err);
 						} else {
+							if(currentItem.title != newItem.title) {
+								OpenLoops.insertActivityMessage(newItem, {
+									activityType: Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED,
+								});
+							}
 							FlowRouter.go("/board/" + Session.get('currentBoardId') + "/item/" + result._id);
 						}
 					});
@@ -335,6 +341,9 @@ if(Meteor.isClient) {
 					case Ols.ACTIVITY_TYPE_ITEM_MOVED_FROM:
 					var fromBoard = Boards.findOne(this.fromBoardId);
 					msg = 'moved ' + ctx + ' here from <a href="/board/' + this.fromBoardId + '" class="board-link">' + fromBoard.title + '</a>';
+					break;
+					case Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED:
+					msg = "changed title of item to " + ctx;
 					break;
 				}
 			} else {
@@ -686,10 +695,9 @@ if(Meteor.isServer) {
 
 		updateItem: function(itemId, attrs) {
 			console.log("> updateItem: " + JSON.stringify(attrs));
-
 			var item = Items.findOne(itemId);
 			Items.update(itemId, {$set: attrs});
-			return {_id: itemId};
+			return Items.findOne(itemId);
 		},
 
 		moveItem: function(itemId, toBoardId) {
