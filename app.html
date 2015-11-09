@@ -244,7 +244,7 @@
 					<li><input id="search-input" placeholder="Type here to search" value={{filterQuery}}></li>
 				</ul>-->
 			{{else}}
-			<div id="header-main-title"><i class="fa {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}}</div>
+			<div id="header-main-title" title="{{currentItemTitle}}"><i class="fa {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}}</div>
 			<div id="header-status-bar">
 				<div id="header-open-status">
 					<strong id="open-status-link" class="{{#if currentItemIsOpen}}open{{else}}closed{{/if}}"><i class="fa {{currentItemIcon}}"></i> {{openStatus}}</strong>
