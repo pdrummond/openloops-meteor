@@ -230,7 +230,7 @@ if(Meteor.isClient) {
 									activityType: Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED,
 								});
 							}
-							FlowRouter.go("/board/" + Session.get('currentBoardId') + "/item/" + result._id);
+							FlowRouter.go("/board/" + Session.get('currentBoardId') + "/item/" + newItem._id);
 						}
 					});
 				}
@@ -319,7 +319,8 @@ if(Meteor.isClient) {
 		activityMessage: function() {
 			if(this.itemId) {
 				var item = Items.findOne(this.itemId);
-				var ctx = Session.get('currentItemId')?'this item':'<span id="item-link"><a class="item-link" href="/board/' + Session.get('currentBoardId') + '/item/' + this.itemId + '">' + item.title + '</a></span>';
+				var itemTitleLink = '<span id="item-link"><a class="item-link" href="/board/' + Session.get('currentBoardId') + '/item/' + this.itemId + '">' + item.title + '</a></span>';
+				var ctx = Session.get('currentItemId')?'this item':itemTitleLink;
 				var msg = '???';
 				switch(this.activityType) {
 					case Ols.ACTIVITY_TYPE_NEW_ITEM:
@@ -343,7 +344,7 @@ if(Meteor.isClient) {
 					msg = 'moved ' + ctx + ' here from <a href="/board/' + this.fromBoardId + '" class="board-link">' + fromBoard.title + '</a>';
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED:
-					msg = "changed title of item to " + ctx;
+						msg = "changed title of item to " + itemTitleLink;
 					break;
 				}
 			} else {
