@@ -7,7 +7,7 @@
 				<img src="/images/openloops-o.png" style="position:relative;top:8px;left:10px;width:30px"/>
 				<div id="connection-status" class="{{connectionStatus}}" title="Server {{connectionStatus}}"></div>
 			</a>
-			<span style="margin-left:10px" id="main-title"><a href="/" style="text-decoration:none">{{currentProjectTitle}}</a></span>
+			<span style="margin-left:10px" id="main-title"><a href="/" style="text-decoration:none">{{currentProjectTitle}} <span class="project-key">{{currentProjectKey}}</span></a></span>
 		</div>
 		<div class="right">
 			<div style="position:relative;top:-10px">
@@ -322,7 +322,7 @@
 		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
 		<div id="content">
 			<span id="title">{{title}}</span>
-			<div id="meta"> <strong>{{createdBy}}</strong> {{timeAgo createdAt}} </div>
+			<div id="meta"> <span class="item-key">#{{projectKey this}}-{{pid}}</span> ● <span class="creared-by">{{createdBy}}</span> ● {{timeAgo createdAt}} </div>
 			<div id="meta"> {{description}}</div>
 			<div id="item-labels">
 				{{#each itemLabels}}

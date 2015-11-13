@@ -91,6 +91,16 @@ if(Meteor.isClient) {
 		return project?project._id:null;
 	});
 
+	Template.registerHelper('projectKey', function (item) {
+		var project = Projects.findOne(item.projectId);
+		return project?(project.key?project.key:project.title.substring(0, 3)):null;
+	});
+
+	Template.registerHelper('currentProjectKey', function () {
+		var project = Projects.findOne(Session.get('currentProjectId'));
+		return project?(project.key?project.key:project.title.substring(0, 3)):null;
+	});
+
 	Template.registerHelper('currentProjectTitle', function () {
 		var project = Projects.findOne(Session.get('currentProjectId'));
 		return project?project.title:'';

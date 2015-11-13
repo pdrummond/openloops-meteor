@@ -208,6 +208,7 @@ if(Meteor.isClient) {
 				};
 				var currentItemId = Session.get('currentItemId');
 				if(currentItemId == null) {
+					item.projectId = Session.get('currentProjectId');
 					item.boardId = Session.get('currentBoardId');
 					Meteor.call('insertItem', item, function(err, newItem) {
 						if(err) {
@@ -677,6 +678,7 @@ if(Meteor.isClient) {
 Items = new Meteor.Collection('items');
 Filters = new Meteor.Collection('filters');
 Settings = new Meteor.Collection('settings');
+Counters = new Mongo.Collection('counters');
 
 if(Meteor.isServer) {
 
@@ -684,7 +686,9 @@ if(Meteor.isServer) {
 		insertItem: function(newItem) {
 			console.log("insertItem - boardId:" + newItem.boardId);
 			var now = new Date().getTime();
+			console.log("new item project id " + newItem.projectId);
 			newItem = _.extend({
+				pid: newItem.projectId?incrementCounter('counters', newItem.projectId):0,
 				createdAt: now,
 				createdBy: Meteor.user().username,
 				updatedAt: now,
