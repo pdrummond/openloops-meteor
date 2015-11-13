@@ -163,14 +163,14 @@ if(Meteor.isClient) {
 		}
 	});
 
-	adminGroup.route('/project/:projectId/team-members', {
+	adminGroup.route('/team-members', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentPage', 'teamMembersList');
 		}
 	});
 
-	adminGroup.route('/project/:projectId/team-members/create', {
+	adminGroup.route('/team-members/create', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentTeamMemberId', null);
@@ -178,7 +178,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	adminGroup.route('/project/:projectId/team-member/:teamMemberId/edit', {
+	adminGroup.route('/team-member/:teamMemberId/edit', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentTeamMemberId', params.teamMemberId);
