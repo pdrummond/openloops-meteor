@@ -216,7 +216,7 @@ if(Meteor.isClient) {
 							OpenLoops.insertActivityMessage(newItem, {
 								activityType: Ols.ACTIVITY_TYPE_NEW_ITEM
 							});
-							FlowRouter.go("/board/" + Session.get('currentBoardId') + "/item/" + newItem._id);
+							FlowRouter.go("/project/" + Session.get('currentProjectId') + "/board/" + Session.get('currentBoardId') + "/item/" + newItem._id);
 						}
 					});
 
@@ -230,7 +230,7 @@ if(Meteor.isClient) {
 									activityType: Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED,
 								});
 							}
-							FlowRouter.go("/board/" + Session.get('currentBoardId') + "/item/" + newItem._id);
+							FlowRouter.go("/project" + Session.get('currentProjectId') + "/board/" + Session.get('currentBoardId') + "/item/" + newItem._id);
 						}
 					});
 				}
@@ -249,13 +249,14 @@ if(Meteor.isClient) {
 					title: title,
 					query: query
 				});
-				FlowRouter.go("/board/" + Session.get('currentBoardId'));
+				FlowRouter.go("/project/" + Session.get('currentProjectId') + "/board/" + Session.get('currentBoardId'));
 			}
 		}
 	});
 
 	Template.app.onCreated(function() {
 		console.log(">>>> APP onCreated");
+		this.subscribe('projects');
 		this.subscribe('boards');
 		this.subscribe('teamMembers');
 		this.subscribe('labels');
@@ -319,7 +320,7 @@ if(Meteor.isClient) {
 		activityMessage: function() {
 			if(this.itemId) {
 				var item = Items.findOne(this.itemId);
-				var itemTitleLink = '<span id="item-link"><a class="item-link" href="/board/' + Session.get('currentBoardId') + '/item/' + this.itemId + '">' + item.title + '</a></span>';
+				var itemTitleLink = '<span id="item-link"><a class="item-link" href="/project' + Session.get('currentProjectId') + '/board/' + Session.get('currentBoardId') + '/item/' + this.itemId + '">' + item.title + '</a></span>';
 				var ctx = Session.get('currentItemId')?'this item':itemTitleLink;
 				var msg = '???';
 				switch(this.activityType) {
@@ -337,11 +338,11 @@ if(Meteor.isClient) {
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_MOVED_TO:
 					var toBoard = Boards.findOne(this.toBoardId);
-					msg = 'moved ' + ctx + ' to <a href="/board/' + this.toBoardId + '" class="board-link">' + toBoard.title + '</a>';
+					msg = 'moved ' + ctx + ' to <a href="/project/' + Session.get('currentProjectId') + '/board/' + this.toBoardId + '" class="board-link">' + toBoard.title + '</a>';
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_MOVED_FROM:
 					var fromBoard = Boards.findOne(this.fromBoardId);
-					msg = 'moved ' + ctx + ' here from <a href="/board/' + this.fromBoardId + '" class="board-link">' + fromBoard.title + '</a>';
+					msg = 'moved ' + ctx + ' here from <a href="/' + Session.get('currentProjectId') + '/board/' + this.fromBoardId + '" class="board-link">' + fromBoard.title + '</a>';
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED:
 						msg = "changed title of item to " + itemTitleLink;
@@ -394,7 +395,7 @@ if(Meteor.isClient) {
 
 	Template.itemItemView.events({
 		'click': function() {
-			FlowRouter.go('/board/' + this.boardId + '/item/' + this._id);
+			FlowRouter.go('/project/' + Session.get('currentProjectId') + '/board/' + this.boardId + '/item/' + this._id);
 		}
 	})
 
@@ -667,7 +668,7 @@ if(Meteor.isClient) {
 
 				}
 			});
-			FlowRouter.go("/board/" + Session.get('currentBoardId'));
+			FlowRouter.go("/project/" + Session.get('currentProjectId') + "/board/" + Session.get('currentBoardId'));
 		}
 	});
 
@@ -675,6 +676,7 @@ if(Meteor.isClient) {
 
 Items = new Meteor.Collection('items');
 Filters = new Meteor.Collection('filters');
+Settings = new Meteor.Collection('settings');
 
 if(Meteor.isServer) {
 

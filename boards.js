@@ -2,7 +2,7 @@
 if(Meteor.isClient) {
 	Template.boardList.helpers({
 		boards: function() {
-			return Boards.find();
+			return Boards.find({projectId: Session.get('currentProjectId')});
 		}
 	});
 
@@ -13,10 +13,11 @@ if(Meteor.isClient) {
 			if(title != null && title.length > 0) {
 				var description = $("#createBoardForm textarea[name='description']").val();
 				Meteor.call('insertBoard', {
+					projectId: Session.get('currentProjectId'),
 					title: title,
 					description: description
 				});
-				FlowRouter.go("/boards");
+				FlowRouter.go("/project/" + Session.get('currentProjectId') + "/boards");
 			}
 		}
 	});

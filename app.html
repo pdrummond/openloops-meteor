@@ -7,7 +7,7 @@
 				<img src="/images/openloops-o.png" style="position:relative;top:8px;left:10px;width:30px"/>
 				<div id="connection-status" class="{{connectionStatus}}" title="Server {{connectionStatus}}"></div>
 			</a>
-			<span style="margin-left:10px" id="main-title"><a href="/" style="text-decoration:none">OpenLoops</a></span>
+			<span style="margin-left:10px" id="main-title"><a href="/" style="text-decoration:none">{{currentProjectTitle}}</a></span>
 		</div>
 		<div class="right">
 			<div style="position:relative;top:-10px">
@@ -89,7 +89,7 @@
 <template name="leftSidebar">
 	<div class="left-sidebar">
 		<div id="board-item">
-			<a class="item {{isBoardItemActive}}" href="/board/{{currentBoardId}}">
+			<a class="item {{isBoardItemActive}}" href="/project/{{currentProjectId}}/board/{{currentBoardId}}">
 				<i id="type-icon" class="fa fa-home" style="color:black"></i>
 				<div id="content">
 					<span id="title">{{currentBoardTitle}}</span>
@@ -100,7 +100,7 @@
 		</div>
 		<div id="top-header">
 			<input id="search-input" class="search-input" placeholder="Type here to filter" value={{filterQuery}}>
-			<a id="create-link" href="/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
+			<a id="create-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
 		</div>
 		<ul class="item-list">
 			{{#each items}}
@@ -115,14 +115,14 @@
 		{{#if isTeamFeed}}
 		<span class="header-text">ACTIONS</span>
 		<ul class="action-buttons">
-			<li id="create-discussion-link" class="action-button"><a href="/board/{{currentBoardId}}/create-item?type=discussion"><i class="fa fa-comments-o"></i> New Discussion</a></li>
-			<li id="create-issue-link" class="action-button"><a href="/board/{{currentBoardId}}/create-item?type=issue"><i class="fa fa-exclamation-circle"></i> New Issue</a></li>
-			<li id="create-article-link" class="action-button"><a href="/board/{{currentBoardId}}/create-item?type=article"><i class="fa fa-book"></i> New Article</a></li>
+			<li id="create-discussion-link" class="action-button"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/create-item?type=discussion"><i class="fa fa-comments-o"></i> New Discussion</a></li>
+			<li id="create-issue-link" class="action-button"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/create-item?type=issue"><i class="fa fa-exclamation-circle"></i> New Issue</a></li>
+			<li id="create-article-link" class="action-button"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/create-item?type=article"><i class="fa fa-book"></i> New Article</a></li>
 		</ul>
 		{{else}}
 		<span class="header-text">ACTIONS</span>
 		<ul class="action-buttons">
-			<li id="edit-link" class="action-button"><a href="/board/{{currentBoardId}}/edit-item/{{currentItemId}}"><i class="fa fa-pencil"></i> Edit</a></li>
+			<li id="edit-link" class="action-button"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/edit-item/{{currentItemId}}"><i class="fa fa-pencil"></i> Edit</a></li>
 			<li id="open-close-link" class="action-button"><a href=""><i class="fa fa-times"></i> {{#if currentItemIsOpen}}Close{{else}}Open{{/if}}</a></li>
 			<li id="move-link" class="action-button"><a href=""><i class="fa fa-arrow-right"></i> Move</a></li>
 		</ul>
@@ -251,10 +251,10 @@
 				</div>
 				<div class="item-tab-bar-wrapper">
 					<div class="item-tab-bar">
-						<div class="tab-item {{isTabActive 'description'}}"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/description"><i class="fa fa-info-circle"></i> Description</a></div>
-						<div class="tab-item {{isTabActive 'messages'}}"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/messages"><i class="fa fa-comments-o"></i> Messages</a></div>
-						<div class="tab-item {{isTabActive 'todos'}}"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/todos"><i class="fa fa-list"></i> Todo Items</a></div>
-						<div class="tab-item {{isTabActive 'activity'}}"><a href="/board/{{currentBoardId}}/item/{{currentItemId}}/activity"><i class="fa fa-exchange"></i> Activity</a></div>
+						<div class="tab-item {{isTabActive 'description'}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/description"><i class="fa fa-info-circle"></i> Description</a></div>
+						<div class="tab-item {{isTabActive 'messages'}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/messages"><i class="fa fa-comments-o"></i> Messages</a></div>
+						<div class="tab-item {{isTabActive 'todos'}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/todos"><i class="fa fa-list"></i> Todo Items</a></div>
+						<div class="tab-item {{isTabActive 'activity'}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/activity"><i class="fa fa-exchange"></i> Activity</a></div>
 					</div>
 				</div>
 			</div>
@@ -294,7 +294,7 @@
 		<span class="meta">
 			<strong>{{createdBy}}</strong>
 			<span id="created-at">{{timeAgo createdAt}}</span>
-			<span id="item-link" class="{{showItemLink}}"><a class="item-link" href="/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
+			<span id="item-link" class="{{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
 		</span>
 		<div id="text">
 			{{#markdown}}{{text}}{{/markdown}}
@@ -363,7 +363,7 @@
 	<h1>Welcome</h1>
 	{{#if currentUser}}
 		This screen is a work in progress - eventually it will say great things about OLS.
-		<p>Click <a href="/boards">here</a> for your boards</p>
+		<p>Click <a href="/projects">here</a> for your projects</p>
 		<p>Click <a href="/team-members">here</a> to configure your team</p>
 	{{else}}
 		<p>Please <a href="/login">login</a> or <a href="/signup">sign-up</a> to continue</p>

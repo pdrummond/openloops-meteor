@@ -19,6 +19,7 @@ if(Meteor.isClient) {
 	noauthGroup.route('/', {
 		name: "welcome",
 		action: function(params, queryParams) {
+			Session.set('currentProjectId', null);
 			Session.set('currentBoardId', null);
 			Session.set('currentItemId', null);
 			Session.set('currentPage', 'welcomePage');
@@ -71,18 +72,19 @@ if(Meteor.isClient) {
 		}
 	});
 
-	loggedInGroup.route('/board/:boardId', {
+	loggedInGroup.route('/project/:projectId/board/:boardId', {
 		action: function(params, queryParams) {
-			Session.set('currentPage', 'feedPage');
+			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', null);
+			Session.set('currentPage', 'feedPage');
 			Session.set('numIncomingMessages', 0);
 			OpenLoops.removeSidebarNewMessages();
 			Ols.HistoryManager.loadInitialMessages();
 		}
 	});
 
-	loggedInGroup.route('/board/:boardId/item/:itemId', {
+	loggedInGroup.route('/project/:projectId/board/:boardId/item/:itemId', {
 		triggersEnter: [function(ctx, redirect) {
 			/*
 				The active tab uses persistent sessions so if it's persisted
@@ -93,12 +95,12 @@ if(Meteor.isClient) {
 			if(activeItemTab) {
 				tabName = activeItemTab;
 			}
-			var url = '/board/' + ctx.params.boardId + '/item/' + ctx.params.itemId + "/" + tabName;
+			var url = '/project/' + ctx.params.projectId + '/board/' + ctx.params.boardId + '/item/' + ctx.params.itemId + "/" + tabName;
     		redirect(url);
   		}],
 	});
 
-	loggedInGroup.route('/board/:boardId/item/:itemId/:tabName', {
+	loggedInGroup.route('/project/:projectId/board/:boardId/item/:itemId/:tabName', {
 		action: function(params, queryParams) {
 			console.log(">>>> ROUTE");
 			var tabName = params.tabName;
@@ -106,6 +108,7 @@ if(Meteor.isClient) {
 				tabName = 'messages';
 			}
 			Session.setPersistent('activeItemTab', tabName);
+			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', params.itemId);
 			Session.set('currentPage', 'feedPage');
@@ -115,74 +118,94 @@ if(Meteor.isClient) {
 		}
 	});
 
-	loggedInGroup.route('/board/:boardId/create-item', {
+	loggedInGroup.route('/project/:projectId/board/:boardId/create-item', {
 		action: function(params, queryParams) {
 			Session.set('createItemType', queryParams.type);
 			Session.set('currentItemId', null);
+			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentPage', 'editItemPage');
 		}
 	});
 
-	loggedInGroup.route('/board/:boardId/edit-item/:itemId', {
+	loggedInGroup.route('/project/:projectId/board/:boardId/edit-item/:itemId', {
 		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', params.itemId);
 			Session.set('currentPage', 'editItemPage');
 		}
 	});
 
-	loggedInGroup.route('/board/:boardId/create-filter', {
+	loggedInGroup.route('/projects', {
 		action: function(params, queryParams) {
-			Session.set('currentBoardId', params.boardId);
-			Session.set('currentPage', 'createFilterPage');
+			Session.set('currentPage', 'projectList');
 		}
 	});
 
-	loggedInGroup.route('/boards', {
+	adminGroup.route('/projects/create', {
 		action: function(params, queryParams) {
+			Session.set('currentPage', 'editProjectForm');
+		}
+	});
+
+	loggedInGroup.route('/project/:projectId/boards', {
+		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
 			Session.set('currentPage', 'boardList');
 		}
 	});
 
-	adminGroup.route('/boards/create', {
+	adminGroup.route('/project/:projectId/boards/create', {
 		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
 			Session.set('currentPage', 'createBoardForm');
 		}
 	});
 
-	adminGroup.route('/team-members', {
+	adminGroup.route('/project/:projectId/team-members', {
 		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
 			Session.set('currentPage', 'teamMembersList');
 		}
 	});
 
-	adminGroup.route('/team-members/create', {
+	adminGroup.route('/project/:projectId/team-members/create', {
 		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
 			Session.set('currentTeamMemberId', null);
 			Session.set('currentPage', 'editTeamMemberForm');
 		}
 	});
 
-	adminGroup.route('/team-member/:teamMemberId/edit', {
+	adminGroup.route('/project/:projectId/team-member/:teamMemberId/edit', {
 		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
 			Session.set('currentTeamMemberId', params.teamMemberId);
 			Session.set('currentPage', 'editTeamMemberForm');
 		}
 	});
 
-	adminGroup.route('/board/:boardId/create-label', {
+	adminGroup.route('/project/:projectId/board/:boardId/create-label', {
 		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentPage', 'editLabelPage');
 		}
 	});
 
-	adminGroup.route('/board/:boardId/label/:labelId/edit', {
+	adminGroup.route('/project/:projectId/board/:boardId/label/:labelId/edit', {
 		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentLabelId', params.labelId);
 			Session.set('currentPage', 'editLabelPage');
+		}
+	});
+
+	adminGroup.route('/dev-admin', {
+		action: function(params, queryParams) {
+			Session.set('currentPage', 'devAdminPage');
 		}
 	});
 
