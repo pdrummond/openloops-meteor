@@ -145,7 +145,22 @@ if(Meteor.isClient) {
 
 	adminGroup.route('/projects/create', {
 		action: function(params, queryParams) {
+			Session.set('currentProjectId', null);
 			Session.set('currentPage', 'editProjectForm');
+		}
+	});
+
+	adminGroup.route('/project/:projectId/edit-project', {
+		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
+			Session.set('currentPage', 'editProjectForm');
+		}
+	});
+
+	adminGroup.route('/project/:projectId/delete-project', {
+		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
+			Session.set('currentPage', 'deleteProjectForm');
 		}
 	});
 

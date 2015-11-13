@@ -1,29 +1,53 @@
 <template name="projectList">
-	<a href="/projects/create">Create Project</a>
-	<ul>
+	<h1 style="margin-left:100px;margin-top:50px">Projects</h1>
+	<a href="/projects/create" style="display:block;margin-left:100px;margin-top:10px">Create Project</a>
+	<hr>
+	<table style="margin-top:10px;padding-left:100px;padding-right:100px" width="100%">
 		{{#each projects}}
-			{{> projectItem}}
+		{{> projectItem}}
 		{{/each}}
-	</ul>
+	</table>
+	<hr>
 </template>
 
 <template name="projectItem">
-	<li><a href="/project/{{_id}}/boards">{{title}}</a></li>
+	<tr>
+		<td><a href="/project/{{_id}}/boards"> {{title}}</a> <span style="color:lightgray">{{key}}</span></td>
+		<td><a href="/project/{{_id}}/edit-project">Edit</a></td>
+		<td><a href="/project/{{_id}}/delete-project">Delete</a></td>
+	</tr>
 </template>
 
 
 <template name="editProjectForm">
 	<div id="editProjectForm" class="main">
+		{{#with currentProject}}
 		<form>
 			<fieldset>
 				<label>Project Title</label>
-				<input name="title" placeholder="Enter project title" autofocus>
+				<input name="title" placeholder="Enter project title" value="{{title}}" autofocus>
 				<label>Project Key</label>
-				<input name="key" placeholder="Enter project key" autofocus>
+				<input name="key" placeholder="Enter project key" value="{{key}}" autofocus>
 				<label>Description</label>
-				<textarea name="description" placeholder="Enter project description"></textarea>
+				<textarea name="description" placeholder="Enter project description">{{description}}</textarea>
 			</fieldset>
 			<button id="save-button">Save Project</button>
+		</form>
+		{{/with}}
+	</div>
+</template>
+
+<template name="deleteProjectForm">
+	<div id="deleteProjectForm" class="main">
+		<div style="width:800px;margin-top:100px;background-color:whitesmoke;padding:10px;border-radius:10px">
+			Are you sure you want to delete this project and all items/Messages within
+			it?  This action is permanent - there will be no way to retrieve this project
+			once is has been deleted.  To continue, type the project name below and click
+			delete button
+		</div>
+		<form>
+			<input name="project-title" placeholder="Enter project name here">
+			<button id="delete-project">Delete Project</button>
 		</form>
 	</div>
 </template>
