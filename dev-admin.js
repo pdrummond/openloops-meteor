@@ -42,6 +42,17 @@ if(Meteor.isClient) {
 					$("#status").text("Set all item PIDS successfully.");
 				}
 			});
+		},
+
+		'click #set-item-project-ids': function() {
+			$("#status").text("Set Item Project ids: working...");
+			Meteor.call('setItemProjectIds', function(err, results) {
+				if(err) {
+					$("#status").text("Error setting item project ids: " + err.reason);
+				} else {
+					$("#status").text("Set all item project ids successfully.");
+				}
+			});
 		}
 	});
 }
@@ -95,18 +106,35 @@ if(Meteor.isServer) {
 
 		setItemPids: function() {
 			console.log("> setItemPids");
-			Items.find({pid: {$exists: false}}).forEach(function(item) {
-				console.log("Item " + item.title + " has no pid");
+			Items.find({$or: [{pid: {$exists: false}}, {pid: 0}]}).forEach(function(item) {
+				console.log("-- Item " + item.title + " has no pid");
 				if(item.projectId == null) {
-					console.error("Item " + item._id + " has no projectId! Skipping...");
+					console.error("-- Item " + item._id + " has no projectId! Skipping...");
 				} else {
 					var pid = incrementCounter('counters', item.projectId);
 					Items.update(item._id, {$set: {pid: pid}});
 					item = Items.findOne(item._id);
-					console.log("New PID for item is " + item.pid);
+					console.log("-- New PID for item is " + item.pid);
 				}
 			});
 			console.log("< setItemPids");
+		},
+
+		setItemProjectIds: function() {
+			console.log("> setItemProjectIds");
+			Items.find({projectId: {$exists: false}}).forEach(function(item) {
+				console.log("-- Item " + item.title + " has no projectId");
+				var board = Boards.findOne(item.boardId);
+				if(board == null) {
+					console.error("-- Item " + item._id + " has no board! Skipping...");
+				} else {
+					var projectId = board.projectId;
+					Items.update(item._id, {$set: {projectId: projectId}});
+					item = Items.findOne(item._id);
+					console.log("-- New project ID for item is " + item.projectId);
+				}
+			});
+			console.log("< setItemProjectIds");
 		}
 	})
 }
