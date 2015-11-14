@@ -31,6 +31,17 @@ if(Meteor.isClient) {
 					$("#status").text("Recounted item messages successfully.");
 				}
 			});
+		},
+
+		'click #set-item-pids': function() {
+			$("#status").text("Set Item PIDS: working...");
+			Meteor.call('setItemPids', function(err, results) {
+				if(err) {
+					$("#status").text("Error setting item PIDS: " + err.reason);
+				} else {
+					$("#status").text("Set all item PIDS successfully.");
+				}
+			});
 		}
 	});
 }
@@ -80,6 +91,22 @@ if(Meteor.isServer) {
 				console.log("-- AFTER num messages for item '" + item.title + "': " + item.numMessages);
 			});
 			console.log("< recountItemMessages");
+		},
+
+		setItemPids: function() {
+			console.log("> setItemPids");
+			Items.find({pid: {$exists: false}}).forEach(function(item) {
+				console.log("Item " + item.title + " has no pid");
+				if(item.projectId == null) {
+					console.error("Item " + item._id + " has no projectId! Skipping...");
+				} else {
+					var pid = incrementCounter('counters', item.projectId);
+					Items.update(item._id, {$set: {pid: pid}});
+					item = Items.findOne(item._id);
+					console.log("New PID for item is " + item.pid);
+				}
+			});
+			console.log("< setItemPids");
 		}
 	})
 }
