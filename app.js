@@ -232,7 +232,12 @@ if(Meteor.isClient) {
 									activityType: Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED,
 								});
 							}
-							FlowRouter.go("/project" + Session.get('currentProjectId') + "/board/" + Session.get('currentBoardId') + "/item/" + newItem._id);
+							if(currentItem.description != newItem.description) {
+								OpenLoops.insertActivityMessage(newItem, {
+									activityType: Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED
+								});
+							}
+							FlowRouter.go("/project/" + Session.get('currentProjectId') + "/board/" + Session.get('currentBoardId') + "/item/" + newItem._id);
 						}
 					});
 				}
@@ -321,9 +326,10 @@ if(Meteor.isClient) {
 
 		activityMessage: function() {
 			if(this.itemId) {
+				var currentItemId = Session.get('currentItemId');
 				var item = Items.findOne(this.itemId);
-				var itemTitleLink = '<span id="item-link"><a class="item-link" href="/project' + Session.get('currentProjectId') + '/board/' + Session.get('currentBoardId') + '/item/' + this.itemId + '">' + item.title + '</a></span>';
-				var ctx = Session.get('currentItemId')?'this item':itemTitleLink;
+				var itemTitleLink = '<span id="item-link"><a class="item-link" href="/project/' + Session.get('currentProjectId') + '/board/' + Session.get('currentBoardId') + '/item/' + this.itemId + '">' + Ols.Item.getItemKey({item: item}) + ': ' + Ols.StringUtils.truncate(item.title, 50) + '</a></span>';
+				var ctx = currentItemId?'this item':itemTitleLink;
 				var msg = '???';
 				switch(this.activityType) {
 					case Ols.ACTIVITY_TYPE_NEW_ITEM:
@@ -348,6 +354,9 @@ if(Meteor.isClient) {
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED:
 						msg = "changed title of item to " + itemTitleLink;
+					case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
+						var itemCtx = currentItemId?"":"of " + ctx;
+						msg = "set the description " + itemCtx;
 					break;
 				}
 			} else {
@@ -358,6 +367,17 @@ if(Meteor.isClient) {
 				}
 			}
 			return msg;
+		},
+
+		activityContent: function() {
+			var activityContent = "";
+			var item = Items.findOne(this.itemId);
+			switch(this.activityType) {
+				case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
+					activityContent = this.item?this.item.description:'ERR: Something went wrong. Cannot find item description';
+					break;
+			}
+			return activityContent;
 		},
 
 		showItemLink: function() {
@@ -406,7 +426,8 @@ if(Meteor.isClient) {
 			type: Ols.MSG_TYPE_ACTIVITY,
 			itemType: item.type,
 			boardId: item.boardId,
-			itemId: item._id
+			itemId: item._id,
+			item: item
 		}, activityMessage);
 		activityMessage = OpenLoops.insertClientMessage(activityMessage);
 		Meteor.call('saveMessage', activityMessage);
