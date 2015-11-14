@@ -218,6 +218,11 @@ if(Meteor.isClient) {
 							OpenLoops.insertActivityMessage(newItem, {
 								activityType: Ols.ACTIVITY_TYPE_NEW_ITEM
 							});
+							if(Ols.StringUtils.notEmpty(newItem.description)) {
+								OpenLoops.insertActivityMessage(newItem, {
+									activityType: Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED
+								});
+							}
 							FlowRouter.go("/project/" + Session.get('currentProjectId') + "/board/" + Session.get('currentBoardId') + "/item/" + newItem._id);
 						}
 					});
