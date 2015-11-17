@@ -209,7 +209,7 @@ if(Meteor.isClient) {
 				};
 				var currentItemId = Session.get('currentItemId');
 				if(currentItemId == null) {
-					//item.projectId = Session.get('currentProjectId');
+					item.projectId = Session.get('currentProjectId');
 					item.boardId = Session.get('currentBoardId');
 					Meteor.call('insertItem', item, function(err, newItem) {
 						if(err) {
