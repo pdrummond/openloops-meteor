@@ -32,3 +32,4 @@ ols:lib
 ols:message-history
 u2622:persistent-session
 osv:mongo-counter
+kadira:blaze-layout

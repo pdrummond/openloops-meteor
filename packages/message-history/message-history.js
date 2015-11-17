@@ -30,7 +30,8 @@ if(Meteor.isClient) {
 
 	Template.messageHistory.onRendered(function() {
 		console.log("MESSAGE HISTORY onRendered - should be called once");
-		$("#message-list").scroll(Ols.HistoryManager.checkScroll);
+		Ols.HistoryManager.loadInitialMessages();
+		$("#messageHistory").scroll(Ols.HistoryManager.checkScroll);
 	});
 
 	Template.messageHistory.helpers({

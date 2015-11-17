@@ -2,6 +2,7 @@
 @import 'nib'
 @import 'variables.import'
 
+
 * {
  	font-family font-main
 	font-size:14px;
@@ -20,6 +21,17 @@ body
 	margin 0
 	height 100% !important
 	width 100% !important
+
+
+#messageHistory {
+	xbackground-color: gray;
+    top: header-height;
+    position: relative;
+    height: "calc(100% - %s)" % (top-banner-height+header-height+footer-height+40);
+	overflow: auto;
+	padding-left:10px;
+	padding-right:10px;
+}
 
 #app #top-banner {
 	height:top-banner-height;
@@ -45,9 +57,9 @@ body
 	}
 }
 
-#app
+#app {
 	height 100%
-	.right-sidebar
+	.right-sidebar {
 		height "calc(100% - %s)" % (top-baner-height + header-height);
 		top top-banner-height + header-height + 20;
 		right 0
@@ -118,8 +130,9 @@ body
 				color:white;
 			}
 		}
+	}
 
-	.left-sidebar
+	.left-sidebar {
 		height "calc(100% - %s)" % top-baner-height;
 		top top-banner-height;
 		left 0
@@ -158,7 +171,7 @@ body
 			}
 		}
 
-		#top-header
+		#top-header {
 			width: 100%;
 			height: 60px;
 			display: flex;
@@ -181,7 +194,6 @@ body
 				.tab-item.active {
 					color:black;
 				}
-
 			}
 
 			#top-header-title {
@@ -218,19 +230,23 @@ body
 			#create-link i {
 				margin-top:8px;
 			}
+		}
 
-
-		.item-list
+		.item-list {
 			margin:0
 			padding: 0
 			list-style: none
 			overflow: auto;
 			height: calc(100% - 117px);
-	.main
+		}
+	}
+	.main {
 		height 100%
 		padding-left left-sidebar-width
 		padding-right right-sidebar-width
 		padding-bottom footer-height
+	}
+}
 
 #app .left-sidebar #board-item .item-msg-count {
 	top: 20px;
@@ -310,16 +326,6 @@ body
 	background-color:#e7edf3;
 #app .left-sidebar .item.active
 	background-color:#e7edf3;
-
-#message-list {
-	xbackground-color: gray;
-    top: header-height;
-    position: relative;
-    height: "calc(100% - %s)" % (top-banner-height+header-height+footer-height+40);
-	overflow: auto;
-	padding-left:10px;
-	padding-right:10px;
-}
 
 #show-more-link {
 	font-size: 0.7rem;
@@ -428,13 +434,15 @@ footer
 	height footer-height
 	margin-left: left-sidebar-width
 
-#login-buttons
+#login-buttons {
   z-index:2;
   position:absolute;
   top:10px;
   right:10px;
-  .login-link-text
-  	color:white;
+  .login-link-text {
+	  color:white;
+  }
+}
 
 #login-buttons #login-dropdown-list {
 	left:auto;
@@ -745,13 +753,6 @@ footer
 
 .main.item-feed.readTab .right-sidebar {
 	display:none;
-}
-
-.main.item-feed.readTab #message-list {
-	width:800px;
-	margin:auto auto;
-	text-align: justify;
-	color: #383838;
 }
 
 .main.item-feed.readTab header {

@@ -281,12 +281,6 @@ if(Meteor.isClient) {
 		}
 	})
 
-	Template.app.helpers({
-		currentPage: function() {
-			return Session.get('currentPage');
-		}
-	});
-
 	/*
 	var previousMessageDate = null;
 	Template.messageItemView.onRendered(function() {

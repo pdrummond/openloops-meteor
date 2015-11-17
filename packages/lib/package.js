@@ -6,8 +6,8 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
-  api.use(['ecmascript', 'yuukan:streamy']);
-  api.addFiles(['namespace.js', 'stringutils-api.js', 'project-api.js', 'item-api.js']);
+  api.use(['ecmascript', 'yuukan:streamy', 'mquandalle:stylus']);
+  api.addFiles(['namespace.js', 'stringutils-api.js', 'project-api.js', 'item-api.js']);  
   api.export(['Ols', 'Streamy']);
 });
 

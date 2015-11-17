@@ -1,6 +1,5 @@
 <template name="messageHistory">
-	<i id="loading-messages-spinner" class="fa fa-spinner fa-pulse" style="position:absolute;opacity:0;top: 175px;left: 420px;color: gray;"></i>
-	<ul id="message-list">
+	<ul id="messageHistory">
 		<a href="" id="loading-more" style="visibility:{{#if moreMessagesOnServer}}visible{{else}}hidden{{/if}}"><i id="loading-more-icon" class="fa fa-spinner fa-pulse"></i></a>
 		{{#each messages}}
 		{{> messageItemView}}

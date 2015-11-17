@@ -1,4 +1,5 @@
 if(Meteor.isClient) {
+	BlazeLayout.setRoot('#app');
 
 	noauthGroup = FlowRouter.group({});
 
@@ -77,10 +78,9 @@ if(Meteor.isClient) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', null);
-			Session.set('currentPage', 'feedPage');
+			BlazeLayout.render("app", {currentPage: "feedPage"});
 			Session.set('numIncomingMessages', 0);
 			OpenLoops.removeSidebarNewMessages();
-			Ols.HistoryManager.loadInitialMessages();
 		}
 	});
 
@@ -111,10 +111,10 @@ if(Meteor.isClient) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', params.itemId);
-			Session.set('currentPage', 'feedPage');
+			BlazeLayout.render("app", {currentPage: "feedPage"});
 			Session.set('numIncomingMessages', 0);
-			OpenLoops.removeSidebarNewMessages(params.itemId);
 			Ols.HistoryManager.loadInitialMessages();
+			OpenLoops.removeSidebarNewMessages(params.itemId);
 		}
 	});
 
