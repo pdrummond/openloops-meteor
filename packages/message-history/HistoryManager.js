@@ -59,7 +59,7 @@ Ols.HistoryManager = {
 		//If load takes a while, show busy
 		this.busyTimeout = setTimeout(function() {
 			console.log("SHOWING BUSY")
-			$("#loading-messages-spinner").css({'opacity': 1});
+			$("#messageHistory #loading-more").css({'opacity': 1});
 		}, 300);
 
 		console.log(">>>> LOAD INITIAL MESSAGES");
@@ -70,7 +70,7 @@ Ols.HistoryManager = {
 			clearTimeout(self.busyTimeout);
 			if(ok) {
 				self.scrollBottom();
-				$("#loading-messages-spinner").animate({'opacity': 0});
+				$("#messageHistory #loading-more").animate({'opacity': 0});
 				self.loadingMessages = false;
 				self.loadingInitialMessages = false;
 			}
