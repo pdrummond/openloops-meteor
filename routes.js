@@ -6,14 +6,14 @@ if(Meteor.isClient) {
 	noauthGroup.route("/login", {
 		name: "login",
 		action: function() {
-			Session.set('currentPage', 'loginPage');
+			BlazeLayout.render("app", {currentPage: "loginPage"});
 		}
 	});
 
 	noauthGroup.route("/signup", {
 		name: "signup",
 		action: function() {
-			Session.set('currentPage', 'signupPage');
+			BlazeLayout.render("app", {currentPage: "signupPage"});
 		}
 	});
 
@@ -23,14 +23,14 @@ if(Meteor.isClient) {
 			Session.set('currentProjectId', null);
 			Session.set('currentBoardId', null);
 			Session.set('currentItemId', null);
-			Session.set('currentPage', 'welcomePage');
+			BlazeLayout.render("app", {currentPage: "welcomePage"});
 		}
 	});
 
 	noauthGroup.route('/notAllowed', {
 		name: "notAllowed",
 		action: function(params, queryParams) {
-			Session.set('currentPage', 'notAllowed');
+			BlazeLayout.render("app", {currentPage: "notAllowed"});
 		}
 	});
 
@@ -124,7 +124,7 @@ if(Meteor.isClient) {
 			Session.set('currentItemId', null);
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
-			Session.set('currentPage', 'editItemPage');
+			BlazeLayout.render("app", {currentPage: "editItemPage"});
 		}
 	});
 
@@ -133,55 +133,55 @@ if(Meteor.isClient) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', params.itemId);
-			Session.set('currentPage', 'editItemPage');
+			BlazeLayout.render("app", {currentPage: "editItemPage"});
 		}
 	});
 
 	loggedInGroup.route('/projects', {
 		action: function(params, queryParams) {
-			Session.set('currentPage', 'projectList');
+			BlazeLayout.render("app", {currentPage: "projectList"});
 		}
 	});
 
 	adminGroup.route('/projects/create', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', null);
-			Session.set('currentPage', 'editProjectForm');
+			BlazeLayout.render("app", {currentPage: "editProjectForm"});
 		}
 	});
 
 	adminGroup.route('/project/:projectId/edit-project', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
-			Session.set('currentPage', 'editProjectForm');
+			BlazeLayout.render("app", {currentPage: "editProjectForm"});
 		}
 	});
 
 	adminGroup.route('/project/:projectId/delete-project', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
-			Session.set('currentPage', 'deleteProjectForm');
+			BlazeLayout.render("app", {currentPage: "deleteProjectForm"});
 		}
 	});
 
 	loggedInGroup.route('/project/:projectId/boards', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
-			Session.set('currentPage', 'boardList');
+			BlazeLayout.render("app", {currentPage: "boardList"});
 		}
 	});
 
 	adminGroup.route('/project/:projectId/boards/create', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
-			Session.set('currentPage', 'createBoardForm');
+			BlazeLayout.render("app", {currentPage: "createBoardForm"});
 		}
 	});
 
 	adminGroup.route('/team-members', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
-			Session.set('currentPage', 'teamMembersList');
+			BlazeLayout.render("app", {currentPage: "teamMembersList"});
 		}
 	});
 
@@ -189,7 +189,7 @@ if(Meteor.isClient) {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentTeamMemberId', null);
-			Session.set('currentPage', 'editTeamMemberForm');
+			BlazeLayout.render("app", {currentPage: "editTeamMemberForm"});
 		}
 	});
 
@@ -197,7 +197,7 @@ if(Meteor.isClient) {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentTeamMemberId', params.teamMemberId);
-			Session.set('currentPage', 'editTeamMemberForm');
+			BlazeLayout.render("app", {currentPage: "editTeamMemberForm"});
 		}
 	});
 
@@ -205,7 +205,7 @@ if(Meteor.isClient) {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
-			Session.set('currentPage', 'editLabelPage');
+			BlazeLayout.render("app", {currentPage: "editLabelPage"});
 		}
 	});
 
@@ -214,19 +214,19 @@ if(Meteor.isClient) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentLabelId', params.labelId);
-			Session.set('currentPage', 'editLabelPage');
+			BlazeLayout.render("app", {currentPage: "editLabelPage"});
 		}
 	});
 
 	adminGroup.route('/dev-admin', {
 		action: function(params, queryParams) {
-			Session.set('currentPage', 'devAdminPage');
+			BlazeLayout.render("app", {currentPage: "devAdminPage"});
 		}
 	});
 
 	FlowRouter.notFound = {
 		action: function() {
-			Session.set('currentPage', 'notFoundPage');
+			BlazeLayout.render("app", {currentPage: "notFoundPage"});
 		}
 	}
 }
