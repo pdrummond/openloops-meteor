@@ -11,7 +11,7 @@ Ols.HistoryManager = {
 			Ols.HistoryManager.atBottom = $("#messageHistory")[0].scrollHeight == ($("#messageHistory").scrollTop() + $("#messageHistory").height());
 			console.log("atBottom: " + Ols.HistoryManager.atBottom);
 			if(Ols.HistoryManager.atBottom) {
-				$("#header-new-messages-toast").hide();
+				$("#messageHistory #header-new-messages-toast").hide();
 			}
 		}
 	},
@@ -54,23 +54,24 @@ Ols.HistoryManager = {
 	},
 
 	loadInitialMessages: function() {
+		var self = this;
 		this.loadingInitialMessages = true;
 		this.loadingMessages = true;
 		//If load takes a while, show busy
 		this.busyTimeout = setTimeout(function() {
 			console.log("SHOWING BUSY")
-			$("#messageHistory #loading-more").css({'opacity': 1});
+			self.showBusyIcon();
 		}, 300);
 
 		console.log(">>>> LOAD INITIAL MESSAGES");
-		//ClientMessages._collection.remove({});
+		ClientMessages._collection.remove({});
 
 		var self = this;
 		this.loadMessages(function(ok) {
 			clearTimeout(self.busyTimeout);
 			if(ok) {
 				self.scrollBottom();
-				$("#messageHistory #loading-more").animate({'opacity': 0});
+				self.hideBusyIcon();
 				self.loadingMessages = false;
 				self.loadingInitialMessages = false;
 			}
@@ -83,6 +84,7 @@ Ols.HistoryManager = {
 		var self = this;
 		Meteor.setTimeout(function() {
 			if(self.moreMessagesOnServer()) {
+				self.showBusyIcon();
 				console.log(">>>> STILL LOAD MORE MESSAGES");
 				self.loadMessages(function(ok) {
 					if(ok) {
@@ -90,10 +92,12 @@ Ols.HistoryManager = {
 						console.log("SCROLLING AWAY FROM TOP!!!!! by " + scrollTopAmount);
 						$("#messageHistory").scrollTop(scrollTopAmount);
 						self.loadingMessages = false;
+						self.hideBusyIcon();
 					}
 				});
 			} else {
 				console.log(">>>> NO MORE MESSAGES ON SERVER");
+				self.hideBusyIcon();
 			}
 		}, 1);
 	},
@@ -136,5 +140,13 @@ Ols.HistoryManager = {
 			$messageList.scrollTop($messageList[0].scrollHeight);
 		}
 		Ols.HistoryManager.atBottom = true;
+	},
+
+	showBusyIcon: function() {
+		$("#messageHistory #loading-more").animate({'opacity': '1'});
+	},
+
+	hideBusyIcon: function() {
+		$("#messageHistory #loading-more").animate({'opacity': '0'});
 	}
 }

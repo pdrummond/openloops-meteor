@@ -728,8 +728,49 @@ Settings = new Meteor.Collection('settings');
 Counters = new Mongo.Collection('counters');
 
 if(Meteor.isServer) {
+	ServerMessages = new Meteor.Collection('server-messages');
 
 	Meteor.methods({
+
+		loadMessages: function(opts) {
+			console.log("loadMessages: " + JSON.stringify(opts));
+			var filter = {};
+			if(opts.itemId) {
+				filter.itemId = opts.itemId;
+			}
+			if(opts.olderThanDate) {
+				filter.createdAt = {$lt: opts.olderThanDate};
+			}
+			console.log("SERVER FILTER: " + JSON.stringify(filter));
+			var messages = ServerMessages.find(filter, {
+				limit: Ols.MESSAGE_PAGE_SIZE,
+				sort: {createdAt: -1}
+			});
+			Meteor._sleepForMs(2000);
+			return messages.fetch();
+		},
+
+		saveMessage: function(newMessage) {
+			ServerMessages.insert(newMessage);
+
+			Items.update(newMessage.itemId, {
+				$inc: {numMessages: 1},
+				$set: {updatedAt: new Date().getTime()},
+			});
+			Boards.update(newMessage.boardId, {$inc: {numMessages: 1}});
+			Meteor.call('detectMentionsInMessage', newMessage);
+
+		},
+
+		insertMessage: function(newMessage) {
+			newMessage = _.extend({
+				createdAt: new Date().getTime(),
+				createdBy: Meteor.user().username,
+			}, newMessage);
+			Meteor.call('saveMessage', newMessage);
+			Streamy.broadcast('sendMessage', newMessage);
+		},
+
 		insertItem: function(newItem) {
 			console.log("insertItem - boardId:" + newItem.boardId);
 			var now = new Date().getTime();

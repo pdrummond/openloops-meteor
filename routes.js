@@ -53,6 +53,7 @@ if(Meteor.isClient) {
 			Session.set('currentItemId', null);
 			BlazeLayout.render("app", {currentPage: "feedPage"});
 			Session.set('numIncomingMessages', 0);
+			Ols.HistoryManager.loadInitialMessages();
 			OpenLoops.removeSidebarNewMessages();
 		}
 	});
