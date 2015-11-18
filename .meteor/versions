@@ -78,6 +78,7 @@ npm-mongo@1.4.39_1
 oaf:html5-desktop-notifications@1.0.0
 observe-sequence@1.0.7
 ols:lib@0.0.1
+ols:message-box@0.0.1
 ols:message-history@0.0.1
 ordered-dict@1.0.4
 osv:mongo-counter@0.2.1

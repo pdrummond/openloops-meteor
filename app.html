@@ -20,14 +20,16 @@
 	</div>
 	{{> Template.dynamic template=currentPage}}
 	{{else}}
-		<p>Loading...</p>
+		<p>OpenLoops is Loading...</p>
 	{{/if}}
 </template>
 
 <template name="feedPage">
-	{{> leftSidebar}}
-	{{> feed}}
-	{{> rightSidebar}}
+	{{#onlyIfLoggedIn}}
+		{{> leftSidebar}}
+		{{> feed}}
+		{{> rightSidebar}}
+	{{/onlyIfLoggedIn}}
 </template>
 
 <template name="createFilterPage">
@@ -50,10 +52,13 @@
 </template>
 
 <template name="editItemPage">
-	{{> editItemForm}}
+	{{#onlyIfLoggedIn}}
+		{{> editItemForm}}
+	{{/onlyIfLoggedIn}}
 </template>
 
 <template name="editItemForm">
+	{{#onlyIfLoggedIn}}
 	<div id="editItemForm" class="main form">
 		<h1>Create {{selectedType}}</h1>
 		<form>
@@ -84,6 +89,7 @@
 			<button id="save-button">Save</button>
 		</form>
 	</div>
+	{{/onlyIfLoggedIn}}
 </template>
 
 <template name="leftSidebar">
@@ -272,6 +278,9 @@
 		<div class="tab-body {{isTabActive 'activity'}}">
 			<div class="current-item-activity"><p><i>Not yet implemented - all item-specific activity will be listed here</i></p></div>
 		</div>
+		<footer>
+			{{> messageBox}}
+		</footer>
 	</div>
 </template>
 
@@ -374,4 +383,32 @@
 	<div class="alert message">
 		<i class="fa fa-exclamation-triangle"></i> 404: Oops, this page doesn't exist, sorry.  Click <a href="/">here</a> to find your way home.
 	</div>
+</template>
+
+<template name="onlyIfLoggedIn">
+  {{#if authInProcess}}
+    <p>Loading ...</p>
+  {{else}}
+    {{#if canShow}}
+      {{> UI.contentBlock }}
+    {{else}}
+      <p>You are not authorized to view this page.</p>
+      <p>Please <a href="/login">login</a> to view this page</p>
+    {{/if}}
+  {{/if}}
+</template>
+
+<template name="onlyIfAdminUser">
+  {{#if authInProcess}}
+    <p>Loading ...</p>
+  {{else}}
+    {{#if canShow}}
+      {{> UI.contentBlock }}
+	  {{else}}
+	  <div class="alert message"><i class="fa fa-exclamation-triangle"></i>
+		  Ooops, sorry - only admins are allowed here
+		  <p>Click <a href="/">here</a> to return.</p>
+	  </div>
+	  {{/if}}
+  {{/if}}
 </template>

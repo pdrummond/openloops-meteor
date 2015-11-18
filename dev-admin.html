@@ -1,4 +1,5 @@
 <template name="devAdminPage">
+	{{#onlyIfAdminUser}}
 	<div style="padding:10px;margin:50px;background-color:whitesmoke;board-radius:10px">
 		<h1>Dev Admin Functions</h1>
 		<div>
@@ -10,5 +11,5 @@
 		</div>
 		<p id="status"></p>
 	</div>
-
+	{{/onlyIfAdminUser}}
 </template>

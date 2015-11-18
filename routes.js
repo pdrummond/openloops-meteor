@@ -1,23 +1,21 @@
 if(Meteor.isClient) {
 	BlazeLayout.setRoot('#app');
 
-	noauthGroup = FlowRouter.group({});
-
-	noauthGroup.route("/login", {
+	FlowRouter.route("/login", {
 		name: "login",
 		action: function() {
 			BlazeLayout.render("app", {currentPage: "loginPage"});
 		}
 	});
 
-	noauthGroup.route("/signup", {
+	FlowRouter.route("/signup", {
 		name: "signup",
 		action: function() {
 			BlazeLayout.render("app", {currentPage: "signupPage"});
 		}
 	});
 
-	noauthGroup.route('/', {
+	FlowRouter.route('/', {
 		name: "welcome",
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', null);
@@ -27,36 +25,11 @@ if(Meteor.isClient) {
 		}
 	});
 
-	noauthGroup.route('/notAllowed', {
+	FlowRouter.route('/notAllowed', {
 		name: "notAllowed",
 		action: function(params, queryParams) {
 			BlazeLayout.render("app", {currentPage: "notAllowed"});
 		}
-	});
-
-	loggedInGroup = FlowRouter.group({
-		triggersEnter: [ function() {
-			if(Meteor.loggingIn() == false && !Meteor.userId()) {
-				route = FlowRouter.current();
-				if(route.route.name != 'login') {
-					Session.set('redirectAfterLogin', route.path);
-				}
-				FlowRouter.go('login');
-			}
-		}]
-	});
-
-	adminGroup = loggedInGroup.group({
-		triggersEnter: [ function() {
-			var user = Meteor.user();
-			if(user) {
-				var email = user.emails[0].address;
-				var teamMember = TeamMembers.findOne({email: email});
-				if(teamMember.role != Ols.ROLE_ADMIN) {
-					FlowRouter.go('notAllowed');
-				}
-			}
-		}]
 	});
 
 	Accounts.onLogin(function() {
@@ -73,7 +46,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	loggedInGroup.route('/project/:projectId/board/:boardId', {
+	FlowRouter.route('/project/:projectId/board/:boardId', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
@@ -84,7 +57,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	loggedInGroup.route('/project/:projectId/board/:boardId/item/:itemId', {
+	FlowRouter.route('/project/:projectId/board/:boardId/item/:itemId', {
 		triggersEnter: [function(ctx, redirect) {
 			/*
 				The active tab uses persistent sessions so if it's persisted
@@ -100,7 +73,7 @@ if(Meteor.isClient) {
   		}],
 	});
 
-	loggedInGroup.route('/project/:projectId/board/:boardId/item/:itemId/:tabName', {
+	FlowRouter.route('/project/:projectId/board/:boardId/item/:itemId/:tabName', {
 		action: function(params, queryParams) {
 			console.log(">>>> ROUTE");
 			var tabName = params.tabName;
@@ -118,7 +91,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	loggedInGroup.route('/project/:projectId/board/:boardId/create-item', {
+	FlowRouter.route('/project/:projectId/board/:boardId/create-item', {
 		action: function(params, queryParams) {
 			Session.set('createItemType', queryParams.type);
 			Session.set('currentItemId', null);
@@ -128,7 +101,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	loggedInGroup.route('/project/:projectId/board/:boardId/edit-item/:itemId', {
+	FlowRouter.route('/project/:projectId/board/:boardId/edit-item/:itemId', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
@@ -137,55 +110,55 @@ if(Meteor.isClient) {
 		}
 	});
 
-	loggedInGroup.route('/projects', {
+	FlowRouter.route('/projects', {
 		action: function(params, queryParams) {
 			BlazeLayout.render("app", {currentPage: "projectList"});
 		}
 	});
 
-	adminGroup.route('/projects/create', {
+	FlowRouter.route('/projects/create', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', null);
 			BlazeLayout.render("app", {currentPage: "editProjectForm"});
 		}
 	});
 
-	adminGroup.route('/project/:projectId/edit-project', {
+	FlowRouter.route('/project/:projectId/edit-project', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			BlazeLayout.render("app", {currentPage: "editProjectForm"});
 		}
 	});
 
-	adminGroup.route('/project/:projectId/delete-project', {
+	FlowRouter.route('/project/:projectId/delete-project', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			BlazeLayout.render("app", {currentPage: "deleteProjectForm"});
 		}
 	});
 
-	loggedInGroup.route('/project/:projectId/boards', {
+	FlowRouter.route('/project/:projectId/boards', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			BlazeLayout.render("app", {currentPage: "boardList"});
 		}
 	});
 
-	adminGroup.route('/project/:projectId/boards/create', {
+	FlowRouter.route('/project/:projectId/boards/create', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			BlazeLayout.render("app", {currentPage: "createBoardForm"});
 		}
 	});
 
-	adminGroup.route('/team-members', {
+	FlowRouter.route('/team-members', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			BlazeLayout.render("app", {currentPage: "teamMembersList"});
 		}
 	});
 
-	adminGroup.route('/team-members/create', {
+	FlowRouter.route('/team-members/create', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentTeamMemberId', null);
@@ -193,7 +166,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	adminGroup.route('/team-member/:teamMemberId/edit', {
+	FlowRouter.route('/team-member/:teamMemberId/edit', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentTeamMemberId', params.teamMemberId);
@@ -201,7 +174,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	adminGroup.route('/project/:projectId/board/:boardId/create-label', {
+	FlowRouter.route('/project/:projectId/board/:boardId/create-label', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
@@ -209,7 +182,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	adminGroup.route('/project/:projectId/board/:boardId/label/:labelId/edit', {
+	FlowRouter.route('/project/:projectId/board/:boardId/label/:labelId/edit', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
@@ -218,7 +191,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	adminGroup.route('/dev-admin', {
+	FlowRouter.route('/dev-admin', {
 		action: function(params, queryParams) {
 			BlazeLayout.render("app", {currentPage: "devAdminPage"});
 		}

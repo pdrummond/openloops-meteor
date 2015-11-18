@@ -66,34 +66,6 @@ if(Meteor.isClient) {
 		},
 
 	});
-
-	Template.messageBox.events({
-		'keypress #message-box': function(e) {
-			var inputVal = $('#message-box').val();
-			var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
-			if(charCode == 13 && (inputVal == null || inputVal.length == 0)) {
-				e.preventDefault();
-				e.stopPropagation();
-			} else {
-				if (charCode == 13 && e.shiftKey == false) {
-					e.preventDefault();
-					e.stopPropagation();
-					if(inputVal.length > 0) {
-						var newMessage = OpenLoops.insertClientMessage({text:inputVal});
-						$("#message-box").val('');
-						Meteor.call('saveMessage', newMessage, function(err, result) {
-							if(err) {
-								alert("error sending message");
-							} else {
-								Ols.HistoryManager.scrollBottom();
-								Streamy.broadcast('sendMessage', newMessage);
-							}
-						});
-					}
-				}
-			}
-		}
-	});
 }
 
 if(Meteor.isServer) {

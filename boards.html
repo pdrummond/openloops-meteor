@@ -1,10 +1,12 @@
 <template name="boardList">
+	{{#onlyIfLoggedIn}}
 	<a href="/project/{{currentProjectId}}/boards/create">Create Board</a>
 	<ul>
 		{{#each boards}}
 			{{> boardItem}}
 		{{/each}}
 	</ul>
+	{{/onlyIfLoggedIn}}
 </template>
 
 <template name="boardItem">
@@ -13,6 +15,7 @@
 
 
 <template name="createBoardForm">
+	{{#onlyIfAdminUser}}
 	<div id="createBoardForm" class="main">
 		<form>
 			<fieldset>
@@ -24,4 +27,5 @@
 			<button id="create-button">Create Board</button>
 		</form>
 	</div>
+	{{/onlyIfAdminUser}}
 </template>

@@ -279,7 +279,8 @@ if(Meteor.isClient) {
 			Meteor.logout();
 			FlowRouter.go("/");
 		}
-	})
+	});
+
 
 	/*
 	var previousMessageDate = null;
@@ -691,6 +692,31 @@ if(Meteor.isClient) {
 				}
 			});
 			FlowRouter.go("/project/" + Session.get('currentProjectId') + "/board/" + Session.get('currentBoardId'));
+		}
+	});
+
+	Template.onlyIfLoggedIn.helpers({
+		authInProcess: function() {
+			return Meteor.loggingIn();
+		},
+		canShow: function() {
+			return !!Meteor.user();
+		}
+	});
+
+	Template.onlyIfAdminUser.helpers({
+		authInProcess: function() {
+			return Meteor.loggingIn();
+		},
+		canShow: function() {
+			var canShow = false;
+			var user = Meteor.user();
+			if(user) {
+				var email = user.emails[0].address;
+				var teamMember = TeamMembers.findOne({email: email});
+				canShow = teamMember.role == Ols.ROLE_ADMIN;
+			}
+			return canShow;
 		}
 	});
 

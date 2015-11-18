@@ -5,16 +5,9 @@
 		{{> messageItemView}}
 		{{/each}}
 	</ul>
-	<footer>
-		{{> messageBox}}
-	</footer>
 	{{#if hasIncomingMessages}}
 		<a href="" id="header-new-messages-toast"><i class="fa fa-arrow-down"></i>
 		{{numIncomingMessages}} {{incomingMessagesText}}</a>
 	{{/if}}
 
-</template>
-
-<template name="messageBox">
-	<textarea id="message-box" placeholder="Type here to comment"></textarea>
 </template>

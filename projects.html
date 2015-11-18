@@ -1,4 +1,5 @@
 <template name="projectList">
+	{{#onlyIfLoggedIn}}
 	<h1 style="margin-left:100px;margin-top:50px">Projects</h1>
 	<a href="/projects/create" style="display:block;margin-left:100px;margin-top:10px">Create Project</a>
 	<hr>
@@ -8,6 +9,7 @@
 		{{/each}}
 	</table>
 	<hr>
+	{{/onlyIfLoggedIn}}
 </template>
 
 <template name="projectItem">
@@ -20,6 +22,7 @@
 
 
 <template name="editProjectForm">
+	{{#onlyIfAdminUser}}
 	<div id="editProjectForm" class="main">
 		{{#with currentProject}}
 		<form>
@@ -35,9 +38,11 @@
 		</form>
 		{{/with}}
 	</div>
+	{{/onlyIfAdminUser}}
 </template>
 
 <template name="deleteProjectForm">
+	{{#onlyIfAdminUser}}
 	<div id="deleteProjectForm" class="main">
 		<div style="width:800px;margin-top:100px;background-color:whitesmoke;padding:10px;border-radius:10px">
 			Are you sure you want to delete this project and all items/Messages within
@@ -50,4 +55,5 @@
 			<button id="delete-project">Delete Project</button>
 		</form>
 	</div>
+	{{/onlyIfAdminUser}}
 </template>

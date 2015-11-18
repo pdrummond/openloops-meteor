@@ -12,8 +12,7 @@ Package.describe({
 
 Package.onUse(function(api) {
 	api.versionsFrom('1.2.1');
-	api.use(['templating', 'ecmascript']);
-	api.use('ols:lib');
+	api.use(['templating', 'ecmascript', 'ols:lib']);
 	api.addFiles([
 		'message-history.html',
 		'message-history.js',
