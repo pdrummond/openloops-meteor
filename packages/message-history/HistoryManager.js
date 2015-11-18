@@ -63,7 +63,7 @@ Ols.HistoryManager = {
 		}, 300);
 
 		console.log(">>>> LOAD INITIAL MESSAGES");
-		ClientMessages._collection.remove({});
+		//ClientMessages._collection.remove({});
 
 		var self = this;
 		this.loadMessages(function(ok) {
