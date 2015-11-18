@@ -125,6 +125,11 @@ if(Meteor.isClient) {
 		return filter;
 	}
 
+	Template.editItemForm.onCreated(function() {
+		var template = this;
+		template.isBusy = new ReactiveVar();
+	});
+
 	Template.editItemForm.onRendered(function() {
 		var createItemType = Session.get('createItemType');
 		if(createItemType) {
@@ -135,6 +140,12 @@ if(Meteor.isClient) {
 	});
 
 	Template.editItemForm.helpers({
+
+		isBusy: function() {
+			 var template = Template.instance();
+			 return template.isBusy.get();
+		},
+
 		currentItem: function() {
 			return Items.findOne(Session.get('currentItemId'));
 		},
@@ -187,11 +198,12 @@ if(Meteor.isClient) {
 		'change select[name="type"]': function() {
 			Session.set('editItemForm.selectedType', $('select[name="type"]').val());
 		},
-		'click #save-button': function(e) {
+		'click #save-button': function(e, template) {
 			e.preventDefault();
 			var currentItem = Items.findOne(Session.get('currentItemId'));
 			var title = $("#editItemForm input[name='title']").val();
 			if(title != null && title.length > 0) {
+				template.isBusy.set(true);
 				var description = $("#editItemForm textarea[name='description']").val();
 
 				var labelList = [];
@@ -746,7 +758,6 @@ if(Meteor.isServer) {
 				limit: Ols.MESSAGE_PAGE_SIZE,
 				sort: {createdAt: -1}
 			});
-			//Meteor._sleepForMs(2000);
 			return messages.fetch();
 		},
 
@@ -785,6 +796,7 @@ if(Meteor.isServer) {
 			}, newItem);
 
 			var newItemId = Items.insert(newItem);
+			//Meteor._sleepForMs(2000);
 			return _.extend(newItem, {_id: newItemId});
 		},
 

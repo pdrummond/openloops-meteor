@@ -30,7 +30,14 @@ if(Meteor.isClient) {
 
 	Template.messageHistory.onRendered(function() {
 		console.log("MESSAGE HISTORY onRendered - should be called once");
-		Ols.HistoryManager.loadInitialMessages();
+		/*
+			This call is needed to load the messages on full browser refresh.
+			When switching to new items from within the app, loadInitialMessages
+			is invoked in the router, which feels wrong.  I think what I really
+			need to do is create the messageHistory template each time the route
+			changes then this call will work.
+		*/
+		//Ols.HistoryManager.loadInitialMessages();
 		$("#messageHistory").scroll(Ols.HistoryManager.checkScroll);
 	});
 

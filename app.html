@@ -59,6 +59,9 @@
 
 <template name="editItemForm">
 	{{#onlyIfLoggedIn}}
+	{{#if isBusy}}
+		{{> spinner}}
+	{{else}}
 	<div id="editItemForm" class="main form">
 		<h1>Create {{selectedType}}</h1>
 		<form>
@@ -89,6 +92,7 @@
 			<button id="save-button">Save</button>
 		</form>
 	</div>
+	{{/if}}
 	{{/onlyIfLoggedIn}}
 </template>
 

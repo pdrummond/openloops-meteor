@@ -65,9 +65,11 @@ Ols.HistoryManager = {
 
 		console.log(">>>> LOAD INITIAL MESSAGES");
 		ClientMessages._collection.remove({});
+		console.log("CLIENT MESSAGES DELETED: Num client msgs: " + ClientMessages.find().count());
 
 		var self = this;
 		this.loadMessages(function(ok) {
+			console.log("CLEARING BUSY TIMER");
 			clearTimeout(self.busyTimeout);
 			if(ok) {
 				self.scrollBottom();

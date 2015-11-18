@@ -34,3 +34,5 @@ u2622:persistent-session
 osv:mongo-counter
 kadira:blaze-layout
 ols:message-box
+sacha:spin
+reactive-var
