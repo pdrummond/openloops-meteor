@@ -22,8 +22,21 @@ body
 	height 100% !important
 	width 100% !important
 
+#react-root {
+	position:absolute;
+	top:0;
+	left:400px;
+	height:100%;
+	width:100%;
+}
 
-#messageHistory {
+#react-root .messageHistoryView {
+	border: 1px solid lightgray;
+	width:800px;
+	height:50%;
+}
+
+#messageHistory, .messageHistoryView {
 	xbackground-color: gray;
     top: header-height;
     position: relative;
@@ -33,7 +46,7 @@ body
 	padding-right:10px;
 }
 
-#app #top-banner {
+#app #top-banner, .app #top-banner {
 	height:top-banner-height;
 	background-color: black;
 
@@ -57,7 +70,7 @@ body
 	}
 }
 
-#app {
+#app, .react-app {
 	height 100%
 	.right-sidebar {
 		height "calc(100% - %s)" % (top-baner-height + header-height);
@@ -332,13 +345,13 @@ body
     margin-left: 10px;
 }
 
-.message {
+.message, .chatMessageView {
 	padding-left: 10px;
 	padding-bottom: 5px;
 	list-style-type none;
 }
 
-.message p:first-child
+.message p:first-child, .chatMessageView p:first-child
 	margin-top:0;
 	margin-bottom:5px;
 
@@ -362,8 +375,9 @@ body
 	border-top-color: #ddd;
 }
 
-.message.selected
+.message.selected, .chatMessageView.selected {
     background-color orange
+}
 
 
 header {

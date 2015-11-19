@@ -36,3 +36,6 @@ kadira:blaze-layout
 ols:message-box
 sacha:spin
 reactive-var
+react
+kadira:react-layout
+ols:message-history-view
