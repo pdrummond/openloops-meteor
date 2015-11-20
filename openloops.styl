@@ -4,7 +4,8 @@
 
 
 * {
- 	font-family font-main
+ 	xfont-family font-main
+	font-family: 'Roboto', sans-serif;
 	font-size:14px;
 }
 
@@ -25,18 +26,15 @@ body
 #react-root {
 	position:absolute;
 	top:0;
-	left:400px;
+	left:0px;
 	height:100%;
 	width:100%;
 }
 
 #react-root .messageHistoryView {
-	border: 1px solid lightgray;
-	width:800px;
-	height:50%;
 }
 
-#messageHistory, .messageHistoryView {
+#messageHistory {
 	xbackground-color: gray;
     top: header-height;
     position: relative;
@@ -345,15 +343,16 @@ body
     margin-left: 10px;
 }
 
-.message, .chatMessageView {
+.message {
 	padding-left: 10px;
 	padding-bottom: 5px;
 	list-style-type none;
 }
 
-.message p:first-child, .chatMessageView p:first-child
+.message p:first-child {
 	margin-top:0;
 	margin-bottom:5px;
+}
 
 .message.new-day:before {
 	content: attr(data-date);
@@ -375,7 +374,7 @@ body
 	border-top-color: #ddd;
 }
 
-.message.selected, .chatMessageView.selected {
+.message.selected {
     background-color orange
 }
 

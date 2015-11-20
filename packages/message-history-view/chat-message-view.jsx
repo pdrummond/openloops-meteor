@@ -1,17 +1,37 @@
+
+const { Card, CardHeader, CardText, CardActions, FlatButton, Avatar} = mui;
+
 ChatMessageView = React.createClass({
 
 	render() {
 		console.log("ChatMessageView.render");
 		return (
-			<li className="chatMessageView" data-id={this.props.message._id}>
-				<span className="meta">
-					<strong>{this.props.message.createdBy}</strong>
-					<span className="created-at"> {Ols.TimeUtils.timeAgo(this.props.message.createdAt)}</span>
-				</span>
-				<div className="text">
+			<Card className="chatMessageView" data-id={this.props.message._id} initiallyExpanded={false}>
+				<CardHeader
+					title={
+						<span>
+							<span>
+								{this.props.message.createdBy}
+							</span>
+							<span style={{marginLeft:'10px', fontSize: '12px', 'color': 'gray'}}>
+								{Ols.TimeUtils.timeAgo(this.props.message.createdAt)}
+							</span>
+						</span>
+					}
+					avatar={<Avatar>A</Avatar>}
+					actAsExpander={true}
+					showExpandableButton={true}>
+				</CardHeader>
+				<CardText style={{display:'inline-block', position:'relative', padding: '0px', top: '-35px', left: '70px'}}>
 					{this.props.message.text}
-				</div>
-			</li>
+				</CardText>
+				<CardActions style={{backgroundColor: 'whitesmoke'}} expandable={true}>
+					<FlatButton label="Edit"/>
+					<FlatButton label="Delete"/>
+				</CardActions>
+
+			</Card>
+
 		);
 	}
 });

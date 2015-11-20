@@ -1,4 +1,4 @@
-Ols = {
+Ols = { //FIXME: Move all of these into more appropriate locations within the API
 	ITEM_TYPE_DISCUSSION: 'discussion',
 	ITEM_TYPE_ISSUE: 'issue',
 	ITEM_TYPE_ARTICLE: 'article',
@@ -22,7 +22,7 @@ Ols = {
 
 	MESSAGE_AGE_HOURS_INCREMENT: 1,
 	FILL_SCREEN_MSG_COUNT: 30,
-	MESSAGE_PAGE_SIZE: 20,
+	MESSAGE_PAGE_SIZE: 5,
 
 	ROLE_ADMIN: 'ADMIN',
 	ROLE_USER: 'USER'

@@ -1,27 +1,65 @@
+const { Paper } = mui;
 
 MessageHistoryView = React.createClass({
 
 	mixins: [ReactMeteorData],
+
+	atBottom: false,
+	shouldScrollBottom: false,
+	loadingMessages: false,
+	loadingInitialMessages: false,
 
 	componentWillMount() {
 		console.log("> componentWillMount");
 		this.loadInitialMessages();
 	},
 
-	getMeteorData() {
-		console.log("getMeteorData");
-		let query = {};
+	componentDidMount() {
+		console.log("> componentDidMount");
+		this.getThisNode().addEventListener('scroll', this.onScroll);
+	},
 
+	onScroll: function() {
+		var node = this.getThisNode();
+		console.log("onScroll: loadingMessages: " + this.loadingMessages + ", scrollTop: " + node.scrollTop);
+
+		if(this.loadingMessages == false) {
+			if(node.scrollTop == 0) {
+				console.log(">> SCROLL IS AT TOP");
+				this.loadMoreMessages();
+			}
+			this.atBottom = node.scrollHeight == (node.scrollTop + node.height);
+			console.log("atBottom: " + this.atBottom);
+			if(Ols.HistoryManager.atBottom) {
+				//$("#messageHistory #header-new-messages-toast").hide(); FIXME
+			}
+		}
+	},
+
+	componentWillUnmount: function() {
+		window.removeEventListener('scroll', this.onScroll);
+	},
+
+	getMeteorData() {
+		console.log("> getMeteorData");
+		var filter = {
+			projectId: Ols.Context.getProjectId(),
+			boardId: Ols.Context.getBoardId()
+		};
+		var currentItemId = Ols.Context.getItemId();
+		if(currentItemId) {
+			filter.itemId = currentItemId;
+		}
 		return {
-			messages: ClientMessages.find(query, {sort: {createdAt: 1}}).fetch()
+			messages: ClientMessages.find(filter, {sort: {createdAt: 1}}).fetch()
 		};
 	},
 
 	render() {
 		return (
-			<ul className="messageHistoryView">
+			<div className="messageHistoryView" style={{height:'calc(100% - 65px)', overflow:'auto'}}>
 				{this.renderMessages()}
-			</ul>
+			</div>
 		);
 	},
 
@@ -36,16 +74,72 @@ MessageHistoryView = React.createClass({
 		this.loadingMessages = true;
 
 		console.log(">>>> LOAD INITIAL MESSAGES");
-		ClientMessages._collection.remove({}); //FIXME: This should be hidden behind an API - Ols.ClientMessages.removeAll().
-		console.log("CLIENT MESSAGES DELETED: Num client msgs: " + ClientMessages.find().count());
+		Ols.MessageHistory.removeAllClientMessages();
+		console.log("CLIENT MESSAGES DELETED: Num client msgs: " + Ols.MessageHistory.getClientMessagesCount());
 
 		var self = this;
 		this.loadMessages(function(ok) {
 			if(ok) {
+				self.loadingMessages = false;
+				self.loadingInitialMessages = false;
 				self.scrollBottom();
 				console.log("Initial load of messages done");
 			}
 		});
+	},
+
+	loadMoreMessages: function() {
+		this.loadingMessages = true;
+		console.log(">>>> LOAD MORE MESSAGES");
+		var self = this;
+		if(self.moreMessagesOnServer()) {
+			self.showBusyIcon();
+			console.log(">>>> STILL LOAD MORE MESSAGES");
+			self.loadMessages(function(ok) {
+				if(ok) {
+					var scrollTopAmount = 300; //So this is temporary - need to somehow calculate the height of the new page to scroll by
+					console.log("SCROLLING AWAY FROM TOP!!!!! by " + scrollTopAmount);
+					self.getThisNode().scrollTop = scrollTopAmount;
+					self.loadingMessages = false;
+					self.hideBusyIcon();
+				}
+			});
+		} else {
+			console.log(">>>> NO MORE MESSAGES ON SERVER");
+			self.hideBusyIcon();
+		}
+
+	},
+
+	moreMessagesOnServer: function() {
+		//console.log("> moreMessagesOnServer");
+		var result = false;
+		if(!this.loadingInitialMessages) {
+			var currentItemId = Ols.Context.getItemId();
+			var serverMsgCount;
+			if(currentItemId) {
+				var item = Items.findOne(currentItemId);
+				if(item) {
+					serverMsgCount = item.numMessages;
+				}
+			}
+			if(!serverMsgCount) {
+				var board = Boards.findOne(Ols.Context.getBoardId());
+				if(board) {
+					serverMsgCount = board.numMessages;
+				}
+			}
+			var clientMsgCount = Ols.MessageHistory.getClientMessagesCount();
+
+			result = (clientMsgCount < serverMsgCount);
+			console.log("    clientMsgCount: " + clientMsgCount);
+			console.log("    serverMsgCount: " + serverMsgCount);
+			console.log("< moreMessagesOnServer");
+			if(result) {
+				console.log("THERE ARE moreMessagesOnServer")
+			}
+		}
+		return result;
 	},
 
 	loadMessages: function(callback) {
@@ -61,7 +155,6 @@ MessageHistoryView = React.createClass({
 				alert("Error loading messages: " + err);
 				callback(false);
 			} else {
-
 				_.each(messages, function(message) {
 					ClientMessages._collection.insert(message);
 				});
@@ -93,15 +186,29 @@ MessageHistoryView = React.createClass({
 		var self = this;
 		requestAnimationFrame(function() {
 			if (self.shouldScrollBottom) {
-				var node = ReactDOM.findDOMNode(self);
+				var node = self.getThisNode();
 				node.scrollTop = (node.scrollHeight + node.offsetHeight + 110);
 				console.log("node.scrollTop=" + node.scrollTop)
 				self.shouldScrollBottom = false;
+				self.atBottom = true;
 			}
 		});
 	},
 
 	scrollBottom: function() {
 		this.shouldScrollBottom = true;
+	},
+
+	getThisNode: function() {
+		var node = ReactDOM.findDOMNode(this);
+		return node;
+	},
+
+	showBusyIcon: function() {
+
+	},
+
+	hideBusyIcon: function() {
+
 	}
 });
