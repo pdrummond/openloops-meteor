@@ -1,4 +1,6 @@
 Ols = { //FIXME: Move all of these into more appropriate locations within the API
+
+	//--- START MOVED: These have been moved to Ols.Item
 	ITEM_TYPE_DISCUSSION: 'discussion',
 	ITEM_TYPE_ISSUE: 'issue',
 	ITEM_TYPE_ARTICLE: 'article',
@@ -6,6 +8,7 @@ Ols = { //FIXME: Move all of these into more appropriate locations within the AP
 	ISSUE_TYPE_BUG: 'bug',
 	ISSUE_TYPE_TASK: 'task',
 	ISSUE_TYPE_ENHANCEMENT: 'enhancement',
+	//---- END MOVED
 
 	MSG_TYPE_CHAT: 'MSG_TYPE_CHAT',
 	MSG_TYPE_ACTIVITY: 'MSG_TYPE_ACTIVITY',

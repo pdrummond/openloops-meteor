@@ -13,7 +13,7 @@ ChatMessageView = React.createClass({
 							<span>
 								{this.props.message.createdBy}
 							</span>
-							<span style={{marginLeft:'10px', fontSize: '12px', 'color': 'gray'}}>
+							<span style={{marginLeft:'10px', fontSize: '12px', 'color': 'lightgray'}}>
 								{Ols.TimeUtils.timeAgo(this.props.message.createdAt)}
 							</span>
 						</span>
