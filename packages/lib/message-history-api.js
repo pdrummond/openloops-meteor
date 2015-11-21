@@ -1,4 +1,5 @@
 Ols.MessageHistory = {
+
 	removeAllClientMessages: function() {
 		ClientMessages._collection.remove({});
 	},

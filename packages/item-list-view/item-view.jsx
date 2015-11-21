@@ -17,9 +17,18 @@ ItemView = React.createClass({
 		return "#OLS-42";// + {{projectKey this}}-{{pid}}
 	},
 
+	onClick() {
+		FlowRouter.go('itemMessages', {
+			projectId: this.props.item.projectId,
+			boardId: this.props.item.boardId,
+			itemId: this.props.item._id
+		});
+	},
+
 	render() {
 		return (
 			<ListItem
+				onClick={this.onClick}
 				leftAvatar={<i className={this.getTypeIconClassName()} style={{color: this.getTypeIconColor(), fontSize: '2.5rem'}}></i>}
 				primaryText={
 					<span style={{fontSize:'16px', fontWeight: 'bold'}}>

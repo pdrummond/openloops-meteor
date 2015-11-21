@@ -6,7 +6,7 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
-  api.use(['ecmascript', 'react', 'markoshust:material-ui', 'ols:lib']);
+  api.use(['ecmascript', 'react', 'reactive-var', 'markoshust:material-ui', 'ols:lib']);
   api.addFiles(['item-list-view.jsx', 'item-view.jsx']);
   api.export('ItemListView');
 });

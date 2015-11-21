@@ -57,7 +57,10 @@ MessageHistoryView = React.createClass({
 
 	render() {
 		return (
-			<div className="messageHistoryView" style={{height:'calc(100% - 65px)', overflow:'auto'}}>
+			<div className="messageHistoryView" style={{height:'calc(100% - 65px - 100px)', overflow:'auto'}}>
+				<a href="" ref='loadingMore' style={{opacity:0}}>
+					<i id="loading-more-icon" className="fa fa-spinner fa-pulse"></i>
+				</a>
 				{this.renderMessages()}
 			</div>
 		);
@@ -70,16 +73,23 @@ MessageHistoryView = React.createClass({
 	},
 
 	loadInitialMessages: function() {
+		var self = this;
 		this.loadingInitialMessages = true;
 		this.loadingMessages = true;
+
+		//If load takes a while, show busy
+		this.busyTimeout = setTimeout(function() {
+			console.log("SHOWING BUSY")
+			self.showBusyIcon();
+		}, 300);
 
 		console.log(">>>> LOAD INITIAL MESSAGES");
 		Ols.MessageHistory.removeAllClientMessages();
 		console.log("CLIENT MESSAGES DELETED: Num client msgs: " + Ols.MessageHistory.getClientMessagesCount());
 
-		var self = this;
 		this.loadMessages(function(ok) {
 			if(ok) {
+				self.hideBusyIcon();
 				self.loadingMessages = false;
 				self.loadingInitialMessages = false;
 				self.scrollBottom();
@@ -205,10 +215,10 @@ MessageHistoryView = React.createClass({
 	},
 
 	showBusyIcon: function() {
-
+		this.refs.loadingMore.style.opacity = 1;
 	},
 
 	hideBusyIcon: function() {
-
+		this.refs.loadingMore.style.opacity = 0;
 	}
 });

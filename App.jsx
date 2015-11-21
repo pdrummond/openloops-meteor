@@ -1,5 +1,5 @@
 
-const { AppBar, IconButton, IconMenu, Paper} = mui;
+const { AppBar, IconButton, IconMenu, Paper, TextField} = mui;
 const { MenuItem } = mui.Menus;
 const { NavigationMoreVert } = mui.SvgIcons;
 const Styles = mui.Styles;
@@ -52,15 +52,19 @@ App = React.createClass({
 							<MenuItem primaryText="Sign out" index={2} />
 						</IconMenu>
 					} />
-				<Paper
-					className="leftSidebar"
-					style={{top:'65px', width: '400px', position: 'fixed', overflow: 'auto', height: '100%'}}
-					menuItems={this.getMenuItems()} >
-					<ItemListView/>
-				</Paper>
-				<div style={{height:'100%', paddingLeft: '400px'}}>
+					<Paper
+						className="leftSidebar"
+						style={{top:'65px', width: '400px', position: 'fixed', overflow: 'auto', height: '100%'}}
+						menuItems={this.getMenuItems()} >
+						<ItemListView/>
+					</Paper>
+					<div style={{height:'100%', paddingLeft: '400px'}}>
 						<main style={{height:'100%'}}>{this.props.content}</main>
+						<footer>
+							<MessageBoxView />
+						</footer>
 					</div>
+
 				</div>
 
 			);

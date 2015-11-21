@@ -10,8 +10,10 @@ Ols = { //FIXME: Move all of these into more appropriate locations within the AP
 	ISSUE_TYPE_ENHANCEMENT: 'enhancement',
 	//---- END MOVED
 
+	//--- START MOVED: These have been moved to Ols.Message
 	MSG_TYPE_CHAT: 'MSG_TYPE_CHAT',
 	MSG_TYPE_ACTIVITY: 'MSG_TYPE_ACTIVITY',
+	//---- END MOVED
 
 	ACTIVITY_TYPE_NEW_BOARD: 'ACTIVITY_TYPE_NEW_BOARD',
 	ACTIVITY_TYPE_NEW_ITEM: 'ACTIVITY_TYPE_NEW_ITEM',
@@ -24,8 +26,8 @@ Ols = { //FIXME: Move all of these into more appropriate locations within the AP
 	ACTIVITY_TYPE_ITEM_DESC_CHANGED: 'ACTIVITY_TYPE_ITEM_DESC_CHANGED',
 
 	MESSAGE_AGE_HOURS_INCREMENT: 1,
-	FILL_SCREEN_MSG_COUNT: 30,
-	MESSAGE_PAGE_SIZE: 5,
+	FILL_SCREEN_MSG_COUNT: 10,
+	MESSAGE_PAGE_SIZE: 10,
 
 	ROLE_ADMIN: 'ADMIN',
 	ROLE_USER: 'USER'

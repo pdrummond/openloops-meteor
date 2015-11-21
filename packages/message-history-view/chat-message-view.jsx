@@ -6,7 +6,8 @@ ChatMessageView = React.createClass({
 	render() {
 		console.log("ChatMessageView.render");
 		return (
-			<Card className="chatMessageView" data-id={this.props.message._id} initiallyExpanded={false}>
+			<Card className="chatMessageView" data-id={this.props.message._id} initiallyExpanded={false}
+				style={{boxShadow:'none'}}>
 				<CardHeader
 					title={
 						<span>

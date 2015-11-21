@@ -13,6 +13,7 @@ Package.onUse(function(api) {
 	  'stringutils-api.js',
 	  'context-api.js',
 	  'project-api.js',
+	  'message-api.js',
 	  'item-api.js',
 	  'message-history-api.js'
   ]);
