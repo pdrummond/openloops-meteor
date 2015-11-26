@@ -5,7 +5,6 @@
 # but you can also edit it by hand.
 
 meteor-base             # Packages every Meteor app needs to have
-mobile-experience       # Packages for a great mobile UX
 mongo                   # The database Meteor supports right now
 blaze-html-templates    # Compile .html files into Meteor Blaze views
 session                 # Client-side reactive dictionary for your app
@@ -16,7 +15,6 @@ standard-minifiers      # JS/CSS minifiers run for production mode
 es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 
-insecure                # Allow all DB writes from clients (for prototyping)
 mquandalle:stylus
 kadira:flow-router
 momentjs:moment
@@ -27,7 +25,6 @@ markdown
 yasaricli:slugify
 accounts-base
 oaf:html5-desktop-notifications
-babrahams:constellation
 ols:lib
 ols:message-history
 u2622:persistent-session
@@ -36,9 +33,3 @@ kadira:blaze-layout
 ols:message-box
 sacha:spin
 reactive-var
-react
-kadira:react-layout
-ols:message-history-view
-markoshust:material-ui
-ols:item-list-view
-ols:message-box-view
