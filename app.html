@@ -1,12 +1,15 @@
 <template name="app">
 	{{#if Template.subscriptionsReady}}
+	{{> Template.dynamic template=currentPage}}
+	{{else}}
+		<p>OpenLoops is Loading...</p>
+	{{/if}}
+</template>
+
+<template name="topBanner">
 	<div id="top-banner">
 		<div class="left">
-
-			<a href="/">
-				<img src="/images/openloops-o.png" style="position:relative;top:8px;left:10px;width:30px"/>
-				<div id="connection-status" class="{{connectionStatus}}" title="Server {{connectionStatus}}"></div>
-			</a>
+			{{> openLoopsEye}}
 			<span style="margin-left:10px" id="main-title">
 				<a href="/" class="project-title"><span class="project-key">{{currentProjectKey}}</span>: {{currentProjectTitle}} </a>
 				<a href="/" class="board-title">{{currentBoardTitle}}</a>
@@ -25,14 +28,18 @@
 			</div>
 		</div>
 	</div>
-	{{> Template.dynamic template=currentPage}}
-	{{else}}
-		<p>OpenLoops is Loading...</p>
-	{{/if}}
+</template>
+
+<template name="openLoopsEye">
+	<a href="/">
+		<img src="/images/openloops-o.png" style="position:relative;top:8px;left:10px;width:30px"/>
+		<div id="connection-status" class="{{connectionStatus}}" title="Server {{connectionStatus}}"></div>
+	</a>
 </template>
 
 <template name="feedPage">
 	{{#onlyIfLoggedIn}}
+		{{> topBanner}}
 		{{> leftSidebar}}
 		{{> feed}}
 		{{> rightSidebar}}
@@ -65,12 +72,27 @@
 </template>
 
 <template name="editItemForm">
+	<div id="top-banner">
+		<div class="left">
+			{{> openLoopsEye}}
+			<span class="form-title">
+				{{formTitle}}
+			</span>
+		</div>
+		<div class="right">
+			<div style="position:relative;top:-20px">
+				<div id="logged-in-user"><strong>{{currentUser.username}}</strong></div>
+				{{#if currentUser}}
+					<a href="" id="logout-link" style="display:block;text-align:right;color:white;font-size:12px">logout</a>
+				{{/if}}
+			</div>
+		</div>
+	</div>
 	{{#onlyIfLoggedIn}}
 	{{#if isBusy}}
 		{{> spinner}}
 	{{else}}
-	<div id="editItemForm" class="main form">
-		<h1>Create {{selectedType}}</h1>
+	<div id="editItemForm" class="form">
 		<form>
 			<fieldset>
 				<label style="display:inline;margin-right:10px">Type</label>
@@ -96,7 +118,8 @@
 				<input name="labels" placeholder="Add labels here, e.g: #important, #milestone1, #in-progress" value="{{labels}}">
 
 			</fieldset>
-			<button id="save-button">Save</button>
+			<button id="save-button" class='button-default'>Save</button>
+			<button id="cancel-button"> Cancel</button>
 		</form>
 	</div>
 	{{/if}}

@@ -141,6 +141,11 @@ if(Meteor.isClient) {
 
 	Template.editItemForm.helpers({
 
+		formTitle: function() {
+			var template = Template.instance();
+			return (Session.get('currentItemId')?"Edit ":"Create ") + (Session.get('editItemForm.selectedType') || 'Issue');
+		},
+
 		isBusy: function() {
 			 var template = Template.instance();
 			 return template.isBusy.get();
@@ -175,7 +180,7 @@ if(Meteor.isClient) {
 		},
 
 		selectedType: function() {
-			return Session.set('editItemForm.selectedType') || 'Issue';
+			return Session.get('editItemForm.selectedType') || 'Issue';
 		},
 
 		isSelectedIssueType: function(issueType) {
@@ -198,6 +203,11 @@ if(Meteor.isClient) {
 		'change select[name="type"]': function() {
 			Session.set('editItemForm.selectedType', $('select[name="type"]').val());
 		},
+		'click #cancel-button': function(e) {
+			e.preventDefault();
+			FlowRouter.go("/project/" + Session.get('currentProjectId') + "/board/" + Session.get('currentBoardId'));
+		},
+
 		'click #save-button': function(e, template) {
 			e.preventDefault();
 			var currentItem = Items.findOne(Session.get('currentItemId'));
@@ -287,12 +297,15 @@ if(Meteor.isClient) {
 	});
 
 	Template.app.events({
-		'keyup #search-input': function() {
-			OpenLoops.onSearchInput();
-		},
 		'click #logout-link': function() {
 			Meteor.logout();
 			FlowRouter.go("/");
+		}
+	});
+
+	Template.topBanner.events({
+		'keyup #search-input': function() {
+			OpenLoops.onSearchInput();
 		}
 	});
 
