@@ -8,6 +8,10 @@
 				<div id="connection-status" class="{{connectionStatus}}" title="Server {{connectionStatus}}"></div>
 			</a>
 			<span style="margin-left:10px" id="main-title"><a href="/" style="text-decoration:none">{{currentProjectTitle}} <span class="project-key">{{currentProjectKey}}</span></a></span>
+			<div id="top-header">
+				<input id="search-input" class="search-input" placeholder="Type here to filter" value={{filterQuery}}>
+				<a id="create-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
+			</div>
 		</div>
 		<div class="right">
 			<div style="position:relative;top:-10px">
@@ -98,20 +102,6 @@
 
 <template name="leftSidebar">
 	<div class="left-sidebar">
-		<div id="board-item">
-			<a class="item {{isBoardItemActive}}" href="/project/{{currentProjectId}}/board/{{currentBoardId}}">
-				<i id="type-icon" class="fa fa-home" style="color:black"></i>
-				<div id="content">
-					<span id="title">{{currentBoardTitle}}</span>
-				</div>
-				<div class="item-msg-count" data-msg-count="0">
-				</div>
-			</a>
-		</div>
-		<div id="top-header">
-			<input id="search-input" class="search-input" placeholder="Type here to filter" value={{filterQuery}}>
-			<a id="create-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
-		</div>
 		<ul class="item-list">
 			{{#each items}}
 				{{> itemItemView}}
@@ -160,7 +150,7 @@
 	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}} {{leftSidebarActiveTab}}">
 		<header class="{{currentItemType}} {{currentItemIssueType}}">
 			{{#if isTeamFeed}}
-				<div class="user-cards">
+				<div class="user-cards" style="display:none;background:whitesmoke">
 					<div class="user-card">
 						<div class="top-section">
 						<img src="http://semantic-ui.com/images/avatar/small/daniel.jpg"/>
