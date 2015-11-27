@@ -7,14 +7,17 @@
 				<img src="/images/openloops-o.png" style="position:relative;top:8px;left:10px;width:30px"/>
 				<div id="connection-status" class="{{connectionStatus}}" title="Server {{connectionStatus}}"></div>
 			</a>
-			<span style="margin-left:10px" id="main-title"><a href="/" style="text-decoration:none">{{currentProjectTitle}} <span class="project-key">{{currentProjectKey}}</span></a></span>
+			<span style="margin-left:10px" id="main-title">
+				<a href="/" class="project-title"><span class="project-key">{{currentProjectKey}}</span>: {{currentProjectTitle}} </a>
+				<a href="/" class="board-title">{{currentBoardTitle}}</a>
+			</span>
 			<div id="top-header">
-				<input id="search-input" class="search-input" placeholder="Type here to filter" value={{filterQuery}}>
+				<input id="search-input" class="search-input" placeholder="Type here to search" value={{filterQuery}}>
 				<a id="create-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
 			</div>
 		</div>
 		<div class="right">
-			<div style="position:relative;top:-10px">
+			<div style="position:relative;top:-35px">
 				<div id="logged-in-user"><strong>{{currentUser.username}}</strong></div>
 				{{#if currentUser}}
 					<a href="" id="logout-link" style="display:block;text-align:right;color:white;font-size:12px">logout</a>
@@ -102,6 +105,16 @@
 
 <template name="leftSidebar">
 	<div class="left-sidebar">
+		<div id="board-item">
+			<a class="item {{isBoardItemActive}}" href="/project/{{currentProjectId}}/board/{{currentBoardId}}">
+				<i id="type-icon" class="fa fa-home" style="color:black"></i>
+				<div id="content">
+					<span id="title">Home</span>
+				</div>
+				<div class="item-msg-count" data-msg-count="0">
+				</div>
+			</a>
+		</div>
 		<ul class="item-list">
 			{{#each items}}
 				{{> itemItemView}}

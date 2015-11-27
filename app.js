@@ -287,6 +287,9 @@ if(Meteor.isClient) {
 	});
 
 	Template.app.events({
+		'keyup #search-input': function() {
+			OpenLoops.onSearchInput();
+		},
 		'click #logout-link': function() {
 			Meteor.logout();
 			FlowRouter.go("/");
@@ -642,9 +645,6 @@ if(Meteor.isClient) {
 	});
 
 	Template.leftSidebar.events({
-		'keyup #search-input': function() {
-			OpenLoops.onSearchInput();
-		},
 		'click #search-link': function() {
 			Session.set('showSidebarTabs', false);
 		},

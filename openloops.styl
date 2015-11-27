@@ -24,7 +24,7 @@ body
 
 #messageHistory {
 	xbackground-color: gray;
-    top: header-height;
+    top: header-height - 20px;
     position: relative;
     height: "calc(100% - %s)" % (top-banner-height+header-height+footer-height+40);
 	overflow: auto;
@@ -32,19 +32,42 @@ body
 	padding-right:10px;
 }
 
-#app #top-banner, .app #top-banner {
+#app #top-banner {
+	padding-top:10px;
 	height:top-banner-height;
-	background-color: black;
+	background-color: #455a64;
 
 	#main-title {
 		a {
 			font-size:20px;
 			color:white;
 			font-weight:bold;
+			text-decoration:none;
+			position:relative;
+			top:5px;
 		}
 
 		padding-top:10px;
 		padding-left:10px;
+
+		.project-title {
+			font-size:10px;
+			color:gray;
+			text-transform: uppercase;
+			font-size:10px;
+			position:absolute;
+			left:50px;
+			top:15px;
+
+			.project-key {
+				font-size:10px;
+			}
+		}
+	}
+
+	.left {
+		color: white;
+		display:flex;
 	}
 
 	.right {
@@ -397,7 +420,6 @@ fieldset, input, textarea
 	border 0
 	font-size 100%
 	vertical-align baseline
-	margin-bottom 30px
 	outline none
 
 textarea
@@ -676,12 +698,31 @@ footer
 }
 
 .search-input {
-	font-size:14px;
-	margin-left:20px;
+	font-size: 14px;
+	margin-left: 20px;
 	width: calc(100% - 42px);
-	height: 28px;
-    margin-top: 10px;
-    margin-left: 5px;
+	height: 35px;
+	margin-top: 10px;
+	margin-left: 5px;
+	background-color: #61737b;
+	border: none;
+	color: white;
+}
+
+.search-input::-webkit-input-placeholder {
+   color: lightgray;
+}
+
+.search-input:-moz-placeholder { /* Firefox 18- */
+   color: lightgray;
+}
+
+.search-input::-moz-placeholder {  /* Firefox 19+ */
+   color: lightgray;
+}
+
+.search-input:-ms-input-placeholder {
+   color: lightgray;
 }
 
 #label-link {
@@ -855,13 +896,13 @@ footer
 }
 
 #connection-status {
-	position:absolute;
-	left: 17.1px;
-	top: 15.3px;
-	width: 5px;
-	height: 5px;
-    padding: 5px;
-    border-radius: 20px;
+	position: absolute;
+	left: 22px;
+	top: 30px;
+	width: 2px;
+	height: 2px;
+	padding: 2px;
+	border-radius: 20px;
 }
 
 #connection-status.connecting {
@@ -938,12 +979,6 @@ footer
 	text-decoration: underline;
 }
 
-#top-banner .project-key {
-	font-size:14px;
-	color:gray;
-	text-transform:uppercase;
-}
-
 .item-key {
 	text-transform:uppercase;
 }
@@ -953,10 +988,11 @@ footer
 }
 
 #top-header {
-	width: calc(100% - 400px);
+	display:flex;
+	width: calc(100% - 800px);
 	position: relative;
-	top: -40px;
-	left: 300px;
+	top: -5px;
+	left: 180px;
 
 	#top-header-tabs {
 		display:flex;
@@ -985,15 +1021,19 @@ footer
 	}
 
 	#create-link {
-		padding:5px;
-		background-color: #1E8F3C;
-		color:white;
-		width:30px;
-		text-align:center;
-		vertical-align:center;
-		height:30px;
-		margin:10px;
-		border-radius:5px;
+		padding: 5px;
+		background-color: #3B454A;
+		color: #fff;
+		width: 30px;
+		text-align: center;
+		vertical-align: center;
+		height: 35px;
+		margin: 10px;
+		border-radius: 5px;
+
+		i {
+			margin-top:10px;
+		}
 	}
 
 	#search-link {
@@ -1008,7 +1048,5 @@ footer
 		margin-left:-30px;
 	}
 
-	#create-link i {
-		margin-top:8px;
-	}
+
 }
