@@ -334,6 +334,13 @@ if(Meteor.isClient) {
 
 		messageDate: function() {
 			return moment(this.createdAt).date();
+		},
+
+		userImageUrl: function() {
+			var url = "";
+			var user = Meteor.users.findOne({username:this.createdBy});
+			url = user.profileImage?user.profileImage:Gravatar.imageUrl("no.openloops@email.wha", {size: 34,default: 'retro'});
+			return url;
 		}
 	});
 

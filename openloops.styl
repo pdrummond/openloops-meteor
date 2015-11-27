@@ -297,6 +297,16 @@ body
 	padding-left: 10px;
 	padding-bottom: 5px;
 	list-style-type none;
+
+	.profile-image {
+		margin-top:5px;
+		float:left;
+		border-radius:30px;
+	}
+
+	.content {
+		padding-left:40px;
+	}
 }
 
 .message p:first-child {
@@ -923,7 +933,12 @@ footer
 .activity-message {
 	margin-top:10px;
 	margin-bottom:10px;
+	margin-left:40px;
 	font-style:italic;
+
+	.meta {
+		color: #aaa;
+	}
 }
 
 .tab-body {
@@ -989,10 +1004,10 @@ footer
 
 #top-header {
 	display:flex;
-	width: calc(100% - 800px);
+	width: 60%;
 	position: relative;
 	top: -5px;
-	left: 180px;
+	left: 50px;
 
 	#top-header-tabs {
 		display:flex;
