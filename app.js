@@ -290,6 +290,7 @@ if(Meteor.isClient) {
 
 	Template.app.onCreated(function() {
 		console.log(">>>> APP onCreated");
+		this.subscribe('allUsernames');
 		this.subscribe('projects');
 		this.subscribe('boards');
 		this.subscribe('teamMembers');
@@ -922,6 +923,14 @@ if(Meteor.isServer) {
 	Meteor.publish("filters", function() {
 		return Filters.find();
 	});
+
+	Meteor.publish("allUsernames", function () {
+		return Meteor.users.find({}, {fields: {
+			"username": 1,
+			"profileImage": 1,
+		}});
+	});
+
 
 } //isServer
 
