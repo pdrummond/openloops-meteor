@@ -346,13 +346,20 @@
 
 <template name="activityMessageItemView">
 	<li class="activity-message message" data-id={{_id}}>
-		<span class="meta">
-			<i class="fa fa-arrow-circle-o-right" style="font-size:1.2em"></i>
-			<span id="created-by">{{createdBy}}</span>
-			<span id="text">{{{activityMessage}}}</span>
-			<span id="created-at">{{timeAgo createdAt}}</span>
-		</span>
-		<div class="activity-content">{{#markdown}}{{activityContent}}{{/markdown}}</div>
+		<img class="profile-image" src="{{userImageUrl}}"/>
+		<div class="content">
+			<span class="header">
+				<strong>{{createdBy}}</strong>
+				<span id="created-at">{{timeAgo createdAt}}</span>
+				<span id="item-link" class="{{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
+			</span>
+			<div id="text">
+				{{{activityMessage}}}
+			</div>
+			<div id="text" style="border:1px solid whitesmoke;padding:10px;margin-top:10px;background-color:whitesmoke">
+				{{#markdown}}{{activityContent}}{{/markdown}}
+			</div>
+		</div>
 	</li>
 </template>
 

@@ -350,14 +350,15 @@ if(Meteor.isClient) {
 		},
 
 		userImageUrl: function() {
-			var url = "";
-			var user = Meteor.users.findOne({username:this.createdBy});
-			url = user.profileImage?user.profileImage:Gravatar.imageUrl("no.openloops@email.wha", {size: 34,default: 'retro'});
-			return url;
+			return Ols.User.getProfileImageUrl(this.createdBy);
 		}
 	});
 
 	Template.activityMessageItemView.helpers({
+
+		userImageUrl: function() {
+			return Ols.User.getProfileImageUrl(this.createdBy);
+		},
 
 		activityMessage: function() {
 			if(this.itemId) {
@@ -390,8 +391,8 @@ if(Meteor.isClient) {
 					case Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED:
 						msg = "changed title of item to " + itemTitleLink;
 					case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
-						var itemCtx = currentItemId?"":"of " + ctx;
-						msg = "set the description " + itemCtx;
+						var itemCtx = currentItemId?"of this item to:":"of " + ctx + " to:";
+						msg = "Set the description " + itemCtx;
 					break;
 				}
 			} else {

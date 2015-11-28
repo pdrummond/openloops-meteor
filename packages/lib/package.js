@@ -15,6 +15,7 @@ Package.onUse(function(api) {
 	  'project-api.js',
 	  'message-api.js',
 	  'item-api.js',
+	  'user-api.js',
 	  'message-history-api.js'
   ]);
   api.export(['Ols', 'Streamy']);

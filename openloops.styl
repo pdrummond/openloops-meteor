@@ -22,6 +22,10 @@ body
 	height 100% !important
 	width 100% !important
 
+html:not(.touch) {
+	text-rendering: optimizeLegibility;
+}
+
 #messageHistory {
 	xbackground-color: gray;
     top: header-height - 20px;
@@ -294,6 +298,7 @@ body
 }
 
 .message {
+	padding-top:10px;
 	padding-left: 10px;
 	padding-bottom: 5px;
 	list-style-type none;
@@ -306,6 +311,8 @@ body
 
 	.content {
 		padding-left:40px;
+		color: #737272;
+		font-size: 16px;
 	}
 }
 
@@ -931,13 +938,16 @@ footer
 }
 
 .activity-message {
-	margin-top:10px;
-	margin-bottom:10px;
-	margin-left:40px;
 	font-style:italic;
 
 	.meta {
 		color: #aaa;
+	}
+
+	#text, #text a {
+		color: #AAA;
+
+
 	}
 }
 
@@ -998,7 +1008,7 @@ footer
 	text-transform:uppercase;
 }
 
-.activity-content {
+.activity.content {
 	font-style:initial;
 }
 
@@ -1110,4 +1120,9 @@ footer
 	margin-top:30px;
 	color:gray;
 	text-transform:uppercase;
+}
+
+
+a, a:visited {
+	color:blue;
 }
