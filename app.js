@@ -699,7 +699,7 @@ if(Meteor.isClient) {
 
 	Template.moveToBoardList.helpers({
 		boards: function() {
-			return Boards.find({_id: {$ne: Session.get('currentBoardId')}});
+			return Boards.find({_id: {$ne: Session.get('currentBoardId')}, projectId: Session.get('currentProjectId')});
 		}
 	});
 
