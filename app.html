@@ -7,12 +7,13 @@
 </template>
 
 <template name="topBanner">
+	{{> boardChooserMenu}}
 	<div id="top-banner">
 		<div class="left">
 			{{> openLoopsEye}}
 			<span style="margin-left:10px" id="main-title">
-				<a href="/" class="project-title"><span class="project-key">{{currentProjectKey}}</span>: {{currentProjectTitle}} </a>
-				<a href="/" class="board-title">{{currentBoardTitle}}</a>
+				<a href="" class="project-title"><span class="project-key">{{currentProjectKey}}</span>: {{currentProjectTitle}} </a>
+				<a href="" class="board-title">{{currentBoardTitle}}</a>
 			</span>
 			<div id="top-header">
 				<input id="search-input" class="search-input" placeholder="Type here to search" value={{filterQuery}}>
@@ -395,6 +396,20 @@
 
 <template name="filterItem">
 	<li><a href="">{{title}}</a></li>
+</template>
+
+<template name="boardChooserMenu">
+	<ul id="board-chooser-menu" style="display:none">
+		<div class="menu-item-header">Select Board</div>
+		<li id="all-boards-item" class="menu-item" style="border-bottom: 1px solid gray;background-color:#ddd">All Boards</li>
+		{{#each boards}}
+			{{> boardChooserItem}}
+		{{/each}}
+	</ul>
+</template>
+
+<template name="boardChooserItem">
+	<li class="menu-item">{{title}}</li>
 </template>
 
 <template name="moveToBoardList">

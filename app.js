@@ -305,6 +305,10 @@ if(Meteor.isClient) {
 	});
 
 	Template.topBanner.events({
+		'click .board-title': function() {
+			$("#board-chooser-menu").slideToggle();
+		},
+
 		'keyup #search-input': function() {
 			OpenLoops.onSearchInput();
 		},
@@ -766,6 +770,21 @@ if(Meteor.isClient) {
 			Session.set('filterQuery', this.query);
 			Session.set('activeFilterLabel', this.title);
 			$("#list-menu").slideUp();
+		}
+	});
+
+	Template.boardChooserMenu.helpers({
+		boards: function() {
+			return Boards.find({projectId: Session.get('currentProjectId')});
+		}
+	});
+
+	Template.boardChooserItem.events({
+		'click': function() {
+			var self = this;
+			$("#board-chooser-menu").slideUp();
+			FlowRouter.go("/project/" + Session.get('currentProjectId') + "/board/" + this._id);
+
 		}
 	});
 
