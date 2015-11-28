@@ -27,6 +27,15 @@
 				{{/if}}
 			</div>
 		</div>
+		<div class='filter-links' style="display:flex;position: relative;top: -10px;display: flex;width: 700px;margin: auto auto;">
+			<li id="all-link" class="{{filterLinkActiveClass 'all-link'}} filter-item"><a href="">All</a></li>
+			<li id="issues-link" class="{{filterLinkActiveClass 'issues-link'}} filter-item"><a href="">Issues</a></li>
+			<li id="bugs-link" class="{{filterLinkActiveClass 'bugs-link'}} filter-item"><a href="">Bugs</a></li>
+			<li id="discussions-link" class="{{filterLinkActiveClass 'discussions-link'}} filter-item"><a href="">Discussions</a></li>
+			<li id="articles-link" class="{{filterLinkActiveClass 'articles-link'}} filter-item"><a href="">Articles</a></li>
+			<li id="now-issues-link" class="{{filterLinkActiveClass 'now-issues-link'}} filter-item"><a href="">Now Issues</a></li>
+			<li id="closed-link" class="{{filterLinkActiveClass 'closed-link'}} filter-item"><a href="">Closed Items</a></li>
+		</div>
 	</div>
 </template>
 

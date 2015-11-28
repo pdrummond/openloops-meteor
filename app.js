@@ -307,7 +307,68 @@ if(Meteor.isClient) {
 	Template.topBanner.events({
 		'keyup #search-input': function() {
 			OpenLoops.onSearchInput();
+		},
+
+		'click #all-link': function() {
+			Session.set('filterQuery', '');
+		},
+
+		'click #issues-link': function() {
+			Session.set('filterQuery', 'type:issue');
+		},
+
+		'click #bugs-link': function() {
+			Session.set('filterQuery', 'type:bug');
+		},
+
+		'click #discussions-link': function() {
+			Session.set('filterQuery', 'type:discussion');
+		},
+
+		'click #articles-link': function() {
+			Session.set('filterQuery', 'type:article');
+		},
+
+		'click #now-issues-link': function() {
+			Session.set('filterQuery', 'label:now type:issue');
+		},
+
+		'click #closed-link': function() {
+			Session.set('filterQuery', 'closed:true');
 		}
+	});
+
+	Template.topBanner.helpers({
+
+		filterLinkActiveClass: function(filterLink) {
+			var active = false;
+			var query = Session.get('filterQuery');
+			switch (filterLink) {
+				case 'all-link':
+				active = query == null || query == '';
+				break;
+				case 'issues-link':
+				active = query == 'type:issue';
+				break;
+				case 'bugs-link':
+				active = query == 'type:bug';
+				break;
+				case 'discussions-link':
+				active = query == 'type:discussion';
+				break;
+				case 'articles-link':
+				active = query == 'type:article';
+				break;
+				case 'now-issues-link':
+				active = query == 'label:now type:issue';
+				break;
+				case 'closed-link':
+				active = query == 'closed:true';
+				break;
+			}
+			return active?"active":"";
+		}
+
 	});
 
 
