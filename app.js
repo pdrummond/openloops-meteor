@@ -417,6 +417,17 @@ if(Meteor.isClient) {
 			return activityContent;
 		},
 
+		showActivityContentClass: function() {
+			var show = false;
+			var item = Items.findOne(this.itemId);
+			switch(this.activityType) {
+				case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
+					show = true;
+					break;
+			}
+			return show?"":"hide";
+		},
+
 		showItemLink: function() {
 			return Session.get('currentItemId')?'hide':'';
 		},
