@@ -27,7 +27,7 @@ Ols = { //FIXME: Move all of these into more appropriate locations within the AP
 
 	MESSAGE_AGE_HOURS_INCREMENT: 1,
 	FILL_SCREEN_MSG_COUNT: 10,
-	MESSAGE_PAGE_SIZE: 10,
+	MESSAGE_PAGE_SIZE: 50,
 
 	ROLE_ADMIN: 'ADMIN',
 	ROLE_USER: 'USER'
