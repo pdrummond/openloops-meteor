@@ -1,5 +1,5 @@
 if(Meteor.isClient) {
-	Template.registerHelper('showBoardTitleClass', function (context, options) {	
+	Template.registerHelper('showBoardTitleClass', function (context, options) {
 		var currentBoardId = Session.get('currentBoardId');
 		return currentBoardId?'hide':'';
 	});
@@ -21,9 +21,9 @@ if(Meteor.isClient) {
 		return item?item.type == 'issue':false;
 	});
 
-	Template.registerHelper('formatDate', function (context, options) {
+	Template.registerHelper('formatTime', function (context, options) {
 		if (context) {
-			return moment(context).format('MMMM Do YYYY, h:mm:ss a');
+			return Ols.TimeUtils.formatTime(context);
 		}
 	});
 

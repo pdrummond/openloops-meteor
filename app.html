@@ -344,7 +344,7 @@
 		<div class="content">
 			<span class="header">
 				<strong>{{createdBy}}</strong>
-				<span id="created-at">{{timeAgo createdAt}}</span>
+				<span id="created-at" title={{formatTime createdAt}}>{{timeAgo createdAt}}</span>
 				<span id="item-link" class="{{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
 				<span class="{{showBoardTitleClass}} board-title"> {{boardTitle}}</span>
 			</span>
@@ -361,7 +361,7 @@
 		<div class="content">
 			<span class="header">
 				<strong>{{createdBy}}</strong>
-				<span id="created-at">{{timeAgo createdAt}}</span>
+				<span id="created-at" title={{formatTime createdAt}}>{{timeAgo createdAt}}</span>
 				<span id="item-link" class="{{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
 				<span class="{{showBoardTitleClass}} board-title"> {{boardTitle}}</span>
 			</span>

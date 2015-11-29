@@ -1035,7 +1035,12 @@ if(Meteor.isServer) {
 					}
 				}
 			} while (matches);
+		},
+
+		_getOldestBoardMessage: function() {
+			return ServerMessages.findOne({}, {sort: {DateTime: 1, limit: 1}});
 		}
+
 	});
 
 	Meteor.publish("items", function(opts) {
