@@ -5,7 +5,6 @@
 
 * {
  	font-family font-main
-	font-size:14px;
 }
 
 html
@@ -105,6 +104,7 @@ html:not(.touch) {
 			padding-left:10px;
 			font-weight:bold;
 			color:gray;
+			font-size:14px;
 		}
 
 		.action-buttons {
@@ -112,6 +112,7 @@ html:not(.touch) {
 			padding:10px;
 		}
 		.action-button {
+			font-size:14px;
 			list-style-type:none;
 			margin:0;
 			padding:0;
@@ -287,8 +288,9 @@ html:not(.touch) {
 		padding-right:50px;
 
 	#title
-		font-size: 14px;
-		color:black;
+		font-size:14px;
+		color: #656565;
+		font-weight: 600;
 	#meta
 		font-size: 12px;
 		color:gray;
@@ -306,10 +308,25 @@ html:not(.touch) {
 }
 
 .message {
-	padding-top:10px;
+	padding-top: 10px;
 	padding-left: 10px;
-	padding-bottom: 5px;
+	padding-bottom: 15px;
 	list-style-type none;
+
+	.header-item {
+		font-size:12px;
+		color:#C5C4C4;
+
+
+		a {
+			color:#C5C4C4;
+		}
+	}
+
+	strong.header-item {
+		color:black;
+	}
+
 
 	.profile-image {
 		margin-top:5px;
@@ -318,14 +335,14 @@ html:not(.touch) {
 	}
 
 	.content {
-		padding-left:40px;
+		padding-left:50px;
 		color: #737272;
 		font-size: 16px;
 	}
 }
 
 .board-title {
-	color:orange;
+	color:#2CA1D6;
 	cursor:pointer;
 	font-size:12px;
 }
@@ -370,7 +387,7 @@ header {
 	top top-banner-height
 	width "calc(100% - %s)" % left-sidebar-width;
 	height header-height
-	background-color gray;
+	background-color #898E91;
 	border-bottom #7089a9;
 	color:white;
 	margin-left: left-sidebar-width
@@ -617,9 +634,13 @@ footer
 	a
 		color: meta-text-color;
 
-.item-link
-	font-style: italic;
-	text-decoration: underline;
+.item-link {
+	text-decoration: none;
+}
+
+.item-link:hover {
+	text-decoration:underline;
+}
 
 #create-filter, #create-label {
 	position:absolute;
@@ -845,7 +866,7 @@ box-shadow: 5px 5px 20px #504C4C;
 .user-card {
 	min-height: 80px;
 	min-width:180px;
-	background-color:black;
+	background-color:#455A64;
 	margin-right:10px;
 
 	img {
@@ -893,18 +914,17 @@ box-shadow: 5px 5px 20px #504C4C;
 	}
 
 	.heading {
-		font-weight:bold;
-		color:white;
+		color:lightgray;
 		text-transform:uppercase;
 		overflow:ellipsis;
 		font-size:12px;
 	}
 
 	.bottom-section {
-		background:#5E5E5E;
+		background:#61737B;
 		.meta {
 			padding:10px;
-			color:white;
+			color:#DADADA;
 			overflow:ellipsis;
 
 		}
@@ -969,15 +989,15 @@ box-shadow: 5px 5px 20px #504C4C;
 }
 
 .activity-message {
-	font-style:italic;
 
 	.meta {
 		color: #aaa;
 	}
 
 	#text, #text a {
-		color: #AAA;
-
+		color: #B5B5B5;
+		font-size:14px;
+		font-style:italic;
 
 	}
 }
@@ -1154,15 +1174,11 @@ box-shadow: 5px 5px 20px #504C4C;
 	text-transform:uppercase;
 }
 
-
-a, a:visited {
-	color:blue;
-}
-
 .filter-item {
 	margin-right:20px;
 	list-style-type:none;
 	a {
+		font-size:14px;
 		color:#898E91;
 		text-decoration:none;
 		text-transform:uppercase;

@@ -203,7 +203,7 @@
 	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}} {{leftSidebarActiveTab}}">
 		<header class="{{currentItemType}} {{currentItemIssueType}}">
 			{{#if isTeamFeed}}
-				<div class="user-cards" style="background:whitesmoke">
+				<div class="user-cards">
 					<div class="user-card">
 						<div class="top-section">
 						<img src="http://semantic-ui.com/images/avatar/small/daniel.jpg"/>
@@ -350,10 +350,10 @@
 		<img class="profile-image" src="{{userImageUrl}}"/>
 		<div class="content">
 			<span class="header">
-				<strong>{{createdBy}}</strong>
-				<span id="created-at" title={{formatTime createdAt}}>{{timeAgo createdAt}}</span>
-				<span id="item-link" class="{{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
-				<span class="{{showBoardTitleClass}} board-title"> {{boardTitle}}</span>
+				<strong class="header-item">{{createdBy}}</strong>
+				<span id="created-at" class="header-item" title={{formatTime createdAt}}>{{timeAgo createdAt}}</span>
+				<span id="item-link" class="header-item {{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
+				<span class="header-item {{showBoardTitleClass}} board-title"> ● {{boardTitle}}</span>
 			</span>
 			<div id="text">
 				{{#markdown}}{{text}}{{/markdown}}
@@ -367,10 +367,10 @@
 		<img class="profile-image" src="{{userImageUrl}}"/>
 		<div class="content">
 			<span class="header">
-				<strong>{{createdBy}}</strong>
-				<span id="created-at" title={{formatTime createdAt}}>{{timeAgo createdAt}}</span>
-				<span id="item-link" class="{{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
-				<span class="{{showBoardTitleClass}} board-title"> {{boardTitle}}</span>
+				<strong class="header-item">{{createdBy}}</strong>
+				<span id="created-at" class="header-item" title={{formatTime createdAt}}>{{timeAgo createdAt}}</span>
+				<span id="item-link" class="header-item {{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
+				<span class="header-item {{showBoardTitleClass}} board-title"> ● {{boardTitle}}</span>
 			</span>
 			<div id="text">
 				{{{activityMessage}}}

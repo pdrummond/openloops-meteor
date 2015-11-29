@@ -4,8 +4,13 @@ if(Meteor.isClient) {
 	});
 
 	Template.registerHelper('showBoardTitleClass', function (context, options) {
+		var show = false;
 		var currentBoardId = Session.get('currentBoardId');
-		return currentBoardId?'hide':'';
+		if(currentBoardId) {
+			var board = Boards.findOne(currentBoardId);
+			show = board != null;
+		}
+		return show;
 	});
 
 	Template.registerHelper('connectionStatus', function (context, options) {
