@@ -15,7 +15,7 @@ if(Meteor.isClient) {
 				if(incomingMessage.itemId != null) {
 					$itemMsgCount = $(".left-sidebar .item-list li[data-id='" + incomingMessage.itemId + "'] .item-msg-count");
 				} else {
-					$itemMsgCount = $(".left-sidebar #board-item .item-msg-count");
+					$itemMsgCount = $(".left-sidebar #home-item .item-msg-count");
 				}
 				var numNewMessages = $itemMsgCount.attr('data-msg-count');
 				numNewMessages = parseInt(numNewMessages) + 1;
@@ -43,7 +43,11 @@ if(Meteor.isClient) {
 
 	Template.messageHistory.helpers({
 		messages: function() {
-			var filter = {boardId: Session.get('currentBoardId')};
+			var filter = {};
+			var currentBoardId = Session.get('currentBoardId');
+			if(currentBoardId) {
+				filter.boardId =  currentBoardId;
+			}
 			var currentItemId = Session.get('currentItemId');
 			if(currentItemId) {
 				filter.itemId = currentItemId;

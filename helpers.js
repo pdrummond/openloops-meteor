@@ -1,4 +1,9 @@
 if(Meteor.isClient) {
+	Template.registerHelper('showBoardTitleClass', function (context, options) {	
+		var currentBoardId = Session.get('currentBoardId');
+		return currentBoardId?'hide':'';
+	});
+
 	Template.registerHelper('connectionStatus', function (context, options) {
 		return Session.get('connectionStatus');
 	});
@@ -113,7 +118,7 @@ if(Meteor.isClient) {
 
 	Template.registerHelper('currentBoardTitle', function () {
 		var board = Boards.findOne(Session.get('currentBoardId'));
-		return board?board.title:'';
+		return board?board.title:'All Boards';
 	});
 
 	Template.registerHelper('filterQuery', function () {

@@ -46,7 +46,20 @@ if(Meteor.isClient) {
 		}
 	});
 
+	FlowRouter.route('/project/:projectId', {
+		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
+			Session.set('currentBoardId', null);
+			Session.set('currentItemId', null);
+			BlazeLayout.render("app", {currentPage: "feedPage"});
+			Session.set('numIncomingMessages', 0);
+			Ols.HistoryManager.loadInitialMessages();
+			OpenLoops.removeSidebarNewMessages();
+		}
+	});
+
 	FlowRouter.route('/project/:projectId/board/:boardId', {
+		name: 'boardMessages',
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
@@ -56,6 +69,22 @@ if(Meteor.isClient) {
 			Ols.HistoryManager.loadInitialMessages();
 			OpenLoops.removeSidebarNewMessages();
 		}
+	});
+
+	FlowRouter.route('/project/:projectId/item/:itemId', {
+		triggersEnter: [function(ctx, redirect) {
+			/*
+				The active tab uses persistent sessions so if it's persisted
+				then use it, otherwise default to messages.
+			*/
+			var tabName = 'messages';
+			var activeItemTab = Session.get('activeItemTab')
+			if(activeItemTab) {
+				tabName = activeItemTab;
+			}
+			var url = '/project/' + ctx.params.projectId + '/item/' + ctx.params.itemId + "/" + tabName;
+    		redirect(url);
+  		}],
 	});
 
 	FlowRouter.route('/project/:projectId/board/:boardId/item/:itemId', {
@@ -74,7 +103,27 @@ if(Meteor.isClient) {
   		}],
 	});
 
+	FlowRouter.route('/project/:projectId/item/:itemId/:tabName', {
+		name:'projectItemMessages',
+		action: function(params, queryParams) {
+			console.log(">>>> ROUTE");
+			var tabName = params.tabName;
+			if(tabName == null || tabName.length == 0) {
+				tabName = 'messages';
+			}
+			Session.setPersistent('activeItemTab', tabName);
+			Session.set('currentProjectId', params.projectId);
+			Session.set('currentBoardId', null);
+			Session.set('currentItemId', params.itemId);
+			BlazeLayout.render("app", {currentPage: "feedPage"});
+			Session.set('numIncomingMessages', 0);
+			Ols.HistoryManager.loadInitialMessages();
+			OpenLoops.removeSidebarNewMessages(params.itemId);
+		}
+	});
+
 	FlowRouter.route('/project/:projectId/board/:boardId/item/:itemId/:tabName', {
+		name:'boardItemMessages',
 		action: function(params, queryParams) {
 			console.log(">>>> ROUTE");
 			var tabName = params.tabName;
@@ -92,7 +141,19 @@ if(Meteor.isClient) {
 		}
 	});
 
+	FlowRouter.route('/project/:projectId/create-item', {
+		name:'createProjectItem',
+		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
+			Session.set('currentBoardId', null);
+			Session.set('currentItemId', null);
+			Session.set('createItemType', queryParams.type);
+			BlazeLayout.render("app", {currentPage: "editItemPage"});
+		}
+	});
+
 	FlowRouter.route('/project/:projectId/board/:boardId/create-item', {
+		name:'createBoardItem',
 		action: function(params, queryParams) {
 			Session.set('createItemType', queryParams.type);
 			Session.set('currentItemId', null);
@@ -138,7 +199,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	FlowRouter.route('/project/:projectId/boards', {
+	FlowRouter.route('/project/:projectId/manage-boards', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			BlazeLayout.render("app", {currentPage: "boardList"});

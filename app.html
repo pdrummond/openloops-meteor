@@ -17,7 +17,7 @@
 			</span>
 			<div id="top-header">
 				<input id="search-input" class="search-input" placeholder="Type here to search" value={{filterQuery}}>
-				<a id="create-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/create-item"><i class="fa fa-plus fx-2x"></i></a>
+				<a id="create-link"><i class="fa fa-plus fx-2x"></i></a>
 			</div>
 		</div>
 		<div class="right">
@@ -138,8 +138,8 @@
 
 <template name="leftSidebar">
 	<div class="left-sidebar">
-		<div id="board-item">
-			<a class="item {{isBoardItemActive}}" href="/project/{{currentProjectId}}/board/{{currentBoardId}}">
+		<div id="home-item">
+			<a class="item {{isBoardItemActive}}">
 				<i id="type-icon" class="fa fa-home" style="color:black"></i>
 				<div id="content">
 					<span id="title">Home</span>
@@ -346,6 +346,7 @@
 				<strong>{{createdBy}}</strong>
 				<span id="created-at">{{timeAgo createdAt}}</span>
 				<span id="item-link" class="{{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
+				<span class="{{showBoardTitleClass}} board-title"> {{boardTitle}}</span>
 			</span>
 			<div id="text">
 				{{#markdown}}{{text}}{{/markdown}}
@@ -362,6 +363,7 @@
 				<strong>{{createdBy}}</strong>
 				<span id="created-at">{{timeAgo createdAt}}</span>
 				<span id="item-link" class="{{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
+				<span class="{{showBoardTitleClass}} board-title"> {{boardTitle}}</span>
 			</span>
 			<div id="text">
 				{{{activityMessage}}}
@@ -379,8 +381,12 @@
 		<a class="item {{isActive}} {{isClosedClass}}" href="">
 		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
 		<div id="content">
-			<span id="title">{{title}}</span>
-			<div id="meta"> <span class="item-key">#{{projectKey this}}-{{pid}}</span> ● <span class="creared-by">{{createdBy}}</span> ● {{timeAgo createdAt}} </div>
+			<span id="title">{{title}} <span class="board-title {{showBoardTitleClass}}">{{boardTitle}}</span></span>
+			<div id="meta">
+				<span class="item-key">#{{projectKey this}}-{{pid}}</span> ●
+				{{timeAgo createdAt}}
+
+			</div>
 			<div id="meta"> {{description}}</div>
 			<div id="item-labels">
 				{{#each itemLabels}}

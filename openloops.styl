@@ -213,12 +213,16 @@ html:not(.touch) {
 	}
 }
 
-#app .left-sidebar #board-item .item-msg-count {
+#app .left-sidebar #home-item {
+	cursor:pointer;
+}
+
+#app .left-sidebar #home-item .item-msg-count {
 	top: 20px;
 	right: 8px;
 }
 
-#app .left-sidebar #board-item {
+#app .left-sidebar #home-item {
 	height: 57px;
 	border-bottom: 1px solid lightgray;
 	#title {
@@ -314,6 +318,16 @@ html:not(.touch) {
 		color: #737272;
 		font-size: 16px;
 	}
+}
+
+.board-title {
+	color:orange;
+	cursor:pointer;
+	font-size:12px;
+}
+
+.message .board-title:hover {
+	text-decoration:underline;
 }
 
 .message p:first-child {
@@ -1059,6 +1073,7 @@ box-shadow: 5px 5px 20px #504C4C;
 	}
 
 	#create-link {
+		cursor:pointer;
 		padding: 5px;
 		background-color: #3B454A;
 		color: #fff;

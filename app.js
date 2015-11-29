@@ -79,7 +79,7 @@ if(Meteor.isClient) {
 			$itemMsgCount = $(".left-sidebar .item-list li[data-id='" + itemId + "'] .item-msg-count");
 
 		} else {
-			$itemMsgCount = $(".left-sidebar #board-item .new-messages")
+			$itemMsgCount = $(".left-sidebar #home-item .new-messages")
 		}
 		$itemMsgCount.attr("data-msg-count", 0);
 		$itemMsgCount.removeClass("new-messages");
@@ -305,6 +305,15 @@ if(Meteor.isClient) {
 	});
 
 	Template.topBanner.events({
+		'click #create-link': function() {
+			var boardId = Session.get('currentBoardId');
+			if(boardId) {
+				FlowRouter.go('createBoardItem', {projectId: Session.get('currentProjectId'), boardId: boardId});
+			} else {
+				FlowRouter.go('createProjectItem', {projectId: Session.get('currentProjectId')});
+			}
+		},
+
 		'click .board-title': function() {
 			$("#board-chooser-menu").slideToggle();
 		},
@@ -400,6 +409,12 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.chatMessageItemView.events({
+		'click .board-title': function() {
+			FlowRouter.go('boardMessages', {projectId: this.projectId, boardId: this.boardId});
+		}
+	});
+
 	Template.chatMessageItemView.helpers({
 
 		itemTitle: function() {
@@ -417,6 +432,17 @@ if(Meteor.isClient) {
 
 		userImageUrl: function() {
 			return Ols.User.getProfileImageUrl(this.createdBy);
+		},
+
+		boardTitle: function() {
+			var board = Boards.findOne(this.boardId);
+			return board?board.title:'';
+		}
+	});
+
+	Template.activityMessageItemView.events({
+		'click .board-title': function() {
+			FlowRouter.go('boardMessages', {projectId: this.projectId, boardId: this.boardId});
 		}
 	});
 
@@ -499,10 +525,19 @@ if(Meteor.isClient) {
 
 		messageDate: function() {
 			return moment(this.createdAt).date();
+		},
+
+		boardTitle: function() {
+			var board = Boards.findOne(this.boardId);
+			return board?board.title:'';
 		}
 	});
 
 	Template.itemItemView.helpers({
+		boardTitle: function() {
+			return Boards.findOne(this.boardId).title;
+		},
+
 		isClosedClass: function() {
 			return this.isOpen?'':'closed';
 		},
@@ -510,6 +545,7 @@ if(Meteor.isClient) {
 		numMessages: function() {
 			return this.numMessages - 1; //to remove the description
 		},
+
 		typeIcon: function() {
 			return OpenLoops.getItemTypeIcon(this);
 		},
@@ -530,9 +566,13 @@ if(Meteor.isClient) {
 
 	Template.itemItemView.events({
 		'click': function() {
-			FlowRouter.go('/project/' + Session.get('currentProjectId') + '/board/' + this.boardId + '/item/' + this._id);
+			if(this.boardId) {
+				FlowRouter.go('boardItemMessages', {projectId: this.projectId, boardId: this.boardId, itemId: this._id});
+			} else {
+				FlowRouter.go('projectItemMessages', {projectId: this.projectId, itemId: this._id});
+			}
 		}
-	})
+	});
 
 	OpenLoops.insertActivityMessage = function(item, activityMessage) {
 		activityMessage = _.extend({
@@ -701,7 +741,11 @@ if(Meteor.isClient) {
 	Template.leftSidebar.helpers({
 		items: function() {
 			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
-			filter.boardId = Session.get('currentBoardId');
+			filter.projectId = Session.get('currentProjectId');
+			var currentBoardId = Session.get('currentBoardId');
+			if(currentBoardId) {
+				filter.boardId = currentBoardId;
+			}
 
 			if(filter.hasOwnProperty('show')) {
 				if(filter.show == 'all') {
@@ -743,6 +787,15 @@ if(Meteor.isClient) {
 	});
 
 	Template.leftSidebar.events({
+		'click #home-item': function() {
+			var boardId = Session.get('currentBoardId');
+			if(boardId) {
+				FlowRouter.go('boardMessages', {projectId: Session.get('currentProjectId'), boardId: boardId});
+			} else {
+				FlowRouter.go('projectMessages', {projectId: Session.get('currentProjectId')});
+			}
+		},
+
 		'click #search-link': function() {
 			Session.set('showSidebarTabs', false);
 		},
@@ -779,7 +832,15 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.boardChooserMenu.events({
+		'click #all-boards-item': function() {
+			$("#board-chooser-menu").slideUp();
+			FlowRouter.go("/project/" + Session.get('currentProjectId'));
+		}
+	});
+
 	Template.boardChooserItem.events({
+
 		'click': function() {
 			var self = this;
 			$("#board-chooser-menu").slideUp();
