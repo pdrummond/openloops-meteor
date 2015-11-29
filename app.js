@@ -289,7 +289,6 @@ if(Meteor.isClient) {
 	});
 
 	Template.app.onCreated(function() {
-		console.log(">>>> APP onCreated");
 		this.subscribe('allUsernames');
 		this.subscribe('projects');
 		this.subscribe('boards');
@@ -535,7 +534,8 @@ if(Meteor.isClient) {
 
 	Template.itemItemView.helpers({
 		boardTitle: function() {
-			return Boards.findOne(this.boardId).title;
+			var board = Boards.findOne(this.boardId);
+			return board?board.title:'';
 		},
 
 		isClosedClass: function() {

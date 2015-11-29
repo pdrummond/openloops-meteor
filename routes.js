@@ -47,6 +47,7 @@ if(Meteor.isClient) {
 	});
 
 	FlowRouter.route('/project/:projectId', {
+		name: 'projectMessages',
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', null);
@@ -106,7 +107,6 @@ if(Meteor.isClient) {
 	FlowRouter.route('/project/:projectId/item/:itemId/:tabName', {
 		name:'projectItemMessages',
 		action: function(params, queryParams) {
-			console.log(">>>> ROUTE");
 			var tabName = params.tabName;
 			if(tabName == null || tabName.length == 0) {
 				tabName = 'messages';
@@ -125,7 +125,6 @@ if(Meteor.isClient) {
 	FlowRouter.route('/project/:projectId/board/:boardId/item/:itemId/:tabName', {
 		name:'boardItemMessages',
 		action: function(params, queryParams) {
-			console.log(">>>> ROUTE");
 			var tabName = params.tabName;
 			if(tabName == null || tabName.length == 0) {
 				tabName = 'messages';

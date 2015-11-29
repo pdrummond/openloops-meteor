@@ -29,7 +29,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.messageHistory.onRendered(function() {
-		console.log("MESSAGE HISTORY onRendered - should be called once");
+		//console.log("MESSAGE HISTORY onRendered - should be called once");
 		/*
 			This call is needed to load the messages on full browser refresh.
 			When switching to new items from within the app, loadInitialMessages

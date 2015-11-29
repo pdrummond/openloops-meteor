@@ -65,7 +65,7 @@ Ols.HistoryManager = {
 
 		console.log(">>>> LOAD INITIAL MESSAGES");
 		ClientMessages._collection.remove({});
-		console.log("CLIENT MESSAGES DELETED: Num client msgs: " + ClientMessages.find().count());
+		//console.log("CLIENT MESSAGES DELETED: Num client msgs: " + ClientMessages.find().count());
 
 		var self = this;
 		this.loadMessages(function(ok) {
@@ -105,7 +105,7 @@ Ols.HistoryManager = {
 	},
 
 	moreMessagesOnServer: function() {
-		//console.log("> moreMessagesOnServer");
+		console.log("> moreMessagesOnServer");
 		var result = false;
 		if(!this.loadingInitialMessages) {
 			var currentItemId = Session.get('currentItemId');
@@ -113,35 +113,38 @@ Ols.HistoryManager = {
 			if(currentItemId) {
 				var item = Items.findOne(currentItemId);
 				if(item) {
+					console.log("    Using item.numMessages: " + item.numMessages);
 					serverMsgCount = item.numMessages;
 				}
 			}
 			if(!serverMsgCount) {
 				var board = Boards.findOne(Session.get('currentBoardId'));
 				if(board) {
+					console.log("    Using board.numMessages: " + board.numMessages);
 					serverMsgCount = board.numMessages;
 				}
 			}
 			var clientMsgCount = ClientMessages._collection.find().fetch().length;
 
 			result = (clientMsgCount < serverMsgCount);
-			//console.log("    clientMsgCount: " + clientMsgCount);
-			//console.log("    serverMsgCount: " + serverMsgCount);
-			//console.log("< moreMessagesOnServer");
+			console.log("    clientMsgCount: " + clientMsgCount);
+			console.log("    serverMsgCount: " + serverMsgCount);
 			if(result) {
 				console.log("moreMessagesOnServer")
 			}
 		}
+		console.log("< moreMessagesOnServer");
 		return result;
 	},
 
 	scrollBottom: function() {
-		console.log("SCROLL BOTTOM !!!!");
+		console.log(">> scrollBottom");
 		var $messageList = $("#messageHistory");
 		if($messageList.length > 0) {
 			$messageList.scrollTop($messageList[0].scrollHeight);
 		}
 		Ols.HistoryManager.atBottom = true;
+		console.log("<< scrollBottom");
 	},
 
 	showBusyIcon: function() {

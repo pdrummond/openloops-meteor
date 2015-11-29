@@ -1,16 +1,24 @@
 <template name="boardList">
 	{{#onlyIfLoggedIn}}
-	<a href="/project/{{currentProjectId}}/boards/create">Create Board</a>
-	<ul>
+	<h1 style="margin-left:100px;margin-top:50px">Manage Boards</h1>
+	<a href="/project/{{currentProjectId}}/boards/create" style="display:block;margin-left:100px;margin-top:10px">Create Board</a>
+	<hr>
+	<table style="margin-top:10px;padding-left:100px;padding-right:100px" width="100%">
 		{{#each boards}}
 			{{> boardItem}}
 		{{/each}}
-	</ul>
+	</table>
+	<hr>
 	{{/onlyIfLoggedIn}}
 </template>
 
 <template name="boardItem">
-	<li><a href="/project/{{currentProjectId}}/board/{{_id}}">{{title}}</a></li>
+	<tr>
+		<td><a href="/project/{{currentProjectId}}/board/{{_id}}">{{title}}</a></td>
+		<td>{{numMessages}}</td>
+		<td><a href="/project/{{_id}}/edit-board">Edit Board</a></td>
+		<td><a href="/project/{{_id}}/delete-board">Delete Board</a></td>
+	</tr>
 </template>
 
 
