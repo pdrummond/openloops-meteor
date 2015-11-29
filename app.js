@@ -294,6 +294,7 @@ if(Meteor.isClient) {
 
 	Template.app.onCreated(function() {
 		this.subscribe('allUsernames');
+		this.subscribe('userPresence');
 		this.subscribe('projects');
 		this.subscribe('boards');
 		this.subscribe('teamMembers');
@@ -400,6 +401,21 @@ if(Meteor.isClient) {
 				case Ols.MSG_TYPE_ACTIVITY: t = 'activityMessageItemView'; break;
 			}
 			return t;
+		}
+	});
+
+	Template.userCard.helpers( {
+		userImageUrl: function() {
+			return Ols.User.getProfileImageUrl(this.username);
+		},
+
+		state: function() {
+			var state='offline';
+			var presence = Presences.findOne({userId: this._id});
+			if(presence) {
+				state = presence.state;
+			}
+			return state;
 		}
 	});
 
@@ -639,6 +655,10 @@ if(Meteor.isClient) {
 	}
 
 	Template.feed.helpers({
+
+		users: function() {
+			return Meteor.users.find();
+		},
 
 		filterQuery: function() {
 			return Session.get('filterQuery');
@@ -1105,6 +1125,11 @@ if(Meteor.isServer) {
 			"username": 1,
 			"profileImage": 1,
 		}});
+	});
+
+	Meteor.publish('userPresence', function() {
+	  filter = { userId: { $exists: true }};
+	  return Presences.find(filter, { fields: { state: true, username: true, userId: true }});
 	});
 
 

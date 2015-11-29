@@ -329,6 +329,8 @@ html:not(.touch) {
 
 
 	.profile-image {
+		width:34px;
+		height:34px;
 		margin-top:5px;
 		float:left;
 		border-radius:30px;
@@ -650,6 +652,7 @@ footer
 }
 
 #header-open-status
+	font-size:14px;
 	display:inline;
 	padding-left:20px;
 
@@ -883,25 +886,20 @@ box-shadow: 5px 5px 20px #504C4C;
 		width:10px
 		height:10px;
 		border-radius:5px;
-		background-color:green;
+		background-color:white;
 	}
 
 	.online-status {
 		color:gray;
 		font-size:12px;
-
 	}
 
-	.online-status.away .online-status-dot {
-		background-color:orange;
+	.online-status-dot.online {
+		background-color:green;
 	}
 
-	.online-status.busy .online-status-dot {
-		background-color:red;
-	}
-
-	.online-status.offline .online-status-dot {
-		background-color:gray;
+	.online-status-dot.offline {
+		background-color:#F75429;
 	}
 
 	.meta {
@@ -1020,6 +1018,7 @@ box-shadow: 5px 5px 20px #504C4C;
 		padding:10px;
 
 		.tab-item {
+			font-size:14px;
 			text-transform:uppercase;
 			margin-right:30px;
 			cursor:pointer;

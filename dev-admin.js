@@ -64,6 +64,17 @@ if(Meteor.isClient) {
 					$("#status").text("Set all item project ids successfully.");
 				}
 			});
+		},
+
+		'click #update-users-icon': function() {
+			$("#status").text("Update users icon: working...");
+			Meteor.call('updateUsersIcon', function(err, results) {
+				if(err) {
+					$("#status").text("Error setting users icon: " + err.reason);
+				} else {
+					$("#status").text("Set all user icons successfully.");
+				}
+			});
 		}
 	});
 }
@@ -158,6 +169,12 @@ if(Meteor.isServer) {
 				}
 			});
 			console.log("< setItemProjectIds");
+		},
+
+		updateUsersIcon: function() {
+			Meteor.users.find().forEach(function(user) {
+				Meteor.users.update(user._id, {$set: {profileImage: Gravatar.imageUrl(user.emails[0].address, {size: 50,default: 'wavatar'})}});
+			});
 		}
 	})
 }

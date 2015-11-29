@@ -69,7 +69,7 @@ if(Meteor.isServer) {
 			}
 		}
 
-		user.profileImage = Gravatar.imageUrl(email, {size: 34,default: 'retro'});
+		user.profileImage = Gravatar.imageUrl(email, {size: 50,default: 'wavatar'});
 
 		// We still want the default hook's 'profile' behavior.
 		if (options.profile) {

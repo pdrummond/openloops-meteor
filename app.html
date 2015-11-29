@@ -199,24 +199,30 @@
 	</div>
 </template>
 
+<template name="userCard">
+	<div class="user-card">
+		<div class="top-section">
+		<img src="{{userImageUrl}}"/>
+		<div class="content">
+			<span class="heading">{{username}}</span>
+			<span class="meta"><span class="online-status"><span class="online-status-dot {{state}}" title="{{state}}"></span> {{state}}</span></span>
+		</div>
+		</div>
+		<div class='bottom-section'>
+		<div class="meta"><i class='fa fa-code'></i> Implementing #OLS-42</div>
+		</div>
+	</div>
+</template>
+
 <template name="feed">
 	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}} {{leftSidebarActiveTab}}">
 		<header class="{{currentItemType}} {{currentItemIssueType}}">
 			{{#if isTeamFeed}}
 				<div class="user-cards">
-					<div class="user-card">
-						<div class="top-section">
-						<img src="http://semantic-ui.com/images/avatar/small/daniel.jpg"/>
-						<div class="content">
-							<span class="heading">Paul Drummond</span>
-							<span class="meta"><span class="online-status"><span class="online-status-dot typing" title="Typing"></span> Typing...</span></span>
-						</div>
-						</div>
-						<div class='bottom-section'>
-						<div class="meta"><i class='fa fa-code'></i> Implementing #OLS-42</div>
-						</div>
-					</div>
-					<div class="user-card">
+					{{#each users}}
+						{{> userCard}}
+					{{/each}}
+					<!--<div class="user-card">
 						<div class="top-section">
 						<img src="http://semantic-ui.com/images/avatar/small/elliot.jpg"/>
 						<div class="content">
@@ -287,7 +293,7 @@
 						<div class='bottom-section'>
 						<div class="meta" title="Testing #OLS-20"><i class='fa fa-cog'></i> Testing #OLS-200</div>
 						</div>
-					</div>
+					</div>-->
 				</div>
 				<!--<ul id="header-feed-links">
 					<li class="{{isActive ''}}"><a href="/"><i class="fa fa-home"></i> Feed</a></li>
