@@ -245,7 +245,7 @@ if(Meteor.isClient) {
 									activityType: Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED
 								});
 							}
-							FlowRouter.go("/project/" + Session.get('currentProjectId') + "/board/" + Session.get('currentBoardId') + "/item/" + newItem._id);
+							Ols.Router.showItemMessages(newItem);
 						}
 					});
 
@@ -264,7 +264,7 @@ if(Meteor.isClient) {
 									activityType: Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED
 								});
 							}
-							FlowRouter.go("/project/" + Session.get('currentProjectId') + "/board/" + Session.get('currentBoardId') + "/item/" + newItem._id);
+							Ols.Router.showItemMessages(newItem);
 						}
 					});
 				}
@@ -305,12 +305,7 @@ if(Meteor.isClient) {
 
 	Template.topBanner.events({
 		'click #create-link': function() {
-			var boardId = Session.get('currentBoardId');
-			if(boardId) {
-				FlowRouter.go('createBoardItem', {projectId: Session.get('currentProjectId'), boardId: boardId});
-			} else {
-				FlowRouter.go('createProjectItem', {projectId: Session.get('currentProjectId')});
-			}
+			Ols.Router.showCreateItemPage();
 		},
 
 		'click .board-title': function() {
@@ -453,9 +448,15 @@ if(Meteor.isClient) {
 
 		activityMessage: function() {
 			if(this.itemId) {
+				var currentBoardId = Session.get('currentBoardId');
 				var currentItemId = Session.get('currentItemId');
 				var item = Items.findOne(this.itemId);
-				var itemTitleLink = '<span id="item-link"><a class="item-link" href="/project/' + Session.get('currentProjectId') + '/board/' + Session.get('currentBoardId') + '/item/' + this.itemId + '">' + Ols.Item.getItemKey({item: item}) + ': ' + Ols.StringUtils.truncate(item.title, 50) + '</a></span>';
+				var itemTitleLink = '<span id="item-link"><a class="item-link" href="' +
+					'/project/' + Session.get('currentProjectId') +
+					(currentBoardId?'/board/' + currentBoardId:'') +
+					'/item/' + this.itemId + '">' + Ols.Item.getItemKey({item: item}) + ': ' + Ols.StringUtils.truncate(item.title, 50)
+					+ '</a></span>';
+
 				var ctx = currentItemId?'this item':itemTitleLink;
 				var msg = '???';
 				switch(this.activityType) {
@@ -566,11 +567,7 @@ if(Meteor.isClient) {
 
 	Template.itemItemView.events({
 		'click': function() {
-			if(this.boardId) {
-				FlowRouter.go('boardItemMessages', {projectId: this.projectId, boardId: this.boardId, itemId: this._id});
-			} else {
-				FlowRouter.go('projectItemMessages', {projectId: this.projectId, itemId: this._id});
-			}
+			Ols.Router.showItemMessages(this);
 		}
 	});
 
@@ -788,12 +785,7 @@ if(Meteor.isClient) {
 
 	Template.leftSidebar.events({
 		'click #home-item': function() {
-			var boardId = Session.get('currentBoardId');
-			if(boardId) {
-				FlowRouter.go('boardMessages', {projectId: Session.get('currentProjectId'), boardId: boardId});
-			} else {
-				FlowRouter.go('projectMessages', {projectId: Session.get('currentProjectId')});
-			}
+			Ols.Router.showHomeMessages();
 		},
 
 		'click #search-link': function() {
