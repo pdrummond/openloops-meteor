@@ -11,6 +11,17 @@ if(Meteor.isClient) {
 			});
 		},
 
+		'click #recount-project-messages': function() {
+			$("#status").text("Recount Project Messages: working...");
+			Meteor.call('recountProjectMessages', function(err, results) {
+				if(err) {
+					$("#status").text("Error recounting project messages: " + err.reason);
+				} else {
+					$("#status").text("Recounted project messages successfully.");
+				}
+			});
+		},
+
 		'click #recount-board-messages': function() {
 			$("#status").text("Recount Board Messages: working...");
 			Meteor.call('recountBoardMessages', function(err, results) {
@@ -78,6 +89,18 @@ if(Meteor.isServer) {
 			};
 			console.log("Added to default board: " + JSON.stringify(results, null, 4));
 			return results;
+		},
+
+		recountProjectMessages: function() {
+			console.log("> recountProjectMessages");
+			Projects.find().forEach(function(project) {
+				console.log("-- BEFORE num messages for project '" + project.title + "': " + project.numMessages);
+				var numMessages = ServerMessages.find({projectId: project._id}).count();
+				Projects.update(project._id, {$set: {numMessages: numMessages}});
+				project = Projects.findOne(project._id);
+				console.log("-- AFTER num messages for project '" + project.title + "': " + project.numMessages);
+			});
+			console.log("< recountProjectMessages");
 		},
 
 		recountBoardMessages: function() {

@@ -1,4 +1,8 @@
 if(Meteor.isClient) {
+	Template.registerHelper('clientMessageCount', function (context, options) {
+		return ClientMessages._collection.find().count();
+	});
+
 	Template.registerHelper('showBoardTitleClass', function (context, options) {
 		var currentBoardId = Session.get('currentBoardId');
 		return currentBoardId?'hide':'';

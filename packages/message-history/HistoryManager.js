@@ -17,13 +17,8 @@ Ols.HistoryManager = {
 	},
 
 	getOldestClientMessageDate: function() {
-		var date;
-		var filter = {};
-		var currentItemId = Session.get('currentItemId');
-		if(currentItemId) {
-			filter.itemId = currentItemId;
-		}
-		var existingMessages = ClientMessages.find(filter, {sort:{createdAt:1}}).fetch();
+		var date;		
+		var existingMessages = ClientMessages.find({}, {sort:{createdAt:1}}).fetch();
 		if(existingMessages.length > 0) {
 			date = existingMessages[0].createdAt;
 		}
@@ -35,6 +30,7 @@ Ols.HistoryManager = {
 		var olderThanDate = this.getOldestClientMessageDate();
 		Meteor.call('loadMessages', {
 			olderThanDate: olderThanDate,
+			projectId: Session.get('currentProjectId'),
 			boardId: Session.get('currentBoardId'),
 			itemId: Session.get('currentItemId')
 		}, function(err, messages) {
@@ -43,7 +39,6 @@ Ols.HistoryManager = {
 				alert("Error loading messages: " + err);
 				callback(false);
 			} else {
-
 				_.each(messages, function(message) {
 					ClientMessages._collection.insert(message);
 				});
@@ -65,7 +60,7 @@ Ols.HistoryManager = {
 
 		console.log(">>>> LOAD INITIAL MESSAGES");
 		ClientMessages._collection.remove({});
-		//console.log("CLIENT MESSAGES DELETED: Num client msgs: " + ClientMessages.find().count());
+		console.log("CLIENT MESSAGES DELETED: Num client msgs: " + ClientMessages.find().count());
 
 		var self = this;
 		this.loadMessages(function(ok) {
@@ -122,6 +117,13 @@ Ols.HistoryManager = {
 				if(board) {
 					console.log("    Using board.numMessages: " + board.numMessages);
 					serverMsgCount = board.numMessages;
+				}
+			}
+			if(!serverMsgCount) {
+				var project = Projects.findOne(Session.get('currentProjectId'));
+				if(project) {
+					console.log("    Using project.numMessages: " + project.numMessages);
+					serverMsgCount = project.numMessages;
 				}
 			}
 			var clientMsgCount = ClientMessages._collection.find().fetch().length;

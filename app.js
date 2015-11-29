@@ -933,6 +933,12 @@ if(Meteor.isServer) {
 		loadMessages: function(opts) {
 			console.log("loadMessages: " + JSON.stringify(opts));
 			var filter = {};
+			if(opts.projectId) {
+				filter.projectId = opts.projectId;
+			}
+			if(opts.boardId) {
+				filter.boardId = opts.boardId;
+			}
 			if(opts.itemId) {
 				filter.itemId = opts.itemId;
 			}
@@ -956,6 +962,7 @@ if(Meteor.isServer) {
 				$set: {updatedAt: new Date().getTime()},
 			});
 			Boards.update(newMessage.boardId, {$inc: {numMessages: 1}});
+			Projects.update(newMessage.projectId, {$inc: {numMessages: 1}});
 			Meteor.call('detectMentionsInMessage', newMessage);
 
 		},

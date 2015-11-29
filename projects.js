@@ -83,7 +83,8 @@ if(Meteor.isServer) {
 			newProject = _.extend({
 				createdAt: now,
 				createdBy: Meteor.user().username,
-				updatedAt: now
+				updatedAt: now,
+				numMessages: 0
 			}, newProject);
 
 			var projectId = Projects.insert(newProject);

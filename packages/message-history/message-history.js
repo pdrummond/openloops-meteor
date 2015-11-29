@@ -43,15 +43,7 @@ if(Meteor.isClient) {
 
 	Template.messageHistory.helpers({
 		messages: function() {
-			var filter = {projectId: Session.get('currentProjectId')};
-			var currentBoardId = Session.get('currentBoardId');
-			if(currentBoardId) {
-				filter.boardId =  currentBoardId;
-			}
-			var currentItemId = Session.get('currentItemId');
-			if(currentItemId) {
-				filter.itemId = currentItemId;
-			}
+			var filter = {};		
 			return ClientMessages.find(filter, {sort: {createdAt: 1}});
 		},
 
