@@ -12,13 +12,13 @@
 		<div class="left">
 			{{> openLoopsEye}}
 			<span style="margin-left:10px" id="main-title">
-				<a href="" class="project-title"><span class="project-key">{{currentProjectKey}}</span>: {{currentProjectTitle}} </a>
-				<a href="" class="board-title">{{currentBoardTitle}}</a>
-				<div>
+				<div class="project-key">{{currentProjectKey}}</div>
+				<a href="" class="project-title">{{currentProjectTitle}}</a>
+				<!--<div>
 					<table>
 						<tr><td>Client messages</td><td>{{clientMessageCount}}</td></tr>
 					</table>
-				</div>
+				</div>-->
 			</span>
 			<div id="top-header">
 				<input id="search-input" class="search-input" placeholder="Type here to search" value={{filterQuery}}>
@@ -144,11 +144,12 @@
 
 <template name="leftSidebar">
 	<div class="left-sidebar">
-		<div id="home-item">
+		<div id="board-item">
 			<a class="item {{isBoardItemActive}}">
-				<i id="type-icon" class="fa fa-home" style="color:black"></i>
+				<i id="type-icon" class="fa fa-th-large" style="color:black"></i>
 				<div id="content">
-					<span id="title">Home</span>
+					{{currentBoardTitle}}
+					<i id="boards-dropdown-button" class="fa fa-caret-down"></i>
 				</div>
 				<div class="item-msg-count" data-msg-count="0">
 				</div>

@@ -55,17 +55,20 @@ html:not(.touch) {
 		padding-left:10px;
 
 		.project-title {
+			font-size:18px;
+			color:white;
+			text-transform: uppercase;
+			position:relative;
+			left:0px;
+			top:-5px;
+
+		}
+
+		.project-key {
+			position:relative;
+			top:-5px;
 			font-size:10px;
 			color:gray;
-			text-transform: uppercase;
-			font-size:10px;
-			position:absolute;
-			left:50px;
-			top:15px;
-
-			.project-key {
-				font-size:10px;
-			}
 		}
 	}
 
@@ -213,24 +216,25 @@ html:not(.touch) {
 	}
 }
 
-#app .left-sidebar #home-item {
+#app .left-sidebar #board-item {
 	cursor:pointer;
-}
-
-#app .left-sidebar #home-item .item-msg-count {
-	top: 20px;
-	right: 8px;
-}
-
-#app .left-sidebar #home-item {
 	height: 57px;
 	border-bottom: 1px solid lightgray;
-	#title {
+
+	.item-msg-count {
+		top: 20px;
+		right: 8px;
+	}
+
+	#content {
 		overflow:ellipsis;
 		font-size:20px;
 		position: relative;
+		padding-left:10px;
     	top: 5px;
+		color:black;
 	}
+
 }
 
 #app .left-sidebar a.item
@@ -697,8 +701,8 @@ margin: 0;
 padding: 0;
 z-index: 99999999;
 position: absolute;
-top: 55px;
-left: 50px;
+top: 145px;
+left: 150px;
 background: #f5f5f5;
 box-shadow: 5px 5px 20px #504C4C;
 }

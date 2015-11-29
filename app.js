@@ -79,7 +79,7 @@ if(Meteor.isClient) {
 			$itemMsgCount = $(".left-sidebar .item-list li[data-id='" + itemId + "'] .item-msg-count");
 
 		} else {
-			$itemMsgCount = $(".left-sidebar #home-item .new-messages")
+			$itemMsgCount = $(".left-sidebar #board-item .new-messages")
 		}
 		$itemMsgCount.attr("data-msg-count", 0);
 		$itemMsgCount.removeClass("new-messages");
@@ -310,10 +310,6 @@ if(Meteor.isClient) {
 	Template.topBanner.events({
 		'click #create-link': function() {
 			Ols.Router.showCreateItemPage();
-		},
-
-		'click .board-title': function() {
-			$("#board-chooser-menu").slideToggle();
 		},
 
 		'keyup #search-input': function() {
@@ -804,7 +800,11 @@ if(Meteor.isClient) {
 	});
 
 	Template.leftSidebar.events({
-		'click #home-item': function() {
+		'click #boards-dropdown-button': function() {
+			$("#board-chooser-menu").slideToggle();
+		},
+
+		'click #board-item': function() {
 			Ols.Router.showHomeMessages();
 		},
 
