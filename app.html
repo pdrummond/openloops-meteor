@@ -122,10 +122,11 @@
 
 				<label style="margin-top:30px">Title</label>
 				<input name="title" placeholder="Enter title" value={{title}} autofocus>
-				<label>Description</label>
+				<!--<label>Description</label>
 				<textarea name="description" placeholder="Enter description" value={{description}}></textarea>
+				-->
 				<label>Labels</label>
-				<input name="labels" placeholder="Add labels here, e.g: #important, #milestone1, #in-progress" value="{{labels}}">
+				<input name="labels" placeholder="Add labels here, e.g: important, milestone1, now, in-progress" value="{{labels}}">
 
 			</fieldset>
 			<button id="save-button" class='button-default'>Save</button>
@@ -161,14 +162,14 @@
 		{{#if isTeamFeed}}
 		<span class="header-text">ACTIONS</span>
 		<ul class="action-buttons">
-			<li id="create-discussion-link" class="action-button"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/create-item?type=discussion"><i class="fa fa-comments-o"></i> New Discussion</a></li>
-			<li id="create-issue-link" class="action-button"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/create-item?type=issue"><i class="fa fa-exclamation-circle"></i> New Issue</a></li>
-			<li id="create-article-link" class="action-button"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/create-item?type=article"><i class="fa fa-book"></i> New Article</a></li>
+			<li id="create-discussion-link" class="action-button"><a href=""><i class="fa fa-comments-o"></i> New Discussion</a></li>
+			<li id="create-issue-link" class="action-button"><a href=""><i class="fa fa-exclamation-circle"></i> New Issue</a></li>
+			<li id="create-article-link" class="action-button"><a href=""><i class="fa fa-book"></i> New Article</a></li>
 		</ul>
 		{{else}}
 		<span class="header-text">ACTIONS</span>
 		<ul class="action-buttons">
-			<li id="edit-link" class="action-button"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/edit-item/{{currentItemId}}"><i class="fa fa-pencil"></i> Edit</a></li>
+			<li id="edit-link" class="action-button"><a href=""><i class="fa fa-pencil"></i> Edit</a></li>
 			<li id="open-close-link" class="action-button"><a href=""><i class="fa fa-times"></i> {{#if currentItemIsOpen}}Close{{else}}Open{{/if}}</a></li>
 			<li id="move-link" class="action-button"><a href=""><i class="fa fa-arrow-right"></i> Move</a></li>
 		</ul>
@@ -254,7 +255,7 @@
 						</div>
 						</div>
 						<div class='bottom-section'>
-						<div class="meta" title="Testing #OLS-20"><i class='fa fa-code'></i> Implememting #OLSX-666</div>
+						<div class="meta" title="Testing #OLS-20"><i class='fa fa-code'></i> Implementing #OLSX-666</div>
 						</div>
 					</div>
 					<div class="user-card">
@@ -297,7 +298,7 @@
 				</div>
 				<div class="item-tab-bar-wrapper">
 					<div class="item-tab-bar">
-						<div class="tab-item {{isTabActive 'description'}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/description"><i class="fa fa-info-circle"></i> Description</a></div>
+						<!--<div class="tab-item {{isTabActive 'description'}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/description"><i class="fa fa-info-circle"></i> Description</a></div>-->
 						<div class="tab-item {{isTabActive 'messages'}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/messages"><i class="fa fa-comments-o"></i> Messages</a></div>
 						<div class="tab-item {{isTabActive 'todos'}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/todos"><i class="fa fa-list"></i> Todo Items</a></div>
 						<div class="tab-item {{isTabActive 'activity'}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/activity"><i class="fa fa-exchange"></i> Activity</a></div>

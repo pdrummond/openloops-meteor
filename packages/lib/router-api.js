@@ -17,12 +17,22 @@ Ols.Router = {
 		}
 	},
 
-	showCreateItemPage: function() {
+	showCreateItemPage: function(queryParams) {
 		var boardId = Session.get('currentBoardId');
 		if(boardId) {
-			FlowRouter.go('createBoardItem', {projectId: Session.get('currentProjectId'), boardId: boardId});
+			FlowRouter.go('createBoardItem', {projectId: Session.get('currentProjectId'), boardId: boardId}, queryParams);
 		} else {
-			FlowRouter.go('createProjectItem', {projectId: Session.get('currentProjectId')});
+			FlowRouter.go('createProjectItem', {projectId: Session.get('currentProjectId')}, queryParams);
 		}
-	}
+	},
+
+	showEditItemPage: function(itemId) {
+		var boardId = Session.get('currentBoardId');
+		if(boardId) {
+			FlowRouter.go('editBoardItem', {projectId: Session.get('currentProjectId'), boardId: boardId, itemId:itemId});
+		} else {
+			FlowRouter.go('editProjectItem', {projectId: Session.get('currentProjectId'), itemId:itemId});
+		}
+	},
+
 }

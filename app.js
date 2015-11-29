@@ -131,10 +131,14 @@ if(Meteor.isClient) {
 	});
 
 	Template.editItemForm.onRendered(function() {
+		//FIXME: Should not be using session here - use FlowRouter.param() instead.
 		var createItemType = Session.get('createItemType');
 		if(createItemType) {
+			Session.set('editItemForm.selectedType', createItemType);
 			this.$("#editItemForm select[name='type']").val(createItemType);
 			Session.set('createItemType', null);
+		} else {
+			Session.set('editItemForm.selectedType', 'issue');
 		}
 		this.$('input[name="title"]').focus();
 	});
@@ -180,7 +184,7 @@ if(Meteor.isClient) {
 		},
 
 		selectedType: function() {
-			return Session.get('editItemForm.selectedType') || 'Issue';
+			return Session.get('editItemForm.selectedType');
 		},
 
 		isSelectedIssueType: function(issueType) {
@@ -205,7 +209,7 @@ if(Meteor.isClient) {
 		},
 		'click #cancel-button': function(e) {
 			e.preventDefault();
-			FlowRouter.go("/project/" + Session.get('currentProjectId') + "/board/" + Session.get('currentBoardId'));
+			Ols.Router.showHomeMessages();
 		},
 
 		'click #save-button': function(e, template) {
@@ -709,6 +713,22 @@ if(Meteor.isClient) {
 	});
 
 	Template.rightSidebar.events({
+		'click #create-discussion-link': function() {
+			Ols.Router.showCreateItemPage({type:'discussion'});
+		},
+
+		'click #create-issue-link': function() {
+			Ols.Router.showCreateItemPage({type:'issue'});
+		},
+
+		'click #create-article-link': function() {
+			Ols.Router.showCreateItemPage({type:'article'});
+		},
+
+		'click #edit-link': function() {
+			Ols.Router.showEditItemPage(Session.get('currentItemId'));
+		},
+
 		'click #open-close-link': function() {
 			Meteor.call('toggleItemOpenStatus', Session.get('currentItemId'), function(err, result) {
 				if(err) {

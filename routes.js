@@ -169,7 +169,18 @@ if(Meteor.isClient) {
 		}
 	});
 
+	FlowRouter.route('/project/:projectId/edit-item/:itemId', {
+		name:'editProjectItem',
+		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
+			Session.set('currentBoardId', null);
+			Session.set('currentItemId', params.itemId);
+			BlazeLayout.render("app", {currentPage: "editItemPage"});
+		}
+	});
+
 	FlowRouter.route('/project/:projectId/board/:boardId/edit-item/:itemId', {
+		name:'editBoardItem',
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
