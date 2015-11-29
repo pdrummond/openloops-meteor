@@ -43,7 +43,7 @@ if(Meteor.isClient) {
 
 	Template.messageHistory.helpers({
 		messages: function() {
-			var filter = {};
+			var filter = {projectId: Session.get('currentProjectId')};
 			var currentBoardId = Session.get('currentBoardId');
 			if(currentBoardId) {
 				filter.boardId =  currentBoardId;
