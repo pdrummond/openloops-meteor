@@ -12,7 +12,7 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
-  api.use(['templating', 'ecmascript', 'ols:lib']);
+  api.use(['templating', 'ecmascript', 'ols:full-screen-editor', 'ols:lib']);
   api.addFiles(['message-box.html', 'message-box.js']);
 });
 

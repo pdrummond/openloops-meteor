@@ -1,0 +1,32 @@
+#full-screen-editor-wrapper {
+	display:none;
+	height:100%;
+}
+
+#full-screen-editor-wrapper #full-screen-editor {
+	width:100%;
+	height:100%;
+	font-size:18px;
+
+	.CodeMirror {
+		padding:20px;
+		height:100%;
+		z-index:999999999;
+	}
+}
+
+#full-screen-editor-wrapper #close-editor-button {
+	position:absolute;
+	top:5px;
+	right: 10px;
+    z-index: 9999999999999;
+	color:gray;
+}
+
+#full-screen-editor-wrapper #create-message-button {
+	position:absolute;
+	top:5px;
+	right: 40px;
+    z-index: 9999999999999;
+	color:gray;
+}

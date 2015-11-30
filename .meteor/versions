@@ -1,6 +1,7 @@
 accounts-base@1.2.2
 accounts-password@1.1.4
 amplify@1.0.0
+ashokgelal:codemirror@1.2.7
 autoupdate@1.2.4
 babel-compiler@5.8.24_1
 babel-runtime@0.1.4
@@ -63,6 +64,7 @@ npm-bcrypt@0.7.8_2
 npm-mongo@1.4.39_1
 oaf:html5-desktop-notifications@1.0.0
 observe-sequence@1.0.7
+ols:full-screen-editor@0.0.1
 ols:lib@0.0.1
 ols:message-box@0.0.1
 ols:message-history@0.0.1
@@ -71,8 +73,6 @@ osv:mongo-counter@0.2.1
 promise@0.5.1
 random@1.0.5
 rate-limit@1.0.0
-react@0.14.1_1
-react-meteor-data@0.2.3
 react-runtime@0.14.1_1
 react-runtime-dev@0.14.1
 react-runtime-prod@0.14.1

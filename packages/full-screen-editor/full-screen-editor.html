@@ -1,0 +1,9 @@
+<template name="fullScreenEditor">
+	<div id="full-screen-editor-wrapper">
+		<a id="close-editor-button" title="Close fullscreen editor" href=""><i class="fa fa-times"></i></a>
+		<a id="create-message-button" title="Create message" href=""><i class="fa fa-plus-circle"></i></a>
+		<div id="full-screen-editor">
+			{{> CodeMirror id="full-screen-editor-textarea" name="fullScreenEditor" options=editorOptions reactiveVar="messageBox.content"}}
+		</div>
+	</div>
+</template>

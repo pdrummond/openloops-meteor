@@ -7,6 +7,7 @@
 </template>
 
 <template name="topBanner">
+	{{> fullScreenEditor}}
 	{{> boardChooserMenu}}
 	<div id="top-banner">
 		<div class="left">
@@ -232,86 +233,7 @@
 					{{#each users}}
 						{{> userCard}}
 					{{/each}}
-					<!--<div class="user-card">
-						<div class="top-section">
-						<img src="http://semantic-ui.com/images/avatar/small/elliot.jpg"/>
-						<div class="content">
-							<span class="heading">Harold Tester</span>
-							<span class="meta"><span class="online-status offline"><span class="online-status-dot"></span> Offline (on holiday)</span></span>
-						</div>
-						</div>
-						<div class='bottom-section'>
-						<div class="meta" title=""><i class='fa fa-coffee'></i> Lying on a beach somewhere <i class="fa fa-smile-o"></i></div>
-						</div>
-					</div>
-					<div class="user-card">
-						<div class="top-section">
-						<img src="http://semantic-ui.com/images/avatar/small/stevie.jpg"/>
-						<div class="content">
-							<span class="heading">Bobby Tester</span>
-							<span class="meta"><span class="online-status"><span class="online-status-dot typing" title="Typing"></span> Typing...</span></span>
-						</div>
-						</div>
-						<div class='bottom-section'>
-						<div class="meta" title="Testing #OLS-20"><i class='fa fa-bug'></i> Fixing #OLS-20</div>
-						</div>
-					</div>
-					<div class="user-card">
-						<div class="top-section">
-						<img src="http://semantic-ui.com/images/avatar/small/christian.jpg"/>
-						<div class="content">
-							<span class="heading">George Tester</span>
-							<span class="meta"><span class="online-status away"><span class="online-status-dot"></span> Away</span></span>
-						</div>
-						</div>
-						<div class='bottom-section'>
-						<div class="meta" title="Testing #OLS-20"><i class='fa fa-code-fork'></i> Creating test branch for #OLS-323 </div>
-						</div>
-					</div>
-					<div class="user-card">
-						<div class="top-section">
-						<img src="http://semantic-ui.com/images/avatar/small/helen.jpg"/>
-						<div class="content">
-							<span class="heading">Lynda Tester</span>
-							<span class="meta"><span class="online-status busy"><span class="online-status-dot"></span> Busy</span></span>
-						</div>
-						</div>
-						<div class='bottom-section'>
-						<div class="meta" title="Testing #OLS-20"><i class='fa fa-code'></i> Implementing #OLSX-666</div>
-						</div>
-					</div>
-					<div class="user-card">
-						<div class="top-section">
-						<img src="http://semantic-ui.com/images/avatar2/small/mark.png"/>
-						<div class="content">
-							<span class="heading">John Tester</span>
-							<span class="meta"><span class="online-status"><span class="online-status-dot online" title="Online"></span> Online</span></span>
-						</div>
-						</div>
-						<div class='bottom-section'>
-						<div class="meta" title="Testing #OLS-20"><i class='fa fa-bug'></i> Fixing bug #OLS-20</div>
-						</div>
-					</div>
-					<div class="user-card">
-						<div class="top-section">
-						<img src="http://semantic-ui.com/images/avatar2/small/lindsay.png"/>
-						<div class="content">
-							<span class="heading">Joyce Tester</span>
-							<span class="meta"><span class="online-status"><span class="online-status-dot online" title="Online"></span> Online</span></span>
-						</div>
-						</div>
-						<div class='bottom-section'>
-						<div class="meta" title="Testing #OLS-20"><i class='fa fa-cog'></i> Testing #OLS-200</div>
-						</div>
-					</div>-->
 				</div>
-				<!--<ul id="header-feed-links">
-					<li class="{{isActive ''}}"><a href="/"><i class="fa fa-home"></i> Feed</a></li>
-					<li class="{{isActive 'discussion'}}"><a href="/feed/search?query=type:discussion"><i class="fa fa-comments-o"></i> Discussions</a></li>
-					<li class="{{isActive 'issue'}}"><a href="/feed/search?query=type:issue"><i class="fa fa-exclamation-circle"></i> Issues</a></li>
-					<li class="{{isActive 'article'}}"><a href="/feed/search?query=type:article"><i class="fa fa-book"></i> Articles</a></li>
-					<li><input id="search-input" placeholder="Type here to search" value={{filterQuery}}></li>
-				</ul>-->
 			{{else}}
 			<div id="header-main-title" title="{{currentItemTitle}}"><i class="fa {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}}</div>
 			<div id="header-status-bar">
