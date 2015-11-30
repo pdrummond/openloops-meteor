@@ -3,6 +3,7 @@ Template.fullScreenEditor.helpers({
 	editorOptions: function() {
 		return {
 			mode: "markdown",
+			lineWrapping:true,
 			placeholder: 'Type your message here'
 		}
 	},
@@ -16,7 +17,7 @@ Template.fullScreenEditor.events({
 		Ols.FullScreenEditor.close();
 	},
 
-	'click #create-message-button': function(e, t) {		
+	'click #create-message-button': function(e, t) {
 		var inputVal = t.find("#full-screen-editor-textarea").value;
 		var newMessage = OpenLoops.insertClientMessage({text:inputVal});
 		$("#messageBox").val('');
