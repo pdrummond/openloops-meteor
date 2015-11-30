@@ -294,7 +294,7 @@ if(Meteor.isClient) {
 
 	Template.app.onCreated(function() {
 		this.subscribe('allUsernames');
-		this.subscribe('userPresence');
+		this.subscribe('userStatus');
 		this.subscribe('projects');
 		this.subscribe('boards');
 		this.subscribe('teamMembers');
@@ -405,17 +405,34 @@ if(Meteor.isClient) {
 	});
 
 	Template.userCard.helpers( {
+
+		isCurrentUser: function() {
+			return this.username == Meteor.user().username;
+		},
+
 		userImageUrl: function() {
 			return Ols.User.getProfileImageUrl(this.username);
 		},
 
 		state: function() {
-			var state='offline';
+			var state = 'offline';
+			/*var state='offline';
 			var presence = Presences.findOne({userId: this._id});
 			if(presence) {
 				state = presence.state;
 			}
+			return state;*/
+			var user = Meteor.users.findOne({username:this.username});
+			if(user && user.status) {
+				state = user.status.online?'online':'offline';
+			}
 			return state;
+		}
+	});
+
+	Template.userCard.events({
+		'click .working-on-link': function() {
+			alert("Not implemented yet, sorry");
 		}
 	});
 
@@ -1127,12 +1144,14 @@ if(Meteor.isServer) {
 		}});
 	});
 
-	Meteor.publish('userPresence', function() {
-	  filter = { userId: { $exists: true }};
-	  return Presences.find(filter, { fields: { state: true, username: true, userId: true }});
+	Meteor.publish("userStatus", function() {
+  		return Meteor.users.find({ "status.online": true }, { fields: { "username": 1, "status":1 } });
 	});
 
-
+	// Meteor.publish('userPresence', function() {
+	//   filter = { userId: { $exists: true }};
+	//   return Presences.find(filter, { fields: { state: true, username: true, userId: true }});
+	// });
 } //isServer
 
 // Override Meteor._debug to filter for custom msgs - as used

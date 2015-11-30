@@ -209,7 +209,11 @@
 		</div>
 		</div>
 		<div class='bottom-section'>
-		<div class="meta"><i class='fa fa-code'></i> Implementing #OLS-42</div>
+			{{#if isCurrentUser}}
+				<div class="meta"><a class="working-on-link">What are you working on?</a></div>
+			{{else}}
+				<div class="meta"><i class='fa fa-circle'></i> Doing nothing</div>
+			{{/if}}
 		</div>
 	</div>
 </template>
