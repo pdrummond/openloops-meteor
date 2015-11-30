@@ -484,11 +484,16 @@ if(Meteor.isClient) {
 				var currentBoardId = Session.get('currentBoardId');
 				var currentItemId = Session.get('currentItemId');
 				var item = Items.findOne(this.itemId);
-				var itemTitleLink = '<span id="item-link"><a class="item-link" href="' +
+				var itemTitleLink = "";
+				if(item != null) {
+					itemTitleLink = '<span id="item-link"><a class="item-link" href="' +
 					'/project/' + Session.get('currentProjectId') +
 					(currentBoardId?'/board/' + currentBoardId:'') +
 					'/item/' + this.itemId + '">' + Ols.Item.getItemKey({item: item}) + ': ' + Ols.StringUtils.truncate(item.title, 50)
 					+ '</a></span>';
+				} else {
+					itemTitleLink = "ERR: Cannot find item";
+				}
 
 				var ctx = currentItemId?'this item':itemTitleLink;
 				var msg = '???';
