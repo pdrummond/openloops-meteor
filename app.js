@@ -512,11 +512,19 @@ if(Meteor.isClient) {
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_MOVED_TO:
 					var toBoard = Boards.findOne(this.toBoardId);
-					msg = 'moved ' + ctx + ' to <a href="/project/' + Session.get('currentProjectId') + '/board/' + this.toBoardId + '" class="board-link">' + toBoard.title + '</a>';
+					if(toBoard != null) {
+						msg = 'moved ' + ctx + ' to <a href="/project/' + Session.get('currentProjectId') + '/board/' + this.toBoardId + '" class="board-link">' + toBoard.title + '</a>';
+					} else {
+						msg = "ERR: toBoard is null";
+					}
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_MOVED_FROM:
 					var fromBoard = Boards.findOne(this.fromBoardId);
-					msg = 'moved ' + ctx + ' here from <a href="/' + Session.get('currentProjectId') + '/board/' + this.fromBoardId + '" class="board-link">' + fromBoard.title + '</a>';
+					if(fromBoard != null) {
+						msg = 'moved ' + ctx + ' here from <a href="/' + Session.get('currentProjectId') + '/board/' + this.fromBoardId + '" class="board-link">' + fromBoard.title + '</a>';
+					} else {
+						msg = "ERR: fromBoard is null";
+					}
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED:
 						msg = "changed title of item to " + itemTitleLink;
@@ -528,7 +536,12 @@ if(Meteor.isClient) {
 			} else {
 				switch(this.activityType) {
 					case Ols.ACTIVITY_TYPE_NEW_BOARD:
-					msg = 'created <span class="board-link">' + Boards.findOne(this.boardId).title + '</span>';
+					var board = Boards.findOne(this.boardId);
+					if(board != nul) {
+						msg = 'created <span class="board-link">' + board.title + '</span>';
+					} else {
+						msg = 'ERR: board is null';
+					}
 					break;
 				}
 			}
