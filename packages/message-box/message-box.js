@@ -1,7 +1,8 @@
 if(Meteor.isClient) {
-	
+
 	Template.messageBox.events({
 		'keypress #messageBox': function(e) {
+			Streamy.broadcast('userTyping', { username: Meteor.user().username });
 			var inputVal = $('#messageBox').val();
 			var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
 			if(charCode == 13 && (inputVal == null || inputVal.length == 0)) {

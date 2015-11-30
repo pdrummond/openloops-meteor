@@ -1,4 +1,14 @@
 if(Meteor.isClient) {
+
+	Meteor.setInterval(function() {
+		$(".user-card").removeClass("user-typing");
+	}, 1000);
+
+	Streamy.on('userTyping', function(user) {
+		if(user.username != Meteor.user().username) {
+  			$(".user-card[data-username='" + user.username + "']").addClass("user-typing");
+  		}
+  	});
 	Streamy.on('sendMessage', function(incomingMessage) {
 		console.log(">>> RECEIVED SEND_MESSAGE STREAMY");
 		if(incomingMessage.createdBy != Meteor.user().username) {
