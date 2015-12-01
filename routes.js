@@ -253,19 +253,18 @@ if(Meteor.isClient) {
 		}
 	});
 
-	FlowRouter.route('/project/:projectId/board/:boardId/create-label', {
+	FlowRouter.route('/project/:projectId/create-label', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
-			Session.set('currentBoardId', params.boardId);
+			Session.set('currentBoardId', null);
 			BlazeLayout.render("app", {currentPage: "editLabelPage"});
 		}
 	});
 
-	FlowRouter.route('/project/:projectId/board/:boardId/label/:labelId/edit', {
+	FlowRouter.route('/project/:projectId/label/:labelId/edit', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
-			Session.set('currentBoardId', params.boardId);
-			Session.set('currentLabelId', params.labelId);
+			Session.set('currentBoardId', null);
 			BlazeLayout.render("app", {currentPage: "editLabelPage"});
 		}
 	});

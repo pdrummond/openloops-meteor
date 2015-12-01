@@ -338,8 +338,8 @@ html:not(.touch) {
 
 	.content {
 		padding-left:50px;
-		color: #737272;
-		font-size: 16px;
+		color: #000000;
+		font-size: 15px;
 	}
 }
 
@@ -509,8 +509,9 @@ footer
 
 #header-main-title
 	overflow: ellipsis;
-	padding:10px
-	font-size 2rem
+	padding:5px
+	font-size 1.2rem
+	font-weight:bold;
 	margin-left 10px
 
 #header-new-messages-toast {
@@ -652,7 +653,7 @@ footer
 }
 
 #header-open-status
-	font-size:14px;
+	font-size:12px;
 	display:inline;
 	padding-left:20px;
 
@@ -754,7 +755,8 @@ box-shadow: 5px 5px 20px #504C4C;
 		.label-tag {
 			padding:5px;
 			border-radius:5px;
-			color:white;
+			color:black;
+			font-size: 16px;
 		}
 
 		.label-counts {
@@ -1015,10 +1017,11 @@ box-shadow: 5px 5px 20px #504C4C;
 	display:inline-block;
 	.item-tab-bar {
 		display:flex;
-		padding:10px;
+		padding:0px;
+		padding-top:5px;
 
 		.tab-item {
-			font-size:14px;
+			font-size:12px;
 			text-transform:uppercase;
 			margin-right:30px;
 			cursor:pointer;
@@ -1220,7 +1223,25 @@ box-shadow: 5px 5px 20px #504C4C;
 
 #full-screen-link {
 	position: absolute;
-	bottom: 0px;	
+	bottom: 0px;
 	font-size: 0.8em;
 	color: gray;
+}
+
+.tab-body {
+	display:none
+}
+
+.tab-body.tab-active {
+	display:block;
+}
+
+.tabs-header {
+	display:flex;
+	cursor:pointer;
+}
+
+.tabs-header .tab {
+	padding:5px;
+	font-size:12px;
 }

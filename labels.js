@@ -5,32 +5,47 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.editLabelForm.helpers({
+		currentLabel: function() {
+			var label = Labels.findOne(FlowRouter.getParam("labelId"));
+			return label?label:{};
+		}
+	});
+
 	Template.editLabelForm.events({
 		'click #save-button': function(e) {
 			e.preventDefault();
+
 			var title = $("#editLabelForm input[name='title']").val();
 			if(title != null && title.length > 0) {
-				var description = $("#editLabelForm textarea[name='description']").val();
-
-				var label = {
+				var labelAttrs = {
 					title: title,
-					description: description,
 					color: $("#editLabelForm input[name='color']").val(),
+					group: $("#editLabelForm input[name='group']").val(),
+					description: $("#editLabelForm textarea[name='description']").val()
 				};
-				Meteor.call('upsertLabel', label, function(err, result) {
-					if(err) {
-						alert("Error upserting label: " + err);
-					} else {
-						if(Session.get('currentItemId')) {
-							FlowRouter.go("/board/" + Session.get('currentBoardId') + "/item/" + Session.get('currentItemId'));
+				var currentLabelId = Session.get('currentLabelId');
+				if(currentLabelId == null) {
+					Meteor.call('insertLabel', labelAttrs, function(err) {
+						if(err) {
+							alert("Error inserting label: " + err.reason);
 						} else {
-							FlowRouter.go("/board/" + Session.get('currentBoardId'));
+							FlowRouter.go("projectMessages", {projectId: Session.get('currentProjectId')});
 						}
-					}
-				});
+					});
+				} else {
+					Meteor.call('updateLabel', currentLabelId, labelAttrs, function(err) {
+						if(err) {
+							alert("Error updating label: " + err.reason);
+						} else {
+							FlowRouter.go("projectMessages", {projectId: Session.get('currentProjectId')});
+						}
+					});
+				}
 			}
 		}
 	});
+
 	Template.labelListItem.helpers({
 		description: function() {
 			return this.description || "No Description";
@@ -57,6 +72,27 @@ if(Meteor.isServer) {
 	});
 
 	Meteor.methods({
+		insertLabel: function(newLabel) {
+			var now = new Date().getTime();
+			newLabel = _.extend({
+				createdAt: now,
+				createdBy: Meteor.user().username,
+				updatedAt: now,
+				numOpenMessages: 0,
+				numClosedMessage: 0
+			}, newLabel);
+			newLabel.title = slugify(newLabel.title);
+			return Labels.insert(newLabel);
+		},
+
+		updateLabel: function(labelId, attrs) {
+			console.log("> updateLabel: " + JSON.stringify(attrs));
+			var label = Labels.findOne(labelId);
+			attrs.title = slugify(attrs.title);
+			Labels.update(label, {$set: attrs});
+			return Labels.findOne(labelId);
+		},
+
 		upsertLabel: function(newLabel) {
 			var now = new Date().getTime();
 			newLabel = _.extend({

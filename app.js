@@ -806,7 +806,18 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.leftSidebar.onCreated(function() {
+		var template = this;
+		template.activeTab = new ReactiveVar("items-tab");
+	});
+
 	Template.leftSidebar.helpers({
+
+		activeTabClass: function(tabName) {
+			var template = Template.instance();
+			return template.activeTab.get() == tabName ? 'tab-active' : '';
+		},
+
 		items: function() {
 			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
 			filter.projectId = Session.get('currentProjectId');
@@ -855,6 +866,14 @@ if(Meteor.isClient) {
 	});
 
 	Template.leftSidebar.events({
+		'click #items-tab': function(e, t) {
+			t.activeTab.set('items-tab');
+		},
+
+		'click #labels-tab': function(e, t) {
+			t.activeTab.set('labels-tab');
+		},
+
 		'click #boards-dropdown-button': function() {
 			$("#board-chooser-menu").slideToggle();
 		},

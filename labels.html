@@ -4,36 +4,44 @@
 			{{> labelListItem}}
 		{{/each}}
 	</ul>
-	<a id="create-label" href="/board/{{currentBoardId}}/create-label"><i class="fa fa-plus"> Create Label</i></a>
+	<a id="create-label" href="/project/{{currentProjectId}}/create-label"><i class="fa fa-plus"> Create Label</i></a>
 </template>
 
 <template name="labelListItem">
 	<li class="label-list-item">
 		<div id="label-list-item-header">
-			<a id="label-link" style="background-color:{{color}}" class="label-tag" href="">{{title}}</a>
-			<span class="label-counts"> <i class="fa fa-tasks"></i> 10</span>
+				<a id="label-link" style="background-color:{{color}}" class="label-tag" href="">{{title}}</a>
+				<span class="label-counts"> <i class="fa fa-tasks"></i> 10</span>
 		</div>
-		<span class="meta">{{description}}</span> <a href="/board/{{currentBoardId}}/label/{{_id}}/edit" style="display:none;font-size:12px">Edit</a>
+		<span class="meta">{{description}}</span> <a href="/project/{{currentProjectId}}/label/{{_id}}/edit" style="display:none;font-size:12px">Edit</a>
 	</li>
 </template>
 
+
 <template name="editLabelPage">
-	{{> leftSidebar}}
-	{{> editLabelForm}}
+	{{#onlyIfLoggedIn}}
+		{{> editLabelForm}}
+	{{/onlyIfLoggedIn}}
 </template>
 
 <template name="editLabelForm">
-	<div id="editLabelForm" class="main">
+	{{#onlyIfAdminUser}}
+	<div id="editLabelForm" class="form">
+		{{#with currentLabel}}
 		<form>
 			<fieldset>
-				<label>Title</label>
-				<input name="title" placeholder="Enter title" value={{title}}>
+				<label>Name</label>
+				<input name="title" placeholder="Enter label name" value="{{title}}" autofocus>
+				<label>Group</label>
+				<input name="group" placeholder="Enter label group (optional)" value="{{group}}">
+				<label>Colour</label>
+				<input name="color" placeholder="Enter label colour (optional)" value="{{colour}}">
 				<label>Description</label>
-				<textarea name="description" placeholder="Enter description" value={{description}}></textarea>
-				<label>Color</label>
-				<input name="color" placeholder="Enter color" value="{{color}}">
+				<textarea name="description" placeholder="Enter label description (optional)">{{description}}</textarea>
 			</fieldset>
 			<button id="save-button">Save Label</button>
 		</form>
+		{{/with}}
 	</div>
+	{{/onlyIfAdminUser}}
 </template>

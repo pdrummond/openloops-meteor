@@ -145,22 +145,31 @@
 
 <template name="leftSidebar">
 	<div class="left-sidebar">
-		<div id="board-item">
-			<a class="item {{isBoardItemActive}}">
-				<i id="type-icon" class="fa fa-th-large" style="color:black"></i>
-				<div id="content">
-					{{currentBoardTitle}}
-					<i id="boards-dropdown-button" class="fa fa-caret-down"></i>
-				</div>
-				<div class="item-msg-count" data-msg-count="0">
-				</div>
-			</a>
+		<div class="tabs-header">
+			<a id="items-tab" class="{{activeTabClass 'items-tab'}} tab"> <i class="fa fa-circle"></i> Items</a>
+			<a id="labels-tab" class="{{activeTabClass 'labels-tab'}} tab"> <i class="fa fa-tag"></i> Labels</a>
 		</div>
-		<ul class="item-list">
-			{{#each items}}
+		<div id="items-tab" class="tab-body {{activeTabClass 'items-tab'}}">
+			<div id="board-item">
+				<a class="item {{isBoardItemActive}}">
+					<i id="type-icon" class="fa fa-th-large" style="color:black"></i>
+					<div id="content">
+						{{currentBoardTitle}}
+						<i id="boards-dropdown-button" class="fa fa-caret-down"></i>
+					</div>
+					<div class="item-msg-count" data-msg-count="0">
+					</div>
+				</a>
+			</div>
+			<ul class="item-list">
+				{{#each items}}
 				{{> itemItemView}}
-			{{/each}}
-		</ul>
+				{{/each}}
+			</ul>
+		</div>
+		<div id="labels-tab" class="tab-body {{activeTabClass 'labels-tab'}}">
+			{{> labelsList}}
+		</div>
 	</div>
 </template>
 
@@ -319,7 +328,6 @@
 		</div>
 	</li>
 </template>
-
 
 <template name="itemItemView">
 	<li  data-id={{_id}} >
