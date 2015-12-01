@@ -8,12 +8,24 @@
 </template>
 
 <template name="labelListItem">
-	<li class="label-list-item">
-		<div id="label-list-item-header">
-				<a id="label-link" style="background-color:{{color}}" class="label-tag" href="">{{title}}</a>
-				<span class="label-counts"> <i class="fa fa-tasks"></i> 10</span>
-		</div>
-		<span class="meta">{{description}}</span> <a href="/project/{{currentProjectId}}/label/{{_id}}/edit" style="display:none;font-size:12px">Edit</a>
+	<li  data-id={{_id}} style="position:relative">
+		<a class="label item" href="">
+			<i id="type-icon" class="fa fa-tag" style="color:{{color}}"></i>
+			<div id="content">
+				<span id="title">{{title}}</span>
+				<div id="meta"> {{description}}</div>
+			</div>
+			<span class="label-counts" style="position:absolute;top:20px;right:10px;font-size:12px;color:gray">
+				 <div><strong>{{numOpenMessages}}</strong> open </div>
+				 <div><strong>{{numClosedMessages}}</strong> closed</div>
+			</span>
+			{{#if userIsAdmin}}
+			<div class="item-links">
+				<a id="edit-label-link" href="/project/{{currentProjectId}}/label/{{_id}}/edit">Edit</a>
+				<a id="delete-label-link" href="">Delete</a>
+			</div>
+			{{/if}}
+		</a>
 	</li>
 </template>
 
@@ -32,10 +44,12 @@
 			<fieldset>
 				<label>Name</label>
 				<input name="title" placeholder="Enter label name" value="{{title}}" autofocus>
+				<label>Colour</label>
+				<input name="color" placeholder="Enter label colour (optional)" value="{{color}}">
+				<label>Order</label>
+				<input name="order" placeholder="Enter label order (optional)" value="{{order}}">
 				<label>Group</label>
 				<input name="group" placeholder="Enter label group (optional)" value="{{group}}">
-				<label>Colour</label>
-				<input name="color" placeholder="Enter label colour (optional)" value="{{colour}}">
 				<label>Description</label>
 				<textarea name="description" placeholder="Enter label description (optional)">{{description}}</textarea>
 			</fieldset>
@@ -44,4 +58,17 @@
 		{{/with}}
 	</div>
 	{{/onlyIfAdminUser}}
+</template>
+
+<template name="labelChooserMenu">
+	<ul id="label-chooser-menu" style="display:none">
+		<div class="menu-item-header">Choose Labels</div>
+		{{#each labels}}
+			{{> labelChooserItem}}
+		{{/each}}
+	</ul>
+</template>
+
+<template name="labelChooserItem">
+	<li class="menu-item">{{title}} <i class="fa fa-check {{showCheck}}" style="position:absolute;right:5px"></i></li>
 </template>

@@ -1,7 +1,7 @@
 if(Meteor.isClient) {
 	Template.labelsList.helpers({
 		labels: function() {
-			return Labels.find();
+			return Labels.find({projectId: Session.get('currentProjectId')}, {sort: {order: 1}});
 		}
 	});
 
@@ -21,8 +21,10 @@ if(Meteor.isClient) {
 				var labelAttrs = {
 					title: title,
 					color: $("#editLabelForm input[name='color']").val(),
+					order: $("#editLabelForm input[name='order']").val(),
 					group: $("#editLabelForm input[name='group']").val(),
-					description: $("#editLabelForm textarea[name='description']").val()
+					description: $("#editLabelForm textarea[name='description']").val(),
+					projectId: Session.get('currentProjectId'),
 				};
 				var currentLabelId = Session.get('currentLabelId');
 				if(currentLabelId == null) {
@@ -53,14 +55,58 @@ if(Meteor.isClient) {
 	});
 
 	Template.labelListItem.events({
-		'click #label-link': function() {
-			Session.set('showSidebarTabs', false);
-			Session.set('currentLabelId', this._id);
-			Session.set('leftSidebarActiveTab', 'inboxTab');
-			Session.set('filterQuery', 'labels:' + this.title);
+		'click .label.item #title': function() {
+			console.log("labelListItem click");
+			Session.set('leftSidebarActiveTab', 'boom');
+			console.log("labelListItem click done");
+			Session.set('filterQuery', 'label:' + this.title);
+		},
 
+		'click #delete-label-link': function() {
+			if(Ols.User.userIsAdmin()) {
+				Meteor.call('deleteLabel', this._id, function(err, result) {
+					if(err) {
+						alert("Error deleting label: " + err.reason);
+					}
+				});
+			} else {
+				alert("You don't have permission to delete labels");
+			}
 		}
-	})
+	});
+
+	Template.labelChooserMenu.helpers({
+		labels: function() {
+			return Labels.find({projectId: Session.get('currentProjectId')}, {sort: {order: 1}});
+		}
+	});
+
+	Template.labelChooserItem.helpers({
+		showCheck: function() {
+			var item = Items.findOne(Session.get('currentItemId'));
+			return _.contains(item.labels, this._id)?'':'hide';
+		}
+	});
+
+	Template.labelChooserItem.events({
+		'click': function() {
+			var item = Items.findOne(Session.get('currentItemId'));
+			var labelExists = _.contains(item.labels, this._id);
+			if(labelExists) {
+				Meteor.call('removeLabelFromItem', Session.get('currentItemId'), this._id, function(err, result) {
+					if(err) {
+						alert("Error adding label: " + err.reason);
+					}
+				});
+			} else {
+				Meteor.call('addLabelToItem', Session.get('currentItemId'), this._id, function(err, result) {
+					if(err) {
+						alert("Error adding label: " + err.reason);
+					}
+				});
+			}
+		}
+	});
 }
 
 Labels = new Meteor.Collection("labels");
@@ -68,7 +114,7 @@ Labels = new Meteor.Collection("labels");
 if(Meteor.isServer) {
 
 	Meteor.publish("labels", function() {
-		return Labels.find();
+		return Labels.find({}, {sort: {order: 1}});
 	});
 
 	Meteor.methods({
@@ -79,7 +125,7 @@ if(Meteor.isServer) {
 				createdBy: Meteor.user().username,
 				updatedAt: now,
 				numOpenMessages: 0,
-				numClosedMessage: 0
+				numClosedMessages: 0
 			}, newLabel);
 			newLabel.title = slugify(newLabel.title);
 			return Labels.insert(newLabel);
@@ -100,11 +146,43 @@ if(Meteor.isServer) {
 				createdBy: Meteor.user().username,
 				updatedAt: now,
 				numOpenMessages: 0,
-				numClosedMessage: 0
+				numClosedMessages: 0
 			}, newLabel);
 			newLabel.title = slugify(newLabel.title);
 			var result = Labels.upsert(newLabel._id, newLabel);
 			console.log("upsertLabel: " + JSON.stringify(result));
+		},
+
+		deleteLabel: function(labelId) {
+			Labels.remove(labelId);
+		},
+
+		addLabelToItem: function(itemId, labelId) {
+			Items.update({
+			  _id: itemId
+			}, {
+			  $push: { labels: labelId}
+			});
+			var item = Items.findOne(itemId);
+			if(item.isOpen) {
+				Labels.update(labelId, {$inc: {numOpenMessages: 1}});
+			} else {
+				Labels.update(labelId, {$inc: {numClosedMessages: 1}});
+			}
+		},
+
+		removeLabelFromItem: function(itemId, labelId) {
+			Items.update({
+			  _id: itemId
+			}, {
+			  $pull: { labels: labelId}
+			});
+			var item = Items.findOne(itemId);
+			if(item.isOpen) {
+				Labels.update(labelId, {$inc: {numOpenMessages: -1}});
+			} else {
+				Labels.update(labelId, {$inc: {numClosedMessages: -1}});
+			}
 		}
 	})
 }

@@ -130,10 +130,10 @@
 				<input name="title" placeholder="Enter title" value={{title}} autofocus>
 				<!--<label>Description</label>
 				<textarea name="description" placeholder="Enter description" value={{description}}></textarea>
-				-->
+
 				<label>Labels</label>
 				<input name="labels" placeholder="Add labels here, e.g: important, milestone1, now, in-progress" value="{{labels}}">
-
+				-->
 			</fieldset>
 			<button id="save-button" class='button-default'>Save</button>
 			<button id="cancel-button"> Cancel</button>
@@ -190,10 +190,16 @@
 			<li id="move-link" class="action-button"><a href=""><i class="fa fa-arrow-right"></i> Move</a></li>
 		</ul>
 		{{> moveToBoardList}}
-		<span class="header-text">LABELS</span>
+		<span class="header-text">LABELS
+			{{#if userIsAdmin}}
+			<i id="show-label-chooser-button" class="fa fa-cog"></i>
+			{{/if}}
+		</span>
+		{{> labelChooserMenu}}
 		<ul class="label-buttons">
 			{{> itemLabels}}
 		</ul>
+
 		{{#if isIssue}}
 			<span class="header-text">ASSIGNEE</span>
 			<ul class="assignee-buttons">
@@ -283,7 +289,7 @@
 		<span class="empty-item-msg">No labels</span>
 	{{else}}
 		{{#each currentItemLabels}}
-			<div class="label-item">{{this}}</div>
+			<div class="label-item" style="background-color:{{labelColor this}}">{{labelTitle this}}</div>
 		{{/each}}
 	{{/if}}
 </template>
@@ -343,7 +349,7 @@
 			<div id="meta"> {{description}}</div>
 			<div id="item-labels">
 				{{#each itemLabels}}
-					<span class="label-item">{{this}}</span>
+					<span class="label-item" style="background-color:{{labelColor this}}">{{labelTitle this}}</span>
 				{{/each}}
 			</div>
 		</div>

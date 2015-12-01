@@ -1,4 +1,16 @@
 if(Meteor.isClient) {
+	Template.registerHelper('userIsAdmin', function () {
+		return Ols.User.currentUserRole() == Ols.ROLE_ADMIN;
+	});
+
+	Template.registerHelper('labelTitle', function (labelId) {
+		return Labels.findOne(labelId).title;
+	});
+
+	Template.registerHelper('labelColor', function (labelId) {
+		return Labels.findOne(labelId).color;
+	});
+
 	Template.registerHelper('clientMessageCount', function (context, options) {
 		return ClientMessages._collection.find().count();
 	});

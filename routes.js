@@ -265,6 +265,7 @@ if(Meteor.isClient) {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', null);
+			Session.set('currentLabelId', params.labelId);
 			BlazeLayout.render("app", {currentPage: "editLabelPage"});
 		}
 	});

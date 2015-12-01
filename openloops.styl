@@ -691,6 +691,7 @@ footer
 	background-color:gray;
 	padding:2px 5px 2px 5px;
 	border-radius:4px;
+	margin-bottom:10px;
 }
 
 .black-underline {
@@ -719,17 +720,29 @@ footer
 	text-align:center;
 }
 
+#label-chooser-menu {
+	min-width: 200px;
+	border: 1px solid #455A64;
+	margin: 0;
+	padding: 0;
+	z-index: 99999999;
+	position: relative;
+	right: 10px;
+	background: #f5f5f5;
+	box-shadow: 5px 5px 20px #504C4C;
+}
+
 #board-chooser-menu {
 	min-width: 200px;
-border: 1px solid #455A64;
-margin: 0;
-padding: 0;
-z-index: 99999999;
-position: absolute;
-top: 145px;
-left: 150px;
-background: #f5f5f5;
-box-shadow: 5px 5px 20px #504C4C;
+	border: 1px solid #455A64;
+	margin: 0;
+	padding: 0;
+	z-index: 99999999;
+	position: absolute;
+	top: 145px;
+	left: 150px;
+	background: #f5f5f5;
+	box-shadow: 5px 5px 20px #504C4C;
 }
 
 #move-to-board-list {
@@ -863,20 +876,20 @@ box-shadow: 5px 5px 20px #504C4C;
 	display:flex;
 	margin:0;
 	padding:0;
-	margin-top:10px;
-	margin-left:10px;
+	margin-top:7px;
+	margin-left:7px;
 
 }
 
 .user-card {
-	min-height: 80px;
+	min-height: 60px;
 	min-width:180px;
 	background-color:#455A64;
 	margin-right:10px;
 
 	img {
-		 width:50px;
-		 height:50px;
+		 width:40px;
+		 height:40px;
 	}
 
 	.content {
@@ -923,7 +936,7 @@ box-shadow: 5px 5px 20px #504C4C;
 	.bottom-section {
 		background:#61737B;
 		.meta {
-			padding:10px;
+			padding:5px;
 			color:#DADADA;
 			overflow:ellipsis;
 
@@ -1239,9 +1252,34 @@ box-shadow: 5px 5px 20px #504C4C;
 .tabs-header {
 	display:flex;
 	cursor:pointer;
+	border-bottom: 1px solid lightgray;
 }
 
 .tabs-header .tab {
 	padding:5px;
 	font-size:12px;
+
+}
+
+.tabs-header .tab-active {
+	color:black;
+	font-weight:bold;
+}
+
+
+#labels-list li {
+	list-style-type: none;
+}
+.item-links {
+	margin-left:50px;
+}
+
+.item-links a {
+	font-size:12px;
+	color:gray;
+}
+
+#app .left-sidebar .item.label #title:hover {
+	cursor:pointer;
+	color:blue;
 }

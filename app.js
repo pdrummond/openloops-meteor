@@ -2,8 +2,8 @@
 OpenLoops = {};
 
 if(Meteor.isClient) {
-	Session.setDefault('leftSidebarActiveTab', 'discussTab');
-	Session.setDefault('showSidebarTabs', true);
+	Session.setDefault('leftSidebarActiveTab', 'items-tab');
+
 	ClientMessages = new Meteor.Collection('client-messages');
 
 	Meteor.startup(function() {
@@ -96,7 +96,13 @@ if(Meteor.isClient) {
 			remainingText = remainingText.replace(field, '');
 			remainingText = remainingText.replace(value, '');
 			remainingText = remainingText.replace(/:/g, '');
-			if(field == 'type') {
+			if(field == "label") {
+				field = "labels";
+				var label = Labels.findOne({title: value});
+				if(label != null) {
+					value = label._id;
+				}
+			} else if(field == 'type') {
 				if(value == 'bug' || value == 'enhancement' || value == 'task') {
 					field = 'issueType';
 				}
@@ -743,10 +749,6 @@ if(Meteor.isClient) {
 			return Boards.findOne(Items.findOne(Session.get('currentItemId')).boardId).title;
 		},
 
-		leftSidebarActiveTab: function() {
-			return Session.get('leftSidebarActiveTab');
-		},
-
 		isTabActive: function(tabName) {
 			if(!Session.get('currentItemId') && tabName == 'messages') {
 				return 'active';
@@ -803,19 +805,17 @@ if(Meteor.isClient) {
 
 		'click #move-link': function() {
 			$("#move-to-board-list").slideToggle();
-		}
-	});
+		},
 
-	Template.leftSidebar.onCreated(function() {
-		var template = this;
-		template.activeTab = new ReactiveVar("items-tab");
+		'click #show-label-chooser-button': function() {
+			$("#label-chooser-menu").slideToggle();
+		}
 	});
 
 	Template.leftSidebar.helpers({
 
 		activeTabClass: function(tabName) {
-			var template = Template.instance();
-			return template.activeTab.get() == tabName ? 'tab-active' : '';
+			return Session.get('leftSidebarActiveTab') == tabName ? 'tab-active' : '';
 		},
 
 		items: function() {
@@ -851,27 +851,15 @@ if(Meteor.isClient) {
 		isBoardItemActive: function() {
 			return Session.get('currentItemId')?'':'active';
 		},
-
-		isActiveTab: function(tabName) {
-			return tabName == Session.get('leftSidebarActiveTab') ? 'active' : '';
-		},
-
-		isActiveTabBody: function(tabName) {
-			return tabName == Session.get('leftSidebarActiveTab') ? '' : 'hide';
-		},
-
-		showSidebarTabs: function() {
-			return Session.get('showSidebarTabs');
-		},
 	});
 
 	Template.leftSidebar.events({
-		'click #items-tab': function(e, t) {
-			t.activeTab.set('items-tab');
+		'click #items-tab': function() {
+			Session.set('leftSidebarActiveTab', 'items-tab');
 		},
 
-		'click #labels-tab': function(e, t) {
-			t.activeTab.set('labels-tab');
+		'click #labels-tab': function() {
+			Session.set('leftSidebarActiveTab', 'labels-tab');
 		},
 
 		'click #boards-dropdown-button': function() {
@@ -884,18 +872,6 @@ if(Meteor.isClient) {
 
 		'click #search-link': function() {
 			Session.set('showSidebarTabs', false);
-		},
-
-		'click #discuss-tab': function() {
-			Session.set('leftSidebarActiveTab', 'discussTab');
-		},
-
-		'click #manage-tab': function() {
-			Session.set('leftSidebarActiveTab', 'manageTab');
-		},
-
-		'click #read-tab': function() {
-			Session.set('leftSidebarActiveTab', 'readTab');
 		},
 
 		'click #back-arrow-link': function() {
@@ -981,14 +957,7 @@ if(Meteor.isClient) {
 			return Meteor.loggingIn();
 		},
 		canShow: function() {
-			var canShow = false;
-			var user = Meteor.user();
-			if(user) {
-				var email = user.emails[0].address;
-				var teamMember = TeamMembers.findOne({email: email});
-				canShow = teamMember.role == Ols.ROLE_ADMIN;
-			}
-			return canShow;
+			return Ols.User.currentUserRole() == Ols.ROLE_ADMIN;
 		}
 	});
 
