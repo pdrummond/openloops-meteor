@@ -479,7 +479,7 @@ if(Meteor.isClient) {
 
 		itemHasAssignee: function() {
 			return Meteor.users.findOne({username: this.assignee}) != null;
-		}		
+		}
 	});
 
 	Template.itemItemView.events({
@@ -811,6 +811,16 @@ if(Meteor.isServer) {
 
 			Items.update(itemId, {
 				$set: {isOpen: !item.isOpen},
+			});
+
+			//update label counters
+			var item = Items.findOne(itemId);
+			_.each(item.labels, function(labelId) {
+				if(item.isOpen) {
+					Labels.update(labelId, {$inc: {numOpenMessages: 1, numClosedMessages: -1}});
+				} else {
+					Labels.update(labelId, {$inc: {numOpenMessages: -1, numClosedMessages: 1}});
+				}
 			});
 		},
 
