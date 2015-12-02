@@ -662,6 +662,13 @@ if(Meteor.isClient) {
 			Meteor.call('moveItem', Session.get('currentItemId'), this._id, function(err, result) {
 				if(err) {
 					alert('Error moving item: ' + err.reason);
+				} else {
+					OpenLoops.insertActivityMessage(item, {
+						projectId: item.projectId,
+						activityType: Ols.ACTIVITY_TYPE_ITEM_MOVED_BOARD,
+						fromBoardId: Session.get('currentBoardId'),
+						toBoardId: self._id
+					});
 				}
 			});
 			Ols.Router.showHomeMessages();
@@ -782,13 +789,6 @@ if(Meteor.isServer) {
 			});
 			var i = ServerMessages.find({itemId: itemId}).count();
 			var num = ServerMessages.update({itemId: itemId}, {$set: {boardId: toBoardId}}, {multi:true});
-
-			OpenLoops.insertActivityMessage(item, {
-				projectId: item.projectId,
-				activityType: Ols.ACTIVITY_TYPE_ITEM_MOVED_BOARD,
-				fromBoardId: fromBoardId,
-				toBoardId: toBoardId
-			});
 		},
 
 		toggleItemOpenStatus: function(itemId) {
