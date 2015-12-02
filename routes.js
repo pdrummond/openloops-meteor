@@ -253,23 +253,6 @@ if(Meteor.isClient) {
 		}
 	});
 
-	FlowRouter.route('/project/:projectId/create-label', {
-		action: function(params, queryParams) {
-			Session.set('currentProjectId', params.projectId);
-			Session.set('currentBoardId', null);
-			BlazeLayout.render("app", {currentPage: "editLabelPage"});
-		}
-	});
-
-	FlowRouter.route('/project/:projectId/label/:labelId/edit', {
-		action: function(params, queryParams) {
-			Session.set('currentProjectId', params.projectId);
-			Session.set('currentBoardId', null);
-			Session.set('currentLabelId', params.labelId);
-			BlazeLayout.render("app", {currentPage: "editLabelPage"});
-		}
-	});
-
 	FlowRouter.route('/dev-admin', {
 		action: function(params, queryParams) {
 			BlazeLayout.render("app", {currentPage: "devAdminPage"});

@@ -1,3 +1,26 @@
+
+if(Meteor.isClient) {
+	FlowRouter.route('/project/:projectId/create-label', {
+		name: 'createLabelPage',
+		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
+			Session.set('currentBoardId', null);
+			Session.set('currentLabelId', null);
+			BlazeLayout.render("app", {currentPage: "editLabelPage"});
+		}
+	});
+
+	FlowRouter.route('/project/:projectId/label/:labelId/edit', {
+		name: 'editLabelPage',
+		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
+			Session.set('currentBoardId', null);
+			Session.set('currentLabelId', params.labelId);
+			BlazeLayout.render("app", {currentPage: "editLabelPage"});
+		}
+	});
+}
+
 if(Meteor.isClient) {
 	Template.labelsList.helpers({
 		labels: function() {
