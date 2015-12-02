@@ -1,0 +1,41 @@
+<template name="rightSidebar">
+	<div class="right-sidebar">
+		{{#if isTeamFeed}}
+		<span class="header-text">ACTIONS</span>
+		<ul class="action-buttons">
+			<li id="create-discussion-link" class="action-button"><a href=""><i class="fa fa-comments-o"></i> New Discussion</a></li>
+			<li id="create-issue-link" class="action-button"><a href=""><i class="fa fa-exclamation-circle"></i> New Issue</a></li>
+			<li id="create-article-link" class="action-button"><a href=""><i class="fa fa-book"></i> New Article</a></li>
+		</ul>
+		{{else}}
+		<span class="header-text">ACTIONS</span>
+		<ul class="action-buttons">
+			<li id="edit-link" class="action-button"><a href=""><i class="fa fa-pencil"></i> Edit</a></li>
+			<li id="open-close-link" class="action-button"><a href=""><i class="fa fa-times"></i> {{#if currentItemIsOpen}}Close{{else}}Open{{/if}}</a></li>
+			<li id="move-link" class="action-button"><a href=""><i class="fa fa-arrow-right"></i> Move</a></li>
+		</ul>
+		{{> moveToBoardList}}
+		<span class="header-text">LABELS
+			{{#if userIsAdmin}}
+			<i id="show-label-chooser-button" class="fa fa-cog"></i>
+			{{/if}}
+		</span>
+		{{> labelChooserMenu}}
+		<ul class="label-buttons">
+			{{> itemLabels}}
+		</ul>
+
+		{{#if isIssue}}
+			<span class="header-text">ASSIGNEE</span>
+			<ul class="assignee-buttons">
+				<span><img src={{assigneeImageUrl}} class="assignee-item"/> {{assigneeUsername}}</span>
+			</ul>
+			<span class="header-text">ESTIMATES</span>
+			<ul class="estimate-buttons">
+				No Estimates
+			</ul>
+		{{/if}}
+
+		{{/if}}
+	</div>
+</template>
