@@ -86,6 +86,17 @@ if(Meteor.isClient) {
 					$("#status").text("Set all user icons successfully.");
 				}
 			});
+		},
+
+		'click #remove-all-labels': function() {
+			$("#status").text("Remove all labels: working...");
+			Meteor.call('removeAllLabels', function(err, results) {
+				if(err) {
+					$("#status").text("Error removing all labels: " + err.reason);
+				} else {
+					$("#status").text("Removed all labels successfully.");
+				}
+			});
 		}
 	});
 }
@@ -200,6 +211,13 @@ if(Meteor.isServer) {
 		updateUsersIcon: function() {
 			Meteor.users.find().forEach(function(user) {
 				Meteor.users.update(user._id, {$set: {profileImage: Gravatar.imageUrl(user.emails[0].address, {size: 50,default: 'wavatar'})}});
+			});
+		},
+
+		removeAllLabels: function() {
+			Labels.remove({});
+			Items.find().forEach(function(item) {
+				Items.update(item._id, {$set: {labels: []}});
 			});
 		}
 	})
