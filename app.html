@@ -55,12 +55,12 @@
 </template>
 
 <template name="feedPage">
-	{{#onlyIfLoggedIn}}
+	{{#onlyIfProjectAccess}}
 		{{> topBanner}}
 		{{> leftSidebar}}
 		{{> feed}}
 		{{> rightSidebar}}
-	{{/onlyIfLoggedIn}}
+	{{/onlyIfProjectAccess}}
 </template>
 
 <template name="createFilterPage">
@@ -212,7 +212,7 @@
 
 				<span class="item-key">#{{projectKey this}}-{{pid}}</span> ●
 				{{timeAgo createdAt}}
-				{{#if itemHasAssignee}}
+				{{#if itemHasAssignee this}}
 					● <span><img src={{assigneeImageUrl this}} class="assignee-item" title="Assigned to {{assigneeUsername this}}"/></span>
 				{{/if}}
 			</div>
@@ -282,6 +282,19 @@
 	<div class="alert message">
 		<i class="fa fa-exclamation-triangle"></i> 404: Oops, this page doesn't exist, sorry.  Click <a href="/">here</a> to find your way home.
 	</div>
+</template>
+
+<template name="onlyIfProjectAccess">
+  {{#if authInProcess}}
+    <p>Loading ...</p>
+  {{else}}
+    {{#if canShow}}
+      {{> UI.contentBlock }}
+    {{else}}
+      <p>You are not authorized to access this project.</p>
+      <p>Click <a href="/">here</a> to return home</p>
+    {{/if}}
+  {{/if}}
 </template>
 
 <template name="onlyIfLoggedIn">

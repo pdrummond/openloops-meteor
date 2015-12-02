@@ -1,0 +1,40 @@
+<template name="projectMembersList">
+	{{#onlyIfAdminUser}}
+	<a href="/project/{{currentProjectId}}/project-member/create">Add Project Member</a>
+	<ul>
+		{{#each projectMembers}}
+			{{> projectMemberItem}}
+		{{/each}}
+	</ul>
+	{{/onlyIfAdminUser}}
+</template>
+
+<template name="projectMemberItem">
+	<li>
+		{{username}} - {{role}}
+		<a href="/project/{{currentProjectId}}/project-member/{{username}}/edit">Edit</a>
+		<a id="delete-link" href="">Delete</a>
+	</li>
+</template>
+
+<template name="editProjectMemberForm">
+	{{#onlyIfAdminUser}}
+	<div id="editProjectMemberForm" class="form">
+		{{#with currentProjectMember}}
+		<form>
+			<fieldset>
+				<label>Member Username</label>
+				<input name="username" placeholder="Enter username" value="{{username}}" autofocus>
+				<label>Role</label>
+				<select name="role">
+					<option {{isSelectedRole 'USER'}} value="USER">User</option>
+					<option {{isSelectedRole 'ADMIN'}} value="ADMIN">Admin</option>
+				</select>
+			</fieldset>
+			<button id="save-button">Save Member</button>
+		</form>
+		{{/with}}
+	</div>
+
+	{{/onlyIfAdminUser}}
+</template>

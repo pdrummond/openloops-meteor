@@ -1,5 +1,12 @@
 if(Meteor.isClient) {
 
+	Template.registerHelper('itemHasAssignee', function (item) {
+		if(item == null) {
+			item = Items.findOne(Session.get('currentItemId'));
+		}
+		return Meteor.users.findOne({username: item.assignee}) != null;
+	}),
+
 	Template.registerHelper('assigneeImageUrl', function (item) {
 		if(item == null) {
 			item = Items.findOne(Session.get('currentItemId'));

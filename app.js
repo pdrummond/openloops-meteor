@@ -467,10 +467,6 @@ if(Meteor.isClient) {
 
 		isActive: function() {
 			return this._id == Session.get('currentItemId')?'active':'';
-		},
-
-		itemHasAssignee: function() {
-			return Meteor.users.findOne({username: this.assignee}) != null;
 		}
 	});
 
@@ -672,6 +668,19 @@ if(Meteor.isClient) {
 				}
 			});
 			Ols.Router.showHomeMessages();
+		}
+	});
+
+	Template.onlyIfProjectAccess.helpers({
+		authInProcess: function() {
+			return Meteor.loggingIn();
+		},
+		canShow: function() {
+			var canShow = false;
+			if(Meteor.user() != null) {
+				canShow = Ols.Project.isUserProjectMember(Session.get('currentProjectId'), Meteor.user().username);
+			}
+			return canShow;
 		}
 	});
 

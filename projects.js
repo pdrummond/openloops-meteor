@@ -84,6 +84,7 @@ if(Meteor.isServer) {
 				createdAt: now,
 				createdBy: Meteor.user().username,
 				updatedAt: now,
+				members: [],
 				numMessages: 0
 			}, newProject);
 

@@ -28,8 +28,12 @@
 		{{#if isIssue}}
 			<span class="header-text">ASSIGNEE</span>
 			<ul class="assignee-buttons">
-				<span><img src={{assigneeImageUrl}} class="assignee-item"/> {{assigneeUsername}}</span>
-			</ul>			
+				{{#if itemHasAssignee}}
+					<span><img src={{assigneeImageUrl}} class="assignee-item"/> {{assigneeUsername}}</span>
+				{{else}}
+					Not Assigned
+				{{/if}}
+			</ul>
 		{{/if}}
 
 		{{/if}}
