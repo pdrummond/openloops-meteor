@@ -372,20 +372,12 @@ if(Meteor.isClient) {
 					case Ols.ACTIVITY_TYPE_ITEM_CLOSED:
 					msg = "closed " + ctx;
 					break;
-					case Ols.ACTIVITY_TYPE_ITEM_MOVED_TO:
+					case Ols.ACTIVITY_TYPE_ITEM_MOVED_BOARD:
 					var toBoard = Boards.findOne(this.toBoardId);
 					if(toBoard != null) {
-						msg = 'moved ' + ctx + ' to <a href="/project/' + Session.get('currentProjectId') + '/board/' + this.toBoardId + '" class="board-link">' + toBoard.title + '</a>';
+						msg = 'moved ' + ctx + ' to <a href="/project/' + this.projectId + '/board/' + this.toBoardId + '" class="board-link">' + toBoard.title + '</a>';
 					} else {
 						msg = "ERR: toBoard is null";
-					}
-					break;
-					case Ols.ACTIVITY_TYPE_ITEM_MOVED_FROM:
-					var fromBoard = Boards.findOne(this.fromBoardId);
-					if(fromBoard != null) {
-						msg = 'moved ' + ctx + ' here from <a href="/' + Session.get('currentProjectId') + '/board/' + this.fromBoardId + '" class="board-link">' + fromBoard.title + '</a>';
-					} else {
-						msg = "ERR: fromBoard is null";
 					}
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED:
@@ -670,21 +662,9 @@ if(Meteor.isClient) {
 			Meteor.call('moveItem', Session.get('currentItemId'), this._id, function(err, result) {
 				if(err) {
 					alert('Error moving item: ' + err.reason);
-				} else {
-					OpenLoops.insertActivityMessage(item, {
-						boardId: Session.get('currentBoardId'),
-						activityType: Ols.ACTIVITY_TYPE_ITEM_MOVED_TO,
-						toBoardId: self._id,
-					});
-					OpenLoops.insertActivityMessage(item, {
-						boardId: self._id,
-						activityType: Ols.ACTIVITY_TYPE_ITEM_MOVED_FROM,
-						fromBoardId: Session.get('currentBoardId'),
-					});
-
 				}
 			});
-			FlowRouter.go("/project/" + Session.get('currentProjectId') + "/board/" + Session.get('currentBoardId'));
+			Ols.Router.showHomeMessages();
 		}
 	});
 
@@ -790,8 +770,8 @@ if(Meteor.isServer) {
 		},
 
 		moveItem: function(itemId, toBoardId) {
-			console.log("MOVE ITEM");
 			var item = Items.findOne(itemId);
+			var fromBoardId = item.boardId;
 
 			Items.update(itemId, {
 				$set: {
@@ -801,9 +781,14 @@ if(Meteor.isServer) {
 				}
 			});
 			var i = ServerMessages.find({itemId: itemId}).count();
-			console.log("i=" + i);
 			var num = ServerMessages.update({itemId: itemId}, {$set: {boardId: toBoardId}}, {multi:true});
-			console.log("MOVED " + num + " MESSAGES");
+
+			OpenLoops.insertActivityMessage(item, {
+				projectId: item.projectId,
+				activityType: Ols.ACTIVITY_TYPE_ITEM_MOVED_BOARD,
+				fromBoardId: fromBoardId,
+				toBoardId: toBoardId
+			});
 		},
 
 		toggleItemOpenStatus: function(itemId) {
