@@ -1,4 +1,21 @@
 if(Meteor.isClient) {
+
+	Template.registerHelper('assigneeImageUrl', function (item) {
+		if(item == null) {
+			item = Items.findOne(Session.get('currentItemId'));
+		}
+		var assignee = Meteor.users.findOne({username: item.assignee});
+		return assignee.profileImage;
+	}),
+
+	Template.registerHelper('assigneeUsername', function (item) {
+		if(item == null) {
+			item = Items.findOne(Session.get('currentItemId'));
+		}
+		var assignee = Meteor.users.findOne({username: item.assignee});
+		return assignee.username;
+	}),
+
 	Template.registerHelper('userIsAdmin', function () {
 		return Ols.User.currentUserRole() == Ols.ROLE_ADMIN;
 	});

@@ -2,8 +2,6 @@
 OpenLoops = {};
 
 if(Meteor.isClient) {
-	Session.setDefault('leftSidebarActiveTab', 'items-tab');
-
 	ClientMessages = new Meteor.Collection('client-messages');
 
 	Meteor.startup(function() {
@@ -131,157 +129,6 @@ if(Meteor.isClient) {
 		return filter;
 	}
 
-	Template.editItemForm.onCreated(function() {
-		var template = this;
-		template.isBusy = new ReactiveVar();
-	});
-
-	Template.editItemForm.onRendered(function() {
-		//FIXME: Should not be using session here - use FlowRouter.param() instead.
-		var createItemType = Session.get('createItemType');
-		if(createItemType) {
-			Session.set('editItemForm.selectedType', createItemType);
-			this.$("#editItemForm select[name='type']").val(createItemType);
-			Session.set('createItemType', null);
-		} else {
-			Session.set('editItemForm.selectedType', 'issue');
-		}
-		this.$('input[name="title"]').focus();
-	});
-
-	Template.editItemForm.helpers({
-
-		formTitle: function() {
-			var template = Template.instance();
-			return (Session.get('currentItemId')?"Edit ":"Create ") + (Session.get('editItemForm.selectedType') || 'Issue');
-		},
-
-		isBusy: function() {
-			 var template = Template.instance();
-			 return template.isBusy.get();
-		},
-
-		currentItem: function() {
-			return Items.findOne(Session.get('currentItemId'));
-		},
-
-		title: function() {
-			var item = Items.findOne(Session.get('currentItemId'));
-			return item?item.title:'';
-		},
-
-		description: function() {
-			var item = Items.findOne(Session.get('currentItemId'));
-			return item?item.description:'';
-		},
-
-		labels: function() {
-			var item = Items.findOne(Session.get('currentItemId'));
-			return item?item.labels:'';
-		},
-
-		isSelectedType: function(type) {
-			var item = Items.findOne(Session.get('currentItemId'));
-			if(item) {
-				return type == item.type?'selected':'';
-			} else {
-				return '';
-			}
-		},
-
-		selectedType: function() {
-			return Session.get('editItemForm.selectedType');
-		},
-
-		isSelectedIssueType: function(issueType) {
-			var item = Items.findOne(Session.get('currentItemId'));
-			if(item) {
-				return issueType == item.issueType?'selected':'';
-
-			} else {
-				return '';
-			}
-		},
-
-		showIssueType: function() {
-			var selectedType = Session.get('editItemForm.selectedType') || 'issue';
-			return selectedType == 'issue'?'':'hide';
-		}
-	});
-
-	Template.editItemForm.events({
-		'change select[name="type"]': function() {
-			Session.set('editItemForm.selectedType', $('select[name="type"]').val());
-		},
-		'click #cancel-button': function(e) {
-			e.preventDefault();
-			Ols.Router.showHomeMessages();
-		},
-
-		'click #save-button': function(e, template) {
-			e.preventDefault();
-			var currentItem = Items.findOne(Session.get('currentItemId'));
-			var title = $("#editItemForm input[name='title']").val();
-			if(title != null && title.length > 0) {
-				template.isBusy.set(true);
-				var description = $("#editItemForm textarea[name='description']").val();
-
-				var labelList = [];
-				var labels = $("#editItemForm input[name='labels']").val();
-				if(labels != null && labels.length > 0) {
-					labelList = labels.split(",");
-				}
-
-				var item = {
-					title: title,
-					description: description,
-					type: $("#editItemForm select[name='type']").val(),
-					issueType: $("#editItemForm select[name='issueType']").val(),
-					labels: labelList
-				};
-				var currentItemId = Session.get('currentItemId');
-				if(currentItemId == null) {
-					item.projectId = Session.get('currentProjectId');
-					item.boardId = Session.get('currentBoardId');
-					Meteor.call('insertItem', item, function(err, newItem) {
-						if(err) {
-							alert("Error adding item: " + err);
-						} else {
-							OpenLoops.insertActivityMessage(newItem, {
-								activityType: Ols.ACTIVITY_TYPE_NEW_ITEM
-							});
-							if(Ols.StringUtils.notEmpty(newItem.description)) {
-								OpenLoops.insertActivityMessage(newItem, {
-									activityType: Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED
-								});
-							}
-							Ols.Router.showItemMessages(newItem);
-						}
-					});
-
-				} else {
-					Meteor.call('updateItem', currentItemId, item, function(err, newItem) {
-						if(err) {
-							alert("Error editing item: " + err);
-						} else {
-							if(currentItem.title != newItem.title) {
-								OpenLoops.insertActivityMessage(newItem, {
-									activityType: Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED,
-								});
-							}
-							if(currentItem.description != newItem.description) {
-								OpenLoops.insertActivityMessage(newItem, {
-									activityType: Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED
-								});
-							}
-							Ols.Router.showItemMessages(newItem);
-						}
-					});
-				}
-			}
-		}
-	});
-
 	Template.createFilterForm.events({
 		'click #create-button': function(e) {
 			e.preventDefault();
@@ -328,8 +175,10 @@ if(Meteor.isClient) {
 		},
 
 		'click #issues-link': function() {
-			Session.set('filterQuery', 'type:issue');
+			Session.set('filterQuery', 'type:issue open:true');
 		},
+
+
 
 		'click #bugs-link': function() {
 			Session.set('filterQuery', 'type:bug');
@@ -347,6 +196,10 @@ if(Meteor.isClient) {
 			Session.set('filterQuery', 'label:now type:issue');
 		},
 
+		'click #assigned-to-me-link': function() {
+			Session.set('filterQuery', 'assignee:' + Meteor.user().username + " open:true");
+		},
+
 		'click #closed-link': function() {
 			Session.set('filterQuery', 'closed:true');
 		}
@@ -362,7 +215,7 @@ if(Meteor.isClient) {
 				active = query == null || query == '';
 				break;
 				case 'issues-link':
-				active = query == 'type:issue';
+				active = query == 'type:issue open:true';
 				break;
 				case 'bugs-link':
 				active = query == 'type:bug';
@@ -372,6 +225,9 @@ if(Meteor.isClient) {
 				break;
 				case 'articles-link':
 				active = query == 'type:article';
+				break;
+				case 'assigned-to-me-link':
+				active = query == 'assignee:' + Meteor.user().username + " open:true";
 				break;
 				case 'now-issues-link':
 				active = query == 'label:now type:issue';
@@ -619,7 +475,11 @@ if(Meteor.isClient) {
 
 		isActive: function() {
 			return this._id == Session.get('currentItemId')?'active':'';
-		}
+		},
+
+		itemHasAssignee: function() {
+			return Meteor.users.findOne({username: this.assignee}) != null;
+		}		
 	});
 
 	Template.itemItemView.events({
@@ -762,121 +622,6 @@ if(Meteor.isClient) {
 		'click #header-new-messages-toast': function() {
 			Session.set("numIncomingMessages", 0);
 			Ols.HistoryManager.scrollBottom();
-		}
-	});
-
-	Template.rightSidebar.events({
-		'click #create-discussion-link': function() {
-			Ols.Router.showCreateItemPage({type:'discussion'});
-		},
-
-		'click #create-issue-link': function() {
-			Ols.Router.showCreateItemPage({type:'issue'});
-		},
-
-		'click #create-article-link': function() {
-			Ols.Router.showCreateItemPage({type:'article'});
-		},
-
-		'click #edit-link': function() {
-			Ols.Router.showEditItemPage(Session.get('currentItemId'));
-		},
-
-		'click #open-close-link': function() {
-			Meteor.call('toggleItemOpenStatus', Session.get('currentItemId'), function(err, result) {
-				if(err) {
-					alert("Error toggling item status: " + err.reason);
-				} else {
-					var item = Items.findOne(Session.get('currentItemId'));
-					var activityType = item.isOpen?Ols.ACTIVITY_TYPE_ITEM_OPENED:Ols.ACTIVITY_TYPE_ITEM_CLOSED;
-					var activityMessage = {
-						activityType: activityType,
-						itemTitle: item.title,
-						itemType: item.type,
-						issueType: item.issueType,
-						boardId: item.boardId,
-						itemId: item._id
-					};
-					OpenLoops.insertActivityMessage(item, activityMessage);
-					Ols.HistoryManager.scrollBottom();
-				}
-			});
-		},
-
-		'click #move-link': function() {
-			$("#move-to-board-list").slideToggle();
-		},
-
-		'click #show-label-chooser-button': function() {
-			$("#label-chooser-menu").slideToggle();
-		}
-	});
-
-	Template.leftSidebar.helpers({
-
-		activeTabClass: function(tabName) {
-			return Session.get('leftSidebarActiveTab') == tabName ? 'tab-active' : '';
-		},
-
-		items: function() {
-			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
-			filter.projectId = Session.get('currentProjectId');
-			var currentBoardId = Session.get('currentBoardId');
-			if(currentBoardId) {
-				filter.boardId = currentBoardId;
-			}
-
-			if(filter.hasOwnProperty('show')) {
-				if(filter.show == 'all') {
-					delete filter.isOpen;
-					delete filter.show;
-				}
-			}
-			return Items.find(filter, {sort: {updatedAt: -1}});
-		},
-
-		filters: function() {
-			return Filters.find({boardId: Session.get('currentBoardId')});
-		},
-
-		activeListLabel: function() {
-			var label = "Inbox";
-			var activeFilterLabel = Session.get('activeFilterLabel');
-			if(activeFilterLabel) {
-				label = activeFilterLabel;
-			}
-			return label;
-		},
-
-		isBoardItemActive: function() {
-			return Session.get('currentItemId')?'':'active';
-		},
-	});
-
-	Template.leftSidebar.events({
-		'click #items-tab': function() {
-			Session.set('leftSidebarActiveTab', 'items-tab');
-		},
-
-		'click #labels-tab': function() {
-			Session.set('leftSidebarActiveTab', 'labels-tab');
-		},
-
-		'click #boards-dropdown-button': function() {
-			$("#board-chooser-menu").slideToggle();
-		},
-
-		'click #board-item': function() {
-			Ols.Router.showHomeMessages();
-		},
-
-		'click #search-link': function() {
-			Session.set('showSidebarTabs', false);
-		},
-
-		'click #back-arrow-link': function() {
-			Session.set('showSidebarTabs', true);
-			Session.set('filterQuery', null);
 		}
 	});
 

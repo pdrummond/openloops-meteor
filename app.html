@@ -34,13 +34,14 @@
 				{{/if}}
 			</div>
 		</div>
-		<div class='filter-links' style="display:flex;position: relative;top: -10px;display: flex;width: 700px;margin: auto auto;">
+		<div class='filter-links' style="display:flex;position: relative;top: -10px;display: flex;width: 900px;margin: auto auto;">
 			<li id="all-link" class="{{filterLinkActiveClass 'all-link'}} filter-item"><a href="">All</a></li>
-			<li id="issues-link" class="{{filterLinkActiveClass 'issues-link'}} filter-item"><a href="">Issues</a></li>
+			<li id="issues-link" class="{{filterLinkActiveClass 'issues-link'}} filter-item"><a href="">Open Issues</a></li>
+			<li id="now-issues-link" class="{{filterLinkActiveClass 'now-issues-link'}} filter-item"><a href="">Now Issues</a></li>
+			<li id="assigned-to-me-link" class="{{filterLinkActiveClass 'assigned-to-me-link'}} filter-item"><a href="">Assigned To Me</a></li>
 			<li id="bugs-link" class="{{filterLinkActiveClass 'bugs-link'}} filter-item"><a href="">Bugs</a></li>
 			<li id="discussions-link" class="{{filterLinkActiveClass 'discussions-link'}} filter-item"><a href="">Discussions</a></li>
 			<li id="articles-link" class="{{filterLinkActiveClass 'articles-link'}} filter-item"><a href="">Articles</a></li>
-			<li id="now-issues-link" class="{{filterLinkActiveClass 'now-issues-link'}} filter-item"><a href="">Now Issues</a></li>
 			<li id="closed-link" class="{{filterLinkActiveClass 'closed-link'}} filter-item"><a href="">Closed Items</a></li>
 		</div>
 	</div>
@@ -78,140 +79,6 @@
 			</fieldset>
 			<button id="create-button">Create Filter</button>
 		</form>
-	</div>
-</template>
-
-<template name="editItemPage">
-	{{#onlyIfLoggedIn}}
-		{{> editItemForm}}
-	{{/onlyIfLoggedIn}}
-</template>
-
-<template name="editItemForm">
-	<div id="top-banner">
-		<div class="left">
-			{{> openLoopsEye}}
-			<span class="form-title">
-				{{formTitle}}
-			</span>
-		</div>
-		<div class="right">
-			<div style="position:relative;top:-20px">
-				<div id="logged-in-user"><strong>{{currentUser.username}}</strong></div>
-				{{#if currentUser}}
-					<a href="" id="logout-link" style="display:block;text-align:right;color:white;font-size:12px">logout</a>
-				{{/if}}
-			</div>
-		</div>
-	</div>
-	{{#onlyIfLoggedIn}}
-	{{#if isBusy}}
-		{{> spinner}}
-	{{else}}
-	<div id="editItemForm" class="form">
-		<form>
-			<fieldset>
-				<label style="display:inline;margin-right:10px">Type</label>
-				<select name="type" placeholder="Enter type">
-					<option {{isSelectedType 'issue'}} value="issue">Issue</option>
-					<option {{isSelectedType 'discussion'}} value="discussion">Discussion</option>
-					<option {{isSelectedType 'article'}} value="article">Article</option>
-				</select>
-				<span class="{{showIssueType}}" style="margin-left:50px;">
-					<label style="margin-top:30px;display:inline;margin-right:10px">Issue Type</label>
-					<select name="issueType">
-						<option {{isSelectedIssueType 'task'}} value="task">Task</option>
-						<option {{isSelectedIssueType 'bug'}} value="bug">Bug</option>
-						<option {{isSelectedIssueType 'enhancement'}} value="enhancement">Enhancement</option>
-					</select>
-				</span>
-
-				<label style="margin-top:30px">Title</label>
-				<input name="title" placeholder="Enter title" value={{title}} autofocus>
-				<!--<label>Description</label>
-				<textarea name="description" placeholder="Enter description" value={{description}}></textarea>
-
-				<label>Labels</label>
-				<input name="labels" placeholder="Add labels here, e.g: important, milestone1, now, in-progress" value="{{labels}}">
-				-->
-			</fieldset>
-			<button id="save-button" class='button-default'>Save</button>
-			<button id="cancel-button"> Cancel</button>
-		</form>
-	</div>
-	{{/if}}
-	{{/onlyIfLoggedIn}}
-</template>
-
-<template name="leftSidebar">
-	<div class="left-sidebar">
-		<div class="tabs-header">
-			<a id="items-tab" class="{{activeTabClass 'items-tab'}} tab"> <i class="fa fa-circle"></i> Items</a>
-			<a id="labels-tab" class="{{activeTabClass 'labels-tab'}} tab"> <i class="fa fa-tag"></i> Labels</a>
-		</div>
-		<div id="items-tab" class="tab-body {{activeTabClass 'items-tab'}}">
-			<div id="board-item">
-				<a class="item {{isBoardItemActive}}">
-					<i id="type-icon" class="fa fa-th-large" style="color:black"></i>
-					<div id="content">
-						{{currentBoardTitle}}
-						<i id="boards-dropdown-button" class="fa fa-caret-down"></i>
-					</div>
-					<div class="item-msg-count" data-msg-count="0">
-					</div>
-				</a>
-			</div>
-			<ul class="item-list">
-				{{#each items}}
-				{{> itemItemView}}
-				{{/each}}
-			</ul>
-		</div>
-		<div id="labels-tab" class="tab-body {{activeTabClass 'labels-tab'}}">
-			{{> labelsList}}
-		</div>
-	</div>
-</template>
-
-<template name="rightSidebar">
-	<div class="right-sidebar">
-		{{#if isTeamFeed}}
-		<span class="header-text">ACTIONS</span>
-		<ul class="action-buttons">
-			<li id="create-discussion-link" class="action-button"><a href=""><i class="fa fa-comments-o"></i> New Discussion</a></li>
-			<li id="create-issue-link" class="action-button"><a href=""><i class="fa fa-exclamation-circle"></i> New Issue</a></li>
-			<li id="create-article-link" class="action-button"><a href=""><i class="fa fa-book"></i> New Article</a></li>
-		</ul>
-		{{else}}
-		<span class="header-text">ACTIONS</span>
-		<ul class="action-buttons">
-			<li id="edit-link" class="action-button"><a href=""><i class="fa fa-pencil"></i> Edit</a></li>
-			<li id="open-close-link" class="action-button"><a href=""><i class="fa fa-times"></i> {{#if currentItemIsOpen}}Close{{else}}Open{{/if}}</a></li>
-			<li id="move-link" class="action-button"><a href=""><i class="fa fa-arrow-right"></i> Move</a></li>
-		</ul>
-		{{> moveToBoardList}}
-		<span class="header-text">LABELS
-			{{#if userIsAdmin}}
-			<i id="show-label-chooser-button" class="fa fa-cog"></i>
-			{{/if}}
-		</span>
-		{{> labelChooserMenu}}
-		<ul class="label-buttons">
-			{{> itemLabels}}
-		</ul>
-
-		{{#if isIssue}}
-			<span class="header-text">ASSIGNEE</span>
-			<ul class="assignee-buttons">
-				Noone is assigned
-			</ul>
-			<span class="header-text">ESTIMATES</span>
-			<ul class="estimate-buttons">
-				No Estimates
-			</ul>
-		{{/if}}
-
-		{{/if}}
 	</div>
 </template>
 
@@ -342,9 +209,12 @@
 		<div id="content">
 			<span id="title">{{title}} <span class="board-title {{showBoardTitleClass}}">{{boardTitle}}</span></span>
 			<div id="meta">
+
 				<span class="item-key">#{{projectKey this}}-{{pid}}</span> ●
 				{{timeAgo createdAt}}
-
+				{{#if itemHasAssignee}}
+					● <span><img src={{assigneeImageUrl this}} class="assignee-item" title="Assigned to {{assigneeUsername this}}"/></span>
+				{{/if}}
 			</div>
 			<div id="meta"> {{description}}</div>
 			<div id="item-labels">
