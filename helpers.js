@@ -5,7 +5,7 @@ if(Meteor.isClient) {
 			item = Items.findOne(Session.get('currentItemId'));
 		}
 		var assignee = Meteor.users.findOne({username: item.assignee});
-		return assignee.profileImage;
+		return assignee?assignee.profileImage:'ERR: Assignee null for assigneeImageUrl';
 	}),
 
 	Template.registerHelper('assigneeUsername', function (item) {
@@ -13,7 +13,7 @@ if(Meteor.isClient) {
 			item = Items.findOne(Session.get('currentItemId'));
 		}
 		var assignee = Meteor.users.findOne({username: item.assignee});
-		return assignee.username;
+		return assignee?assignee.username:'ERR: Assignee null for assigneeUsername';
 	}),
 
 	Template.registerHelper('userIsAdmin', function () {
@@ -21,11 +21,13 @@ if(Meteor.isClient) {
 	});
 
 	Template.registerHelper('labelTitle', function (labelId) {
-		return Labels.findOne(labelId).title;
+		var label = Labels.findOne(labelId);
+		return label?label.title:'ERR: label null for labelTitle';
 	});
 
 	Template.registerHelper('labelColor', function (labelId) {
-		return Labels.findOne(labelId).color;
+		var label = Labels.findOne(labelId);
+		return label?label.color:'ERR: label null for labelColor';
 	});
 
 	Template.registerHelper('clientMessageCount', function (context, options) {
