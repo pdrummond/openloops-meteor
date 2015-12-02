@@ -11,6 +11,17 @@ if(Meteor.isClient) {
 			});
 		},
 
+		'click #recalculate-label-counts': function() {
+			$("#status").text("Recalculate label counts: working...");
+			Meteor.call('recalculateLabelCounts', function(err, results) {
+				if(err) {
+					$("#status").text("Error recalculating label counts: " + err.reason);
+				} else {
+					$("#status").text("Recalculated label counts successfully.");
+				}
+			});
+		},
+
 		'click #recount-project-messages': function() {
 			$("#status").text("Recount Project Messages: working...");
 			Meteor.call('recountProjectMessages', function(err, results) {
@@ -136,6 +147,21 @@ if(Meteor.isServer) {
 				console.log("-- AFTER num messages for item '" + item.title + "': " + item.numMessages);
 			});
 			console.log("< recountItemMessages");
+		},
+
+		recalculateLabelCounts: function() {
+			console.log("> recalculateLabelCounts");
+			Labels.find({}).forEach(function(label) {
+				console.log("-- BEFORE label '" + label.title + "': open: " + label.numOpenMessages, ", closed: " + label.numClosedMessages);
+				var numOpenMessages = Items.find({isOpen: true, labels: label._id}).count();
+				var numClosedMessages = Items.find({isOpen: false, labels: label._id}).count();
+				console.log("numOpenMessages: " + numOpenMessages);
+				console.log("numClosedMessages: " + numClosedMessages);
+				Labels.update(label._id, {$set: {numOpenMessages: numOpenMessages, numClosedMessages: numClosedMessages}});
+				label = Labels.findOne(label._id);
+				console.log("-- AFTER label '" + label.title + "': open: " + label.numOpenMessages, ", closed: " + label.numClosedMessages);
+			});
+			console.log("< recalculateLabelCounts");
 		},
 
 		setItemPids: function() {
