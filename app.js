@@ -277,6 +277,10 @@ if(Meteor.isClient) {
 
 	Template.userCard.helpers( {
 
+		noWorkingOn: function() {
+			return this.workingOn == null || this.workingOn.length == 0;
+		},
+
 		isCurrentUser: function() {
 			return this.username == Meteor.user().username;
 		},
@@ -303,7 +307,19 @@ if(Meteor.isClient) {
 
 	Template.userCard.events({
 		'click .working-on-link': function() {
-			alert("Not implemented yet, sorry");
+			var workingOn = prompt("What are you working on?", workingOn);
+			if(workingOn != null) {
+				Meteor.call('updateUserWorkingOn', Meteor.user().username, workingOn, function(err) {
+					if(err) {
+						alert("Error updating working on status: " + err.reason);
+					} else {
+						OpenLoops.insertBoardActivityMessage({
+							activityType: Ols.ACTIVITY_TYPE_ITEM_USER_WORKING_ON,
+							workingOn: workingOn
+						});
+					}
+				});
+			}
 		}
 	});
 
@@ -367,7 +383,7 @@ if(Meteor.isClient) {
 				}
 
 				var ctx = currentItemId?'this item':itemTitleLink;
-				var msg = '???';
+				var msg = '';
 				switch(this.activityType) {
 					case Ols.ACTIVITY_TYPE_NEW_ITEM:
 					msg = 'created ' + ctx;
@@ -391,10 +407,14 @@ if(Meteor.isClient) {
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED:
 						msg = "changed title of item to " + itemTitleLink;
+						break;
 					case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
 						var itemCtx = currentItemId?"of this item to:":"of " + ctx + " to:";
 						msg = "Set the description " + itemCtx;
-					break;
+						break;
+					default:
+						msg =  "activity item " + this.activityType + " not found";
+						break;
 				}
 			} else {
 				switch(this.activityType) {
@@ -405,6 +425,12 @@ if(Meteor.isClient) {
 					} else {
 						msg = 'ERR: board is null';
 					}
+					break;
+					case Ols.ACTIVITY_TYPE_ITEM_USER_WORKING_ON:
+					msg = "is working on " + this.workingOn;
+					break;
+					default:
+					msg =  "activity item " + this.activityType + " not found";
 					break;
 				}
 			}
@@ -484,6 +510,17 @@ if(Meteor.isClient) {
 			Ols.Router.showItemMessages(this);
 		}
 	});
+
+	OpenLoops.insertBoardActivityMessage = function(activityMessage) {
+		activityMessage = _.extend(activityMessage, {
+			type: Ols.MSG_TYPE_ACTIVITY,
+			projectId: Session.get('currentProjectId'),
+			boardId: Session.get('currentBoardId')
+		});
+		activityMessage = OpenLoops.insertClientMessage(activityMessage);
+		Meteor.call('saveMessage', activityMessage);
+		Streamy.broadcast('sendMessage', activityMessage);
+	}
 
 	OpenLoops.insertActivityMessage = function(item, activityMessage) {
 		activityMessage = _.extend({
@@ -866,6 +903,13 @@ if(Meteor.isServer) {
 			} while (matches);
 		},
 
+		updateUserWorkingOn: function(username, workingOn) {
+			workingOn = workingOn.trim();
+			Meteor.users.update({username: username}, {$set: {workingOn: workingOn}});
+			var user = Meteor.users.findOne({username: username});
+			console.log("updateUserWorkingOn: " + JSON.stringify(user, null, 4));
+		},
+
 		_getOldestBoardMessage: function() {
 			return ServerMessages.findOne({}, {sort: {DateTime: 1, limit: 1}});
 		}
@@ -906,6 +950,7 @@ if(Meteor.isServer) {
 		return Meteor.users.find({}, {fields: {
 			"username": 1,
 			"profileImage": 1,
+			"workingOn": 1
 		}});
 	});
 

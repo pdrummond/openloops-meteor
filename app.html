@@ -95,10 +95,14 @@
 		</div>
 		</div>
 		<div class='bottom-section'>
+			{{#if noWorkingOn}}
 			{{#if isCurrentUser}}
 				<div class="meta"><a class="working-on-link">What are you working on?</a></div>
 			{{else}}
 				<div class="meta"><i class='fa fa-circle'></i> Doing nothing</div>
+			{{/if}}
+			{{else}}
+				<div class="meta"><i class='fa fa-circle'></i> <a class="working-on-link">{{workingOn}}</a></div>
 			{{/if}}
 		</div>
 	</div>
@@ -186,7 +190,6 @@
 				<strong class="header-item">{{createdBy}}</strong>
 				<span id="created-at" class="header-item" title={{formatTime createdAt}}>{{timeAgo createdAt}}</span>
 				<span id="item-link" class="header-item {{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
-				<span class="header-item {{showBoardTitleClass}} board-title"> ● {{boardTitle}}</span>
 			</span>
 			<div id="text">
 				{{{activityMessage}}}
