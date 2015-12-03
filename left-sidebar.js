@@ -39,10 +39,6 @@ if(Meteor.isClient) {
 
 		isBoardItemActive: function() {
 			return Session.get('currentItemId')?'':'active';
-		},
-
-		boardItemTitle: function() {
-			return Ols.Board.getCurrent() == null ? "Project Activity" : "Board Activity";
 		}
 	});
 

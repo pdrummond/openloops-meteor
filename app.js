@@ -161,13 +161,6 @@ if(Meteor.isClient) {
 		}
 	});
 
-	Template.boardChooserMenu.events({
-		'click #project-summary-item': function() {
-				$("#board-chooser-menu").slideUp();
-				FlowRouter.go("/project/" + Session.get('currentProjectId'));
-		}
-	});
-
 	Template.topBanner.events({
 
 		'click .project-breadcrumb': function() {

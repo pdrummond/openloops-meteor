@@ -66,7 +66,7 @@ if(Meteor.isClient) {
 				})
 			}
 		}
-	})
+	});
 }
 
 Projects = new Meteor.Collection("projects");

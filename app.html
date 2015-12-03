@@ -115,7 +115,7 @@
 				</div>
 			{{else}}
 			<div id="header-main-title" title="{{currentItemTitle}}"><i class="fa {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}}</div>
-			<div id="header-status-bar">
+			<div id="header-status-bar" style="position: relative;top: 5px;">
 				<div id="header-open-status">
 					<strong id="open-status-link" class="{{#if currentItemIsOpen}}open{{else}}closed{{/if}}"><i class="fa {{currentItemIcon}}"></i> {{openStatus}}</strong>
 				</div>
@@ -170,7 +170,6 @@
 				<strong class="header-item">{{createdBy}}</strong>
 				<span id="created-at" class="header-item" title={{formatTime createdAt}}>{{timeAgo createdAt}}</span>
 				<span id="item-link" class="header-item {{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
-				<span class="header-item {{showBoardTitleClass}} board-title"> ● {{boardTitle}}</span>
 			</span>
 			<div id="text">
 				{{#markdown}}{{text}}{{/markdown}}
@@ -204,7 +203,7 @@
 		<a class="item {{isActive}} {{isClosedClass}}" href="">
 		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
 		<div id="content">
-			<span id="title">{{title}} <span class="board-title {{showBoardTitleClass}}">{{boardTitle}}</span></span>
+			<span id="title">{{title}}</span>
 			<div id="meta">
 
 				<span class="item-key">#{{projectKey this}}-{{pid}}</span> ●
@@ -232,8 +231,7 @@
 
 <template name="boardChooserMenu">
 	<ul id="board-chooser-menu" style="display:none">
-		<div class="menu-item-header">Select Project Area</div>
-		<li id="project-summary-item" class="menu-item" style="border-bottom: 1px solid gray;background-color:#ddd">Project Summary</li>
+		<div class="menu-item-header">Select Board</div>
 		{{#each boards}}
 			{{> boardChooserItem}}
 		{{/each}}

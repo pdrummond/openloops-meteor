@@ -46,7 +46,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	FlowRouter.route('/project/:projectId', {
+	/*FlowRouter.route('/project/:projectId', {
 		name: 'projectMessages',
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
@@ -57,7 +57,7 @@ if(Meteor.isClient) {
 			Ols.HistoryManager.loadInitialMessages();
 			OpenLoops.removeSidebarNewMessages();
 		}
-	});
+	});*/
 
 	FlowRouter.route('/project/:projectId/board/:boardId', {
 		name: 'boardMessages',

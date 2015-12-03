@@ -14,10 +14,9 @@
 
 <template name="projectItem">
 	<tr>
-		<td><a href="/project/{{_id}}"> {{title}}</a> <span style="color:lightgray">{{key}}</span></td>
+		<td><a href="/project/{{_id}}/manage-boards"> {{title}}</a> <span style="color:lightgray">{{key}}</span></td>
 		<td>{{numMessages}}</td>
 		<td><a href="/project/{{_id}}/edit-project">Edit Project</a></td>
-		<td><a href="/project/{{_id}}/manage-boards">Manage Boards</a></td>
 		<td><a href="/project/{{_id}}/manage-members">Manage Members</a></td>
 		<td><a href="/project/{{_id}}/delete-project">Delete Project</a></td>
 	</tr>

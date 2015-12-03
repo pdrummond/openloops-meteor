@@ -64,10 +64,11 @@ html:not(.touch) {
 		}
 
 		.project-key {
-			position:relative;
-			top:-5px;
-			font-size:10px;
-			color:gray;
+			position: relative;
+			top: -1px;
+			font-size: 12px;
+			color: #aaa;
+			text-transform: uppercase;
 		}
 	}
 
@@ -219,8 +220,11 @@ html:not(.touch) {
 
 #app .left-sidebar #board-item {
 	cursor:pointer;
-	height: 57px;
-	border-bottom: 1px solid lightgray;
+	height:60px;
+
+	.item {
+		height:30px;
+	}
 
 	.item-msg-count {
 		top: 20px;
@@ -228,14 +232,14 @@ html:not(.touch) {
 	}
 
 	#content {
+
 		overflow:ellipsis;
 		font-size: 14px;
 		color: #656565;
 		font-weight: 600;
 		position: relative;
-		padding-left:10px;
-    	top: 5px;
-		color:black;
+		padding-left: 3px;
+		top: 8px;
 	}
 
 }
@@ -658,6 +662,7 @@ footer
 	font-size:12px;
 	display:inline;
 	padding-left:20px;
+	padding-right:10px;
 
 	strong {
 		padding:5px;
