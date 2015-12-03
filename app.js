@@ -786,6 +786,9 @@ if(Meteor.isServer) {
 		},
 
 		saveMessage: function(newMessage) {
+			newMessage.createdAt = new Date().getTime();
+			newMessage.createdBy = Meteor.user().username;
+
 			ServerMessages.insert(newMessage);
 
 			Items.update(newMessage.itemId, {
