@@ -545,8 +545,16 @@ if(Meteor.isClient) {
 
 	Template.feed.helpers({
 
-		users: function() {
-			return Meteor.users.find();
+		projectUsers: function() {
+			var project = Ols.Project.getCurrent();
+
+			var projectUsers = [];
+			Meteor.users.find().forEach(function(user) {
+				if(_.findWhere(project.members, {username: user.username}) != null) {
+					projectUsers.push(user);
+				}
+			});
+			return projectUsers;
 		},
 
 		filterQuery: function() {
