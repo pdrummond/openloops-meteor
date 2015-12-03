@@ -13,13 +13,9 @@
 		<div class="left">
 			{{> openLoopsEye}}
 			<span style="margin-left:10px" id="main-title">
-				<div class="project-key">{{currentProjectKey}}</div>
-				<a href="" class="project-title">{{currentProjectTitle}}</a>
-				<!--<div>
-					<table>
-						<tr><td>Client messages</td><td>{{clientMessageCount}}</td></tr>
-					</table>
-				</div>-->
+				<span class="project-key">{{currentProjectTitle}}</span><br/>
+				<a href="" class="project-title">{{currentBoardTitle}}</a>
+				<i id="boards-dropdown-button" class="fa fa-caret-down" style="position:relative;top:-5px;left:5px"></i>
 			</span>
 			<div id="top-header">
 				<input id="search-input" class="search-input" placeholder="Type here to search" value={{filterQuery}}>
@@ -34,7 +30,8 @@
 				{{/if}}
 			</div>
 		</div>
-		<div class='filter-links' style="display:flex;position: relative;top: -10px;display: flex;width: 900px;margin: auto auto;">
+		<div class='filter-links' style="display:flex;position: relative;top: -5px;width:900px;display: flex;margin: auto auto;">
+
 			<li id="all-link" class="{{filterLinkActiveClass 'all-link'}} filter-item"><a href="">All</a></li>
 			<li id="issues-link" class="{{filterLinkActiveClass 'issues-link'}} filter-item"><a href="">Open Issues</a></li>
 			<li id="now-issues-link" class="{{filterLinkActiveClass 'now-issues-link'}} filter-item"><a href="">Now Issues</a></li>
@@ -235,8 +232,8 @@
 
 <template name="boardChooserMenu">
 	<ul id="board-chooser-menu" style="display:none">
-		<div class="menu-item-header">Select Board</div>
-		<li id="all-boards-item" class="menu-item" style="border-bottom: 1px solid gray;background-color:#ddd">All Boards</li>
+		<div class="menu-item-header">Select Project Area</div>
+		<li id="project-summary-item" class="menu-item" style="border-bottom: 1px solid gray;background-color:#ddd">Project Summary</li>
 		{{#each boards}}
 			{{> boardChooserItem}}
 		{{/each}}

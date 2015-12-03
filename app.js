@@ -161,7 +161,23 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.boardChooserMenu.events({
+		'click #project-summary-item': function() {
+				$("#board-chooser-menu").slideUp();
+				FlowRouter.go("/project/" + Session.get('currentProjectId'));
+		}
+	});
+
 	Template.topBanner.events({
+
+		'click .project-breadcrumb': function() {
+			FlowRouter.go("/project/" + Session.get('currentProjectId'));
+		},
+
+		'click #boards-dropdown-button': function() {
+			$("#board-chooser-menu").slideToggle();
+		},
+
 		'click #create-link': function() {
 			Ols.Router.showCreateItemPage();
 		},
@@ -632,13 +648,6 @@ if(Meteor.isClient) {
 	Template.boardChooserMenu.helpers({
 		boards: function() {
 			return Boards.find({projectId: Session.get('currentProjectId')});
-		}
-	});
-
-	Template.boardChooserMenu.events({
-		'click #all-boards-item': function() {
-			$("#board-chooser-menu").slideUp();
-			FlowRouter.go("/project/" + Session.get('currentProjectId'));
 		}
 	});
 

@@ -50,7 +50,7 @@ html:not(.touch) {
 			top:5px;
 		}
 
-		padding-top:10px;
+		padding-top:2px;
 		padding-left:10px;
 
 		.project-title {
@@ -229,7 +229,9 @@ html:not(.touch) {
 
 	#content {
 		overflow:ellipsis;
-		font-size:20px;
+		font-size: 14px;
+		color: #656565;
+		font-weight: 600;
 		position: relative;
 		padding-left:10px;
     	top: 5px;
@@ -739,7 +741,7 @@ footer
 	padding: 0;
 	z-index: 99999999;
 	position: absolute;
-	top: 145px;
+	top: 90px;
 	left: 150px;
 	background: #f5f5f5;
 	box-shadow: 5px 5px 20px #504C4C;
@@ -1083,7 +1085,7 @@ footer
 	width: 60%;
 	position: relative;
 	top: -5px;
-	left: 50px;
+	left: 60px;
 
 	#top-header-tabs {
 		display:flex;
@@ -1286,4 +1288,19 @@ footer
 
 .assignee-item {
 	width: 15px;position: relative;top: 3px;border-radius: 15px;
+}
+
+.app-breadcrumb {
+font-size: 14px;
+color: white;
+margin-right: 70px;
+margin-left: 10px;
+position: relative;
+top: 2px;
+text-transform: uppercase;
+}
+
+.project-breadcrumb:hover, breadcrumb-item.active {
+	cursor:pointer;
+	color:orange;
 }

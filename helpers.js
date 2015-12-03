@@ -165,7 +165,7 @@ if(Meteor.isClient) {
 
 	Template.registerHelper('currentBoardTitle', function () {
 		var board = Boards.findOne(Session.get('currentBoardId'));
-		return board?board.title:'All Boards';
+		return board?board.title:'Project Summary';
 	});
 
 	Template.registerHelper('filterQuery', function () {

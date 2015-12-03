@@ -40,6 +40,10 @@ if(Meteor.isClient) {
 		isBoardItemActive: function() {
 			return Session.get('currentItemId')?'':'active';
 		},
+
+		boardItemTitle: function() {
+			return Ols.Board.getCurrent() == null ? "Project Activity" : "Board Activity";
+		}
 	});
 
 	Template.leftSidebar.events({
@@ -49,10 +53,6 @@ if(Meteor.isClient) {
 
 		'click #labels-tab': function() {
 			Session.set('leftSidebarActiveTab', 'labels-tab');
-		},
-
-		'click #boards-dropdown-button': function() {
-			$("#board-chooser-menu").slideToggle();
 		},
 
 		'click #board-item': function() {
