@@ -14,6 +14,7 @@
 
 <template name="boardItem">
 	<tr>
+		<td>{{_id}}</td>
 		<td><a href="/project/{{currentProjectId}}/board/{{_id}}">{{title}}</a></td>
 		<td>{{numMessages}}</td>
 		<td><a href="/project/{{_id}}/edit-board">Edit Board</a></td>

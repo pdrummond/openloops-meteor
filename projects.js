@@ -2,9 +2,31 @@
 if(Meteor.isClient) {
 	Template.projectList.helpers({
 		projects: function() {
-			return Projects.find();
+			if(Ols.User.userIsAdmin()) {
+				return Projects.find();
+			} else {
+				return Projects.find({'members.username': Meteor.user().username});
+			}
+		},
+
+		projectsListEmpty: function() {
+			var projects;
+			if(Ols.User.userIsAdmin()) {
+				projects = Projects.find();
+			} else {
+				projects = Projects.find({'members.username': Meteor.user().username});
+			}
+			return projects.count() == 0;
 		}
 	});
+
+	Template.projectItem.helpers({
+		projectSelectedLink: function() {
+			var link = "/project/" + this._id;
+			link += this.defaultBoardId && this.defaultBoardId.length > 0?"/board/" + this.defaultBoardId:"/manage-boards";
+			return link;
+		}
+	})
 
 	Template.editProjectForm.helpers({
 		currentProject: function() {
@@ -23,7 +45,8 @@ if(Meteor.isClient) {
 				var projectAttrs = {
 					title: title,
 					key: $("#editProjectForm input[name='key']").val(),
-					description: $("#editProjectForm textarea[name='description']").val()
+					description: $("#editProjectForm textarea[name='description']").val(),
+					defaultBoardId: $("#editProjectForm input[name='defaultBoardId']").val(),
 				};
 				var currentProjectId = Session.get('currentProjectId');
 				if(currentProjectId == null) {

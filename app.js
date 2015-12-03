@@ -687,7 +687,7 @@ if(Meteor.isClient) {
 		},
 		canShow: function() {
 			var canShow = false;
-			if(Meteor.user() != null) {
+			if(Meteor.user() != null && Session.get('currentProjectId') != null) {
 				canShow = Ols.Project.isUserProjectMember(Session.get('currentProjectId'), Meteor.user().username);
 			}
 			return canShow;

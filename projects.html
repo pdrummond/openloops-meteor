@@ -1,12 +1,19 @@
 <template name="projectList">
 	{{#onlyIfLoggedIn}}
 	<h1 style="margin-left:100px;margin-top:50px">Projects</h1>
-	<a href="/projects/create" style="display:block;margin-left:100px;margin-top:10px">Create Project</a>
+	<p style="position:relative;top:-20px;left:100px;color:gray">This screen is a work in progress - bear with me! It will look awesome when it's finished ;-)</p>
+	{{#if userIsAdmin}}
+		<a href="/projects/create" style="display:block;margin-left:100px;margin-top:10px">Create Project</a>
+	{{/if}}
 	<hr>
 	<table style="margin-top:10px;padding-left:100px;padding-right:100px" width="100%">
-		{{#each projects}}
-		{{> projectItem}}
-		{{/each}}
+		{{#if projectsListEmpty}}
+			<p>You are not a member of any projects - you might want to speak to an admin about this!</p>
+		{{else}}
+			{{#each projects}}
+			{{> projectItem}}
+			{{/each}}
+		{{/if}}
 	</table>
 	<hr>
 	{{/onlyIfLoggedIn}}
@@ -14,10 +21,12 @@
 
 <template name="projectItem">
 	<tr>
-		<td><a href="/project/{{_id}}/manage-boards"> {{title}}</a> <span style="color:lightgray">{{key}}</span></td>
+		<td><a href="{{projectSelectedLink}}"> {{title}}</a> <span style="color:lightgray">{{key}}</span></td>
 		<td>{{numMessages}}</td>
 		<td><a href="/project/{{_id}}/edit-project">Edit Project</a></td>
+		<td><a href="/project/{{_id}}/manage-boards">Manage Boards</a></td>
 		<td><a href="/project/{{_id}}/manage-members">Manage Members</a></td>
+
 		<td><a href="/project/{{_id}}/delete-project">Delete Project</a></td>
 	</tr>
 </template>
@@ -35,6 +44,8 @@
 				<input name="key" placeholder="Enter project key" value="{{key}}">
 				<label>Description</label>
 				<textarea name="description" placeholder="Enter project description">{{description}}</textarea>
+				<label>Default Board Id</label>
+				<input name="defaultBoardId" placeholder="Enter board id" value="{{defaultBoardId}}">
 			</fieldset>
 			<button id="save-button">Save Project</button>
 		</form>
