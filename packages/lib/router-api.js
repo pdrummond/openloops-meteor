@@ -10,11 +10,18 @@ Ols.Router = {
 	},
 
 	showItemMessages: function(item) {
-		if(item.boardId) {
-			FlowRouter.go('boardItemMessages', {projectId: item.projectId, boardId: item.boardId, itemId: item._id}, this._getQueryParams());
-		} else {
-			FlowRouter.go('projectItemMessages', {projectId: item.projectId, itemId: item._id}, this._getQueryParams());
+		var params = {
+			projectId: item.projectId,
+			boardId: item.boardId,
+			itemId: item._id
+		};
+		var tabName = 'messages';
+		var activeItemTab = Session.get('activeItemTab')
+		if(activeItemTab) {
+			params.tabName = activeItemTab;
 		}
+
+		FlowRouter.go('boardItemMessages', params, this._getQueryParams());
 	},
 
 	showCreateItemPage: function(queryParams) {

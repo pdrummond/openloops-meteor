@@ -89,37 +89,7 @@ if(Meteor.isClient) {
 		}
 	});
 
-	FlowRouter.route('/project/:projectId/item/:itemId', {
-		triggersEnter: [function(ctx, redirect) {
-			/*
-				The active tab uses persistent sessions so if it's persisted
-				then use it, otherwise default to messages.
-			*/
-			var tabName = 'messages';
-			var activeItemTab = Session.get('activeItemTab')
-			if(activeItemTab) {
-				tabName = activeItemTab;
-			}
-			var url = '/project/' + ctx.params.projectId + '/item/' + ctx.params.itemId + "/" + tabName;
-    		redirect(url);
-  		}],
-	});
 
-	FlowRouter.route('/project/:projectId/board/:boardId/item/:itemId', {
-		triggersEnter: [function(ctx, redirect) {
-			/*
-				The active tab uses persistent sessions so if it's persisted
-				then use it, otherwise default to messages.
-			*/
-			var tabName = 'messages';
-			var activeItemTab = Session.get('activeItemTab')
-			if(activeItemTab) {
-				tabName = activeItemTab;
-			}
-			var url = '/project/' + ctx.params.projectId + '/board/' + ctx.params.boardId + '/item/' + ctx.params.itemId + "/" + tabName;
-    		redirect(url);
-  		}],
-	});
 
 	FlowRouter.route('/project/:projectId/item/:itemId/:tabName', {
 		name:'projectItemMessages',
