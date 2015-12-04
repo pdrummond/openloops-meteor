@@ -18,6 +18,11 @@ if(Meteor.isClient) {
 		    Session.set('connectionStatus', status);
 		});
 
+		Streamy.on('webHookEvent', function(data) {
+			console.log("WEBHOOK: " + JSON.stringify(data, null, 4));
+			OpenLoops.insertBoardActivityMessage(data, {clientSideOnly: true});
+		});
+
 		Streamy.on('mention', function(data) {
 			console.log(">>> RECEIVED MENTION STREAMY");
 			//TODO: Once mention uses direct message we won't have to
@@ -383,7 +388,8 @@ if(Meteor.isClient) {
 	Template.activityMessageItemView.helpers({
 
 		userImageUrl: function() {
-			return Ols.User.getProfileImageUrl(this.createdBy);
+			console.log("activityImageUrl: " + this.activityImageUrl);
+			return this.activityImageUrl?this.activityImageUrl:Ols.User.getProfileImageUrl(this.createdBy);
 		},
 
 		activityMessage: function() {
@@ -433,7 +439,7 @@ if(Meteor.isClient) {
 						msg = "Set the description " + itemCtx;
 						break;
 					default:
-						msg =  "activity item " + this.activityType + " not found";
+						msg =  "> activity item " + this.activityType + " not found";
 						break;
 				}
 			} else {
@@ -447,10 +453,18 @@ if(Meteor.isClient) {
 					}
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_USER_WORKING_ON:
-					msg = "is working on " + this.workingOn;
+						msg = "is working on " + this.workingOn;
 					break;
+					//FIXME: Need to find someway to defer to the plugin for this.
+					case Ols.ACTIVITY_TYPE_WEBHOOK_EVENT:
+						switch(this.webHookType) {
+							case "GITHUB_WEBHOOK_EVENT":
+								msg = Ols.GitHub.generateActivityMessage(this);
+								break;
+							}
+						break;
 					default:
-					msg =  "activity item " + this.activityType + " not found";
+					msg =  ">> activity item " + this.activityType + " not found";
 					break;
 				}
 			}
@@ -459,11 +473,25 @@ if(Meteor.isClient) {
 
 		activityContent: function() {
 			var activityContent = "";
-			var item = Items.findOne(this.itemId);
-			switch(this.activityType) {
-				case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
+			if(this.itemId) {
+				var item = Items.findOne(this.itemId);
+
+				switch(this.activityType) {
+					case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
 					activityContent = this.item?this.item.description:'ERR: Something went wrong. Cannot find item description';
 					break;
+
+				}
+			} else {
+				switch(this.activityType) {
+					case Ols.ACTIVITY_TYPE_WEBHOOK_EVENT:
+						switch(this.webHookType) {
+							case "GITHUB_WEBHOOK_EVENT":
+								activityContent = Ols.GitHub.generateActivityContent(this);
+								break;
+						}
+						break;
+				}
 			}
 			return activityContent;
 		},
@@ -474,6 +502,13 @@ if(Meteor.isClient) {
 			switch(this.activityType) {
 				case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
 					show = true;
+					break;
+				case Ols.ACTIVITY_TYPE_WEBHOOK_EVENT:
+					switch(this.webHookType) {
+						case "GITHUB_WEBHOOK_EVENT":
+							show = Ols.GitHub.showActivityContent(this);
+						break;
+					}
 					break;
 			}
 			return show?"":"hide";
@@ -536,15 +571,19 @@ if(Meteor.isClient) {
 		}
 	});
 
-	OpenLoops.insertBoardActivityMessage = function(activityMessage) {
-		activityMessage = _.extend(activityMessage, {
+	OpenLoops.insertBoardActivityMessage = function(activityMessage, opts) {
+		activityMessage = _.extend({
 			type: Ols.MSG_TYPE_ACTIVITY,
 			projectId: Session.get('currentProjectId'),
 			boardId: Session.get('currentBoardId')
-		});
+		}, activityMessage);
 		activityMessage = OpenLoops.insertClientMessage(activityMessage);
-		Meteor.call('saveMessage', activityMessage);
-		Streamy.broadcast('sendMessage', activityMessage);
+		if(opts && 'clientSideOnly' in opts && opts.clientSideOnly == true) {
+			//Don't do anything here
+		} else {
+			Meteor.call('saveMessage', activityMessage);
+			Streamy.broadcast('sendMessage', activityMessage);
+		}
 	}
 
 	OpenLoops.insertActivityMessage = function(item, activityMessage) {
@@ -811,8 +850,9 @@ if(Meteor.isServer) {
 		},
 
 		saveMessage: function(newMessage) {
+			console.log("> saveMessage: " + JSON.stringify(newMessage));
 			newMessage.createdAt = new Date().getTime();
-			newMessage.createdBy = Meteor.user().username;
+			newMessage.createdBy = newMessage.createdBy || Meteor.user().username;
 
 			ServerMessages.insert(newMessage);
 
@@ -823,7 +863,6 @@ if(Meteor.isServer) {
 			Boards.update(newMessage.boardId, {$inc: {numMessages: 1}});
 			Projects.update(newMessage.projectId, {$inc: {numMessages: 1}});
 			Meteor.call('detectMentionsInMessage', newMessage);
-
 		},
 
 		insertMessage: function(newMessage) {

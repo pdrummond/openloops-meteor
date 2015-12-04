@@ -6,7 +6,7 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
-  api.use(['templating', 'ecmascript', 'reactive-var', 'markoshust:material-ui', 'yuukan:streamy', 'mquandalle:stylus']);
+  api.use(['templating', 'ecmascript', 'reactive-var', 'yuukan:streamy', 'mquandalle:stylus']);
   api.addFiles([
 	  'namespace.js',
 	  'timeutils-api.js',
@@ -15,6 +15,7 @@ Package.onUse(function(api) {
 	  'project-api.js',
 	  'board-api.js',
 	  'message-api.js',
+	  'activity-api.js',
 	  'item-api.js',
 	  'user-api.js',
 	  'router-api.js',

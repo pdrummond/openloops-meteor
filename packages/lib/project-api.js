@@ -6,6 +6,11 @@ Ols.Project = {
 		return Projects.findOne(Session.get('currentProjectId'));
 	},
 
+	get: function(projectId) {
+		return Projects.findOne(projectId);
+	},
+
+	//FIXME: Remove this version - use get()
 	getProject: function(projectId) {
 		return Projects.findOne(projectId);
 	},
