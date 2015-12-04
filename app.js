@@ -18,15 +18,6 @@ if(Meteor.isClient) {
 		    Session.set('connectionStatus', status);
 		});
 
-		Tracker.autorun(function() {
-			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
-			Meteor.subscribe('items', filter, function(err, result) {
-				if(err) {
-					alert("Items Subscription error: " + err);
-				}
-			});
-		});
-
 		Streamy.on('mention', function(data) {
 			console.log(">>> RECEIVED MENTION STREAMY");
 			//TODO: Once mention uses direct message we won't have to
@@ -163,6 +154,15 @@ if(Meteor.isClient) {
 
 	Template.topBanner.events({
 
+		'click #logged-in-user': function() {
+			var current = FlowRouter.current();
+			if('userDashboard' in current.queryParams) {
+				FlowRouter.setQueryParams({userDashboard: null});
+			} else {
+				FlowRouter.setQueryParams({userDashboard: Meteor.user().username});
+			}
+		},
+
 		'click .project-breadcrumb': function() {
 			FlowRouter.go("/project/" + Session.get('currentProjectId'));
 		},
@@ -186,8 +186,6 @@ if(Meteor.isClient) {
 		'click #issues-link': function() {
 			Session.set('filterQuery', 'type:issue open:true');
 		},
-
-
 
 		'click #bugs-link': function() {
 			Session.set('filterQuery', 'type:bug');
@@ -215,6 +213,28 @@ if(Meteor.isClient) {
 	});
 
 	Template.topBanner.helpers({
+
+		topBannerModeClass: function() {
+			return Session.get('userDashboard') == null ? 'project-mode': 'user-dashboard-mode';
+		},
+
+		headerProjectTitle: function() {
+			if(Session.get('userDashboard') != null) {
+				return Meteor.user().username;
+			} else {
+				var project = Projects.findOne(Session.get('currentProjectId'));
+				return project?project.title:'';
+			}
+		},
+
+		headerBoardTitle: function() {
+			if(Session.get('userDashboard') != null) {
+				return 'User Dashboard';
+			} else {
+				var board = Boards.findOne(Session.get('currentBoardId'));
+				return board?board.title:'';
+			}
+		},
 
 		filterLinkActiveClass: function(filterLink) {
 			var active = false;
@@ -475,8 +495,13 @@ if(Meteor.isClient) {
 
 	Template.itemItemView.helpers({
 		boardTitle: function() {
+			var project = Projects.findOne(this.projectId);
 			var board = Boards.findOne(this.boardId);
-			return board?board.title:'';
+			return project && board?project.title + "/" + board.title:'';
+		},
+
+		showBoardTitleClass: function() {
+			return Session.get('userDashboard') != null;
 		},
 
 		isClosedClass: function() {
@@ -820,7 +845,7 @@ if(Meteor.isServer) {
 				createdBy: Meteor.user().username,
 				updatedAt: now,
 				isOpen: true,
-				numMessages: 0,
+				numMessages: 0
 			}, newItem);
 
 			var newItemId = Items.insert(newItem);
@@ -920,12 +945,23 @@ if(Meteor.isServer) {
 	});
 
 	Meteor.publish("items", function(opts) {
+		console.log("publish items: " + JSON.stringify(opts));
 		var filter = {};
 		if(opts && opts.filter) {
 			filter = _.extend(filter, opts.filter);
 		}
+		if('userDashboard' in opts) {
+			delete filter.projectId;
+			delete filter.boardId;
+			var allowedProjectIds = Projects.find({ 'members.username': opts.userDashboard }).map(function (project) {
+				return project._id;
+			});
+			console.log("allowed projects: " + JSON.stringify(allowedProjectIds));
+			filter.projectId = {$in: allowedProjectIds};
+		}
+		console.log("filter: " + JSON.stringify(filter));
 		return Items.find(filter, {sort: {updatedAt: -1}});
-	});
+   });
 
 	Meteor.publish("articles", function(opts) {
 		var filter = {};

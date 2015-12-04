@@ -1,41 +1,44 @@
 if(Meteor.isClient) {
 
-	Meteor.setInterval(function() {
-		$(".user-card").removeClass("user-typing");
-	}, 1000);
+	Template.messageHistory.onCreated(function() {
 
-	Streamy.on('userTyping', function(user) {
-		if(user.username != Meteor.user().username) {
-  			$(".user-card[data-username='" + user.username + "']").addClass("user-typing");
-  		}
-  	});
-	Streamy.on('sendMessage', function(incomingMessage) {
-		console.log(">>> RECEIVED SEND_MESSAGE STREAMY");
-		if(incomingMessage.createdBy != Meteor.user().username) {
-			OpenLoops.insertClientMessage(incomingMessage);
-			if(Ols.HistoryManager.atBottom) {
-				Ols.HistoryManager.scrollBottom();
-			} else if(incomingMessage.itemId == Session.get('currentItemId')) {
-				Session.set('numIncomingMessages', Session.get('numIncomingMessages')+1);
+		Meteor.setInterval(function() {
+			$(".user-card").removeClass("user-typing");
+		}, 1000);
+
+		Streamy.on('userTyping', function(user) {
+			if(user.username != Meteor.user().username) {
+				$(".user-card[data-username='" + user.username + "']").addClass("user-typing");
 			}
-
-			//FIXME: An event should be fired here which the sidebar can handle.
-			if(incomingMessage.itemId != Session.get('currentItemId')) {
-				var $itemMsgCount;
-				if(incomingMessage.itemId != null) {
-					$itemMsgCount = $(".left-sidebar .item-list li[data-id='" + incomingMessage.itemId + "'] .item-msg-count");
-				} else {
-					$itemMsgCount = $(".left-sidebar #board-item .item-msg-count");
+		});
+		Streamy.on('sendMessage', function(incomingMessage) {
+			console.log(">>> RECEIVED SEND_MESSAGE STREAMY");
+			if(incomingMessage.createdBy != Meteor.user().username) {
+				OpenLoops.insertClientMessage(incomingMessage);
+				if(Ols.HistoryManager.atBottom) {
+					Ols.HistoryManager.scrollBottom();
+				} else if(incomingMessage.itemId == Session.get('currentItemId')) {
+					Session.set('numIncomingMessages', Session.get('numIncomingMessages')+1);
 				}
-				var numNewMessages = $itemMsgCount.attr('data-msg-count');
-				numNewMessages = parseInt(numNewMessages) + 1;
-				$itemMsgCount.attr('data-msg-count', numNewMessages);
-				$itemMsgCount.text(numNewMessages);
-				$itemMsgCount.addClass("new-messages");
+
+				//FIXME: An event should be fired here which the sidebar can handle.
+				if(incomingMessage.itemId != Session.get('currentItemId')) {
+					var $itemMsgCount;
+					if(incomingMessage.itemId != null) {
+						$itemMsgCount = $(".left-sidebar .item-list li[data-id='" + incomingMessage.itemId + "'] .item-msg-count");
+					} else {
+						$itemMsgCount = $(".left-sidebar #board-item .item-msg-count");
+					}
+					var numNewMessages = $itemMsgCount.attr('data-msg-count');
+					numNewMessages = parseInt(numNewMessages) + 1;
+					$itemMsgCount.attr('data-msg-count', numNewMessages);
+					$itemMsgCount.text(numNewMessages);
+					$itemMsgCount.addClass("new-messages");
+				}
+			} else {
+				Ols.HistoryManager.scrollBottom();
 			}
-		} else {
-			Ols.HistoryManager.scrollBottom();
-		}
+		});
 	});
 
 	Template.messageHistory.onRendered(function() {

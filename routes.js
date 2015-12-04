@@ -1,6 +1,16 @@
 if(Meteor.isClient) {
 	BlazeLayout.setRoot('#app');
 
+	function trackUserDashboard(context) {
+		if('userDashboard' in context.queryParams) {
+			Session.set("userDashboard", context.queryParams.userDashboard);
+		} else {
+			Session.set("userDashboard", null);
+		}
+	}
+
+	FlowRouter.triggers.enter([trackUserDashboard]);
+
 	FlowRouter.route("/login", {
 		name: "login",
 		action: function() {

@@ -35,6 +35,24 @@ html:not(.touch) {
 	padding-right:10px;
 }
 
+#app #top-banner.user-dashboard-mode {
+	background-color: #db4437;
+
+	.search-input {
+		background-color: #ef6155
+	}
+
+	#main-title {
+		.project-key {
+			color: white;
+		}
+	}
+
+	#create-link {
+		background-color: #A52A2A
+	}
+}
+
 #app #top-banner {
 	padding-top:10px;
 	height:top-banner-height;
@@ -346,6 +364,11 @@ html:not(.touch) {
 		padding-left:50px;
 		color: #000000;
 		font-size: 15px;
+
+		.code {
+		    background-color: whitesmoke;
+			font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+		}
 	}
 }
 
@@ -1309,4 +1332,9 @@ text-transform: uppercase;
 .project-breadcrumb:hover, breadcrumb-item.active {
 	cursor:pointer;
 	color:orange;
+}
+
+#logged-in-user :hover {
+	cursor:pointer;
+	text-decoration:underline;
 }

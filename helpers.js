@@ -125,7 +125,7 @@ if(Meteor.isClient) {
 
 	Template.registerHelper('currentItemLabelsEmpty', function () {
 		var item = Items.findOne(Session.get('currentItemId'));
-		return item?item.labels.length == 0:true;
+		return item && item.labels ? item.labels.length == 0 : true;
 	});
 
 	Template.registerHelper('currentItemLabels', function () {

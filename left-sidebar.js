@@ -1,6 +1,27 @@
 if(Meteor.isClient) {
 	Session.setDefault('leftSidebarActiveTab', 'items-tab');
 
+	Template.leftSidebar.onCreated(function() {
+		Tracker.autorun(function() {
+			var opts = {};
+			opts.filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
+			if(Session.get('userDashboard') != null) {
+				opts.userDashboard = Session.get('userDashboard');
+			} else {
+				opts.filter.projectId = Session.get('currentProjectId');
+				var currentBoardId = Session.get('currentBoardId');
+				if(currentBoardId) {
+					opts.filter.boardId = currentBoardId;
+				}
+			}
+			Meteor.subscribe('items', opts, function(err, result) {
+				if(err) {
+					alert("Items Subscription error: " + err);
+				}
+			});
+		});
+	});
+
 	Template.leftSidebar.helpers({
 
 		activeTabClass: function(tabName) {
@@ -8,20 +29,7 @@ if(Meteor.isClient) {
 		},
 
 		items: function() {
-			var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
-			filter.projectId = Session.get('currentProjectId');
-			var currentBoardId = Session.get('currentBoardId');
-			if(currentBoardId) {
-				filter.boardId = currentBoardId;
-			}
-
-			if(filter.hasOwnProperty('show')) {
-				if(filter.show == 'all') {
-					delete filter.isOpen;
-					delete filter.show;
-				}
-			}
-			return Items.find(filter, {sort: {updatedAt: -1}});
+			return Items.find({}, {sort: {updatedAt: -1}});
 		},
 
 		filters: function() {

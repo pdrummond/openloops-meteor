@@ -9,12 +9,12 @@
 <template name="topBanner">
 	{{> fullScreenEditor}}
 	{{> boardChooserMenu}}
-	<div id="top-banner">
+	<div id="top-banner" class="{{topBannerModeClass}}">
 		<div class="left">
 			{{> openLoopsEye}}
 			<span style="margin-left:10px" id="main-title">
-				<span class="project-key">{{currentProjectTitle}}</span><br/>
-				<a href="" class="project-title">{{currentBoardTitle}}</a>
+				<span class="project-key">{{headerProjectTitle}}</span><br/>
+				<a href="" class="project-title">{{headerBoardTitle}}</a>
 				<i id="boards-dropdown-button" class="fa fa-caret-down" style="position:relative;top:-5px;left:5px"></i>
 			</span>
 			<div id="top-header">
@@ -206,7 +206,7 @@
 		<a class="item {{isActive}} {{isClosedClass}}" href="">
 		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
 		<div id="content">
-			<span id="title">{{title}}</span>
+			<span id="title">{{title}} <span class="board-title {{showBoardTitleClass}}">{{boardTitle}}</span></span>
 			<div id="meta">
 
 				<span class="item-key">#{{projectKey this}}-{{pid}}</span> ●
