@@ -652,7 +652,7 @@ if(Meteor.isClient) {
 	Template.feed.helpers({
 
 		isUserDashboard: function() {
-			return Session.get('userDashboard') != null;
+			return Session.get('userDashboard') != null && Session.get('currentItemId') == null;
 		},
 
 		projectUsers: function() {
