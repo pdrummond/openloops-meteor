@@ -531,7 +531,7 @@ if(Meteor.isClient) {
 		},
 
 		showBoardTitleClass: function() {
-			return Session.get('userDashboard') != null;
+			return Session.get('userDashboard') == null?'hide':'';
 		},
 
 		isClosedClass: function() {
