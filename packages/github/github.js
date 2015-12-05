@@ -11,7 +11,7 @@ Ols.GitHub = {
 			case 'push':
 				var numCommits = activity.event.commits.length;
 				var repo = activity.event.repository.name;
-				var branch = activity.event.target_commitish;
+				var branch = activity.event.ref.replace(/refs\/heads\//g, '');			
 				msg = numCommits + " new " + (numCommits==1?"commit":"commits") + " by " + username + " in " + repo + ":" + branch;
 				break;
 			case 'issues':
