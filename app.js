@@ -18,10 +18,7 @@ if(Meteor.isClient) {
 		    Session.set('connectionStatus', status);
 		});
 
-		Streamy.on('webHookEvent', function(data) {
-			console.log("WEBHOOK: " + JSON.stringify(data, null, 4));
-			OpenLoops.insertBoardActivityMessage(data, {clientSideOnly: true});
-		});
+
 
 		Streamy.on('mention', function(data) {
 			console.log(">>> RECEIVED MENTION STREAMY");
@@ -41,14 +38,12 @@ if(Meteor.isClient) {
 	});
 
 	OpenLoops.insertClientMessage = function(attrs) {
-		var currentItemId = Session.get('currentItemId');
 		var defaultAttrs = {
 			type: Ols.MSG_TYPE_CHAT,
 			createdAt: new Date().getTime(),
 			createdBy: Meteor.user().username,
 			projectId: Session.get('currentProjectId'),
 			boardId: Session.get('currentBoardId'),
-			itemId: currentItemId
 		};
 		var newMessage = _.extend(defaultAttrs, attrs);
 		var newMessageId = ClientMessages._collection.insert(newMessage);
@@ -856,10 +851,12 @@ if(Meteor.isServer) {
 
 			ServerMessages.insert(newMessage);
 
-			Items.update(newMessage.itemId, {
-				$inc: {numMessages: 1},
-				$set: {updatedAt: new Date().getTime()},
-			});
+			if(newMessage.itemId) {
+				Items.update(newMessage.itemId, {
+					$inc: {numMessages: 1},
+					$set: {updatedAt: new Date().getTime()},
+				});
+			}
 			Boards.update(newMessage.boardId, {$inc: {numMessages: 1}});
 			Projects.update(newMessage.projectId, {$inc: {numMessages: 1}});
 			Meteor.call('detectMentionsInMessage', newMessage);

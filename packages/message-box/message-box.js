@@ -20,7 +20,10 @@ if(Meteor.isClient) {
 					e.preventDefault();
 					e.stopPropagation();
 					if(inputVal.length > 0) {
-						var newMessage = OpenLoops.insertClientMessage({text:inputVal});
+						var newMessage = OpenLoops.insertClientMessage({
+							text:inputVal,
+							itemId: Session.get('currentItemId')
+						});
 						$("#messageBox").val('');
 						Session.set('messageBox.content', "");
 						Meteor.call('saveMessage', newMessage, function(err, result) {

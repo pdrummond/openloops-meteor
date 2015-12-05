@@ -4,15 +4,21 @@ Ols.StringUtils = {
 		less than maxLength, otherwise, the string up to maxLength size with
 		'...' appended.
 
+		The ellipsis is included by default - to ommit pass {ellipsis: false} in
+		the opts
+
 		Example: Ols.StringUtils.truncate('This is a string', 2) --> 'Th...'
 
 	*/
-	truncate: function(str, maxLength) {
+	truncate: function(str, maxLength, opts) {
+		opts = opts || {ellipsis:true};
 		if(str.length > maxLength) {
-			return str.substring(0, maxLength) + "...";
-		} else {
-			return str;
+			str = str.substring(0, maxLength);
+			if(opts.ellipsis) {
+				 str += "...";
+			}
 		}
+		return str;
 	},
 
 	/**

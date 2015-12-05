@@ -6,19 +6,28 @@ Ols.GitHub = {
 		var msg = "";
 		var action = activity.event.action;
 		var username = activity.event.sender.login;
-		var issueNumber = activity.event.issue.number;
-		var issueTitle = activity.event.issue.title;
+
 		switch(activity.eventType) {
+			case 'push':
+				var numCommits = activity.event.commits.length;
+				var repo = activity.event.repository.name;
+				var branch = activity.event.target_commitish;
+				msg = numCommits + " new " + (numCommits==1?"commit":"commits") + " by " + username + " in " + repo + ":" + branch;
+				break;
 			case 'issues':
+				var issueNumber = activity.event.issue.number;
+				var issueTitle = activity.event.issue.title;
 				var url = activity.event.issue.html_url;
-				msg = username + ' ' + action + ' issue #<a href="' + url + '">' + issueNumber + ": " + Ols.StringUtils.truncate(issueTitle, 100) + '</a>';
+				msg = username + ' ' + action + ' issue #<a target="_blank" href="' + url + '">' + issueNumber + ": " + Ols.StringUtils.truncate(issueTitle, 100) + '</a>';
 				if(action == 'assigned') {
 					msg += ' to ' + activity.event.assignee.login;
 				}
 			break;
 			case 'issue_comment':
+				var issueNumber = activity.event.issue.number;
+				var issueTitle = activity.event.issue.title;
 				var url = activity.event.comment.html_url;
-				msg = username + ' commented on issue #<a href="' + url + '">' + issueNumber + ": " + Ols.StringUtils.truncate(issueTitle, 100) + '</a>';
+				msg = username + ' commented on issue #<a target="_blank" href="' + url + '">' + issueNumber + ": " + Ols.StringUtils.truncate(issueTitle, 100) + '</a>';
 			break;
 			default:
 				msg = "ERR: Unsupported GitHub event ocurred for activity message: " + activity.eventType;
@@ -30,6 +39,14 @@ Ols.GitHub = {
 	generateActivityContent: function(activity) {
 		var msg = "";
 		switch(activity.eventType) {
+			case 'push':
+				var commits = activity.event.commits;
+				msg = "<ul>";
+				_.each(commits, function(commit) {
+					msg += "<li>" + "<a target='_blank' href='" + commit.url + "'>" + Ols.StringUtils.truncate(commit.id, 7, {ellipsis:false}) + "</a>: " + commit.message + "</li>";
+				});
+				msg +="</ul>"
+				break;
 			case 'issues':
 				msg = activity.event.issue.body;
 			break;
@@ -46,8 +63,9 @@ Ols.GitHub = {
 	showActivityContent: function(activity) {
 		var show = false;
 		switch(activity.eventType) {
+			case 'push': show = true; break;
 			case 'issues':
-				show = activity.event.issue.body && activity.event.issue.body.length > 0; 
+				show = activity.event.issue.body && activity.event.issue.body.length > 0;
 				break;
 			case 'issue_comment': show = true; break;
 		}

@@ -7,6 +7,11 @@ Ols.Activity = {
 			message to the clients to insert the message client-side only.
 		*/
 		Meteor.call('saveMessage', activityMessage);
-		Streamy.broadcast('webHookEvent', activityMessage);
+		Streamy.broadcast('sendMessage', activityMessage);
+		//Streamy.broadcast('webHookEvent', activityMessage);
+		/*Streamy.on('webHookEvent', function(data) {
+			console.log("WEBHOOK: " + JSON.stringify(data, null, 4));
+			OpenLoops.insertBoardActivityMessage(data, {clientSideOnly: true});
+		});*/
 	}
 }
