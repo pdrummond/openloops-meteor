@@ -56,7 +56,20 @@ if(Meteor.isClient) {
 		}
 	});
 
-	/*FlowRouter.route('/project/:projectId', {
+	FlowRouter.route('/dashboard', {
+		name: 'dashboardMessages',
+		action: function(params, queryParams) {
+			Session.set('currentProjectId', null);
+			Session.set('currentBoardId', null);
+			Session.set('currentItemId', null);
+			BlazeLayout.render("app", {currentPage: "dashboardFeedPage"});
+			Session.set('numIncomingMessages', 0);
+			Ols.HistoryManager.loadInitialMessages();
+			OpenLoops.removeSidebarNewMessages();
+		}
+	});
+
+	FlowRouter.route('/project/:projectId', {
 		name: 'projectMessages',
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);
@@ -67,7 +80,7 @@ if(Meteor.isClient) {
 			Ols.HistoryManager.loadInitialMessages();
 			OpenLoops.removeSidebarNewMessages();
 		}
-	});*/
+	});
 
 	FlowRouter.route('/project/:projectId/board/:boardId', {
 		name: 'boardMessages',

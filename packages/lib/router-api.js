@@ -2,10 +2,11 @@ Ols.Router = {
 
 	showHomeMessages: function() {
 		var boardId = Session.get('currentBoardId');
-		if(boardId) {
-			FlowRouter.go('boardMessages', {projectId: Session.get('currentProjectId'), boardId: boardId}, this._getQueryParams());
+		var queryParams = this._getQueryParams();
+		if(boardId && queryParams.userDashboard == null) {
+			FlowRouter.go('boardMessages', {projectId: Session.get('currentProjectId'), boardId: boardId}, queryParams);
 		} else {
-			FlowRouter.go('projectMessages', {projectId: Session.get('currentProjectId')}, this._getQueryParams());
+			FlowRouter.go('dashboardMessages', {}, queryParams);
 		}
 	},
 

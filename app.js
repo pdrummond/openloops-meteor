@@ -158,6 +158,7 @@ if(Meteor.isClient) {
 			var current = FlowRouter.current();
 			if('userDashboard' in current.queryParams) {
 				FlowRouter.setQueryParams({userDashboard: null});
+				FlowRouter.go('/');
 			} else {
 				FlowRouter.setQueryParams({userDashboard: Meteor.user().username});
 			}
@@ -649,6 +650,10 @@ if(Meteor.isClient) {
 	}
 
 	Template.feed.helpers({
+
+		isUserDashboard: function() {
+			return Session.get('userDashboard') != null;
+		},
 
 		projectUsers: function() {
 			var project = Ols.Project.getCurrent();

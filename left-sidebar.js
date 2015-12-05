@@ -8,7 +8,10 @@ if(Meteor.isClient) {
 			if(Session.get('userDashboard') != null) {
 				opts.userDashboard = Session.get('userDashboard');
 			} else {
-				opts.filter.projectId = Session.get('currentProjectId');
+				var currentProjectId = Session.get('currentProjectId');
+				if(currentProjectId) {
+					opts.filter.projectId = currentProjectId;
+				}
 				var currentBoardId = Session.get('currentBoardId');
 				if(currentBoardId) {
 					opts.filter.boardId = currentBoardId;
@@ -23,6 +26,10 @@ if(Meteor.isClient) {
 	});
 
 	Template.leftSidebar.helpers({
+
+		showLabelsTab: function() {
+			return Session.get('userDashboard') == null ? '':'hide';
+		},
 
 		activeTabClass: function(tabName) {
 			return Session.get('leftSidebarActiveTab') == tabName ? 'tab-active' : '';
