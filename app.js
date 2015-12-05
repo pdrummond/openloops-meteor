@@ -15,7 +15,7 @@ if(Meteor.isClient) {
 		Tracker.autorun(function () {
 			var status = Meteor.status().status;
 			console.log("** STATUS CHANGE: " + status);
-		    Session.set('connectionStatus', status);
+			Session.set('connectionStatus', status);
 		});
 
 
@@ -154,16 +154,6 @@ if(Meteor.isClient) {
 
 	Template.topBanner.events({
 
-		'click #logged-in-user': function() {
-			var current = FlowRouter.current();
-			if('userDashboard' in current.queryParams) {
-				FlowRouter.setQueryParams({userDashboard: null});
-				FlowRouter.go('/');
-			} else {
-				FlowRouter.setQueryParams({userDashboard: Meteor.user().username});
-			}
-		},
-
 		'click .project-breadcrumb': function() {
 			FlowRouter.go("/project/" + Session.get('currentProjectId'));
 		},
@@ -215,26 +205,14 @@ if(Meteor.isClient) {
 
 	Template.topBanner.helpers({
 
-		topBannerModeClass: function() {
-			return Session.get('userDashboard') == null ? 'project-mode': 'user-dashboard-mode';
-		},
-
 		headerProjectTitle: function() {
-			if(Session.get('userDashboard') != null) {
-				return Meteor.user().username;
-			} else {
-				var project = Projects.findOne(Session.get('currentProjectId'));
-				return project?project.title:'';
-			}
+			var project = Projects.findOne(Session.get('currentProjectId'));
+			return project?project.title:'';
 		},
 
 		headerBoardTitle: function() {
-			if(Session.get('userDashboard') != null) {
-				return 'User Dashboard';
-			} else {
-				var board = Boards.findOne(Session.get('currentBoardId'));
-				return board?board.title:'';
-			}
+			var board = Boards.findOne(Session.get('currentBoardId'));
+			return board?board.title:'';
 		},
 
 		filterLinkActiveClass: function(filterLink) {
@@ -275,13 +253,13 @@ if(Meteor.isClient) {
 	/*
 	var previousMessageDate = null;
 	Template.messageItemView.onRendered(function() {
-		var messageDate = moment(this.data.createdAt).date();
-		if(previousMessageDate && (messageDate < previousMessageDate)) {
-			this.$(".user-message").addClass('new-day');
-			this.$(".user-message").attr('data-date', moment(this.data.createdAt).format('MMMM Do YYYY'));
-		}
-		previousMessageDate = messageDate;
-		console.log("previousMessageDate: " + previousMessageDate);
+	var messageDate = moment(this.data.createdAt).date();
+	if(previousMessageDate && (messageDate < previousMessageDate)) {
+	this.$(".user-message").addClass('new-day');
+	this.$(".user-message").attr('data-date', moment(this.data.createdAt).format('MMMM Do YYYY'));
+	}
+	previousMessageDate = messageDate;
+	console.log("previousMessageDate: " + previousMessageDate);
 	});*/
 
 	Template.messageItemView.helpers({
@@ -315,7 +293,7 @@ if(Meteor.isClient) {
 			/*var state='offline';
 			var presence = Presences.findOne({userId: this._id});
 			if(presence) {
-				state = presence.state;
+			state = presence.state;
 			}
 			return state;*/
 			var user = Meteor.users.findOne({username:this.username});
@@ -428,15 +406,15 @@ if(Meteor.isClient) {
 					}
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED:
-						msg = "changed title of item to " + itemTitleLink;
-						break;
+					msg = "changed title of item to " + itemTitleLink;
+					break;
 					case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
-						var itemCtx = currentItemId?"of this item to:":"of " + ctx + " to:";
-						msg = "Set the description " + itemCtx;
-						break;
+					var itemCtx = currentItemId?"of this item to:":"of " + ctx + " to:";
+					msg = "Set the description " + itemCtx;
+					break;
 					default:
-						msg =  "> activity item " + this.activityType + " not found";
-						break;
+					msg =  "> activity item " + this.activityType + " not found";
+					break;
 				}
 			} else {
 				switch(this.activityType) {
@@ -449,16 +427,16 @@ if(Meteor.isClient) {
 					}
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_USER_WORKING_ON:
-						msg = "is working on " + this.workingOn;
+					msg = "is working on " + this.workingOn;
 					break;
 					//FIXME: Need to find someway to defer to the plugin for this.
 					case Ols.ACTIVITY_TYPE_WEBHOOK_EVENT:
-						switch(this.webHookType) {
-							case "GITHUB_WEBHOOK_EVENT":
-								msg = Ols.GitHub.generateActivityMessage(this);
-								break;
-							}
+					switch(this.webHookType) {
+						case "GITHUB_WEBHOOK_EVENT":
+						msg = Ols.GitHub.generateActivityMessage(this);
 						break;
+					}
+					break;
 					default:
 					msg =  ">> activity item " + this.activityType + " not found";
 					break;
@@ -481,12 +459,12 @@ if(Meteor.isClient) {
 			} else {
 				switch(this.activityType) {
 					case Ols.ACTIVITY_TYPE_WEBHOOK_EVENT:
-						switch(this.webHookType) {
-							case "GITHUB_WEBHOOK_EVENT":
-								activityContent = Ols.GitHub.generateActivityContent(this);
-								break;
-						}
+					switch(this.webHookType) {
+						case "GITHUB_WEBHOOK_EVENT":
+						activityContent = Ols.GitHub.generateActivityContent(this);
 						break;
+					}
+					break;
 				}
 			}
 			return activityContent;
@@ -497,15 +475,15 @@ if(Meteor.isClient) {
 			var item = Items.findOne(this.itemId);
 			switch(this.activityType) {
 				case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
-					show = true;
-					break;
+				show = true;
+				break;
 				case Ols.ACTIVITY_TYPE_WEBHOOK_EVENT:
-					switch(this.webHookType) {
-						case "GITHUB_WEBHOOK_EVENT":
-							show = Ols.GitHub.showActivityContent(this);
-						break;
-					}
+				switch(this.webHookType) {
+					case "GITHUB_WEBHOOK_EVENT":
+					show = Ols.GitHub.showActivityContent(this);
 					break;
+				}
+				break;
 			}
 			return show?"":"hide";
 		},
@@ -525,16 +503,6 @@ if(Meteor.isClient) {
 	});
 
 	Template.itemItemView.helpers({
-		boardTitle: function() {
-			var project = Projects.findOne(this.projectId);
-			var board = Boards.findOne(this.boardId);
-			return project && board?project.title + "/" + board.title:'';
-		},
-
-		showBoardTitleClass: function() {
-			return Session.get('userDashboard') == null?'hide':'';
-		},
-
 		isClosedClass: function() {
 			return this.isOpen?'':'closed';
 		},
@@ -650,10 +618,6 @@ if(Meteor.isClient) {
 	}
 
 	Template.feed.helpers({
-
-		isUserDashboard: function() {
-			return Session.get('userDashboard') != null && Session.get('currentItemId') == null;
-		},
 
 		projectUsers: function() {
 			var project = Ols.Project.getCurrent();
@@ -990,19 +954,10 @@ if(Meteor.isServer) {
 		var filter = {};
 		if(opts && opts.filter) {
 			filter = _.extend(filter, opts.filter);
-		}
-		if('userDashboard' in opts) {
-			delete filter.projectId;
-			delete filter.boardId;
-			var allowedProjectIds = Projects.find({ 'members.username': opts.userDashboard }).map(function (project) {
-				return project._id;
-			});
-			console.log("allowed projects: " + JSON.stringify(allowedProjectIds));
-			filter.projectId = {$in: allowedProjectIds};
-		}
+		}		
 		console.log("filter: " + JSON.stringify(filter));
 		return Items.find(filter, {sort: {updatedAt: -1}});
-   });
+	});
 
 	Meteor.publish("articles", function(opts) {
 		var filter = {};
@@ -1035,7 +990,7 @@ if(Meteor.isServer) {
 	});
 
 	Meteor.publish("userStatus", function() {
-  		return Meteor.users.find({ "status.online": true }, { fields: { "username": 1, "status":1 } });
+		return Meteor.users.find({ "status.online": true }, { fields: { "username": 1, "status":1 } });
 	});
 
 	// Meteor.publish('userPresence', function() {
@@ -1047,8 +1002,8 @@ if(Meteor.isServer) {
 // Override Meteor._debug to filter for custom msgs - as used
 // by yuukan:streamy (https://goo.gl/4HQiKg)
 Meteor._debug = (function (super_meteor_debug) {
-  return function (error, info) {
-    if (!(info && _.has(info, 'msg')))
-      super_meteor_debug(error, info);
-  }
+	return function (error, info) {
+		if (!(info && _.has(info, 'msg')))
+		super_meteor_debug(error, info);
+	}
 })(Meteor._debug);

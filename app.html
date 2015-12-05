@@ -9,7 +9,7 @@
 <template name="topBanner">
 	{{> fullScreenEditor}}
 	{{> boardChooserMenu}}
-	<div id="top-banner" class="{{topBannerModeClass}}">
+	<div id="top-banner">
 		<div class="left">
 			{{> openLoopsEye}}
 			<span style="margin-left:10px" id="main-title">
@@ -120,9 +120,6 @@
 <template name="feed">
 	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}} {{leftSidebarActiveTab}}">
 		<header class="{{currentItemType}} {{currentItemIssueType}}">
-			{{#if isUserDashboard}}
-				<h1 style="margin-left:10px;"> {{currentUser.username}}</h1>
-			{{else}}
 			{{#if isTeamFeed}}
 				<div class="user-cards">
 					{{#each projectUsers}}
@@ -144,7 +141,6 @@
 					</div>
 				</div>
 			</div>
-			{{/if}}
 			{{/if}}
 		</header>
 		<div class="tab-body {{isTabActive 'messages'}}">
@@ -187,7 +183,6 @@
 				<strong class="header-item">{{createdBy}}</strong>
 				<span id="created-at" class="header-item" title={{formatTime createdAt}}>{{timeAgo createdAt}}</span>
 				<span id="item-link" class="header-item {{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
-				<span class="header-item {{itemShowBoardTitleClass this}} board-title"> ● {{itemBoardTitle this}}</span>
 			</span>
 			<div id="text">
 				{{#markdown}}{{text}}{{/markdown}}
@@ -204,7 +199,6 @@
 				<strong class="header-item">{{createdBy}}</strong>
 				<span id="created-at" class="header-item" title={{formatTime createdAt}}>{{timeAgo createdAt}}</span>
 				<span id="item-link" class="header-item {{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}">{{itemTitle}}</a></span>
-				<span class="header-item {{itemShowBoardTitleClass this}} board-title"> ● {{itemBoardTitle this}}</span>
 			</span>
 			<div id="text">
 				{{{activityMessage}}}
@@ -221,7 +215,7 @@
 		<a class="item {{isActive}} {{isClosedClass}}" href="">
 		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
 		<div id="content">
-			<span id="title">{{title}} <span class="board-title {{showBoardTitleClass}}">{{boardTitle}}</span></span>
+			<span id="title">{{title}} </span>
 			<div id="meta">
 
 				<span class="item-key">#{{projectKey this}}-{{pid}}</span> ●

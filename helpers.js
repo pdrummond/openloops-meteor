@@ -1,24 +1,4 @@
 if(Meteor.isClient) {
-
-	Template.registerHelper('itemBoardTitle', function (item) {
-		var title = "";
-		var project = Projects.findOne(item.projectId);
-		var board = Boards.findOne(item.boardId);
-		if(project != null) {
-			title = project.title;
-			if(board != null) {
-				title += "/" + board.title;
-			}
-		} else {
-			title = 'Dashboard';
-		}
-		return title;
-	});
-
-	Template.registerHelper('itemShowBoardTitleClass', function (item) {
-		return Session.get('userDashboard') == null?'hide':'';
-	});
-
 	Template.registerHelper('itemHasAssignee', function (item) {
 		if(item == null) {
 			item = Items.findOne(Session.get('currentItemId'));

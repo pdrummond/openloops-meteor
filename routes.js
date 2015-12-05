@@ -1,16 +1,6 @@
 if(Meteor.isClient) {
 	BlazeLayout.setRoot('#app');
 
-	function trackUserDashboard(context) {
-		if('userDashboard' in context.queryParams) {
-			Session.set("userDashboard", context.queryParams.userDashboard);
-		} else {
-			Session.set("userDashboard", null);
-		}
-	}
-
-	FlowRouter.triggers.enter([trackUserDashboard]);
-
 	FlowRouter.route("/login", {
 		name: "login",
 		action: function() {
@@ -53,19 +43,6 @@ if(Meteor.isClient) {
 			if(route.path == "/login") {
 				FlowRouter.go("welcome");
 			}
-		}
-	});
-
-	FlowRouter.route('/dashboard', {
-		name: 'dashboardMessages',
-		action: function(params, queryParams) {
-			Session.set('currentProjectId', null);
-			Session.set('currentBoardId', null);
-			Session.set('currentItemId', null);
-			BlazeLayout.render("app", {currentPage: "dashboardFeedPage"});
-			Session.set('numIncomingMessages', 0);
-			Ols.HistoryManager.loadInitialMessages();
-			OpenLoops.removeSidebarNewMessages();
 		}
 	});
 

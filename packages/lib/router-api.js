@@ -3,7 +3,7 @@ Ols.Router = {
 	showHomeMessages: function() {
 		var boardId = Session.get('currentBoardId');
 		var queryParams = this._getQueryParams();
-		if(boardId && queryParams.userDashboard == null) {
+		if(boardId) {
 			FlowRouter.go('boardMessages', {projectId: Session.get('currentProjectId'), boardId: boardId}, queryParams);
 		} else {
 			FlowRouter.go('dashboardMessages', {}, queryParams);
@@ -45,10 +45,6 @@ Ols.Router = {
 
 	_getQueryParams: function() {
 		var queryParams = {};
-		var userDashboard = Session.get('userDashboard');
-		if(userDashboard != null) {
-			queryParams.userDashboard = userDashboard;
-		}
 		return queryParams;
 	}
 

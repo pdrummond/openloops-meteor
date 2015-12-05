@@ -5,17 +5,13 @@ if(Meteor.isClient) {
 		Tracker.autorun(function() {
 			var opts = {};
 			opts.filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
-			if(Session.get('userDashboard') != null) {
-				opts.userDashboard = Session.get('userDashboard');
-			} else {
-				var currentProjectId = Session.get('currentProjectId');
-				if(currentProjectId) {
-					opts.filter.projectId = currentProjectId;
-				}
-				var currentBoardId = Session.get('currentBoardId');
-				if(currentBoardId) {
-					opts.filter.boardId = currentBoardId;
-				}
+			var currentProjectId = Session.get('currentProjectId');
+			if(currentProjectId) {
+				opts.filter.projectId = currentProjectId;
+			}
+			var currentBoardId = Session.get('currentBoardId');
+			if(currentBoardId) {
+				opts.filter.boardId = currentBoardId;
 			}
 			Meteor.subscribe('items', opts, function(err, result) {
 				if(err) {
@@ -26,10 +22,6 @@ if(Meteor.isClient) {
 	});
 
 	Template.leftSidebar.helpers({
-
-		showLabelsTab: function() {
-			return Session.get('userDashboard') == null ? '':'hide';
-		},
 
 		activeTabClass: function(tabName) {
 			return Session.get('leftSidebarActiveTab') == tabName ? 'tab-active' : '';

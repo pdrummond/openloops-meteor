@@ -107,7 +107,7 @@ if(Meteor.isClient) {
 	Template.labelChooserItem.helpers({
 		showCheck: function() {
 			var item = Items.findOne(Session.get('currentItemId'));
-			return _.contains(item.labels, this._id)?'':'hide';
+			return item && item.labels?(_.contains(item.labels, this._id)?'':'hide'):'hide';
 		}
 	});
 
