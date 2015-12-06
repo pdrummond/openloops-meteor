@@ -117,6 +117,25 @@
 	</div>
 </template>
 
+<template name="activityHistory">
+	<div><p><i>Not yet implemented - Activity will go here</i></p></div>
+</template>
+
+
+<template name="checkList">
+	<div><p><i>Not yet implemented - Check lists will go here</i></p></div>
+</template>
+
+<template name="tabBody">
+	<div class="tab-body {{itemTabActiveClass this}}">
+		{{> Template.dynamic template=tabBodyTemplate}}
+	</div>
+</template>
+
+<template name="tabHeader">
+	<div class="tab-item {{itemTabActiveClass this}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/messages"><i class="fa {{icon}}"></i> {{label}}</a></div>
+</template>
+
 <template name="feed">
 	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}} {{leftSidebarActiveTab}}">
 		<header class="{{currentItemType}} {{currentItemIssueType}}">
@@ -134,27 +153,17 @@
 				</div>
 				<div class="item-tab-bar-wrapper">
 					<div class="item-tab-bar">
-						<!--<div class="tab-item {{isTabActive 'description'}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/description"><i class="fa fa-info-circle"></i> Description</a></div>-->
-						<div class="tab-item {{isTabActive 'messages'}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/messages"><i class="fa fa-comments-o"></i> Messages</a></div>
-						<div class="tab-item {{isTabActive 'todos'}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/todos"><i class="fa fa-list"></i> Todo Items</a></div>
-						<div class="tab-item {{isTabActive 'activity'}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/activity"><i class="fa fa-exchange"></i> Activity</a></div>
+						{{#each tabs}}
+							{{> tabHeader}}
+						{{/each}}
 					</div>
 				</div>
 			</div>
 			{{/if}}
 		</header>
-		<div class="tab-body {{isTabActive 'messages'}}">
-			{{> messageHistory}}
-		</div>
-		<div class="tab-body {{isTabActive 'description'}}">
-			<div class="current-item-description">{{#markdown}}{{currentItemDescription}}{{/markdown}}</div>
-		</div>
-		<div class="tab-body {{isTabActive 'todos'}}">
-			<div class="current-item-todos"><p><i>Not yet implemented - TODOS will go here</i></p></div>
-		</div>
-		<div class="tab-body {{isTabActive 'activity'}}">
-			<div class="current-item-activity"><p><i>Not yet implemented - all item-specific activity will be listed here</i></p></div>
-		</div>
+		{{#each tabs}}
+			{{> tabBody}}
+		{{/each}}
 		<footer>
 			{{> messageBox}}
 		</footer>

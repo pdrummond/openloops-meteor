@@ -617,7 +617,40 @@ if(Meteor.isClient) {
 		return color;
 	}
 
+	Template.tabHeader.events({
+		'click': function() {
+			Session.set('activeItemTab', this._id);
+			console.log("activeItemTab: " + Session.get('activeItemTab'))
+		}
+	});
+
+	Template.tabBody.helpers({
+
+		tabBodyTemplate: function() {
+			switch(this.type) {
+				case Ols.Item.Tab.TAB_TYPE_MESSAGE_HISTORY:
+					template = "messageHistory";
+					break;
+				case Ols.Item.Tab.TAB_TYPE_ACTIVITY_HISTORY:
+					template = "activityHistory";
+					break;
+				case Ols.Item.Tab.TAB_TYPE_CHECKLIST:
+					template = "checkList";
+					break;
+				default:
+					console.error("No template for tab " + this.type);
+					break;
+			}
+			return template;
+		}
+	});
+
 	Template.feed.helpers({
+
+		tabs: function() {
+			var item = Ols.Item.getCurrent();
+			return item && item.tabs ? item.tabs : [];
+		},
 
 		projectUsers: function() {
 			var project = Ols.Project.getCurrent();
@@ -844,13 +877,25 @@ if(Meteor.isServer) {
 			console.log("insertItem - boardId:" + newItem.boardId);
 			var now = new Date().getTime();
 			console.log("new item project id " + newItem.projectId);
+			var checkListId = Random.id();
 			newItem = _.extend({
 				pid: newItem.projectId?incrementCounter('counters', newItem.projectId):0,
 				createdAt: now,
 				createdBy: Meteor.user().username,
 				updatedAt: now,
 				isOpen: true,
-				numMessages: 0
+				numMessages: 0,
+				tabs: [
+					{_id: Random.id(), icon: 'fa-comments-o', label: "Messages", type: Ols.Item.Tab.TAB_TYPE_MESSAGE_HISTORY},
+					{_id: Random.id(), icon: 'fa-exchange', label: "Activity", type: Ols.Item.Tab.TAB_TYPE_ACTIVITY_HISTORY},
+					{_id: checkListId, icon: 'fa-check', label: "Todo List", type: Ols.Item.Tab.TAB_TYPE_CHECKLIST}
+				],
+				subItems: [{
+					_id: Random.id(),
+					text: "Implmenent sub-items",
+					isOpen: true,
+					tabId: checkListId
+				}]
 			}, newItem);
 
 			var newItemId = Items.insert(newItem);
@@ -954,7 +999,7 @@ if(Meteor.isServer) {
 		var filter = {};
 		if(opts && opts.filter) {
 			filter = _.extend(filter, opts.filter);
-		}		
+		}
 		console.log("filter: " + JSON.stringify(filter));
 		return Items.find(filter, {sort: {updatedAt: -1}});
 	});

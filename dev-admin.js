@@ -97,7 +97,18 @@ if(Meteor.isClient) {
 					$("#status").text("Removed all labels successfully.");
 				}
 			});
-		}
+		},
+
+		'click #add-item-tabs': function() {
+			$("#status").text("Add Item Tabs: working...");
+			Meteor.call('addItemTabs', function(err, results) {
+				if(err) {
+					$("#status").text("Error adding item tabs: " + err.reason);
+				} else {
+					$("#status").text("Added Item Tabs sucessfully. ");
+				}
+			});
+		},
 	});
 }
 
@@ -218,6 +229,16 @@ if(Meteor.isServer) {
 			Labels.remove({});
 			Items.find().forEach(function(item) {
 				Items.update(item._id, {$set: {labels: []}});
+			});
+		},
+
+		addItemTabs: function() {
+			Items.find().forEach(function(item) {
+				Items.update(item._id, {$set: {tabs: [
+					{_id: Random.id(), icon: 'fa-comments-o', label: "Messages", type: Ols.Item.Tab.TAB_TYPE_MESSAGE_HISTORY},
+					{_id: Random.id(), icon: 'fa-exchange', label: "Activity", type: Ols.Item.Tab.TAB_TYPE_ACTIVITY_HISTORY},
+					{_id: Random.id(), icon: 'fa-check', label: "Todo List", type: Ols.Item.Tab.TAB_TYPE_CHECKLIST}
+				], subItems: []}});
 			});
 		}
 	})

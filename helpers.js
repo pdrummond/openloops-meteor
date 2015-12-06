@@ -1,4 +1,9 @@
 if(Meteor.isClient) {
+
+	Template.registerHelper('itemTabActiveClass', function (item) {		
+		return item && Session.get('activeItemTab') == item._id?'active':'';
+	});
+
 	Template.registerHelper('itemHasAssignee', function (item) {
 		if(item == null) {
 			item = Items.findOne(Session.get('currentItemId'));

@@ -1,4 +1,13 @@
 Ols.Item = {
+
+	getCurrent: function() {
+		return Items.findOne(Session.get('currentItemId'));
+	},
+
+	get: function(itemId) {
+		return Items.findOne(itemId)
+	},
+
 	/**
 		Given an item or an itemId returns the item key for a project. The item
 		key is made up of the project key and the item PID, for example: OLS-42.
@@ -60,6 +69,11 @@ Ols.Item = {
 		return color;
 	},
 
+	Tab: {
+		TAB_TYPE_MESSAGE_HISTORY: "TAB_TYPE_MESSAGE_HISTORY",
+		TAB_TYPE_ACTIVITY_HISTORY: "TAB_TYPE_ACTIVITY_HISTORY",
+		TAB_TYPE_CHECKLIST: "TAB_TYPE_CHECKLIST",
+	},
 
 	ITEM_TYPE_DISCUSSION: 'discussion',
 	ITEM_TYPE_ISSUE: 'issue',
