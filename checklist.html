@@ -1,0 +1,16 @@
+<template name="checkList">
+	<div id="checklist-wrapper">
+		<input id="checklist-input" placeholder="Type here">
+		<button id="add-checkitem-button">Add</button>
+
+		<ul id="checkitem-list">
+			{{#each checkitems}}
+				{{> checkItem}}
+			{{/each}}
+		</ul>
+	</div>
+</template>
+
+<template name="checkitem">
+	<li><input type="check"> {{title}} </li>
+</template>

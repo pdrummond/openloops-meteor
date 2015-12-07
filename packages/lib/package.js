@@ -17,6 +17,7 @@ Package.onUse(function(api) {
 	  'message-api.js',
 	  'activity-api.js',
 	  'item-api.js',
+	  'sub-item-api.js',
 	  'user-api.js',
 	  'router-api.js',
 	  'message-history-api.js'

@@ -121,11 +121,6 @@
 	<div><p><i>Not yet implemented - Activity will go here</i></p></div>
 </template>
 
-
-<template name="checkList">
-	<div><p><i>Not yet implemented - Check lists will go here</i></p></div>
-</template>
-
 <template name="tabBody">
 	<div class="tab-body {{itemTabActiveClass this}}">
 		{{> Template.dynamic template=tabBodyTemplate}}
@@ -161,6 +156,9 @@
 			</div>
 			{{/if}}
 		</header>
+		{{#if isTeamFeed}}
+			{{> messageHistory}}
+		{{/if}}
 		{{#each tabs}}
 			{{> tabBody}}
 		{{/each}}
