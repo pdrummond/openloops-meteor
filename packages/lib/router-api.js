@@ -16,11 +16,7 @@ Ols.Router = {
 			boardId: item.boardId,
 			itemId: item._id
 		};
-		var tabName = 'messages';
-		var activeItemTab = Session.get('activeItemTab')
-		if(activeItemTab) {
-			params.tabName = activeItemTab;
-		}
+		params.tabName = 'messages';
 
 		FlowRouter.go('boardItemMessages', params, this._getQueryParams());
 	},

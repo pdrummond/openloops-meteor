@@ -237,7 +237,8 @@ if(Meteor.isServer) {
 				Items.update(item._id, {$set: {tabs: [
 					{_id: 'messages', icon: 'fa-comments-o', label: "Messages", type: Ols.Item.Tab.TAB_TYPE_MESSAGE_HISTORY},
 					{_id: 'activity', icon: 'fa-exchange', label: "Activity", type: Ols.Item.Tab.TAB_TYPE_ACTIVITY_HISTORY},
-					{_id: Random.id(), icon: 'fa-check', label: "Todo List", type: Ols.Item.Tab.TAB_TYPE_CHECKLIST}
+					{_id: Random.id(), icon: 'fa-check', label: "Todo List", type: Ols.Item.Tab.TAB_TYPE_CHECKLIST},
+					{_id: Random.id(), icon: 'fa-book', label: "References", type: Ols.Item.Tab.TAB_TYPE_REFLIST}
 				], subItems: []}});
 			});
 		}
