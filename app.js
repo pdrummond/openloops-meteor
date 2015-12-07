@@ -877,7 +877,7 @@ if(Meteor.isServer) {
 			console.log("insertItem - boardId:" + newItem.boardId);
 			var now = new Date().getTime();
 			console.log("new item project id " + newItem.projectId);
-			var checkListId = Random.id();
+
 			newItem = _.extend({
 				pid: newItem.projectId?incrementCounter('counters', newItem.projectId):0,
 				createdAt: now,
@@ -888,14 +888,10 @@ if(Meteor.isServer) {
 				tabs: [
 					{_id: Random.id(), icon: 'fa-comments-o', label: "Messages", type: Ols.Item.Tab.TAB_TYPE_MESSAGE_HISTORY},
 					{_id: Random.id(), icon: 'fa-exchange', label: "Activity", type: Ols.Item.Tab.TAB_TYPE_ACTIVITY_HISTORY},
-					{_id: checkListId, icon: 'fa-check', label: "Todo List", type: Ols.Item.Tab.TAB_TYPE_CHECKLIST}
+					{_id: Random.id(), icon: 'fa-check', label: "Todo List", type: Ols.Item.Tab.TAB_TYPE_CHECKLIST},
+					//{_id: Random.id(), icon: 'fa-check-circle-o', label: "Check List", type: Ols.Item.Tab.TAB_TYPE_CHECKLIST}
 				],
-				subItems: [{
-					_id: Random.id(),
-					text: "Implmenent sub-items",
-					isOpen: true,
-					tabId: checkListId
-				}]
+				subItems: []
 			}, newItem);
 
 			var newItemId = Items.insert(newItem);

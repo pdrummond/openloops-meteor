@@ -1,16 +1,37 @@
 <template name="checkList">
 	<div id="checklist-wrapper">
-		<input id="checklist-input" placeholder="Type here">
-		<button id="add-checkitem-button">Add</button>
+		<form style="display:flex;padding:0;padding-left:20px;padding-bottom: 0px;">
+			<input id="checklist-input" placeholder="Type here to add new item">
+			<button type="submit" class="action-button" id="add-checkitem-button"><a>Add</a></button>
+		</form>
 
-		<ul id="checkitem-list">
-			{{#each checkitems}}
+		<span class="checklist-header">{{numOpenCheckItems}} Open</span>
+		<ul class="checkitem-list">
+			{{#each openCheckItems}}
 				{{> checkItem}}
 			{{/each}}
+			{{#if noOpenCheckItems}}
+				<p class="empty-text">No Open Items</p>
+			{{/if}}
+		</ul>
+
+		<span class="checklist-header">{{numClosedCheckItems}} Closed</span>
+		<ul class="checkitem-list">
+			{{#each closedCheckItems}}
+				{{> checkItem}}
+			{{/each}}
+			{{#if noClosedCheckItems}}
+				<p class="empty-text">No Closed Items</p>
+			{{/if}}
 		</ul>
 	</div>
 </template>
 
-<template name="checkitem">
-	<li><input type="check"> {{title}} </li>
+<template name="checkItem">
+	<li class='check-item {{isOpenClass}} {{isEditModeClass}}' style="display:flex;padding: 10px;">
+		<input class='itemCheck' type="checkbox" {{checked}} style="position:relative;top:4px;">
+		<span class="text {{#if isEditMode}}hide{{else}}{{/if}}" style="margin-left:10px">{{#markdown}}{{text}}{{/markdown}}</span>
+		<input class="check-item-input {{#if isEditMode}}{{else}}hide{{/if}}" value={{text}}>
+		<i class="delete-button fa fa-times" style="color:gray"></i>
+	</li>
 </template>
