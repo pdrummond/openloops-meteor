@@ -637,6 +637,9 @@ if(Meteor.isClient) {
 				case Ols.Item.Tab.TAB_TYPE_CHECKLIST:
 					template = "checkList";
 					break;
+				case Ols.Item.Tab.TAB_TYPE_REFLIST:
+					template = "refList";
+					break;
 				default:
 					console.error("No template for tab " + this.type);
 					break;
@@ -890,6 +893,7 @@ if(Meteor.isServer) {
 					{_id: "activity", icon: 'fa-exchange', label: "Activity", type: Ols.Item.Tab.TAB_TYPE_ACTIVITY_HISTORY},
 					{_id: Random.id(), icon: 'fa-check', label: "Todo List", type: Ols.Item.Tab.TAB_TYPE_CHECKLIST},
 					//{_id: Random.id(), icon: 'fa-check-circle-o', label: "Check List", type: Ols.Item.Tab.TAB_TYPE_CHECKLIST}
+					{_id: Random.id(), icon: 'fa-book', label: "User Stories", type: Ols.Item.Tab.TAB_TYPE_REFLIST}
 				],
 				subItems: []
 			}, newItem);

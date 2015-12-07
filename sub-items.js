@@ -1,11 +1,16 @@
 
+SubItems = new Mongo.Collection('sub-items');
+
 if(Meteor.isServer) {
+
+	Meteor.publish('subItems', function(filter) {
+		return SubItems.find(filter);
+	});
 
 	Meteor.methods({
 
 		insertSubItem: function(newSubItem) {
 			var now = new Date().getTime();
-			var parentItem = Items.findOne(newSubItem.itemId);
 			newSubItem = _.extend({
 				_id: Random.id(),
 				createdAt: now,
@@ -13,17 +18,17 @@ if(Meteor.isServer) {
 				updatedAt: now,
 				isOpen: true
 			}, newSubItem);
-			Items.update(parentItem._id, {$addToSet: {subItems: newSubItem}});
+
+			var subItemId = SubItems.insert(newSubItem);
+			console.log("insertSubItem id" + subItemId + ", data: " + JSON.stringify(newSubItem, null, 4));
 		},
 
 		updateSubItem: function(subItem) {
-			console.log("updateSubItem: " + JSON.stringify(subItem, null, 4));
-			var parentItem = Items.findOne(subItem.itemId);
-			Items.update({_id: parentItem._id, 'subItems._id': subItem._id}, {$set: {'subItems.$': subItem}});
+			SubItems.update({_id: subItem._id}, {$set: subItem});
 		},
 
 		removeSubItem: function(subItem) {
-			Items.update(subItem.itemId, {$pull: {subItems: {_id: subItem._id}}});
+			SubItems.remove(subItem._id);
 		}
 	});
 }

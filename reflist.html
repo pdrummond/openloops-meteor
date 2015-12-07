@@ -1,0 +1,28 @@
+<template name="refList">
+	<div id="reflist-wrapper">
+		<form style="display:flex;padding:0;padding-left:20px;padding-bottom: 0px;">
+			 {{> inputAutocomplete settings=autoCompleteSettings id="msg" class="input-xlarge" placeholder="Type here to find items"}}
+		</form>
+
+		<ul class="refitem-list">
+			{{#each refItems}}
+				{{> refItem}}
+			{{/each}}
+			{{#if noRefItems}}
+				<p class="empty-text">No Items</p>
+			{{/if}}
+		</ul>
+	</div>
+</template>
+
+<template name="itemPill">
+    <span class="itemTitle">{{title}}</span>
+</template>
+
+<template name="refItem">
+	<li class='ref-item' style="display:flex;padding: 10px;">
+		<a href="/project/{{itemProjectId}}/board/{{itemBoardId}}/item/{{refItemId}}/messages" class="item-key">#{{projectKey}}-{{itemPid}}</a> 
+		<span class="text" style="margin-left:10px">{{#markdown}}{{text}}{{/markdown}}</span>
+		<i class="remove-button fa fa-times" style="color:gray"></i>
+	</li>
+</template>

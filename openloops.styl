@@ -1294,7 +1294,7 @@ text-transform: uppercase;
 	text-decoration:underline;
 }
 
-#checklist-wrapper {
+#checklist-wrapper, #reflist-wrapper {
 	xbackground-color: gray;
     top: header-height;
     position: relative;
@@ -1327,16 +1327,16 @@ border-radius: 0;
 }
 
 
-.check-item:hover, .check-item.edit-mode {
+.check-item:hover, .check-item.edit-mode, .ref-item:hover {
 	cursor:pointer;
 	background-color: whitesmoke;
 }
 
-.check-item .text {
+.check-item .text, .ref-item .text {
 	flex-grow:2;
 }
 
-.check-item .text p {
+.check-item .text p, .ref-item .text p {
 	margin:0;
 }
 

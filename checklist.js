@@ -1,69 +1,38 @@
 if(Meteor.isClient) {
+
+	Template.checkList.onCreated(function() {
+		var self = this;
+		this.autorun(function() {
+			self.subscribe('subItems', {
+				itemTab: Session.get('activeItemTab'),
+				type: Ols.SubItem.SUB_ITEM_TYPE_CHECKITEM
+			});
+		});
+	});
+
 	Template.checkList.helpers({
 		numOpenCheckItems: function() {
-			var num = 0;
-			var item = Ols.Item.getCurrent();
-			if(item) {
-				num =_.filter(item.subItems, function(subItem) {
-					return subItem.itemTab == Session.get('activeItemTab') && subItem.isOpen == true;
-				}).length;
-			}
-			return num;
+			return SubItems.find({isOpen:true}).count();
 		},
 
 		numClosedCheckItems: function() {
-			var num = 0;
-			var item = Ols.Item.getCurrent();
-			if(item) {
-				num =_.filter(item.subItems, function(subItem) {
-					return subItem.itemTab == Session.get('activeItemTab') && subItem.isOpen == false;
-				}).length;
-			}
-			return num;
+			return SubItems.find({isOpen:false}).count();
 		},
 
 		openCheckItems: function() {
-			var checkItems = [];
-			var item = Ols.Item.getCurrent();
-			if(item) {
-				checkItems =  _.filter(item.subItems, function(subItem) {
-					return subItem.itemTab == Session.get('activeItemTab') && subItem.isOpen == true;
-				});
-			}
-			return checkItems;
+			return SubItems.find({isOpen:true});
 		},
 
 		closedCheckItems: function() {
-			var checkItems = [];
-			var item = Ols.Item.getCurrent();
-			if(item) {
-				checkItems =  _.filter(item.subItems, function(subItem) {
-					return subItem.itemTab == Session.get('activeItemTab') && subItem.isOpen == false;
-				});
-			}
-			return checkItems;
+			return SubItems.find({isOpen:false});
 		},
 
 		noOpenCheckItems: function() {
-			var num = 0;
-			var item = Ols.Item.getCurrent();
-			if(item) {
-				num = _.filter(item.subItems, function(subItem) {
-					return subItem.itemTab == Session.get('activeItemTab') && subItem.isOpen == true;
-				}).length;
-			}
-			return num == 0;
+			return SubItems.find({isOpen:true}).count() == 0;
 		},
 
 		noClosedCheckItems: function() {
-			var num = 0;
-			var item = Ols.Item.getCurrent();
-			if(item) {
-				num = _.filter(item.subItems, function(subItem) {
-					return subItem.itemTab == Session.get('activeItemTab') && subItem.isOpen == false;
-				}).length;
-			}
-			return num == 0;
+			return SubItems.find({isOpen:false}).count() == 0;
 		}
 	});
 

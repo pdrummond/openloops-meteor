@@ -1,6 +1,6 @@
 if(Meteor.isClient) {
 
-	Template.registerHelper('itemTabActiveClass', function (item) {		
+	Template.registerHelper('itemTabActiveClass', function (item) {
 		return item && Session.get('activeItemTab') == item._id?'active':'';
 	});
 
