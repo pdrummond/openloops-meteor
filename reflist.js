@@ -1,5 +1,5 @@
 if(Meteor.isClient) {
-	Template.checkList.onCreated(function() {
+	Template.refList.onCreated(function() {
 		var self = this;
 		this.autorun(function() {
 			self.subscribe('subItems', {
@@ -35,6 +35,24 @@ if(Meteor.isClient) {
 				]
 			};
 		}
+	});
+
+	Template.refList.events({
+		'autocompleteselect #auto-input': function(event, template, item) {
+			var subItem = {
+				type: Ols.SubItem.SUB_ITEM_TYPE_REFITEM,
+				itemId: Session.get('currentItemId'),
+				itemTab: Session.get('activeItemTab'),
+				refItemId: item._id
+			};
+			Meteor.call('insertSubItem', subItem, function(err, res) {
+				if(err) {
+					alert("Error adding reflist item: " + err.reason);
+				} else {
+					$(template.find('#auto-input')).val('');
+				}
+			});
+  		}
 	});
 
 	Template.refItem.onCreated(function() {
@@ -84,22 +102,4 @@ if(Meteor.isClient) {
 			});
 		}
 	});
-
-	Template.itemPill.events({
-		'click': function(e, t) {
-			var subItem = {
-				type: Ols.SubItem.SUB_ITEM_TYPE_REFITEM,
-				itemId: Session.get('currentItemId'),
-				itemTab: Session.get('activeItemTab'),
-				refItemId: this._id
-			};
-			Meteor.call('insertSubItem', subItem, function(err, res) {
-				if(err) {
-					alert("Error adding reflist item: " + err.reason);
-				} else {
-					$(t.find('#msg')).val('');
-				}
-			});
-		}
-	})
 }
