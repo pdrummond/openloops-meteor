@@ -122,7 +122,7 @@
 </template>
 
 <template name="tabBody">
-	<div class="tab-body {{itemTabActiveClass this}}">
+	<div class="tab-body">
 		{{> Template.dynamic template=tabBodyTemplate}}
 	</div>
 </template>
@@ -157,11 +157,9 @@
 			{{/if}}
 		</header>
 		{{#if isTeamFeed}}
-			{{> messageHistory}}
+
 		{{/if}}
-		{{#each tabs}}
-			{{> tabBody}}
-		{{/each}}
+		{{> tabBody}}
 		<footer>
 			{{> messageBox}}
 		</footer>

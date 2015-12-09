@@ -18,7 +18,7 @@ Ols.HistoryManager = {
 
 	getOldestClientMessageDate: function() {
 		var date;
-		var existingMessages = ClientMessages.find({}, {sort:{createdAt:1}}).fetch();
+		var existingMessages = [];//ClientMessages.find({}, {sort:{createdAt:1}}).fetch();
 		if(existingMessages.length > 0) {
 			date = existingMessages[0].createdAt;
 		}
@@ -30,20 +30,22 @@ Ols.HistoryManager = {
 		var olderThanDate = this.getOldestClientMessageDate();
 		Meteor.call('loadMessages', {
 			olderThanDate: olderThanDate,
-			projectId: Session.get('currentProjectId'),
-			boardId: Session.get('currentBoardId'),
-			itemId: Session.get('currentItemId'),
-			itemFilter: OpenLoops.getFilterQuery(Session.get('filterQuery'))
+			projectId: 'cxmM3DtvJHi5eay3m',//Session.get('currentProjectId'),
+			boardId: 'AGWQYXoxYTppLu553', //Session.get('currentBoardId'),
+			itemId: null,//Session.get('currentItemId'),
+			itemFilter: {}//OpenLoops.getFilterQuery(Session.get('filterQuery'))
 		}, function(err, messages) {
 			console.log(" >> load messages returned: " + messages.length);
 			if(err) {
 				alert("Error loading messages: " + err);
 				callback(false);
 			} else {
-				_.each(messages, function(message) {
-					ClientMessages._collection.insert(message);
-				});
-				console.log("<<<< LOAD MESSAGES DONE - " + ClientMessages._collection.find().count() + " client messages loaded");
+				//Tracker.nonreactive(function() {
+					_.each(messages, function(message) {
+						ClientMessages._collection.insert(message);
+					});
+				//});
+				//console.log("<<<< LOAD MESSAGES DONE - " + ClientMessages._collection.find().count() + " client messages loaded");
 				callback(true);
 			}
 		});
@@ -54,14 +56,19 @@ Ols.HistoryManager = {
 		this.loadingInitialMessages = true;
 		this.loadingMessages = true;
 		//If load takes a while, show busy
-		this.busyTimeout = setTimeout(function() {
+		/*this.busyTimeout = Meteor.setTimeout(function() {
 			console.log("SHOWING BUSY")
 			self.showBusyIcon();
-		}, 300);
-
+		}, 300);*/
 		console.log(">>>> LOAD INITIAL MESSAGES");
-		ClientMessages._collection.remove({});
-		console.log("CLIENT MESSAGES DELETED: Num client msgs: " + ClientMessages.find().count());
+
+		//Need to be able to remove all items here but this causes infinite
+		//loop - need to figure out why.  Try in a simple testbed app - should
+		//be possible to call remove() on a client only collection?  Learn about
+		//reactivity properly - maybe ask something on SO if I can't figure this
+		//out myself.
+		//ClientMessages.remove({});
+
 
 		var self = this;
 		this.loadMessages(function(ok) {
@@ -80,7 +87,7 @@ Ols.HistoryManager = {
 		this.loadingMessages = true;
 		console.log(">>>> LOAD MORE MESSAGES");
 		var self = this;
-		Meteor.setTimeout(function() {
+		/*Meteor.setTimeout(function() {
 			if(self.moreMessagesOnServer()) {
 				self.showBusyIcon();
 				console.log(">>>> STILL LOAD MORE MESSAGES");
@@ -97,13 +104,13 @@ Ols.HistoryManager = {
 				console.log(">>>> NO MORE MESSAGES ON SERVER");
 				self.hideBusyIcon();
 			}
-		}, 1);
+		}, 1);*/
 	},
 
 	moreMessagesOnServer: function() {
 		console.log("> moreMessagesOnServer");
 		var result = false;
-		if(!this.loadingInitialMessages) {
+		/*if(!this.loadingInitialMessages) {
 			var currentItemId = Session.get('currentItemId');
 			var serverMsgCount;
 			if(currentItemId) {
@@ -136,18 +143,18 @@ Ols.HistoryManager = {
 				console.log("moreMessagesOnServer")
 			}
 		}
-		console.log("< moreMessagesOnServer");
+		console.log("< moreMessagesOnServer");*/
 		return result;
 	},
 
 	scrollBottom: function() {
-		console.log(">> scrollBottom");
+		/*console.log(">> scrollBottom");
 		var $messageList = $("#messageHistory");
 		if($messageList.length > 0) {
 			$messageList.scrollTop($messageList[0].scrollHeight);
 		}
 		Ols.HistoryManager.atBottom = true;
-		console.log("<< scrollBottom");
+		console.log("<< scrollBottom");*/
 	},
 
 	showBusyIcon: function() {

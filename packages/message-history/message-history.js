@@ -1,7 +1,7 @@
 if(Meteor.isClient) {
 
 	Template.messageHistory.onCreated(function() {
-
+		console.log("messageHistory onCreated !!!!!!!!!");
 		Meteor.setInterval(function() {
 			$(".user-card").removeClass("user-typing");
 		}, 1000);
@@ -42,7 +42,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.messageHistory.onRendered(function() {
-		//console.log("MESSAGE HISTORY onRendered - should be called once");
+		console.log("MESSAGE HISTORY onRendered - should be called once");
 		/*
 			This call is needed to load the messages on full browser refresh.
 			When switching to new items from within the app, loadInitialMessages
@@ -52,16 +52,26 @@ if(Meteor.isClient) {
 		*/
 		//Ols.HistoryManager.loadInitialMessages();
 		$("#messageHistory").scroll(Ols.HistoryManager.checkScroll);
+
+		/*Tracker.autorun(function() {
+			console.log(">>>>>> AUTO RUN");
+			//console.log("Filter query changedddd: " + Session.get('filterQueryXX'));
+			//Ols.HistoryManager.loadInitialMessages();
+		});*/
 	});
 
 	Template.messageHistory.helpers({
 		messages: function() {
-			var filter = {};
-			var itemId = Session.get('currentItemId');
+			console.log("> messageHistory.messages")
+			/*var filter = {};
+
+			var itemId = null;//Session.get('currentItemId');
 			if(itemId) {
 				filter.itemId = itemId;
 			}
-			return ClientMessages.find(filter, {sort: {createdAt: 1}});
+			//var msgs = ClientMessages._collection.find(filter, {sort: {createdAt: 1}});
+			*/
+			return [];
 		},
 
 		numIncomingMessages: function() {

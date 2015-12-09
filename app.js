@@ -2,7 +2,7 @@
 OpenLoops = {};
 
 if(Meteor.isClient) {
-	ClientMessages = new Meteor.Collection('client-messages');
+	ClientMessages = new Meteor.Collection(null);
 
 	Meteor.startup(function() {
 		var permissionLevel = notify.permissionLevel();
@@ -362,7 +362,6 @@ if(Meteor.isClient) {
 	Template.activityMessageItemView.helpers({
 
 		userImageUrl: function() {
-			console.log("activityImageUrl: " + this.activityImageUrl);
 			return this.activityImageUrl?this.activityImageUrl:Ols.User.getProfileImageUrl(this.createdBy);
 		},
 
@@ -624,9 +623,19 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.tabBody.onRendered(function() {
+		console.log("> tabBody rendered");
+	});
+
 	Template.tabBody.helpers({
 
 		tabBodyTemplate: function() {
+			var tabName = Session.get('activeItemTab');
+			switch(tabName) {
+				case 'messages': return 'messageHistory';
+				case 'activity': return 'activityHistory';
+			}
+			/*console.log(">tabBodyTemplate");
 			switch(this.type) {
 				case Ols.Item.Tab.TAB_TYPE_MESSAGE_HISTORY:
 					template = "messageHistory";
@@ -644,7 +653,7 @@ if(Meteor.isClient) {
 					console.error("No template for tab " + this.type);
 					break;
 			}
-			return template;
+			return template;*/
 		}
 	});
 
@@ -684,6 +693,7 @@ if(Meteor.isClient) {
 		},
 
 		currentItemIcon: function() {
+			console.log("<<>>> currentItemIcon");
 			return OpenLoops.getItemTypeIcon(Items.findOne(Session.get('currentItemId')));
 		},
 
@@ -716,6 +726,7 @@ if(Meteor.isClient) {
 		},
 
 		isTabActive: function(tabName) {
+			console.log("> isTabActive");
 			if(!Session.get('currentItemId') && tabName == 'messages') {
 				return 'active';
 			} else {
@@ -763,6 +774,7 @@ if(Meteor.isClient) {
 
 	Template.moveToBoardItem.events({
 		'click': function() {
+			console.log("MOVE TO BOARD ITEM CLICK");
 			var self = this;
 			$("#move-to-board-list").slideUp();
 			var item = Items.findOne(Session.get('currentItemId'));
@@ -826,7 +838,7 @@ if(Meteor.isServer) {
 	Meteor.methods({
 
 		loadMessages: function(opts) {
-			console.log("loadMessages: " + JSON.stringify(opts));
+			console.log("> loadMessages");// + JSON.stringify(opts));
 
 			var filter = {};
 
@@ -852,7 +864,7 @@ if(Meteor.isServer) {
 			if(opts.olderThanDate) {
 				filter.createdAt = {$lt: opts.olderThanDate};
 			}
-			console.log("SERVER FILTER: " + JSON.stringify(filter));
+			//console.log("SERVER FILTER: " + JSON.stringify(filter));
 			var messages = ServerMessages.find(filter, {
 				limit: Ols.MESSAGE_PAGE_SIZE,
 				sort: {createdAt: -1}
