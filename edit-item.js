@@ -43,6 +43,12 @@ if(Meteor.isClient) {
 			return item?item.description:'';
 		},
 
+		//FIXME: change this form to use with instead of all these field methods!
+		assignee: function() {
+			var item = Items.findOne(Session.get('currentItemId'));
+			return item?item.assignee:'';
+		},
+
 		labels: function() {
 			var item = Items.findOne(Session.get('currentItemId'));
 			return item?item.labels:'';
@@ -99,7 +105,7 @@ if(Meteor.isClient) {
 					description: description,
 					type: $("#editItemForm select[name='type']").val(),
 					issueType: $("#editItemForm select[name='issueType']").val(),
-					assignee: $("#editItemForm input[name='assignee']").val(),					
+					assignee: $("#editItemForm input[name='assignee']").val(),
 				};
 				var currentItemId = Session.get('currentItemId');
 				if(currentItemId == null) {

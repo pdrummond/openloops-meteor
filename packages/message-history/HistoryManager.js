@@ -17,7 +17,7 @@ Ols.HistoryManager = {
 	},
 
 	getOldestClientMessageDate: function() {
-		var date;		
+		var date;
 		var existingMessages = ClientMessages.find({}, {sort:{createdAt:1}}).fetch();
 		if(existingMessages.length > 0) {
 			date = existingMessages[0].createdAt;
@@ -32,7 +32,8 @@ Ols.HistoryManager = {
 			olderThanDate: olderThanDate,
 			projectId: Session.get('currentProjectId'),
 			boardId: Session.get('currentBoardId'),
-			itemId: Session.get('currentItemId')
+			itemId: Session.get('currentItemId'),
+			itemFilter: OpenLoops.getFilterQuery(Session.get('filterQuery'))
 		}, function(err, messages) {
 			console.log(" >> load messages returned: " + messages.length);
 			if(err) {

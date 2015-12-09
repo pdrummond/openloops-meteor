@@ -827,7 +827,19 @@ if(Meteor.isServer) {
 
 		loadMessages: function(opts) {
 			console.log("loadMessages: " + JSON.stringify(opts));
+
 			var filter = {};
+
+			if(opts.itemFilter) {
+				var itemIds = Items.find(opts.itemFilter, {fields: {_id: 1}}).map(function(obj) {
+					return obj._id;
+				});
+
+				console.log("itemIds: " + JSON.stringify(itemIds));
+
+				filter.itemId = { $in: itemIds };
+			}
+
 			if(opts.projectId) {
 				filter.projectId = opts.projectId;
 			}
@@ -1038,10 +1050,6 @@ if(Meteor.isServer) {
 		return Meteor.users.find({ "status.online": true }, { fields: { "username": 1, "status":1 } });
 	});
 
-	// Meteor.publish('userPresence', function() {
-	//   filter = { userId: { $exists: true }};
-	//   return Presences.find(filter, { fields: { state: true, username: true, userId: true }});
-	// });
 } //isServer
 
 // Override Meteor._debug to filter for custom msgs - as used

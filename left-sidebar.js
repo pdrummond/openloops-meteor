@@ -17,7 +17,7 @@ if(Meteor.isClient) {
 				if(err) {
 					alert("Items Subscription error: " + err);
 				}
-			});
+			});			
 		});
 	});
 
