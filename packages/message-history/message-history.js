@@ -1,6 +1,21 @@
 if(Meteor.isClient) {
 
 	Template.messageHistory.onCreated(function() {
+		Tracker.autorun(function(computation) {
+
+			var filterQuery = Session.get("filterQuery");
+			var itemId = Session.get('currentItemId');
+
+			//TODO: Pass these into the history manager - it shouldn't use session 
+			//at all.
+
+			computation.onInvalidate(function() {
+		        console.trace();
+		    });
+			Tracker.nonreactive(function() {
+				Ols.HistoryManager.loadInitialMessages();
+			});
+		});
 
 		Meteor.setInterval(function() {
 			$(".user-card").removeClass("user-typing");
@@ -56,6 +71,7 @@ if(Meteor.isClient) {
 
 	Template.messageHistory.helpers({
 		messages: function() {
+			console.log("> messageHistory.messages");
 			var filter = {};
 			var itemId = Session.get('currentItemId');
 			if(itemId) {

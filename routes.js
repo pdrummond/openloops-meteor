@@ -54,7 +54,6 @@ if(Meteor.isClient) {
 			Session.set('currentItemId', null);
 			BlazeLayout.render("app", {currentPage: "feedPage"});
 			Session.set('numIncomingMessages', 0);
-			Ols.HistoryManager.loadInitialMessages();
 			OpenLoops.removeSidebarNewMessages();
 		}
 	});
@@ -67,7 +66,6 @@ if(Meteor.isClient) {
 			Session.set('currentItemId', null);
 			BlazeLayout.render("app", {currentPage: "feedPage"});
 			Session.set('numIncomingMessages', 0);
-			Ols.HistoryManager.loadInitialMessages();
 			OpenLoops.removeSidebarNewMessages();
 
 			Meteor.call('_getOldestBoardMessage', function(err, result) {
@@ -94,7 +92,6 @@ if(Meteor.isClient) {
 			Session.set('currentItemId', params.itemId);
 			BlazeLayout.render("app", {currentPage: "feedPage"});
 			Session.set('numIncomingMessages', 0);
-			Ols.HistoryManager.loadInitialMessages();
 			OpenLoops.removeSidebarNewMessages(params.itemId);
 		}
 	});
@@ -113,7 +110,6 @@ if(Meteor.isClient) {
 			Session.set('activeItemTab', 'messages');
 			BlazeLayout.render("app", {currentPage: "feedPage"});
 			Session.set('numIncomingMessages', 0);
-			Ols.HistoryManager.loadInitialMessages();
 			OpenLoops.removeSidebarNewMessages(params.itemId);
 		}
 	});

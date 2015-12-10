@@ -2,6 +2,7 @@
 OpenLoops = {};
 
 if(Meteor.isClient) {
+
 	ClientMessages = new Meteor.Collection('client-messages');
 
 	Meteor.startup(function() {
