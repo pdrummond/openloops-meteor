@@ -109,6 +109,17 @@ if(Meteor.isClient) {
 				}
 			});
 		},
+
+		'click #add-prj-to-new-board-activity-msg': function() {
+			$("#status").text("Working...");
+			Meteor.call('addPrjToNewBoardActivityMsg', function(err, results) {
+				if(err) {
+					$("#status").text("Error " + err.reason);
+				} else {
+					$("#status").text("Completed Successfully.");
+				}
+			});
+		},
 	});
 }
 
@@ -241,6 +252,14 @@ if(Meteor.isServer) {
 					{_id: Random.id(), icon: 'fa-book', label: "References", type: Ols.Item.Tab.TAB_TYPE_REFLIST}
 				], subItems: []}});
 			});
-		}
+		},
+
+
+		addPrjToNewBoardActivityMsg: function() {
+			ServerMessages.find({type: Ols.MSG_TYPE_ACTIVITY, activityType: Ols.ACTIVITY_TYPE_NEW_BOARD}).forEach(function(activityMsg) {
+				var projectId = Boards.findOne(activityMsg.boardId).projectId;
+				ServerMessages.update(activityMsg._id, {$set: {projectId: projectId}});
+			});
+		},
 	})
 }

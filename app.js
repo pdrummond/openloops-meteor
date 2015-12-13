@@ -363,7 +363,6 @@ if(Meteor.isClient) {
 	Template.activityMessageItemView.helpers({
 
 		userImageUrl: function() {
-			console.log("activityImageUrl: " + this.activityImageUrl);
 			return this.activityImageUrl?this.activityImageUrl:Ols.User.getProfileImageUrl(this.createdBy);
 		},
 
@@ -421,7 +420,7 @@ if(Meteor.isClient) {
 				switch(this.activityType) {
 					case Ols.ACTIVITY_TYPE_NEW_BOARD:
 					var board = Boards.findOne(this.boardId);
-					if(board != nul) {
+					if(board != null) {
 						msg = 'created <span class="board-link">' + board.title + '</span>';
 					} else {
 						msg = 'ERR: board is null';
@@ -831,12 +830,12 @@ if(Meteor.isServer) {
 
 			var filter = {};
 
-			if(opts.itemFilter) {
+			if(opts.itemFilter && opts.itemFilter.length > 0) {
 				var itemIds = Items.find(opts.itemFilter, {fields: {_id: 1}}).map(function(obj) {
 					return obj._id;
 				});
 
-				console.log("itemIds: " + JSON.stringify(itemIds));
+				console.log("MESSAGES itemIds: " + JSON.stringify(itemIds));
 
 				filter.itemId = { $in: itemIds };
 			}
@@ -1001,8 +1000,8 @@ if(Meteor.isServer) {
 			console.log("updateUserWorkingOn: " + JSON.stringify(user, null, 4));
 		},
 
-		_getOldestBoardMessage: function() {
-			return ServerMessages.findOne({}, {sort: {DateTime: 1, limit: 1}});
+		_getOldestBoardMessage: function(projectId, boardId) {
+			return ServerMessages.findOne({boardId: boardId}, {sort: {DateTime: 1, limit: 1}});
 		}
 
 	});
@@ -1013,7 +1012,7 @@ if(Meteor.isServer) {
 		if(opts && opts.filter) {
 			filter = _.extend(filter, opts.filter);
 		}
-		console.log("filter: " + JSON.stringify(filter));
+		console.log("ITEM filter: " + JSON.stringify(filter));
 		return Items.find(filter, {sort: {updatedAt: -1}});
 	});
 

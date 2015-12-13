@@ -46,6 +46,7 @@ if(Meteor.isServer) {
 			Meteor.call('insertMessage', {
 				type: Ols.MSG_TYPE_ACTIVITY,
 				activityType: Ols.ACTIVITY_TYPE_NEW_BOARD,
+				projectId: newBoard.projectId,
 				boardId: boardId
 			});
 

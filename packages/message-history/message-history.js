@@ -2,15 +2,15 @@ if(Meteor.isClient) {
 
 	Template.messageHistory.onCreated(function() {
 		Tracker.autorun(function(computation) {
-			console.trace("MessageHistory.autorun on currentItemId and filterQuery");
-			Ols.HistoryManager.projectId = Session.get('projectId');
-			Ols.HistoryManager.boardId = Session.get('boardId');
+			//console.trace("MessageHistory.autorun on currentItemId and filterQuery");
+			Ols.HistoryManager.projectId = Session.get('currentProjectId');
+			Ols.HistoryManager.boardId = Session.get('currentBoardId');
 			Ols.HistoryManager.itemId = Session.get('currentItemId');
 			Ols.HistoryManager.filterQuery = Session.get("filterQuery");
 
-			computation.onInvalidate(function() {
+			/*computation.onInvalidate(function() {
 		        console.trace("MessageHistory.autorun invalidated");
-		    });
+		    });*/
 			Tracker.nonreactive(function() {
 				Ols.HistoryManager.loadInitialMessages();
 			});
@@ -69,8 +69,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.messageHistory.helpers({
-		messages: function() {
-			console.log("> messageHistory.messages");
+		messages: function() {			
 			var filter = {};
 			var itemId = Session.get('currentItemId');
 			if(itemId) {
