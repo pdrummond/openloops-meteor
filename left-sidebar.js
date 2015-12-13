@@ -17,8 +17,12 @@ if(Meteor.isClient) {
 				if(err) {
 					alert("Items Subscription error: " + err);
 				}
-			});			
+			});
 		});
+	});
+
+	Template.leftSidebar.onRendered(function() {
+		console.trace("leftSidebar.onRendered");
 	});
 
 	Template.leftSidebar.helpers({
@@ -50,11 +54,11 @@ if(Meteor.isClient) {
 	});
 
 	Template.leftSidebar.events({
-		'click #items-tab': function() {
+		'click .tabs-header #items-tab': function() {
 			Session.set('leftSidebarActiveTab', 'items-tab');
 		},
 
-		'click #labels-tab': function() {
+		'click .tabs-header #labels-tab': function() {
 			Session.set('leftSidebarActiveTab', 'labels-tab');
 		},
 

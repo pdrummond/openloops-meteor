@@ -80,9 +80,8 @@ if(Meteor.isClient) {
 	Template.labelListItem.events({
 		'click .label.item #title': function() {
 			console.log("labelListItem click");
-			Session.set('leftSidebarActiveTab', 'boom');
-			console.log("labelListItem click done");
-			Session.set('filterQuery', 'label:' + this.title);
+			Session.set('filterQuery', 'label:' + this.title + " open:true");
+			Session.set('leftSidebarActiveTab', 'items-tab');
 		},
 
 		'click #delete-label-link': function() {
