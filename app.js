@@ -377,7 +377,7 @@ if(Meteor.isClient) {
 					itemTitleLink = '<span id="item-link"><a class="item-link" href="' +
 					'/project/' + Session.get('currentProjectId') +
 					(currentBoardId?'/board/' + currentBoardId:'') +
-					'/item/' + this.itemId + '">' + Ols.Item.getItemKey({item: item}) + ': ' + Ols.StringUtils.truncate(item.title, 50)
+					'/item/' + this.itemId + '/messages">' + Ols.Item.getItemKey({item: item}) + ': ' + Ols.StringUtils.truncate(item.title, 50)
 					+ '</a></span>';
 				} else {
 					itemTitleLink = "ERR: Cannot find item";
