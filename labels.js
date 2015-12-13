@@ -133,6 +133,42 @@ if(Meteor.isClient) {
 
 Labels = new Meteor.Collection("labels");
 
+if(Meteor.isServer || Meteor.isClient) {
+
+	Meteor.methods({
+		addLabelToItem: function(itemId, labelId) {
+			Items.update({
+				_id: itemId
+			}, {
+				$push: { labels: labelId}
+			});
+			var item = Items.findOne(itemId);
+
+			if(item.isOpen) {
+				Labels.update(labelId, {$inc: {numOpenMessages: 1}});
+			} else {
+				Labels.update(labelId, {$inc: {numClosedMessages: 1}});
+			}
+
+		},
+
+		removeLabelFromItem: function(itemId, labelId) {
+			Items.update({
+				_id: itemId
+			}, {
+				$pull: { labels: labelId}
+			});
+			var item = Items.findOne(itemId);
+			if(item.isOpen) {
+				Labels.update(labelId, {$inc: {numOpenMessages: -1}});
+			} else {
+				Labels.update(labelId, {$inc: {numClosedMessages: -1}});
+			}
+		}
+	});
+}
+
+
 if(Meteor.isServer) {
 
 	Meteor.publish("labels", function() {
@@ -177,34 +213,6 @@ if(Meteor.isServer) {
 
 		deleteLabel: function(labelId) {
 			Labels.remove(labelId);
-		},
-
-		addLabelToItem: function(itemId, labelId) {
-			Items.update({
-			  _id: itemId
-			}, {
-			  $push: { labels: labelId}
-			});
-			var item = Items.findOne(itemId);
-			if(item.isOpen) {
-				Labels.update(labelId, {$inc: {numOpenMessages: 1}});
-			} else {
-				Labels.update(labelId, {$inc: {numClosedMessages: 1}});
-			}
-		},
-
-		removeLabelFromItem: function(itemId, labelId) {
-			Items.update({
-			  _id: itemId
-			}, {
-			  $pull: { labels: labelId}
-			});
-			var item = Items.findOne(itemId);
-			if(item.isOpen) {
-				Labels.update(labelId, {$inc: {numOpenMessages: -1}});
-			} else {
-				Labels.update(labelId, {$inc: {numClosedMessages: -1}});
-			}
 		}
 	})
 }
