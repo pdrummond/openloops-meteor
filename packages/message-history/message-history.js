@@ -2,15 +2,14 @@ if(Meteor.isClient) {
 
 	Template.messageHistory.onCreated(function() {
 		Tracker.autorun(function(computation) {
-
-			var filterQuery = Session.get("filterQuery");
-			var itemId = Session.get('currentItemId');
-
-			//TODO: Pass these into the history manager - it shouldn't use session 
-			//at all.
+			console.trace("MessageHistory.autorun on currentItemId and filterQuery");
+			Ols.HistoryManager.projectId = Session.get('projectId');
+			Ols.HistoryManager.boardId = Session.get('boardId');
+			Ols.HistoryManager.itemId = Session.get('currentItemId');
+			Ols.HistoryManager.filterQuery = Session.get("filterQuery");
 
 			computation.onInvalidate(function() {
-		        console.trace();
+		        console.trace("MessageHistory.autorun invalidated");
 		    });
 			Tracker.nonreactive(function() {
 				Ols.HistoryManager.loadInitialMessages();

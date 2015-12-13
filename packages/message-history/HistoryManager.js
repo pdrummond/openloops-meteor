@@ -1,6 +1,10 @@
 Ols.HistoryManager = {
 	loadingInitialMessages: false,
 	loadingMessages: false,
+	projectId: null,
+	boardId: null,
+	itemId: null,
+	filterQuery: '',
 
 	checkScroll: function() {
 		if(Ols.HistoryManager.loadingMessages == false) {
@@ -30,10 +34,10 @@ Ols.HistoryManager = {
 		var olderThanDate = this.getOldestClientMessageDate();
 		Meteor.call('loadMessages', {
 			olderThanDate: olderThanDate,
-			projectId: Session.get('currentProjectId'),
-			boardId: Session.get('currentBoardId'),
-			itemId: Session.get('currentItemId'),
-			itemFilter: OpenLoops.getFilterQuery(Session.get('filterQuery'))
+			projectId: this.projectId,
+			boardId: this.boardId,
+			itemId: this.itemId,
+			itemFilter: OpenLoops.getFilterQuery(this.filterQuery)
 		}, function(err, messages) {
 			console.log(" >> load messages returned: " + messages.length);
 			if(err) {
@@ -51,29 +55,31 @@ Ols.HistoryManager = {
 
 	loadInitialMessages: function() {
 		var self = this;
-		this.loadingInitialMessages = true;
-		this.loadingMessages = true;
-		//If load takes a while, show busy
-		this.busyTimeout = setTimeout(function() {
-			console.log("SHOWING BUSY")
-			self.showBusyIcon();
-		}, 300);
+		if(Ols.HistoryManager.loadingMessages == false) {
+			this.loadingInitialMessages = true;
+			this.loadingMessages = true;
+			//If load takes a while, show busy
+			this.busyTimeout = setTimeout(function() {
+				console.log("SHOWING BUSY")
+				self.showBusyIcon();
+			}, 300);
 
-		console.log(">>>> LOAD INITIAL MESSAGES");
-		ClientMessages._collection.remove({});
-		console.log("CLIENT MESSAGES DELETED: Num client msgs: " + ClientMessages.find().count());
+			console.log(">>>> LOAD INITIAL MESSAGES");
+			ClientMessages._collection.remove({});
+			console.log("CLIENT MESSAGES DELETED: Num client msgs: " + ClientMessages.find().count());
 
-		var self = this;
-		this.loadMessages(function(ok) {
-			console.log("CLEARING BUSY TIMER");
-			clearTimeout(self.busyTimeout);
-			if(ok) {
-				self.scrollBottom();
-				self.hideBusyIcon();
-				self.loadingMessages = false;
-				self.loadingInitialMessages = false;
-			}
-		});
+			var self = this;
+			this.loadMessages(function(ok) {
+				console.log("CLEARING BUSY TIMER");
+				clearTimeout(self.busyTimeout);
+				if(ok) {
+					self.scrollBottom();
+					self.hideBusyIcon();
+					self.loadingMessages = false;
+					self.loadingInitialMessages = false;
+				}
+			});
+		}
 	},
 
 	loadMoreMessages: function() {
@@ -104,7 +110,7 @@ Ols.HistoryManager = {
 		console.log("> moreMessagesOnServer");
 		var result = false;
 		if(!this.loadingInitialMessages) {
-			var currentItemId = Session.get('currentItemId');
+			var currentItemId = this.itemId;
 			var serverMsgCount;
 			if(currentItemId) {
 				var item = Items.findOne(currentItemId);
@@ -114,14 +120,14 @@ Ols.HistoryManager = {
 				}
 			}
 			if(!serverMsgCount) {
-				var board = Boards.findOne(Session.get('currentBoardId'));
+				var board = Boards.findOne(this.boardId);
 				if(board) {
 					console.log("    Using board.numMessages: " + board.numMessages);
 					serverMsgCount = board.numMessages;
 				}
 			}
 			if(!serverMsgCount) {
-				var project = Projects.findOne(Session.get('currentProjectId'));
+				var project = Projects.findOne(this.projectId);
 				if(project) {
 					console.log("    Using project.numMessages: " + project.numMessages);
 					serverMsgCount = project.numMessages;
