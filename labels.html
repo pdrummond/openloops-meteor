@@ -4,7 +4,9 @@
 			{{> labelListItem}}
 		{{/each}}
 	</ul>
-	<a id="create-label" href="/project/{{currentProjectId}}/create-label"><i class="fa fa-plus"> Create Label</i></a>
+	{{#if userIsProjectAdmin}}
+		<a id="create-label" href="/project/{{currentProjectId}}/create-label"><i class="fa fa-plus"></i></a>
+	{{/if}}
 </template>
 
 <template name="labelListItem">
