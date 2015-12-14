@@ -799,7 +799,7 @@ if(Meteor.isClient) {
 			}
 			return canShow;
 		}
-	});
+	});	
 
 	Template.onlyIfLoggedIn.helpers({
 		authInProcess: function() {
@@ -1013,7 +1013,7 @@ if(Meteor.isServer) {
 	});
 
 	Meteor.publish("currentItem", function(itemId) {
-		var items = Items.find({_id: itemId});		
+		var items = Items.find({_id: itemId});
 		return items;
 	});
 

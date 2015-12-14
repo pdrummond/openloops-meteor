@@ -21,6 +21,12 @@ Ols.Project = {
 		return result;
 	},
 
+	isUserProjectAdmin: function(projectId, username) {
+		var project = this.getProject(projectId);
+		var result = _.findWhere(project.members, {username: username, role: Ols.ROLE_ADMIN}) != null;
+		return result;
+	},
+
 	/**
 		Takes either a project or a projectId and returns its key or '??' if no
 		project can be found.  If project doesn't have a key then the first 3
