@@ -32,7 +32,7 @@ if(Meteor.isClient) {
 		},
 
 		items: function() {
-			return Items.find({}, {sort: {updatedAt: -1}});
+			return Items.find(OpenLoops.getFilterQuery(Session.get('filterQuery')), {sort: {updatedAt: -1}});
 		},
 
 		filters: function() {

@@ -19,6 +19,12 @@ if(Meteor.isClient) {
 			Session.set('connectionStatus', status);
 		});
 
+		Tracker.autorun(function() {
+			var itemId = Session.get('currentItemId');
+			if(itemId != null) {
+				Meteor.subscribe('currentItem', itemId);
+			}
+		});
 
 
 		Streamy.on('mention', function(data) {
@@ -1004,6 +1010,11 @@ if(Meteor.isServer) {
 			return ServerMessages.findOne({boardId: boardId}, {sort: {DateTime: 1, limit: 1}});
 		}
 
+	});
+
+	Meteor.publish("currentItem", function(itemId) {
+		var items = Items.find({_id: itemId});		
+		return items;
 	});
 
 	Meteor.publish("items", function(opts) {
