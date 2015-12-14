@@ -50,7 +50,7 @@ if(Meteor.isClient) {
 				};
 				Meteor.call('insertSubItem', subItem, function(err, res) {
 					if(err) {
-						alert("Error adding checklist item: " + err.reason);
+						Ols.Error.showError("Error adding checklist item", err);
 					} else {
 						$input.val('');
 					}
@@ -95,7 +95,7 @@ if(Meteor.isClient) {
 			this.isOpen = !this.isOpen;
 			Meteor.call('updateSubItem', this, function(err) {
 				if(err) {
-					alert("Error updating sub-item status: " + err.reason);
+					Ols.Error.showError("Error updating sub-item status", err);
 				}
 			});
 		},
@@ -116,7 +116,7 @@ if(Meteor.isClient) {
 						this.text = inputVal;
 						Meteor.call('updateSubItem', this, function(err) {
 							if(err) {
-								alert("Error updating sub-item text: " + err.reason);
+								Ols.Error.showError("Error updating sub-item text", err);
 							} else {
 								t.editMode.set(false);
 							}
@@ -129,7 +129,7 @@ if(Meteor.isClient) {
 		'click .delete-button': function() {
 			Meteor.call('removeSubItem', this, function(err) {
 				if(err) {
-					alert("Error removing sub-item: " + err.reason);
+					Ols.Error.showError("Error removing sub-item", err);
 				}
 			});
 		}

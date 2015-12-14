@@ -47,7 +47,7 @@ if(Meteor.isClient) {
 			};
 			Meteor.call('insertSubItem', subItem, function(err, res) {
 				if(err) {
-					alert("Error adding reflist item: " + err.reason);
+					Ols.Error.showError("Error adding reflist item", err);
 				} else {
 					$(template.find('#auto-input')).val('');
 				}
@@ -97,7 +97,7 @@ if(Meteor.isClient) {
 		'click .remove-button': function() {
 			Meteor.call('removeSubItem', this, function(err) {
 				if(err) {
-					alert("Error removing sub-item: " + err.reason);
+					Ols.Error.showError("Error removing sub-item", err);
 				}
 			});
 		}

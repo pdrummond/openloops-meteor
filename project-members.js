@@ -87,7 +87,7 @@ if(Meteor.isClient) {
 		'click #delete-link': function() {
 			Meteor.call('removeProjectMember', Session.get('currentProjectId'), this.username, function(err) {
 				if(err) {
-					alert(err.message);
+					Ols.Error.showError("Error removing project member", err);
 				}
 			});
 		}

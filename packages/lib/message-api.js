@@ -3,7 +3,7 @@ Ols.Message = {
 		var newMessage = this._private.insertClientMessage(attrs);
 		Meteor.call('saveMessage', newMessage, function(err, result) {
 			if(err) {
-				alert("error sending message");
+				Ols.Error.showError("error sending message", err);
 			} else {
 				if(callback) callback(result);
 				Streamy.broadcast('sendMessage', newMessage);

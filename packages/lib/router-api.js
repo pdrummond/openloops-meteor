@@ -10,6 +10,10 @@ Ols.Router = {
 		}
 	},
 
+	showBoardMessages: function() {
+		return this.showHomeMessages(); //FIXME: Get rid of 'showHomeMessages and just use this name going forward.
+	},
+
 	showItemMessages: function(item) {
 		var params = {
 			projectId: item.projectId,

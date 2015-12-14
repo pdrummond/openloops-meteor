@@ -317,7 +317,7 @@ if(Meteor.isClient) {
 			if(workingOn != null) {
 				Meteor.call('updateUserWorkingOn', Meteor.user().username, workingOn, function(err) {
 					if(err) {
-						alert("Error updating working on status: " + err.reason);
+						Ols.Error.showError("Error updating working on status: ", err);
 					} else {
 						OpenLoops.insertBoardActivityMessage({
 							activityType: Ols.ACTIVITY_TYPE_ITEM_USER_WORKING_ON,
@@ -373,17 +373,15 @@ if(Meteor.isClient) {
 		},
 
 		activityMessage: function() {
-			if(this.itemId) {
+			if(this.item) {
 				var currentBoardId = Session.get('currentBoardId');
 				var currentItemId = Session.get('currentItemId');
-				var item = Items.findOne(this.itemId);
 				var itemTitleLink = "";
-				if(item != null) {
-					itemTitleLink = '<span id="item-link"><a class="item-link" href="' +
+				if(this.item != null) {
+					itemTitleLink = '<span id="item-link"><a class="item-link" title="' +  Ols.StringUtils.truncate(this.item.title, 500) + '" href="' +
 					'/project/' + Session.get('currentProjectId') +
 					(currentBoardId?'/board/' + currentBoardId:'') +
-					'/item/' + this.itemId + '/messages">' + Ols.Item.getItemKey({item: item}) + ': ' + Ols.StringUtils.truncate(item.title, 50)
-					+ '</a></span>';
+					'/item/' + this.item._id + '/messages">' + Ols.Item.getItemKey({item: this.item}) + '</a></span>';
 				} else {
 					itemTitleLink = "ERR: Cannot find item";
 				}
@@ -391,28 +389,34 @@ if(Meteor.isClient) {
 				var ctx = currentItemId?'this item':itemTitleLink;
 				var msg = '';
 				switch(this.activityType) {
-					case Ols.ACTIVITY_TYPE_NEW_ITEM:
-					msg = 'created ' + ctx;
+					case Ols.Activity.ACTIVITY_TYPE_NEW_ITEM:
+					msg = '<b>created</b> ' + ctx;
 					break;
-					case Ols.ACTIVITY_TYPE_ITEM_TYPE_CHANGE:
-					msg = ('changed ' + ctx + ' to ' + OpenLoops.getItemTypePhrase(this.itemType, this.issueType));
+					case Ols.Activity.ACTIVITY_TYPE_ITEM_TYPE_CHANGE:
+					msg = ('<b>changed</b> ' + ctx + ' to ' + OpenLoops.getItemTypePhrase(this.itemType, this.issueType));
 					break;
-					case Ols.ACTIVITY_TYPE_ITEM_OPENED:
-					msg = "re-opened " + ctx;
+					case Ols.Activity.ACTIVITY_TYPE_ITEM_OPENED:
+					msg = "<b>re-opened</b> " + ctx;
 					break;
-					case Ols.ACTIVITY_TYPE_ITEM_CLOSED:
-					msg = "closed " + ctx;
+					case Ols.Activity.ACTIVITY_TYPE_ITEM_CLOSED:
+					msg = "<b>closed</b> " + ctx;
 					break;
-					case Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED:
-					msg = "changed title of item to " + itemTitleLink;
+					case Ols.Activity.ACTIVITY_TYPE_ITEM_TITLE_CHANGED:
+					msg = "<b>changed</b> title of item to " + itemTitleLink;
 					break;
-					case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
+					case Ols.Activity.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
 					var itemCtx = currentItemId?"of this item to:":"of " + ctx + " to:";
 					msg = "Set the description " + itemCtx;
 					break;
+					case Ols.Activity.ACTIVITY_TYPE_ITEM_MOVED_TO_BOARD:
+						msg = "<b>moved</b> " + ctx + " to board " + "<a href='/project/" + this.toBoard.projectId + "/board/" + this.toBoard.boardId + "'>" + this.toBoard.title + "</a>";
+						break;
+					case Ols.Activity.ACTIVITY_TYPE_ITEM_MOVED_FROM_BOARD:
+						msg = "<b>moved</b> " + ctx + " here from board " + "<a href='/project/" + this.fromBoard.projectId + "/board/" + this.fromBoard.boardId + "'>" + this.fromBoard.title + "</a>";
+						break;
 					default:
-					msg =  "> activity item " + this.activityType + " not found";
-					break;
+						msg =  "ERR: activity item " + this.activityType + " not found";
+						break;
 				}
 			} else {
 				switch(this.activityType) {
@@ -546,19 +550,6 @@ if(Meteor.isClient) {
 			Meteor.call('saveMessage', activityMessage);
 			Streamy.broadcast('sendMessage', activityMessage);
 		}
-	}
-
-	OpenLoops.insertActivityMessage = function(item, activityMessage) {
-		activityMessage = _.extend({
-			type: Ols.MSG_TYPE_ACTIVITY,
-			itemType: item.type,
-			boardId: item.boardId,
-			itemId: item._id,
-			item: item
-		}, activityMessage);
-		activityMessage = OpenLoops.insertClientMessage(activityMessage);
-		Meteor.call('saveMessage', activityMessage);
-		Streamy.broadcast('sendMessage', activityMessage);
 	}
 
 	OpenLoops.getItemTypePhrase = function(itemType, issueType) {
@@ -766,7 +757,7 @@ if(Meteor.isClient) {
 			var item = Items.findOne(Session.get('currentItemId'));
 			Meteor.call('moveItem', Session.get('currentItemId'), this._id, function(err, result) {
 				if(err) {
-					alert('Error moving item: ' + err.reason);
+					Ols.Error.showError('Error moving item: ', err);
 				}
 			});
 			Ols.Router.showHomeMessages();
@@ -903,14 +894,36 @@ if(Meteor.isServer) {
 
 			var newItemId = Items.insert(newItem);
 			//Meteor._sleepForMs(2000);
-			return _.extend(newItem, {_id: newItemId});
+			var newItem = _.extend(newItem, {_id: newItemId});
+
+			Ols.Activity.insertActivityMessage({
+				activityType: Ols.ACTIVITY_TYPE_NEW_ITEM
+			}, newItem);
+			if(Ols.StringUtils.notEmpty(newItem.description)) {
+				Ols.Activity.insertActivityMessage({
+					activityType: Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED
+				}, newItem);
+			}
+
+			return newItem;
 		},
 
 		updateItem: function(itemId, attrs) {
 			console.log("> updateItem: " + JSON.stringify(attrs));
 			var item = Items.findOne(itemId);
 			Items.update(itemId, {$set: attrs});
-			return Items.findOne(itemId);
+			var newItem = Items.findOne(itemId);
+			if(item.title != newItem.title) {
+				Ols.Activity.insertActivityMessage({
+					activityType: Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED,
+				}, newItem);
+			}
+			if(item.description != newItem.description) {
+				Ols.Activity.insertActivityMessage({
+					activityType: Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED
+				}, newItem);
+			}
+			return newItem;
 		},
 
 		moveItem: function(itemId, toBoardId) {
@@ -924,19 +937,44 @@ if(Meteor.isServer) {
 					updatedBy: Meteor.userId(),
 				}
 			});
-			var i = ServerMessages.find({itemId: itemId}).count();
+
+			Ols.Activity.insertActivityMessage({
+				activityType: Ols.Activity.ACTIVITY_TYPE_ITEM_MOVED_TO_BOARD,
+				item: item,
+				boardId: fromBoardId, //The from board displays the "moved to board" activity item
+				fromBoard: Boards.findOne(fromBoardId),
+				toBoard: Boards.findOne(toBoardId)
+			}, item);
+
+			Ols.Activity.insertActivityMessage({
+				activityType: Ols.Activity.ACTIVITY_TYPE_ITEM_MOVED_FROM_BOARD,
+				item: item,
+				boardId: toBoardId, //The to board displays the "moved from board" activity item
+				fromBoard: Boards.findOne(fromBoardId),
+				toBoard: Boards.findOne(toBoardId)
+			}, item);
+
 			var num = ServerMessages.update({itemId: itemId}, {$set: {boardId: toBoardId}}, {multi:true});
 		},
 
 		toggleItemOpenStatus: function(itemId) {
+			check(itemId, String);
+
 			var item = Items.findOne(itemId);
+
+			var isOpen = !item.isOpen;
 
 			Items.update(itemId, {
-				$set: {isOpen: !item.isOpen},
+				$set: {isOpen: isOpen},
 			});
 
-			//update label counters
 			var item = Items.findOne(itemId);
+
+			Ols.Activity.insertActivityMessage({
+				activityType: isOpen?Ols.ACTIVITY_TYPE_ITEM_OPENED:Ols.ACTIVITY_TYPE_ITEM_CLOSED
+			}, item);
+
+			//update label counters
 			_.each(item.labels, function(labelId) {
 				if(item.isOpen) {
 					Labels.update(labelId, {$inc: {numOpenMessages: 1, numClosedMessages: -1}});
@@ -957,7 +995,7 @@ if(Meteor.isServer) {
 		},
 
 		detectMentionsInMessage: function(message) {
-			console.log("detectMentionsInMessage");
+			console.log("> detectMentionsInMessage");
 			var re = /@([\w\.-]+)/g;
 			var matches;
 
@@ -982,6 +1020,7 @@ if(Meteor.isServer) {
 					}
 				}
 			} while (matches);
+			console.log("< detectMentionsInMessage");
 		},
 
 		updateUserWorkingOn: function(username, workingOn) {

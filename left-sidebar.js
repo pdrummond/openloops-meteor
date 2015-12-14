@@ -15,7 +15,7 @@ if(Meteor.isClient) {
 			}
 			Meteor.subscribe('items', opts, function(err, result) {
 				if(err) {
-					alert("Items Subscription error: " + err);
+					Ols.Error.showError("Items Subscription error", err);
 				}
 			});
 		});

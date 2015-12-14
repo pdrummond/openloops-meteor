@@ -26,20 +26,7 @@ if(Meteor.isClient) {
 		'click #open-close-link': function() {
 			Meteor.call('toggleItemOpenStatus', Session.get('currentItemId'), function(err, result) {
 				if(err) {
-					alert("Error toggling item status: " + err.reason);
-				} else {
-					var item = Items.findOne(Session.get('currentItemId'));
-					var activityType = item.isOpen?Ols.ACTIVITY_TYPE_ITEM_OPENED:Ols.ACTIVITY_TYPE_ITEM_CLOSED;
-					var activityMessage = {
-						activityType: activityType,
-						itemTitle: item.title,
-						itemType: item.type,
-						issueType: item.issueType,
-						boardId: item.boardId,
-						itemId: item._id
-					};
-					OpenLoops.insertActivityMessage(item, activityMessage);
-					Ols.HistoryManager.scrollBottom();
+					Ols.Error.showError("Error toggling item status: ", err);
 				}
 			});
 		},

@@ -113,16 +113,9 @@ if(Meteor.isClient) {
 					item.boardId = Session.get('currentBoardId');
 					Meteor.call('insertItem', item, function(err, newItem) {
 						if(err) {
-							alert("Error adding item: " + err);
+							Ols.Error.showError("Error adding item",  err);
+							Ols.Router.showBoardMessages();
 						} else {
-							OpenLoops.insertActivityMessage(newItem, {
-								activityType: Ols.ACTIVITY_TYPE_NEW_ITEM
-							});
-							if(Ols.StringUtils.notEmpty(newItem.description)) {
-								OpenLoops.insertActivityMessage(newItem, {
-									activityType: Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED
-								});
-							}
 							Ols.Router.showItemMessages(newItem);
 						}
 					});
@@ -130,18 +123,9 @@ if(Meteor.isClient) {
 				} else {
 					Meteor.call('updateItem', currentItemId, item, function(err, newItem) {
 						if(err) {
-							alert("Error editing item: " + err);
+							Ols.Error.showError("Error updating item",  err);
+							Ols.Router.showBoardMessages();
 						} else {
-							if(currentItem.title != newItem.title) {
-								OpenLoops.insertActivityMessage(newItem, {
-									activityType: Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED,
-								});
-							}
-							if(currentItem.description != newItem.description) {
-								OpenLoops.insertActivityMessage(newItem, {
-									activityType: Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED
-								});
-							}
 							Ols.Router.showItemMessages(newItem);
 						}
 					});

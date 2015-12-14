@@ -52,7 +52,7 @@ if(Meteor.isClient) {
 				if(currentProjectId == null) {
 					Meteor.call('insertProject', projectAttrs, function(err) {
 						if(err) {
-							alert("Error inserting project: " + err.reason);
+							Ols.Error.showError("Error inserting project", err);
 						} else {
 							FlowRouter.go("/projects");
 						}
@@ -60,7 +60,7 @@ if(Meteor.isClient) {
 				} else {
 					Meteor.call('updateProject', currentProjectId, projectAttrs, function(err) {
 						if(err) {
-							alert("Error updating project: " + err.reason);
+							Ols.Error.showError("Error updating project", err);
 						} else {
 							FlowRouter.go("/projects");
 						}
@@ -78,11 +78,11 @@ if(Meteor.isClient) {
 			var currentProjectId = Session.get('currentProjectId');
 			var project = Projects.findOne(currentProjectId);
 			if(title != project.title) {
-				alert("That name doesn't match the title of the project");
+				Ols.Error.showError("That name doesn't match the title of the project");
 			} else {
 				Meteor.call('deleteProject', currentProjectId, function(err) {
 					if(err) {
-						alert("Unable to delete project: " + err.reason);
+						Ols.Error.showError("Unable to delete project", err);
 					} else {
 						FlowRouter.go("/projects");
 					}

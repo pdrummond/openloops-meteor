@@ -41,7 +41,7 @@ Ols.HistoryManager = {
 		}, function(err, messages) {
 			console.log(" >> load messages returned: " + messages.length);
 			if(err) {
-				alert("Error loading messages: " + err);
+				Ols.Error.showError("Error loading messages", err);
 				callback(false);
 			} else {
 				_.each(messages, function(message) {
@@ -136,7 +136,7 @@ Ols.HistoryManager = {
 
 			result = (clientMsgCount < serverMsgCount);
 			console.log("    clientMsgCount: " + clientMsgCount);
-			console.log("    serverMsgCount: " + serverMsgCount);			
+			console.log("    serverMsgCount: " + serverMsgCount);
 		}
 		console.log("< moreMessagesOnServer");
 		return result;

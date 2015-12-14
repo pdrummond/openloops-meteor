@@ -160,7 +160,17 @@ if(Meteor.isClient) {
 		return project?project._id:null;
 	});
 
+	Template.registerHelper('itemPid', function (item) {
+		if(item ==null) {
+			item = Items.findOne(Session.get('currentItemId'));
+		}
+		return item && item.pid?item.pid:'??';
+	});
+
 	Template.registerHelper('projectKey', function (item) {
+		if(item ==null) {
+			item = Items.findOne(Session.get('currentItemId'));
+		}
 		var project = Projects.findOne(item.projectId);
 		return project?(project.key?project.key:project.title.substring(0, 3)):null;
 	});

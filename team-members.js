@@ -57,7 +57,7 @@ if(Meteor.isClient) {
 		'click #delete-link': function() {
 			Meteor.call('removeTeamMember', this._id, function(err) {
 				if(err) {
-					alert(err.message);
+					Ols.Error.showError("Error removing team member", err);
 				}
 			});
 		}

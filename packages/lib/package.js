@@ -9,6 +9,7 @@ Package.onUse(function(api) {
   api.use(['templating', 'ecmascript', 'reactive-var', 'yuukan:streamy', 'mquandalle:stylus']);
   api.addFiles([
 	  'namespace.js',
+	  'error-api.js',
 	  'timeutils-api.js',
 	  'stringutils-api.js',
 	  'context-api.js',

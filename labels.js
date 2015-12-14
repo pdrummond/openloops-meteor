@@ -53,7 +53,7 @@ if(Meteor.isClient) {
 				if(currentLabelId == null) {
 					Meteor.call('insertLabel', labelAttrs, function(err) {
 						if(err) {
-							alert("Error inserting label: " + err.reason);
+							Ols.Error.showError("Error inserting label: ", err);
 						} else {
 							FlowRouter.go("projectMessages", {projectId: Session.get('currentProjectId')});
 						}
@@ -61,7 +61,7 @@ if(Meteor.isClient) {
 				} else {
 					Meteor.call('updateLabel', currentLabelId, labelAttrs, function(err) {
 						if(err) {
-							alert("Error updating label: " + err.reason);
+							Ols.Error.showError("Error updating label: ", err);
 						} else {
 							FlowRouter.go("projectMessages", {projectId: Session.get('currentProjectId')});
 						}
@@ -88,11 +88,11 @@ if(Meteor.isClient) {
 			if(Ols.User.userIsAdmin()) {
 				Meteor.call('deleteLabel', this._id, function(err, result) {
 					if(err) {
-						alert("Error deleting label: " + err.reason);
+						Ols.Error.showError("Error deleting label: ", err);
 					}
 				});
 			} else {
-				alert("You don't have permission to delete labels");
+				Ols.Error.showError("You don't have permission to delete labels");
 			}
 		}
 	});
@@ -117,13 +117,13 @@ if(Meteor.isClient) {
 			if(labelExists) {
 				Meteor.call('removeLabelFromItem', Session.get('currentItemId'), this._id, function(err, result) {
 					if(err) {
-						alert("Error adding label: " + err.reason);
+						Ols.Error.showError("Error removing label", err);
 					}
 				});
 			} else {
 				Meteor.call('addLabelToItem', Session.get('currentItemId'), this._id, function(err, result) {
 					if(err) {
-						alert("Error adding label: " + err.reason);
+						Ols.Error.showError("Error adding label", err);
 					}
 				});
 			}

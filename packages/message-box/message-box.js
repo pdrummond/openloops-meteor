@@ -28,7 +28,7 @@ if(Meteor.isClient) {
 						Session.set('messageBox.content', "");
 						Meteor.call('saveMessage', newMessage, function(err, result) {
 							if(err) {
-								alert("error sending message");
+								Ols.Error.showError("Error sending message", err);
 							} else {
 								Ols.HistoryManager.scrollBottom();
 								Streamy.broadcast('sendMessage', newMessage);
