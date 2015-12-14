@@ -376,7 +376,7 @@ if(Meteor.isClient) {
 			if(this.itemId) {
 				var currentBoardId = Session.get('currentBoardId');
 				var currentItemId = Session.get('currentItemId');
-				var item = Items.findOne(this.itemId);
+				var item = Items.findOne(this.itemId);				
 				var itemTitleLink = "";
 				if(item != null) {
 					itemTitleLink = '<span id="item-link"><a class="item-link" href="' +
@@ -402,14 +402,6 @@ if(Meteor.isClient) {
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_CLOSED:
 					msg = "closed " + ctx;
-					break;
-					case Ols.ACTIVITY_TYPE_ITEM_MOVED_BOARD:
-					var toBoard = Boards.findOne(this.toBoardId);
-					if(toBoard != null) {
-						msg = 'moved ' + ctx + ' to <a href="/project/' + this.projectId + '/board/' + this.toBoardId + '" class="board-link">' + toBoard.title + '</a>';
-					} else {
-						msg = "ERR: toBoard is null";
-					}
 					break;
 					case Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED:
 					msg = "changed title of item to " + itemTitleLink;
@@ -775,13 +767,6 @@ if(Meteor.isClient) {
 			Meteor.call('moveItem', Session.get('currentItemId'), this._id, function(err, result) {
 				if(err) {
 					alert('Error moving item: ' + err.reason);
-				} else {
-					OpenLoops.insertActivityMessage(item, {
-						projectId: item.projectId,
-						activityType: Ols.ACTIVITY_TYPE_ITEM_MOVED_BOARD,
-						fromBoardId: Session.get('currentBoardId'),
-						toBoardId: self._id
-					});
 				}
 			});
 			Ols.Router.showHomeMessages();
@@ -799,7 +784,7 @@ if(Meteor.isClient) {
 			}
 			return canShow;
 		}
-	});	
+	});
 
 	Template.onlyIfLoggedIn.helpers({
 		authInProcess: function() {
