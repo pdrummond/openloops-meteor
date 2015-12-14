@@ -27,6 +27,23 @@ if(Meteor.isClient) {
 		return assignee?assignee.username:'ERR: Assignee null for assigneeUsername';
 	}),
 
+	Template.registerHelper('userIsItemOwnerOrProjectAdmin', function () {
+		var allowed = false;
+		if(Meteor.user() != null) {
+			allowed = Ols.User.currentUserRole() == Ols.ROLE_ADMIN;
+			if(allowed == false) {
+				allowed = Ols.Item.isUserItemOwner(Session.get('currentItemId'), Meteor.user().username);
+			}
+			if(allowed == false) {
+				if(Session.get('currentProjectId') != null) {
+					allowed = Ols.Project.isUserProjectAdmin(Session.get('currentProjectId'), Meteor.user().username);
+				}
+			}
+
+		}
+		return allowed;
+	});
+
 	Template.registerHelper('userIsProjectAdmin', function () {
 		var allowed = false;
 		if(Meteor.user() != null) {

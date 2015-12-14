@@ -69,6 +69,11 @@ Ols.Item = {
 		return color;
 	},
 
+	isUserItemOwner: function(itemId, username) {
+		var item = Items.findOne(itemId);
+		return item && item.createdBy == username;
+	},
+
 	Tab: {
 		TAB_TYPE_MESSAGE_HISTORY: "TAB_TYPE_MESSAGE_HISTORY",
 		TAB_TYPE_ACTIVITY_HISTORY: "TAB_TYPE_ACTIVITY_HISTORY",
