@@ -27,6 +27,15 @@ if(Meteor.isClient) {
 
 	Template.leftSidebar.helpers({
 
+		noItems: function() {
+			return Items.find(OpenLoops.getFilterQuery(Session.get('filterQuery'))).count() == 0;
+		},
+
+		noFilter: function() {
+			var filterQuery = Session.get('filterQuery');
+			return !(filterQuery && filterQuery.length > 0);
+		},
+
 		activeTabClass: function(tabName) {
 			return Session.get('leftSidebarActiveTab') == tabName ? 'tab-active' : '';
 		},
@@ -54,6 +63,15 @@ if(Meteor.isClient) {
 	});
 
 	Template.leftSidebar.events({
+
+		'click #new-item-link': function() {
+			Ols.Router.showCreateItemPage();
+		},
+
+		'click #clear-filter-link': function() {
+			Session.set('filterQuery', '');
+		},
+
 		'click .tabs-header #items-tab': function() {
 			Session.set('leftSidebarActiveTab', 'items-tab');
 		},

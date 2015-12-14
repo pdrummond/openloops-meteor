@@ -376,7 +376,7 @@ if(Meteor.isClient) {
 			if(this.itemId) {
 				var currentBoardId = Session.get('currentBoardId');
 				var currentItemId = Session.get('currentItemId');
-				var item = Items.findOne(this.itemId);				
+				var item = Items.findOne(this.itemId);
 				var itemTitleLink = "";
 				if(item != null) {
 					itemTitleLink = '<span id="item-link"><a class="item-link" href="' +
