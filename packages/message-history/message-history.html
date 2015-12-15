@@ -3,9 +3,17 @@
 		<a href="" id="loading-more" style="opacity:0">
 			<i id="loading-more-icon" class="fa fa-spinner fa-pulse"></i>
 		</a>
-		{{#each messages}}
-		{{> messageItemView}}
-		{{/each}}
+		{{#if noMessages}}
+			{{#if noFilter}}
+			<p class="empty-msg">No messages found.</p>
+			{{else}}
+			<p class="empty-msg">No messages found using current filter.  Click <a href="" id="clear-filter-link">here</a> to clear the filter</p>
+			{{/if}}
+		{{else}}
+			{{#each messages}}
+			{{> messageItemView}}
+			{{/each}}
+		{{/if}}
 	</ul>
 	{{#if hasIncomingMessages}}
 		<a href="" id="header-new-messages-toast"><i class="fa fa-arrow-down"></i>

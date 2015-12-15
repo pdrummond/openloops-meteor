@@ -8,6 +8,8 @@ if(Meteor.isClient) {
 			Ols.HistoryManager.itemId = Session.get('currentItemId');
 			Ols.HistoryManager.filterQuery = Session.get("filterQuery");
 
+			console.log("mesage-history filterQuery: " + Ols.HistoryManager.filterQuery);
+
 			/*computation.onInvalidate(function() {
 		        console.trace("MessageHistory.autorun invalidated");
 		    });*/
@@ -69,7 +71,22 @@ if(Meteor.isClient) {
 	});
 
 	Template.messageHistory.helpers({
-		messages: function() {			
+
+		noMessages: function() {
+			var filter = {};
+			var itemId = Session.get('currentItemId');
+			if(itemId) {
+				filter.itemId = itemId;
+			}
+			return ClientMessages.find(filter, {sort: {createdAt: 1}}).count() == 0;
+		},
+
+		noFilter: function() {
+			var filterQuery = Session.get('filterQuery');
+			return !(filterQuery && filterQuery.length > 0);
+		},
+
+		messages: function() {
 			var filter = {};
 			var itemId = Session.get('currentItemId');
 			if(itemId) {
@@ -99,5 +116,11 @@ if(Meteor.isClient) {
 			return Ols.HistoryManager.moreMessagesOnServer();
 		},
 
+	});
+
+	Template.messageHistory.events({
+		'click #clear-filter-link': function() {
+			Session.set('filterQuery', '');
+		},
 	});
 }

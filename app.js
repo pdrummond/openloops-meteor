@@ -812,7 +812,7 @@ if(Meteor.isServer) {
 
 			var filter = {};
 
-			if(opts.itemFilter && opts.itemFilter.length > 0) {
+			if(opts.itemFilter && !_.isEmpty(opts.itemFilter)) {
 				var itemIds = Items.find(opts.itemFilter, {fields: {_id: 1}}).map(function(obj) {
 					return obj._id;
 				});
