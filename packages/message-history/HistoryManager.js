@@ -89,57 +89,76 @@ Ols.HistoryManager = {
 		console.log(">>>> loadMoreMessages");
 		var self = this;
 		Meteor.setTimeout(function() {
-			if(self.moreMessagesOnServer()) {
-				console.log("    more messages detected. Loading now...");
-				self.showBusyIcon();
-				self.loadMessages(function(ok) {
-					if(ok) {
-						//So this is temporary - need to somehow calculate the height of the new page to scroll by
-						//Could always just guess based on the average size of a message - if one or two messages
-						//are bigger then hopefully the visual effect will go unnoticable?
-						var scrollTopAmount = 200;
-						//console.log("SCROLLING AWAY FROM TOP!!!!! by " + scrollTopAmount);
-						$("#messageHistory").scrollTop(scrollTopAmount);
-						self.loadingMessages = false;
-						self.hideBusyIcon();
-					}
-				});
-			} else {
-				console.log("    NO MORE MESSAGES ON SERVER");
-				self.hideBusyIcon();
-			}
+			self.moreMessagesOnServer(function(moreMessages) {
+				if(moreMessages) {
+					console.log("    more messages detected. Loading now...");
+					self.showBusyIcon();
+					self.loadMessages(function(ok) {
+						if(ok) {
+							//So this is temporary - need to somehow calculate the height of the new page to scroll by
+							//Could always just guess based on the average size of a message - if one or two messages
+							//are bigger then hopefully the visual effect will go unnoticable?
+							var scrollTopAmount = 400;
+							console.log("SCROLLING AWAY FROM TOP!!!!! by " + scrollTopAmount);
+							$("#messageHistory").scrollTop(scrollTopAmount);
+							self.loadingMessages = false;
+							self.hideBusyIcon();
+						}
+					});
+				} else {
+					console.log("    NO MORE MESSAGES ON SERVER");
+					self.hideBusyIcon();
+				}
+			});
 		}, 1);
 	},
 
-	moreMessagesOnServer: function() {
+	moreMessagesOnServer: function(callback) {
 		console.log("> moreMessagesOnServer");
 		console.log("    boardId: " + this.boardId);
 		console.log("    itemId: " + this.itemId);
-		var result = false;
 		if(!this.loadingInitialMessages) {
-			var serverMsgCount;
+			var clientMsgCount = ClientMessages._collection.find().fetch().length;
+			console.log("    clientMsgCount: " + clientMsgCount);
+			var serverMsgCount = -1;
 			if(this.itemId) {
 				var item = Items.findOne(this.itemId);
 				if(item) {
 					console.log("    Using item.numMessages: " + item.numMessages);
 					serverMsgCount = item.numMessages;
-				}
-			}
-			if(!serverMsgCount && this.boardId) {
-				var board = Boards.findOne(this.boardId);
-				if(board) {
-					console.log("    Using board.numMessages: " + board.numMessages);
-					serverMsgCount = board.numMessages;
-				}
-			}
-			var clientMsgCount = ClientMessages._collection.find().fetch().length;
+					console.log("    serverMsgCount: " + serverMsgCount);
 
-			result = (clientMsgCount < serverMsgCount);
-			console.log("    clientMsgCount: " + clientMsgCount);
-			console.log("    serverMsgCount: " + serverMsgCount);
+					callback(clientMsgCount < serverMsgCount);
+				}
+			} else if(this.boardId) {
+				/*
+					If there is no filter then use the board's numMessages count because it's
+					fast.  If there is a filter, then we have no choice but to do a method call
+					to determine the num messages dynamically.
+				*/
+				if(this.filterQuery == null || this.filterQuery.length == 0) {
+					var board = Boards.findOne(this.boardId);
+					if(board) {
+						console.log("    Using board.numMessages: " + board.numMessages);
+						serverMsgCount = board.numMessages;
+						console.log("    serverMsgCount: " + serverMsgCount);
+						callback(clientMsgCount < serverMsgCount);
+					}
+				} else {
+					Meteor.call('getServerMessagesCount', {projectId: this.projectId, boardId: this.boardId, itemFilter: OpenLoops.getFilterQuery(this.filterQuery)}, function(err, result) {
+						if(err) {
+							console.error("getServerMessageCount failed: " + err.reason);
+						} else {
+							serverMsgCount = result;
+							console.log("    serverMsgCount: " + serverMsgCount);
+							callback(clientMsgCount < serverMsgCount);
+						}
+					})
+				}
+			}
+		} else {
+			callback(false);
 		}
-		console.log("< moreMessagesOnServer");
-		return result;
 	},
 
 	scrollBottom: function() {

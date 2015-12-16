@@ -808,6 +808,30 @@ if(Meteor.isServer) {
 			return messages.fetch();
 		},
 
+		getServerMessagesCount: function(opts) {
+			var filter = {};
+
+			if(opts.itemFilter && !_.isEmpty(opts.itemFilter)) {
+				var itemIds = Items.find(opts.itemFilter, {fields: {_id: 1}}).map(function(obj) {
+					return obj._id;
+				});
+
+				//console.log("MESSAGES itemIds: " + JSON.stringify(itemIds));
+
+				filter.itemId = { $in: itemIds };
+			}
+			if(opts.projectId) {
+				filter.projectId = opts.projectId;
+			}
+			if(opts.boardId) {
+				filter.boardId = opts.boardId;
+			}
+			console.log(">> getServerMessagesCount filter: " + JSON.stringify(filter));
+			var count = ServerMessages.find(filter).count();
+			console.log(">> getServerMessagesCount count: " + count);
+			return count;
+		},
+
 		saveMessage: function(newMessage) {
 			check(newMessage, {
 				_id: Match.Optional(String),
