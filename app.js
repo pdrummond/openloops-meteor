@@ -123,7 +123,7 @@ if(Meteor.isClient) {
 			//console.log("REMAINING TEXT: " + remainingText);
 			filter["$or"] = [{title: {$regex:remainingText}}];
 		}
-		console.log("Current filter is: " + JSON.stringify(filter));
+		console.log("getFilterQuery: Current client-side item filter is: " + JSON.stringify(filter));
 		return filter;
 	}
 
@@ -311,24 +311,6 @@ if(Meteor.isClient) {
 		}
 	});
 
-	Template.userCard.events({
-		'click .working-on-link': function() {
-			var workingOn = prompt("What are you working on?", workingOn);
-			if(workingOn != null) {
-				Meteor.call('updateUserWorkingOn', Meteor.user().username, workingOn, function(err) {
-					if(err) {
-						Ols.Error.showError("Error updating working on status: ", err);
-					} else {
-						OpenLoops.insertBoardActivityMessage({
-							activityType: Ols.ACTIVITY_TYPE_ITEM_USER_WORKING_ON,
-							workingOn: workingOn
-						});
-					}
-				});
-			}
-		}
-	});
-
 	Template.chatMessageItemView.events({
 		'click .board-title': function() {
 			FlowRouter.go('boardMessages', {projectId: this.projectId, boardId: this.boardId});
@@ -427,9 +409,6 @@ if(Meteor.isClient) {
 					} else {
 						msg = 'ERR: board is null';
 					}
-					break;
-					case Ols.ACTIVITY_TYPE_ITEM_USER_WORKING_ON:
-					msg = "is working on " + this.workingOn;
 					break;
 					//FIXME: Need to find someway to defer to the plugin for this.
 					case Ols.ACTIVITY_TYPE_WEBHOOK_EVENT:
@@ -536,21 +515,6 @@ if(Meteor.isClient) {
 			Ols.Router.showItemMessages(this);
 		}
 	});
-
-	OpenLoops.insertBoardActivityMessage = function(activityMessage, opts) {
-		activityMessage = _.extend({
-			type: Ols.MSG_TYPE_ACTIVITY,
-			projectId: Session.get('currentProjectId'),
-			boardId: Session.get('currentBoardId')
-		}, activityMessage);
-		activityMessage = OpenLoops.insertClientMessage(activityMessage);
-		if(opts && 'clientSideOnly' in opts && opts.clientSideOnly == true) {
-			//Don't do anything here
-		} else {
-			Meteor.call('saveMessage', activityMessage);
-			Streamy.broadcast('sendMessage', activityMessage);
-		}
-	}
 
 	OpenLoops.getItemTypePhrase = function(itemType, issueType) {
 		var type = 'an item';
@@ -808,7 +772,7 @@ if(Meteor.isServer) {
 	Meteor.methods({
 
 		loadMessages: function(opts) {
-			console.log("loadMessages: " + JSON.stringify(opts));
+			//console.log("loadMessages: " + JSON.stringify(opts));
 
 			var filter = {};
 
@@ -817,7 +781,7 @@ if(Meteor.isServer) {
 					return obj._id;
 				});
 
-				console.log("MESSAGES itemIds: " + JSON.stringify(itemIds));
+				//console.log("MESSAGES itemIds: " + JSON.stringify(itemIds));
 
 				filter.itemId = { $in: itemIds };
 			}
@@ -834,7 +798,7 @@ if(Meteor.isServer) {
 			if(opts.olderThanDate) {
 				filter.createdAt = {$lt: opts.olderThanDate};
 			}
-			console.log("SERVER FILTER: " + JSON.stringify(filter));
+			console.log("SERVER MSG FILTER: " + JSON.stringify(filter));
 			var messages = ServerMessages.find(filter, {
 				limit: Ols.MESSAGE_PAGE_SIZE,
 				sort: {createdAt: -1}
@@ -844,7 +808,23 @@ if(Meteor.isServer) {
 		},
 
 		saveMessage: function(newMessage) {
-			console.log("> saveMessage: " + JSON.stringify(newMessage));
+			check(newMessage, {
+				_id: Match.Optional(String),
+				projectId: String,
+				boardId: String,
+				type: String,
+				text: Match.Optional(String),
+				activityType: Match.Optional(String),
+				createdAt: Match.Optional(Number),
+				createdBy: Match.Optional(String),
+				issueType: Match.Optional(String),
+				item: Match.Optional(Match.Any),
+				itemId: Match.Optional(String),
+				itemType: Match.Optional(String),
+				toBoard: Match.Optional(Match.Any),
+				fromBoard: Match.Optional(Match.Any)
+			});
+			//console.log("> saveMessage: " + JSON.stringify(newMessage));
 			newMessage.createdAt = new Date().getTime();
 			newMessage.createdBy = newMessage.createdBy || Meteor.user().username;
 

@@ -8,7 +8,7 @@ if(Meteor.isClient) {
 			Ols.HistoryManager.itemId = Session.get('currentItemId');
 			Ols.HistoryManager.filterQuery = Session.get("filterQuery");
 
-			console.log("mesage-history filterQuery: " + Ols.HistoryManager.filterQuery);
+			//console.log("mesage-history filterQuery: " + Ols.HistoryManager.filterQuery);
 
 			/*computation.onInvalidate(function() {
 		        console.trace("MessageHistory.autorun invalidated");

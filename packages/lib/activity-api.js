@@ -8,11 +8,6 @@ Ols.Activity = {
 		*/
 		Meteor.call('saveMessage', activityMessage);
 		Streamy.broadcast('sendMessage', activityMessage);
-		//Streamy.broadcast('webHookEvent', activityMessage);
-		/*Streamy.on('webHookEvent', function(data) {
-			console.log("WEBHOOK: " + JSON.stringify(data, null, 4));
-			OpenLoops.insertBoardActivityMessage(data, {clientSideOnly: true});
-		});*/
 	},
 
 	insertActivityMessage: function(activityMessage, item) {
@@ -33,7 +28,7 @@ Ols.Activity = {
 		if(item) {
 			activityMessage = _.extend({
 				createdBy: Meteor.user().username,
-				createdAt: new Date(),
+				createdAt: new Date().getTime(),
 				itemType: item.type,
 				projectId: item.projectId,
 				boardId: item.boardId,
@@ -54,6 +49,5 @@ Ols.Activity = {
 	ACTIVITY_TYPE_ITEM_MOVED_FROM_BOARD: 'ACTIVITY_TYPE_ITEM_MOVED_FROM_BOARD',
 	ACTIVITY_TYPE_ITEM_TITLE_CHANGED: 'ACTIVITY_TYPE_ITEM_TITLE_CHANGED',
 	ACTIVITY_TYPE_ITEM_DESC_CHANGED: 'ACTIVITY_TYPE_ITEM_DESC_CHANGED',
-	ACTIVITY_TYPE_ITEM_USER_WORKING_ON: 'ACTIVITY_TYPE_ITEM_USER_WORKING_ON',
 	ACTIVITY_TYPE_WEBHOOK_EVENT: 'ACTIVITY_TYPE_WEBHOOK_EVENT',
 }

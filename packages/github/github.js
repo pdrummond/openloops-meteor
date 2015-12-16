@@ -11,7 +11,7 @@ Ols.GitHub = {
 			case 'push':
 				var numCommits = activity.event.commits.length;
 				var repo = activity.event.repository.name;
-				var branch = activity.event.ref.replace(/refs\/heads\//g, '');			
+				var branch = activity.event.ref.replace(/refs\/heads\//g, '');
 				msg = numCommits + " new " + (numCommits==1?"commit":"commits") + " by " + username + " in " + repo + ":" + branch;
 				break;
 			case 'issues':
@@ -100,7 +100,7 @@ if(Meteor.isServer) {
 				event: req.body,
 				projectId: project._id,
 				boardId: board._id,
-				createdAt: new Date(),
+				createdAt: new Date().getTime(),
 				createdBy: 'github',
 				activityImageUrl: 'https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png'
 				//activityImageUrl: 'packages/ols_github/images/GitHub-Mark-32px.png'
