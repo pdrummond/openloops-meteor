@@ -1,7 +1,7 @@
 if(Meteor.isClient) {
 	Template.rightSidebar.helpers({
 		assigneeLabel: function() {
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			return item && item.assignee?item.assignee:"Unassigned";
 		}
 	});

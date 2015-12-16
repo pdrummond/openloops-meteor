@@ -78,7 +78,7 @@ if(Meteor.isClient) {
 			if(itemId) {
 				filter.itemId = itemId;
 			}
-			return ClientMessages.find(filter, {sort: {createdAt: 1}}).count() == 0;
+			return Ols.ClientMessage.find(filter, {sort: {createdAt: 1}}).count() == 0;
 		},
 
 		noFilter: function() {
@@ -92,7 +92,7 @@ if(Meteor.isClient) {
 			if(itemId) {
 				filter.itemId = itemId;
 			}
-			return ClientMessages.find(filter, {sort: {createdAt: 1}});
+			return Ols.ClientMessage.find(filter, {sort: {createdAt: 1}});
 		},
 
 		numIncomingMessages: function() {

@@ -22,7 +22,7 @@ Ols.HistoryManager = {
 
 	getOldestClientMessageDate: function() {
 		var date;
-		var existingMessages = ClientMessages.find({}, {sort:{createdAt:1}}).fetch();
+		var existingMessages = Ols.ClientMessage.find({}, {sort:{createdAt:1}}).fetch();
 		if(existingMessages.length > 0) {
 			date = existingMessages[0].createdAt;
 		}
@@ -45,9 +45,8 @@ Ols.HistoryManager = {
 				callback(false);
 			} else {
 				_.each(messages, function(message) {
-					ClientMessages._collection.insert(message);
+					Ols.ClientMessage._insertRaw(message);
 				});
-				console.log("<<<< LOAD MESSAGES DONE - " + ClientMessages._collection.find().count() + " client messages loaded");
 				callback(true);
 			}
 		});
@@ -67,8 +66,8 @@ Ols.HistoryManager = {
 			console.log("> loadInitialMessages");
 
 
-			ClientMessages._collection.remove({});
-			//console.log("CLIENT MESSAGES DELETED: Num client msgs: " + ClientMessages.find().count());
+			Ols.ClientMessage._removeAllRaw();
+			//console.log("CLIENT MESSAGES DELETED: Num client msgs: " + Ols.ClientMessage.find().count());
 
 			var self = this;
 			this.loadMessages(function(ok) {
@@ -118,11 +117,11 @@ Ols.HistoryManager = {
 		console.log("    boardId: " + this.boardId);
 		console.log("    itemId: " + this.itemId);
 		if(!this.loadingInitialMessages) {
-			var clientMsgCount = ClientMessages._collection.find().fetch().length;
+			var clientMsgCount = Ols.ClientMessage._countRaw();
 			console.log("    clientMsgCount: " + clientMsgCount);
 			var serverMsgCount = -1;
 			if(this.itemId) {
-				var item = Items.findOne(this.itemId);
+				var item = Ols.Item.findOne(this.itemId);
 				if(item) {
 					console.log("    Using item.numMessages: " + item.numMessages);
 					serverMsgCount = item.numMessages;

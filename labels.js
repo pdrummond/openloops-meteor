@@ -105,14 +105,14 @@ if(Meteor.isClient) {
 
 	Template.labelChooserItem.helpers({
 		showCheck: function() {
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			return item && item.labels?(_.contains(item.labels, this._id)?'':'hide'):'hide';
 		}
 	});
 
 	Template.labelChooserItem.events({
 		'click': function() {
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			var labelExists = _.contains(item.labels, this._id);
 			if(labelExists) {
 				Meteor.call('removeLabelFromItem', Session.get('currentItemId'), this._id, function(err, result) {
@@ -137,12 +137,12 @@ if(Meteor.isServer || Meteor.isClient) {
 
 	Meteor.methods({
 		addLabelToItem: function(itemId, labelId) {
-			Items.update({
+			Ols.Item.update({
 				_id: itemId
 			}, {
 				$push: { labels: labelId}
 			});
-			var item = Items.findOne(itemId);
+			var item = Ols.Item.findOne(itemId);
 
 			if(item.isOpen) {
 				Labels.update(labelId, {$inc: {numOpenMessages: 1}});
@@ -153,12 +153,12 @@ if(Meteor.isServer || Meteor.isClient) {
 		},
 
 		removeLabelFromItem: function(itemId, labelId) {
-			Items.update({
+			Ols.Item.update({
 				_id: itemId
 			}, {
 				$pull: { labels: labelId}
 			});
-			var item = Items.findOne(itemId);
+			var item = Ols.Item.findOne(itemId);
 			if(item.isOpen) {
 				Labels.update(labelId, {$inc: {numOpenMessages: -1}});
 			} else {

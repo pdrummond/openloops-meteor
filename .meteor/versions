@@ -67,6 +67,7 @@ oaf:html5-desktop-notifications@1.0.0
 observe-sequence@1.0.7
 ols:full-screen-editor@0.0.1
 ols:github@0.0.1
+ols:kernel@0.0.1
 ols:lib@0.0.1
 ols:message-box@0.0.1
 ols:message-history@0.0.1

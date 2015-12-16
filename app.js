@@ -3,8 +3,6 @@ OpenLoops = {};
 
 if(Meteor.isClient) {
 
-	ClientMessages = new Meteor.Collection('client-messages');
-
 	Meteor.startup(function() {
 		var permissionLevel = notify.permissionLevel();
 		console.log("Desktop Notifications: " + permissionLevel);
@@ -320,7 +318,7 @@ if(Meteor.isClient) {
 	Template.chatMessageItemView.helpers({
 
 		itemTitle: function() {
-			var item = Items.findOne(this.itemId);
+			var item = Ols.Item.findOne(this.itemId);
 			return item ? 'in ' + item.title:'';
 		},
 
@@ -429,7 +427,7 @@ if(Meteor.isClient) {
 		activityContent: function() {
 			var activityContent = "";
 			if(this.itemId) {
-				var item = Items.findOne(this.itemId);
+				var item = Ols.Item.findOne(this.itemId);
 
 				switch(this.activityType) {
 					case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
@@ -453,7 +451,7 @@ if(Meteor.isClient) {
 
 		showActivityContentClass: function() {
 			var show = false;
-			var item = Items.findOne(this.itemId);
+			var item = Ols.Item.findOne(this.itemId);
 			switch(this.activityType) {
 				case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
 				show = true;
@@ -501,7 +499,7 @@ if(Meteor.isClient) {
 		},
 
 		itemLabels: function() {
-			var item = Items.findOne(this._id);
+			var item = Ols.Item.findOne(this._id);
 			return item?item.labels:[];
 		},
 
@@ -637,35 +635,35 @@ if(Meteor.isClient) {
 		},
 
 		currentItemIcon: function() {
-			return OpenLoops.getItemTypeIcon(Items.findOne(Session.get('currentItemId')));
+			return OpenLoops.getItemTypeIcon(Ols.Item.findOne(Session.get('currentItemId')));
 		},
 
 		currentItemIconColor: function() {
-			return OpenLoops.getItemTypeIconColor(Items.findOne(Session.get('currentItemId')));
+			return OpenLoops.getItemTypeIconColor(Ols.Item.findOne(Session.get('currentItemId')));
 		},
 
 		currentItemType: function() {
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			return item?item.type:'';
 		},
 
 		currentItemIssueType: function() {
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			return item?item.issueType:'';
 		},
 
 		currentItemLabels: function() {
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			return item?item.labels:[];
 		},
 
 		openStatus: function() {
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			return item?(item.isOpen?'Open':'Closed'):'Open';
 		},
 
 		boardTitle: function() {
-			return Boards.findOne(Items.findOne(Session.get('currentItemId')).boardId).title;
+			return Boards.findOne(Ols.Item.findOne(Session.get('currentItemId')).boardId).title;
 		},
 
 		isTabActive: function(tabName) {
@@ -718,7 +716,7 @@ if(Meteor.isClient) {
 		'click': function() {
 			var self = this;
 			$("#move-to-board-list").slideUp();
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			Meteor.call('moveItem', Session.get('currentItemId'), this._id, function(err, result) {
 				if(err) {
 					Ols.Error.showError('Error moving item: ', err);
@@ -760,343 +758,3 @@ if(Meteor.isClient) {
 	});
 
 } //isClient
-
-Items = new Meteor.Collection('items');
-Filters = new Meteor.Collection('filters');
-Settings = new Meteor.Collection('settings');
-Counters = new Mongo.Collection('counters');
-
-if(Meteor.isServer) {
-	ServerMessages = new Meteor.Collection('server-messages');
-
-	Meteor.methods({
-
-		loadMessages: function(opts) {
-			//console.log("loadMessages: " + JSON.stringify(opts));
-
-			var filter = {};
-
-			if(opts.itemFilter && !_.isEmpty(opts.itemFilter)) {
-				var itemIds = Items.find(opts.itemFilter, {fields: {_id: 1}}).map(function(obj) {
-					return obj._id;
-				});
-
-				//console.log("MESSAGES itemIds: " + JSON.stringify(itemIds));
-
-				filter.itemId = { $in: itemIds };
-			}
-
-			if(opts.projectId) {
-				filter.projectId = opts.projectId;
-			}
-			if(opts.boardId) {
-				filter.boardId = opts.boardId;
-			}
-			if(opts.itemId) {
-				filter.itemId = opts.itemId;
-			}
-			if(opts.olderThanDate) {
-				filter.createdAt = {$lt: opts.olderThanDate};
-			}
-			console.log("SERVER MSG FILTER: " + JSON.stringify(filter));
-			console.log("NUM MSGS ON SERVER: " + ServerMessages.find(filter).count());
-			var messages = ServerMessages.find(filter, {
-				limit: Ols.MESSAGE_PAGE_SIZE,
-				sort: {createdAt: -1}
-			});
-			//Meteor._sleepForMs(2000);
-			return messages.fetch();
-		},
-
-		getServerMessagesCount: function(opts) {
-			var filter = {};
-
-			if(opts.itemFilter && !_.isEmpty(opts.itemFilter)) {
-				var itemIds = Items.find(opts.itemFilter, {fields: {_id: 1}}).map(function(obj) {
-					return obj._id;
-				});
-
-				//console.log("MESSAGES itemIds: " + JSON.stringify(itemIds));
-
-				filter.itemId = { $in: itemIds };
-			}
-			if(opts.projectId) {
-				filter.projectId = opts.projectId;
-			}
-			if(opts.boardId) {
-				filter.boardId = opts.boardId;
-			}
-			console.log(">> getServerMessagesCount filter: " + JSON.stringify(filter));
-			var count = ServerMessages.find(filter).count();
-			console.log(">> getServerMessagesCount count: " + count);
-			return count;
-		},
-
-		saveMessage: function(newMessage) {
-			check(newMessage, {
-				_id: Match.Optional(String),
-				projectId: String,
-				boardId: String,
-				type: String,
-				text: Match.Optional(String),
-				activityType: Match.Optional(String),
-				createdAt: Match.Optional(Number),
-				createdBy: Match.Optional(String),
-				issueType: Match.Optional(String),
-				item: Match.Optional(Match.Any),
-				itemId: Match.Optional(String),
-				itemType: Match.Optional(String),
-				toBoard: Match.Optional(Match.Any),
-				fromBoard: Match.Optional(Match.Any)
-			});
-			//console.log("> saveMessage: " + JSON.stringify(newMessage));
-			newMessage.createdAt = new Date().getTime();
-			newMessage.createdBy = newMessage.createdBy || Meteor.user().username;
-
-			ServerMessages.insert(newMessage);
-
-			if(newMessage.itemId) {
-				Items.update(newMessage.itemId, {
-					$inc: {numMessages: 1},
-					$set: {updatedAt: new Date().getTime()},
-				});
-			}
-			Boards.update(newMessage.boardId, {$inc: {numMessages: 1}});
-			Projects.update(newMessage.projectId, {$inc: {numMessages: 1}});
-			Meteor.call('detectMentionsInMessage', newMessage);
-		},
-
-		insertMessage: function(newMessage) {
-			newMessage = _.extend({
-				createdAt: new Date().getTime(),
-				createdBy: Meteor.user().username,
-			}, newMessage);
-			Meteor.call('saveMessage', newMessage);
-			Streamy.broadcast('sendMessage', newMessage);
-		},
-
-		insertItem: function(newItem) {
-			console.log("insertItem - boardId:" + newItem.boardId);
-			var now = new Date().getTime();
-			console.log("new item project id " + newItem.projectId);
-
-			newItem = _.extend({
-				pid: newItem.projectId?incrementCounter('counters', newItem.projectId):0,
-				createdAt: now,
-				createdBy: Meteor.user().username,
-				updatedAt: now,
-				isOpen: true,
-				numMessages: 0,
-				tabs: [
-					{_id: "messages", icon: 'fa-comments-o', label: "Messages", type: Ols.Item.Tab.TAB_TYPE_MESSAGE_HISTORY},
-					{_id: "activity", icon: 'fa-exchange', label: "Activity", type: Ols.Item.Tab.TAB_TYPE_ACTIVITY_HISTORY},
-					{_id: Random.id(), icon: 'fa-check', label: "Todo List", type: Ols.Item.Tab.TAB_TYPE_CHECKLIST},
-					//{_id: Random.id(), icon: 'fa-check-circle-o', label: "Check List", type: Ols.Item.Tab.TAB_TYPE_CHECKLIST}
-					{_id: Random.id(), icon: 'fa-book', label: "References", type: Ols.Item.Tab.TAB_TYPE_REFLIST}
-				],
-				subItems: []
-			}, newItem);
-
-			var newItemId = Items.insert(newItem);
-			//Meteor._sleepForMs(2000);
-			var newItem = _.extend(newItem, {_id: newItemId});
-
-			Ols.Activity.insertActivityMessage({
-				activityType: Ols.ACTIVITY_TYPE_NEW_ITEM
-			}, newItem);
-			if(Ols.StringUtils.notEmpty(newItem.description)) {
-				Ols.Activity.insertActivityMessage({
-					activityType: Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED
-				}, newItem);
-			}
-
-			return newItem;
-		},
-
-		updateItem: function(itemId, attrs) {
-			console.log("> updateItem: " + JSON.stringify(attrs));
-			var item = Items.findOne(itemId);
-			Items.update(itemId, {$set: attrs});
-			var newItem = Items.findOne(itemId);
-			if(item.title != newItem.title) {
-				Ols.Activity.insertActivityMessage({
-					activityType: Ols.ACTIVITY_TYPE_ITEM_TITLE_CHANGED,
-				}, newItem);
-			}
-			if(item.description != newItem.description) {
-				Ols.Activity.insertActivityMessage({
-					activityType: Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED
-				}, newItem);
-			}
-			return newItem;
-		},
-
-		moveItem: function(itemId, toBoardId) {
-			var item = Items.findOne(itemId);
-			var fromBoardId = item.boardId;
-
-			Items.update(itemId, {
-				$set: {
-					boardId: toBoardId,
-					updatedAt: Date.now(),
-					updatedBy: Meteor.userId(),
-				}
-			});
-
-			Ols.Activity.insertActivityMessage({
-				activityType: Ols.Activity.ACTIVITY_TYPE_ITEM_MOVED_TO_BOARD,
-				item: item,
-				boardId: fromBoardId, //The from board displays the "moved to board" activity item
-				fromBoard: Boards.findOne(fromBoardId),
-				toBoard: Boards.findOne(toBoardId)
-			}, item);
-
-			Ols.Activity.insertActivityMessage({
-				activityType: Ols.Activity.ACTIVITY_TYPE_ITEM_MOVED_FROM_BOARD,
-				item: item,
-				boardId: toBoardId, //The to board displays the "moved from board" activity item
-				fromBoard: Boards.findOne(fromBoardId),
-				toBoard: Boards.findOne(toBoardId)
-			}, item);
-
-			var num = ServerMessages.update({itemId: itemId}, {$set: {boardId: toBoardId}}, {multi:true});
-		},
-
-		toggleItemOpenStatus: function(itemId) {
-			check(itemId, String);
-
-			var item = Items.findOne(itemId);
-
-			var isOpen = !item.isOpen;
-
-			Items.update(itemId, {
-				$set: {isOpen: isOpen},
-			});
-
-			var item = Items.findOne(itemId);
-
-			Ols.Activity.insertActivityMessage({
-				activityType: isOpen?Ols.ACTIVITY_TYPE_ITEM_OPENED:Ols.ACTIVITY_TYPE_ITEM_CLOSED
-			}, item);
-
-			//update label counters
-			_.each(item.labels, function(labelId) {
-				if(item.isOpen) {
-					Labels.update(labelId, {$inc: {numOpenMessages: 1, numClosedMessages: -1}});
-				} else {
-					Labels.update(labelId, {$inc: {numOpenMessages: -1, numClosedMessages: 1}});
-				}
-			});
-		},
-
-		insertFilter: function(newFilter) {
-			var now = new Date().getTime();
-			newFilter = _.extend({
-				createdAt: now,
-				createdBy: Meteor.user().username,
-				updatedAt: now,
-			}, newFilter);
-			return Filters.insert(newFilter);
-		},
-
-		detectMentionsInMessage: function(message) {
-			console.log("> detectMentionsInMessage");
-			var re = /@([\w\.-]+)/g;
-			var matches;
-
-			do {
-				matches = re.exec(message.text);
-				if (matches) {
-					var toUser = Meteor.users.findOne({username: matches[1]});
-					if(toUser != null) {
-						console.log("MENTION DETECTED: " + JSON.stringify(toUser));
-
-						var data = {
-							type: 'new-message-mention',
-							fromUserId: Meteor.userId(),
-							fromUsername: Meteor.user().username,
-							toUserId: toUser._id,
-							messageId: message._id,
-							messageText: message.text
-						};
-						//TODO: Once sessionForUsers is released, use it
-						//Streamy.sessionsForUsers(toUser._id).emit('mention', data);
-						Streamy.broadcast('mention', data);
-					}
-				}
-			} while (matches);
-			console.log("< detectMentionsInMessage");
-		},
-
-		updateUserWorkingOn: function(username, workingOn) {
-			workingOn = workingOn.trim();
-			Meteor.users.update({username: username}, {$set: {workingOn: workingOn}});
-			var user = Meteor.users.findOne({username: username});
-			console.log("updateUserWorkingOn: " + JSON.stringify(user, null, 4));
-		},
-
-		_getOldestBoardMessage: function(projectId, boardId) {
-			return ServerMessages.findOne({boardId: boardId}, {sort: {DateTime: 1, limit: 1}});
-		}
-
-	});
-
-	Meteor.publish("currentItem", function(itemId) {
-		var items = Items.find({_id: itemId});
-		return items;
-	});
-
-	Meteor.publish("items", function(opts) {
-		console.log("publish items: " + JSON.stringify(opts));
-		var filter = {};
-		if(opts && opts.filter) {
-			filter = _.extend(filter, opts.filter);
-		}
-		console.log("ITEM filter: " + JSON.stringify(filter));
-		return Items.find(filter, {sort: {updatedAt: -1}});
-	});
-
-	Meteor.publish("articles", function(opts) {
-		var filter = {};
-		if(opts && opts.filter) {
-			filter = _.extend(filter, opts.filter);
-		}
-		filter.type = 'article';
-		return Items.find(filter, {sort: {updatedAt: -1}});
-	});
-
-	Meteor.publish("issues", function(opts) {
-		var filter = {};
-		if(opts && opts.filter) {
-			filter = _.extend(filter, opts.filter);
-		}
-		filter.type = 'issue';
-		return Items.find(filter, {sort: {updatedAt: -1}});
-	});
-
-	Meteor.publish("filters", function() {
-		return Filters.find();
-	});
-
-	Meteor.publish("allUsernames", function () {
-		return Meteor.users.find({}, {fields: {
-			"username": 1,
-			"profileImage": 1,
-			"workingOn": 1
-		}});
-	});
-
-	Meteor.publish("userStatus", function() {
-		return Meteor.users.find({ "status.online": true }, { fields: { "username": 1, "status":1 } });
-	});
-
-} //isServer
-
-// Override Meteor._debug to filter for custom msgs - as used
-// by yuukan:streamy (https://goo.gl/4HQiKg)
-Meteor._debug = (function (super_meteor_debug) {
-	return function (error, info) {
-		if (!(info && _.has(info, 'msg')))
-		super_meteor_debug(error, info);
-	}
-})(Meteor._debug);

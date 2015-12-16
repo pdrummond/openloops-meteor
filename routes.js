@@ -68,12 +68,12 @@ if(Meteor.isClient) {
 			Session.set('numIncomingMessages', 0);
 			OpenLoops.removeSidebarNewMessages();
 
-			Meteor.call('_getOldestBoardMessage', params.projectId, params.boardId, function(err, result) {
+			/*Meteor.call('_getOldestBoardMessage', params.projectId, params.boardId, function(err, result) {
 				console.log(">> _getOldestBoardMessage");
 				console.log("msg: " + JSON.stringify(result, null, 4));
 				console.log("msg date: " + Ols.TimeUtils.formatTime(result.createdAt));
 				console.log("<< _getOldestBoardMessage");
-			});
+			});*/
 		}
 	});
 

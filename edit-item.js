@@ -30,32 +30,32 @@ if(Meteor.isClient) {
 		},
 
 		currentItem: function() {
-			return Items.findOne(Session.get('currentItemId'));
+			return Ols.Item.findOne(Session.get('currentItemId'));
 		},
 
 		title: function() {
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			return item?item.title:'';
 		},
 
 		description: function() {
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			return item?item.description:'';
 		},
 
 		//FIXME: change this form to use with instead of all these field methods!
 		assignee: function() {
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			return item?item.assignee:'';
 		},
 
 		labels: function() {
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			return item?item.labels:'';
 		},
 
 		isSelectedType: function(type) {
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			if(item) {
 				return type == item.type?'selected':'';
 			} else {
@@ -68,7 +68,7 @@ if(Meteor.isClient) {
 		},
 
 		isSelectedIssueType: function(issueType) {
-			var item = Items.findOne(Session.get('currentItemId'));
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			if(item) {
 				return issueType == item.issueType?'selected':'';
 
@@ -94,7 +94,7 @@ if(Meteor.isClient) {
 
 		'click #save-button': function(e, template) {
 			e.preventDefault();
-			var currentItem = Items.findOne(Session.get('currentItemId'));
+			var currentItem = Ols.Item.findOne(Session.get('currentItemId'));
 			var title = $("#editItemForm input[name='title']").val();
 			if(title != null && title.length > 0) {
 				template.isBusy.set(true);

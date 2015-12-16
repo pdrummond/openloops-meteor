@@ -183,11 +183,11 @@ if(Meteor.isServer) {
 
 		recountItemMessages: function() {
 			console.log("> recountItemMessages");
-			Items.find({}).forEach(function(item) {
+			Ols.Item.find({}).forEach(function(item) {
 				console.log("-- BEFORE num messages for item '" + item.title + "': " + item.numMessages);
 				var numMessages = ServerMessages.find({itemId: item._id}).count();
 				Items.update(item._id, {$set: {numMessages: numMessages}});
-				item = Items.findOne(item._id);
+				item = Ols.Item.findOne(item._id);
 				console.log("-- AFTER num messages for item '" + item.title + "': " + item.numMessages);
 			});
 			console.log("< recountItemMessages");
@@ -197,8 +197,8 @@ if(Meteor.isServer) {
 			console.log("> recalculateLabelCounts");
 			Labels.find({}).forEach(function(label) {
 				console.log("-- BEFORE label '" + label.title + "': open: " + label.numOpenMessages, ", closed: " + label.numClosedMessages);
-				var numOpenMessages = Items.find({isOpen: true, labels: label._id}).count();
-				var numClosedMessages = Items.find({isOpen: false, labels: label._id}).count();
+				var numOpenMessages = Ols.Item.find({isOpen: true, labels: label._id}).count();
+				var numClosedMessages = Ols.Item.find({isOpen: false, labels: label._id}).count();
 				console.log("numOpenMessages: " + numOpenMessages);
 				console.log("numClosedMessages: " + numClosedMessages);
 				Labels.update(label._id, {$set: {numOpenMessages: numOpenMessages, numClosedMessages: numClosedMessages}});
@@ -210,14 +210,14 @@ if(Meteor.isServer) {
 
 		setItemPids: function() {
 			console.log("> setItemPids");
-			Items.find({$or: [{pid: {$exists: false}}, {pid: 0}]}).forEach(function(item) {
+			Ols.Item.find({$or: [{pid: {$exists: false}}, {pid: 0}]}).forEach(function(item) {
 				console.log("-- Item " + item.title + " has no pid");
 				if(item.projectId == null) {
 					console.error("-- Item " + item._id + " has no projectId! Skipping...");
 				} else {
 					var pid = incrementCounter('counters', item.projectId);
 					Items.update(item._id, {$set: {pid: pid}});
-					item = Items.findOne(item._id);
+					item = Ols.Item.findOne(item._id);
 					console.log("-- New PID for item is " + item.pid);
 				}
 			});
@@ -226,7 +226,7 @@ if(Meteor.isServer) {
 
 		setItemProjectIds: function() {
 			console.log("> setItemProjectIds");
-			Items.find({projectId: {$exists: false}}).forEach(function(item) {
+			Ols.Item.find({projectId: {$exists: false}}).forEach(function(item) {
 				console.log("-- Item " + item.title + " has no projectId");
 				var board = Boards.findOne(item.boardId);
 				if(board == null) {
@@ -234,7 +234,7 @@ if(Meteor.isServer) {
 				} else {
 					var projectId = board.projectId;
 					Items.update(item._id, {$set: {projectId: projectId}});
-					item = Items.findOne(item._id);
+					item = Ols.Item.findOne(item._id);
 					console.log("-- New project ID for item is " + item.projectId);
 				}
 			});
@@ -249,13 +249,13 @@ if(Meteor.isServer) {
 
 		removeAllLabels: function() {
 			Labels.remove({});
-			Items.find().forEach(function(item) {
+			Ols.Item.find().forEach(function(item) {
 				Items.update(item._id, {$set: {labels: []}});
 			});
 		},
 
 		addItemTabs: function() {
-			Items.find().forEach(function(item) {
+			Ols.Item.find().forEach(function(item) {
 				Items.update(item._id, {$set: {tabs: [
 					{_id: 'messages', icon: 'fa-comments-o', label: "Messages", type: Ols.Item.Tab.TAB_TYPE_MESSAGE_HISTORY},
 					{_id: 'activity', icon: 'fa-exchange', label: "Activity", type: Ols.Item.Tab.TAB_TYPE_ACTIVITY_HISTORY},
@@ -271,6 +271,6 @@ if(Meteor.isServer) {
 				var projectId = Boards.findOne(activityMsg.boardId).projectId;
 				ServerMessages.update(activityMsg._id, {$set: {projectId: projectId}});
 			});
-		}		
+		}
 	})
 }

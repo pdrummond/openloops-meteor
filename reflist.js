@@ -11,15 +11,15 @@ if(Meteor.isClient) {
 
 	Template.refList.helpers({
 		numRefItems: function() {
-			return SubItems.find().count();
+			return Ols.Item.find().count();
 		},
 
 		refItems: function() {
-			return SubItems.find();
+			return Ols.Item.find();
 		},
 
 		noRefItems: function() {
-			return SubItems.find().count() == 0;
+			return Ols.Item.find().count() == 0;
 		},
 
 		autoCompleteSettings: function() {
@@ -28,7 +28,7 @@ if(Meteor.isClient) {
 				limit: 5,
 				rules: [
 					{
-						collection: Items,
+						collection: Ols.Item._collection(),
 						field: "title",
 						template: Template.itemPill
 					}
@@ -61,23 +61,23 @@ if(Meteor.isClient) {
 
 	Template.refItem.helpers({
 		text:function() {
-			var item = Items.findOne(this.refItemId);
+			var item = Ols.Item.findOne(this.refItemId);
 			return item?item.title:'';
 		},
 
 		itemProjectId: function() {
-			var item = Items.findOne(this.refItemId);
+			var item = Ols.Item.findOne(this.refItemId);
 			return item?item.projectId:'';
 		},
 
 		itemBoardId: function() {
-			var item = Items.findOne(this.refItemId);
+			var item = Ols.Item.findOne(this.refItemId);
 			return item?item.boardId:'';
 		},
 
 		projectKey: function() {
 			var projectKey = '???';
-			var item = Items.findOne(this.refItemId);
+			var item = Ols.Item.findOne(this.refItemId);
 			if(item) {
 				var project = Projects.findOne(item.projectId);
 				if(project) {
@@ -88,7 +88,7 @@ if(Meteor.isClient) {
 		},
 
 		itemPid: function() {
-			var item = Items.findOne(this.refItemId);
+			var item = Ols.Item.findOne(this.refItemId);
 			return item?item.pid:'';
 		}
 	});

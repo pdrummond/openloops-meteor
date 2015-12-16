@@ -1,4 +1,47 @@
+Ols.ClientMessage = {
+	find: function(selector, options) {
+		return ClientMessages.find(selector, options);
+	},
+
+	findOne: function(selector, options) {
+		return ClientMessages.findOne(selector, options);
+	},
+
+	//TODO: Figure out if _collection is required for HistoryManager. If not,
+	//remove this.
+	_insertRaw: function(message) {
+		ClientMessages._collection.insert(message);
+	},
+
+	//TODO: Figure out if _collection is required for HistoryManager. If not,
+	//remove this.
+	_removeAllRaw: function() {
+		ClientMessages._collection.remove({});
+	},
+
+	//TODO: Figure out if _collection is required for HistoryManager. If not,
+	//remove this.
+	_countRaw: function() {
+		return ClientMessages._collection.find().fetch().length;
+	}
+}
+
+Ols.ServerMessage = {
+	find: function(selector, options) {
+		return ServerMessages.find(selector, options);
+	},
+
+	findOne: function(selector, options) {
+		return ServerMessages.findOne(selector, options);
+	},
+
+	insert: function(message, callback) {
+		return ServerMessages.insert(message, callback);
+	}
+}
+
 Ols.Message = {
+
 	createMessage: function(attrs, callback) {
 		var newMessage = this._private.insertClientMessage(attrs);
 		Meteor.call('saveMessage', newMessage, function(err, result) {
@@ -30,5 +73,22 @@ Ols.Message = {
 			newMessage._id = newMessageId;
 			return newMessage;
 		}
+	},
+
+	Schema: {
+		_id: Match.Optional(String),
+		projectId: String,
+		boardId: String,
+		type: String,
+		text: Match.Optional(String),
+		activityType: Match.Optional(String),
+		createdAt: Match.Optional(Number),
+		createdBy: Match.Optional(String),
+		issueType: Match.Optional(String),
+		item: Match.Optional(Match.Any),
+		itemId: Match.Optional(String),
+		itemType: Match.Optional(String),
+		toBoard: Match.Optional(Match.Any),
+		fromBoard: Match.Optional(Match.Any)
 	}
 }

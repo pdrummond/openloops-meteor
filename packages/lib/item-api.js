@@ -1,11 +1,31 @@
 Ols.Item = {
 
+	find: function(selector, options) {
+		return Items.find(selector, options);
+	},
+
+	findOne: function(selector, options) {
+		return Items.findOne(selector, options);
+	},
+
+	insert: function(item, callback) {
+		return Items.insert(item, callback);
+	},
+
+	update: function(selector, modifier, options, callback) {
+		return Items.update(selector, modifier, options, callback);
+	},
+
 	getCurrent: function() {
 		return Items.findOne(Session.get('currentItemId'));
 	},
 
 	get: function(itemId) {
 		return Items.findOne(itemId)
+	},
+
+	_collection: function() {
+		return Items;
 	},
 
 	/**

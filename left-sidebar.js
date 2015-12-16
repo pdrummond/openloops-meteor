@@ -28,7 +28,7 @@ if(Meteor.isClient) {
 	Template.leftSidebar.helpers({
 
 		noItems: function() {
-			return Items.find(OpenLoops.getFilterQuery(Session.get('filterQuery'))).count() == 0;
+			return Ols.Item.find(OpenLoops.getFilterQuery(Session.get('filterQuery'))).count() == 0;
 		},
 
 		noFilter: function() {
@@ -41,7 +41,7 @@ if(Meteor.isClient) {
 		},
 
 		items: function() {
-			return Items.find(OpenLoops.getFilterQuery(Session.get('filterQuery')), {sort: {updatedAt: -1}});
+			return Ols.Item.find(OpenLoops.getFilterQuery(Session.get('filterQuery')), {sort: {updatedAt: -1}});
 		},
 
 		filters: function() {

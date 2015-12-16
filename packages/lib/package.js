@@ -6,9 +6,10 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
-  api.use(['templating', 'ecmascript', 'reactive-var', 'yuukan:streamy', 'mquandalle:stylus']);
+  api.use(['templating', 'ecmascript', 'reactive-var', 'check', 'mongo', 'yuukan:streamy', 'mquandalle:stylus']);
   api.addFiles([
 	  'namespace.js',
+	  'collections.js',
 	  'error-api.js',
 	  'timeutils-api.js',
 	  'stringutils-api.js',

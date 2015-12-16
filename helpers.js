@@ -6,14 +6,14 @@ if(Meteor.isClient) {
 
 	Template.registerHelper('itemHasAssignee', function (item) {
 		if(item == null) {
-			item = Items.findOne(Session.get('currentItemId'));
+			item = Ols.Item.findOne(Session.get('currentItemId'));
 		}
 		return Meteor.users.findOne({username: item.assignee}) != null;
 	}),
 
 	Template.registerHelper('assigneeImageUrl', function (item) {
 		if(item == null) {
-			item = Items.findOne(Session.get('currentItemId'));
+			item = Ols.Item.findOne(Session.get('currentItemId'));
 		}
 		var assignee = Meteor.users.findOne({username: item.assignee});
 		return assignee?assignee.profileImage:'ERR: Assignee null for assigneeImageUrl';
@@ -21,7 +21,7 @@ if(Meteor.isClient) {
 
 	Template.registerHelper('assigneeUsername', function (item) {
 		if(item == null) {
-			item = Items.findOne(Session.get('currentItemId'));
+			item = Ols.Item.findOne(Session.get('currentItemId'));
 		}
 		var assignee = Meteor.users.findOne({username: item.assignee});
 		return assignee?assignee.username:'ERR: Assignee null for assigneeUsername';
@@ -71,10 +71,6 @@ if(Meteor.isClient) {
 		return label?label.color:'ERR: label null for labelColor';
 	});
 
-	Template.registerHelper('clientMessageCount', function (context, options) {
-		return ClientMessages._collection.find().count();
-	});
-
 	Template.registerHelper('showBoardTitleClass', function (context, options) {
 		var show = false;
 		var currentBoardId = Session.get('currentBoardId');
@@ -98,7 +94,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.registerHelper('isIssue', function (context, options) {
-		var item = Items.findOne(Session.get('currentItemId'));
+		var item = Ols.Item.findOne(Session.get('currentItemId'));
 		return item?item.type == 'issue':false;
 	});
 
@@ -118,7 +114,7 @@ if(Meteor.isClient) {
 		var currentItemTitle = '';
 		var currentItemId = Session.get("currentItemId");
 		if(currentItemId) {
-			var currentItem = Items.findOne(currentItemId);
+			var currentItem = Ols.Item.findOne(currentItemId);
 			if(currentItem) {
 				currentItemTitle = currentItem.title;
 			}
@@ -130,7 +126,7 @@ if(Meteor.isClient) {
 		var currentItemDescription = 'No Description';
 		var currentItemId = Session.get("currentItemId");
 		if(currentItemId) {
-			var currentItem = Items.findOne(currentItemId);
+			var currentItem = Ols.Item.findOne(currentItemId);
 			if(currentItem) {
 				if(currentItem.description && currentItem.description.length > 0) {
 					currentItemDescription = currentItem.description;
@@ -144,7 +140,7 @@ if(Meteor.isClient) {
 		var currentItemMessageCount = '';
 		var currentItemId = Session.get("currentItemId");
 		if(currentItemId) {
-			var currentItem = Items.findOne(currentItemId);
+			var currentItem = Ols.Item.findOne(currentItemId);
 			if(currentItem) {
 				currentItemMessageCount = currentItem.numMessages;
 			}
@@ -153,22 +149,22 @@ if(Meteor.isClient) {
 	});
 
 	Template.registerHelper('currentItemIsOpen', function () {
-		var item = Items.findOne(Session.get('currentItemId'));
+		var item = Ols.Item.findOne(Session.get('currentItemId'));
 		return item?item.isOpen:true;
 	});
 
 	Template.registerHelper('currentItemLabelsEmpty', function () {
-		var item = Items.findOne(Session.get('currentItemId'));
+		var item = Ols.Item.findOne(Session.get('currentItemId'));
 		return item && item.labels ? item.labels.length == 0 : true;
 	});
 
 	Template.registerHelper('currentItemLabels', function () {
-		var item = Items.findOne(Session.get('currentItemId'));
+		var item = Ols.Item.findOne(Session.get('currentItemId'));
 		return item?item.labels:[];
 	});
 
 	Template.registerHelper('currentItemId', function () {
-		var item = Items.findOne(Session.get('currentItemId'));
+		var item = Ols.Item.findOne(Session.get('currentItemId'));
 		return item?item._id:null;
 	});
 
@@ -179,14 +175,14 @@ if(Meteor.isClient) {
 
 	Template.registerHelper('itemPid', function (item) {
 		if(item ==null) {
-			item = Items.findOne(Session.get('currentItemId'));
+			item = Ols.Item.findOne(Session.get('currentItemId'));
 		}
 		return item && item.pid?item.pid:'??';
 	});
 
 	Template.registerHelper('projectKey', function (item) {
 		if(item ==null) {
-			item = Items.findOne(Session.get('currentItemId'));
+			item = Ols.Item.findOne(Session.get('currentItemId'));
 		}
 		var project = Projects.findOne(item.projectId);
 		return project?(project.key?project.key:project.title.substring(0, 3)):null;
