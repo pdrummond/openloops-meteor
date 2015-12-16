@@ -799,6 +799,7 @@ if(Meteor.isServer) {
 				filter.createdAt = {$lt: opts.olderThanDate};
 			}
 			console.log("SERVER MSG FILTER: " + JSON.stringify(filter));
+			console.log("NUM MSGS ON SERVER: " + ServerMessages.find(filter).count());
 			var messages = ServerMessages.find(filter, {
 				limit: Ols.MESSAGE_PAGE_SIZE,
 				sort: {createdAt: -1}

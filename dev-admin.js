@@ -120,6 +120,17 @@ if(Meteor.isClient) {
 				}
 			});
 		},
+
+		'click #fix-msg-bad-createdAt': function() {
+			$("#status").text("Working...");
+			Meteor.call('fixMsgBadCreatedAt', function(err, results) {
+				if(err) {
+					$("#status").text("Error " + err.reason);
+				} else {
+					$("#status").text("Completed Successfully.");
+				}
+			});
+		},
 	});
 }
 
@@ -260,6 +271,6 @@ if(Meteor.isServer) {
 				var projectId = Boards.findOne(activityMsg.boardId).projectId;
 				ServerMessages.update(activityMsg._id, {$set: {projectId: projectId}});
 			});
-		},
+		}		
 	})
 }

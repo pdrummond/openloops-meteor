@@ -31,7 +31,6 @@ Ols.HistoryManager = {
 
 	loadMessages: function(callback) {
 		var olderThanDate = this.getOldestClientMessageDate();
-		$("#messageHistory .empty-msg").hide();
 		console.log(">>>> LOADING MESSAGES older than " + Ols.TimeUtils.formatTime(olderThanDate));
 		Meteor.call('loadMessages', {
 			olderThanDate: olderThanDate,
@@ -50,7 +49,6 @@ Ols.HistoryManager = {
 				});
 				console.log("<<<< LOAD MESSAGES DONE - " + ClientMessages._collection.find().count() + " client messages loaded");
 				callback(true);
-				$("#messageHistory .empty-msg").show();
 			}
 		});
 	},
@@ -146,11 +144,14 @@ Ols.HistoryManager = {
 
 	scrollBottom: function() {
 		//console.log(">> scrollBottom");
+		Meteor.defer(function() {
 		var $messageList = $("#messageHistory");
 		if($messageList.length > 0) {
+			console.log("scrollBottom");
 			$messageList.scrollTop($messageList[0].scrollHeight);
 		}
 		Ols.HistoryManager.atBottom = true;
+		});
 		//console.log("<< scrollBottom");
 	},
 
