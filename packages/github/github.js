@@ -78,7 +78,7 @@ Ols.GitHub = {
 if(Meteor.isServer) {
 
 	JsonRoutes.add("post", "/ols/webhook/github/project/:projectId/board/:boardId/", function (req, res, next) {
-		//console.log("GITHUB WEBHOOK BOOM");
+		console.log("GITHUB WEBHOOK EVENT");
 		console.log("req.body: " + JSON.stringify(req.body, null, 4));
 		//console.log('req.headers' + JSON.stringify(req.headers));
 		var eventType = req.headers['x-github-event'];
