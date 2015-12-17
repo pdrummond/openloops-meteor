@@ -101,7 +101,25 @@ if(Meteor.isServer) {
 	});
 
 	Meteor.methods({
+
 		insertProject: function(newProject) {
+			check(newProject, {
+				title: String,
+				key: String,
+				description: Match.Optional(String),
+				defaultBoardId: Match.Optional(String),
+			});
+
+			if(newProject.key.length == 0) {
+				throw new Meteor.Error("insert-project-failure-001", "Project key cannot be empty");
+			}
+
+			newProject.key = newProject.key.toUpperCase();
+
+			if(Projects.findOne({key:newProject.key}) != null) {
+				throw new Meteor.Error("insert-project-failure-002", "Project with key '" + newProject.key + "' already exists");
+			}
+
 			var now = new Date().getTime();
 			newProject = _.extend({
 				createdAt: now,
@@ -116,7 +134,28 @@ if(Meteor.isServer) {
 		},
 
 		updateProject: function(projectId, attrs) {
+			check(projectId, String);
+			check(attrs, {
+				title: String,
+				key: String,
+				description: Match.Optional(String),
+				defaultBoardId: Match.Optional(String)
+			});
 			var project = Projects.findOne(projectId);
+
+			if(attrs.key != project.key) {
+
+				if(attrs.key.length == 0) {
+					throw new Meteor.Error("insert-project-failure-001", "Project key cannot be empty");
+				}
+
+				attrs.key = attrs.key.toUpperCase();
+
+				if(Projects.findOne({key:attrs.key}) != null) {
+					throw new Meteor.Error("insert-project-failure-002", "Project with key '" + attrs.key + "' already exists");
+				}
+			}
+
 			Projects.update(projectId, {$set: attrs});
 		},
 
@@ -124,7 +163,7 @@ if(Meteor.isServer) {
 			Ols.Item.remove({projectId: projectId});
 			Ols.ServerMessage.remove({projectId: projectId});
 			Ols.Board.remove({projectId: projectId});
-			Ols.Project.remove({projectId: projectId});
+			Ols.Project.remove(projectId);
 		}
 	})
 }
