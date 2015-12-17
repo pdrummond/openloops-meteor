@@ -117,6 +117,11 @@
 	</div>
 </template>
 
+<template name="itemDescription">
+	<div class="current-item-description markdown-content">{{#markdown}}{{itemDescription}}{{/markdown}}</div>
+</template>
+
+
 <template name="activityHistory">
 	<div><p><i>Not yet implemented - Activity will go here</i></p></div>
 </template>
@@ -191,7 +196,7 @@
 				<span id="created-at" class="header-item" title={{formatTime createdAt}}>{{timeAgo createdAt}}</span>
 				<span id="item-link" class="header-item {{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}/messages">{{itemTitle}}</a></span>
 			</span>
-			<div id="text">
+			<div id="text" class="markdown-content">
 				{{#markdown}}{{text}}{{/markdown}}
 			</div>
 		</div>
@@ -231,7 +236,7 @@
 					● <span><img src={{assigneeImageUrl this}} class="assignee-item" title="Assigned to {{assigneeUsername this}}"/></span>
 				{{/if}}
 			</div>
-			<div id="meta"> {{description}}</div>
+			<div id="meta"> {{truncateString description 80}}</div>
 			<div id="item-labels">
 				{{#each itemLabels}}
 					<span class="label-item" style="background-color:{{labelColor this}}">{{labelTitle this}}</span>

@@ -1,5 +1,13 @@
 if(Meteor.isClient) {
 
+	Template.registerHelper('truncateString', function (str, maxLength) {
+		if(str) {
+			return Ols.StringUtils.truncate(str, maxLength);
+		} else {
+			return str;
+		}
+	});
+
 	Template.registerHelper('itemTabActiveClass', function (item) {
 		return item && Session.get('activeItemTab') == item._id?'active':'';
 	});

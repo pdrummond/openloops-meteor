@@ -526,6 +526,9 @@ if(Meteor.isClient) {
 
 		tabBodyTemplate: function() {
 			switch(this.type) {
+				case Ols.Item.Tab.TAB_TYPE_ITEM_DESCRIPTION:
+					template = "itemDescription";
+					break;
 				case Ols.Item.Tab.TAB_TYPE_MESSAGE_HISTORY:
 					template = "messageHistory";
 					break;
@@ -543,6 +546,13 @@ if(Meteor.isClient) {
 					break;
 			}
 			return template;
+		}
+	});
+
+	Template.itemDescription.helpers({
+		itemDescription: function() {
+			var item = Ols.Item.getCurrent();
+			return item && item.description && item.description.length > 0 ? item.description : '*No Description*';
 		}
 	});
 
