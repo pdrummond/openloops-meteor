@@ -42,7 +42,7 @@ Ols.ServerMessage = {
 
 Ols.Message = {
 
-	insertClientMessage = function(attrs) {
+	insertClientMessage: function(attrs) {
 		var defaultAttrs = {
 			type: Ols.MSG_TYPE_CHAT,
 			createdAt: new Date().getTime(),
@@ -54,7 +54,7 @@ Ols.Message = {
 		var newMessageId = Ols.ClientMessage._insertRaw(newMessage);
 		newMessage._id = newMessageId;
 		return newMessage;
-	}
+	},
 
 	MSG_TYPE_CHAT: 'MSG_TYPE_CHAT',
 	MSG_TYPE_ACTIVITY: 'MSG_TYPE_ACTIVITY',

@@ -7,3 +7,11 @@ Meteor._debug = (function (super_meteor_debug) {
 		super_meteor_debug(error, info);
 	}
 })(Meteor._debug);
+
+if(Meteor.isClient) {
+	Tracker.autorun(function () {
+		var status = Meteor.status().status;
+		console.log("** STATUS CHANGE: " + status);
+		Session.set('connectionStatus', status);
+	});
+}

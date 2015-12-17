@@ -138,10 +138,10 @@ if(Meteor.isServer) {
 	Meteor.methods({
 		addDefaultProject: function() {
 			var defaultProjectId;
-			var defaultProject = Projects.findOne({defaultProject: true});
+			var defaultProject = Ols.Project.findOne({defaultProject: true});
 			if(defaultProject == null) {
 				console.log("creating new default project");
-				defaultProjectId = Projects.insert({
+				defaultProjectId = Ols.Project.insert({
 					title: "Default Project",
 					defaultProject:true
 				});
@@ -149,7 +149,7 @@ if(Meteor.isServer) {
 				console.log("Default project already exists");
 				defaultProjectId = defaultProject._id;
 			}
-			var numBoards = Boards.update({projectId: {$exists: false}}, {$set: {projectId: defaultProjectId}}, {multi:true});
+			var numBoards = Ols.Board.update({projectId: {$exists: false}}, {$set: {projectId: defaultProjectId}}, {multi:true});
 			var results = {
 				numBoards: numBoards
 			};
@@ -159,11 +159,11 @@ if(Meteor.isServer) {
 
 		recountProjectMessages: function() {
 			console.log("> recountProjectMessages");
-			Projects.find().forEach(function(project) {
+			Ols.Project.find().forEach(function(project) {
 				console.log("-- BEFORE num messages for project '" + project.title + "': " + project.numMessages);
-				var numMessages = ServerMessages.find({projectId: project._id}).count();
-				Projects.update(project._id, {$set: {numMessages: numMessages}});
-				project = Projects.findOne(project._id);
+				var numMessages = Ols.ServerMessage.find({projectId: project._id}).count();
+				Ols.Project.update(project._id, {$set: {numMessages: numMessages}});
+				project = Ols.Project.findOne(project._id);
 				console.log("-- AFTER num messages for project '" + project.title + "': " + project.numMessages);
 			});
 			console.log("< recountProjectMessages");
@@ -171,11 +171,11 @@ if(Meteor.isServer) {
 
 		recountBoardMessages: function() {
 			console.log("> recountBoardMessages");
-			Boards.find().forEach(function(board) {
+			Ols.Board.find().forEach(function(board) {
 				console.log("-- BEFORE num messages for board '" + board.title + "': " + board.numMessages);
-				var numMessages = ServerMessages.find({boardId: board._id}).count();
-				Boards.update(board._id, {$set: {numMessages: numMessages}});
-				board = Boards.findOne(board._id);
+				var numMessages = Ols.ServerMessage.find({boardId: board._id}).count();
+				Ols.Board.update(board._id, {$set: {numMessages: numMessages}});
+				board = Ols.Board.findOne(board._id);
 				console.log("-- AFTER num messages for board '" + board.title + "': " + board.numMessages);
 			});
 			console.log("< recountBoardMessages");
@@ -185,8 +185,8 @@ if(Meteor.isServer) {
 			console.log("> recountItemMessages");
 			Ols.Item.find({}).forEach(function(item) {
 				console.log("-- BEFORE num messages for item '" + item.title + "': " + item.numMessages);
-				var numMessages = ServerMessages.find({itemId: item._id}).count();
-				Items.update(item._id, {$set: {numMessages: numMessages}});
+				var numMessages = Ols.ServerMessage.find({itemId: item._id}).count();
+				Ols.Item.update(item._id, {$set: {numMessages: numMessages}});
 				item = Ols.Item.findOne(item._id);
 				console.log("-- AFTER num messages for item '" + item.title + "': " + item.numMessages);
 			});
@@ -216,7 +216,7 @@ if(Meteor.isServer) {
 					console.error("-- Item " + item._id + " has no projectId! Skipping...");
 				} else {
 					var pid = incrementCounter('counters', item.projectId);
-					Items.update(item._id, {$set: {pid: pid}});
+					Ols.Item.update(item._id, {$set: {pid: pid}});
 					item = Ols.Item.findOne(item._id);
 					console.log("-- New PID for item is " + item.pid);
 				}
@@ -228,12 +228,12 @@ if(Meteor.isServer) {
 			console.log("> setItemProjectIds");
 			Ols.Item.find({projectId: {$exists: false}}).forEach(function(item) {
 				console.log("-- Item " + item.title + " has no projectId");
-				var board = Boards.findOne(item.boardId);
+				var board = Ols.Board.findOne(item.boardId);
 				if(board == null) {
 					console.error("-- Item " + item._id + " has no board! Skipping...");
 				} else {
 					var projectId = board.projectId;
-					Items.update(item._id, {$set: {projectId: projectId}});
+					Ols.Item.update(item._id, {$set: {projectId: projectId}});
 					item = Ols.Item.findOne(item._id);
 					console.log("-- New project ID for item is " + item.projectId);
 				}
@@ -250,13 +250,13 @@ if(Meteor.isServer) {
 		removeAllLabels: function() {
 			Labels.remove({});
 			Ols.Item.find().forEach(function(item) {
-				Items.update(item._id, {$set: {labels: []}});
+				Ols.Item.update(item._id, {$set: {labels: []}});
 			});
 		},
 
 		addItemTabs: function() {
 			Ols.Item.find().forEach(function(item) {
-				Items.update(item._id, {$set: {tabs: [
+				Ols.Item.update(item._id, {$set: {tabs: [
 					{_id: 'messages', icon: 'fa-comments-o', label: "Messages", type: Ols.Item.Tab.TAB_TYPE_MESSAGE_HISTORY},
 					{_id: 'activity', icon: 'fa-exchange', label: "Activity", type: Ols.Item.Tab.TAB_TYPE_ACTIVITY_HISTORY},
 					{_id: Random.id(), icon: 'fa-check', label: "Todo List", type: Ols.Item.Tab.TAB_TYPE_CHECKLIST},
@@ -267,9 +267,9 @@ if(Meteor.isServer) {
 
 
 		addPrjToNewBoardActivityMsg: function() {
-			ServerMessages.find({type: Ols.MSG_TYPE_ACTIVITY, activityType: Ols.ACTIVITY_TYPE_NEW_BOARD}).forEach(function(activityMsg) {
-				var projectId = Boards.findOne(activityMsg.boardId).projectId;
-				ServerMessages.update(activityMsg._id, {$set: {projectId: projectId}});
+			Ols.ServerMessage.find({type: Ols.MSG_TYPE_ACTIVITY, activityType: Ols.ACTIVITY_TYPE_NEW_BOARD}).forEach(function(activityMsg) {
+				var projectId = Ols.Board.findOne(activityMsg.boardId).projectId;
+				Ols.ServerMessage.update(activityMsg._id, {$set: {projectId: projectId}});
 			});
 		}
 	})

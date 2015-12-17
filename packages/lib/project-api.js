@@ -1,4 +1,21 @@
 Ols.Project = {
+
+	find: function(selector, options) {
+	return Projects.find(selector, options);
+	},
+
+	findOne: function(selector, options) {
+		return Projects.findOne(selector, options);
+	},
+
+	insert: function(item, callback) {
+		return Projects.insert(item, callback);
+	},
+
+	update: function(selector, modifier, options, callback) {
+		return Projects.update(selector, modifier, options, callback);
+	},
+
 	/**
 		Returns the project for the current session
 	*/

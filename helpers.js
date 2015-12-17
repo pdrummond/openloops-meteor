@@ -169,7 +169,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.registerHelper('currentProjectId', function () {
-		var project = Projects.findOne(Session.get('currentProjectId'));
+		var project = Ols.Project.findOne(Session.get('currentProjectId'));
 		return project?project._id:null;
 	});
 
@@ -184,17 +184,17 @@ if(Meteor.isClient) {
 		if(item ==null) {
 			item = Ols.Item.findOne(Session.get('currentItemId'));
 		}
-		var project = Projects.findOne(item.projectId);
+		var project = Ols.Project.findOne(item.projectId);
 		return project?(project.key?project.key:project.title.substring(0, 3)):null;
 	});
 
 	Template.registerHelper('currentProjectKey', function () {
-		var project = Projects.findOne(Session.get('currentProjectId'));
+		var project = Ols.Project.findOne(Session.get('currentProjectId'));
 		return project?(project.key?project.key:project.title.substring(0, 3)):null;
 	});
 
 	Template.registerHelper('currentProjectTitle', function () {
-		var project = Projects.findOne(Session.get('currentProjectId'));
+		var project = Ols.Project.findOne(Session.get('currentProjectId'));
 		return project?project.title:'';
 	});
 

@@ -5,8 +5,17 @@ Package.describe({
 
 Package.onUse(function(api) {
 	api.versionsFrom('1.2.1');
-	api.use(['templating', 'ecmascript', 'ols:lib']);
-	api.addFiles('kernel.js', ['client', 'server']);
+	api.use(['templating', 'ecmascript', 'tracker', 'session', 'ols:lib']);
+	api.addFiles([
+		'kernel.js',
+		'components/dev-admin/dev-admin.html',
+		'components/dev-admin/dev-admin.js',
+	], ['client', 'server']);
+	api.addFiles([
+		'client/items.js',
+		'client/streams.js',
+		'client/notifications.js'
+	], 'client');
 	api.addFiles([
 		'server/messages.js',
 		'server/items.js',
