@@ -42,20 +42,6 @@ if(Meteor.isClient) {
 		});
 	});
 
-	OpenLoops.insertClientMessage = function(attrs) {
-		var defaultAttrs = {
-			type: Ols.MSG_TYPE_CHAT,
-			createdAt: new Date().getTime(),
-			createdBy: Meteor.user().username,
-			projectId: Session.get('currentProjectId'),
-			boardId: Session.get('currentBoardId'),
-		};
-		var newMessage = _.extend(defaultAttrs, attrs);
-		var newMessageId = ClientMessages._collection.insert(newMessage);
-		newMessage._id = newMessageId;
-		return newMessage;
-	}
-
 	OpenLoops.onSearchInput = function() {
 		var self = this;
 		if(this.searchInputKeyTimer) {

@@ -20,7 +20,7 @@ if(Meteor.isClient) {
 					e.preventDefault();
 					e.stopPropagation();
 					if(inputVal.length > 0) {
-						var newMessage = OpenLoops.insertClientMessage({
+						var newMessage = Ols.Message.insertClientMessage({
 							text:inputVal,
 							itemId: Session.get('currentItemId')
 						});

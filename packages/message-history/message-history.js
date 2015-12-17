@@ -30,7 +30,7 @@ if(Meteor.isClient) {
 		Streamy.on('sendMessage', function(incomingMessage) {
 			console.log(">>> RECEIVED SEND_MESSAGE STREAMY");
 			if(incomingMessage.createdBy != Meteor.user().username) {
-				OpenLoops.insertClientMessage(incomingMessage);
+				Ols.Message.insertClientMessage(incomingMessage);
 				if(Ols.HistoryManager.atBottom) {
 					Ols.HistoryManager.scrollBottom();
 				} else if(incomingMessage.itemId == Session.get('currentItemId')) {

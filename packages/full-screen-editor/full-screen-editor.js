@@ -19,7 +19,7 @@ Template.fullScreenEditor.events({
 
 	'click #create-message-button': function(e, t) {
 		var inputVal = t.find("#full-screen-editor-textarea").value;
-		var newMessage = OpenLoops.insertClientMessage({
+		var newMessage = Ols.Message.insertClientMessage({
 			text:inputVal,
 			itemId: Session.get('currentItemId')
 		});
