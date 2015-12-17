@@ -37,7 +37,15 @@ Ols.ServerMessage = {
 
 	insert: function(message, callback) {
 		return ServerMessages.insert(message, callback);
-	}
+	},
+
+	update: function(selector, modifier, options, callback) {
+		return ServerMessages.update(selector, modifier, options, callback);
+	},
+
+	remove: function(selector, callback) {
+		return ServerMessages.remove(selector, callback);
+	},
 }
 
 Ols.Message = {

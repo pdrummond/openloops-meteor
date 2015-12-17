@@ -83,7 +83,7 @@ Meteor.methods({
 			toBoard: Boards.findOne(toBoardId)
 		}, item);
 
-		var num = ServerMessages.update({itemId: itemId}, {$set: {boardId: toBoardId}}, {multi:true});
+		var num = Ols.ServerMessage.update({itemId: itemId}, {$set: {boardId: toBoardId}}, {multi:true});
 	},
 
 	toggleItemOpenStatus: function(itemId) {

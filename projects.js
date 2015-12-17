@@ -121,10 +121,10 @@ if(Meteor.isServer) {
 		},
 
 		deleteProject: function(projectId) {
-			Items.remove({projectId: projectId});
-			ServerMessages.remove({projectId: projectId});
-			Boards.remove({projectId: projectId});
-			Projects.remove(projectId);
+			Ols.Item.remove({projectId: projectId});
+			Ols.ServerMessage.remove({projectId: projectId});
+			Ols.Board.remove({projectId: projectId});
+			Ols.Project.remove({projectId: projectId});
 		}
 	})
 }

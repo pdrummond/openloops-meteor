@@ -16,6 +16,10 @@ Ols.Item = {
 		return Items.update(selector, modifier, options, callback);
 	},
 
+	remove: function(selector, callback) {
+		return Items.remove(selector, callback);
+	},
+
 	getCurrent: function() {
 		return Items.findOne(Session.get('currentItemId'));
 	},

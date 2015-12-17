@@ -16,6 +16,10 @@ Ols.Board = {
 		return Boards.update(selector, modifier, options, callback);
 	},
 
+	remove: function(selector, callback) {
+		return Boards.remove(selector, callback);
+	},
+
 	getCurrent: function() {
 		return Boards.findOne(Session.get('currentBoardId'));
 	},

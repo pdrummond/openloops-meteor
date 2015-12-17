@@ -16,6 +16,10 @@ Ols.Project = {
 		return Projects.update(selector, modifier, options, callback);
 	},
 
+	remove: function(selector, callback) {
+		return Projects.remove(selector, callback);
+	},
+
 	/**
 		Returns the project for the current session
 	*/
