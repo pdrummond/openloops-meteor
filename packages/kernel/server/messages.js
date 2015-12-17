@@ -62,7 +62,7 @@ Meteor.methods({
 	},
 
 	saveMessage: function(newMessage) {
-		console.trace("saveMessage: " + JSON.stringify(newMessage, null, 4));
+		console.log("saveMessage: " + JSON.stringify(newMessage));
 		check(newMessage, {
 			_id: Match.Optional(String),
 			projectId: String,
@@ -70,6 +70,9 @@ Meteor.methods({
 			type: String,
 			text: Match.Optional(String),
 			activityType: Match.Optional(String),
+			webHookType: Match.Optional(String),
+			eventType: Match.Optional(String),
+			event: Match.Optional(Match.Any),
 			createdAt: Match.Optional(Number),
 			createdBy: Match.Optional(String),
 			issueType: Match.Optional(String),
@@ -77,9 +80,10 @@ Meteor.methods({
 			itemId: Match.Optional(Match.Any), //FIXME - item should be enough - need to get rid of other item fields here.
 			itemType: Match.Optional(String),
 			toBoard: Match.Optional(Match.Any),
-			fromBoard: Match.Optional(Match.Any)
+			fromBoard: Match.Optional(Match.Any),
+			activityImageUrl: Match.Optional(String)
 		});
-		//console.log("> saveMessage: " + JSON.stringify(newMessage));
+		console.log("check passed");
 		newMessage.createdAt = new Date().getTime();
 		newMessage.createdBy = newMessage.createdBy || Meteor.user().username;
 
@@ -91,8 +95,8 @@ Meteor.methods({
 				$set: {updatedAt: new Date().getTime()},
 			});
 		}
-		Boards.update(newMessage.boardId, {$inc: {numMessages: 1}});
-		Projects.update(newMessage.projectId, {$inc: {numMessages: 1}});
+		Ols.Board.update(newMessage.boardId, {$inc: {numMessages: 1}});
+		Ols.Project.update(newMessage.projectId, {$inc: {numMessages: 1}});
 		Meteor.call('detectMentionsInMessage', newMessage);
 	},
 
