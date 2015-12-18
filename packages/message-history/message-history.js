@@ -72,6 +72,10 @@ if(Meteor.isClient) {
 
 	Template.messageHistory.helpers({
 
+		showEmptyMsgClass: function() {
+			return Ols.HistoryManager.isLoadingInitialMessages()?'hide':'';
+		},
+
 		noMessages: function() {
 			var filter = {};
 			var itemId = Session.get('currentItemId');

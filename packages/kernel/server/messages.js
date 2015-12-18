@@ -33,7 +33,7 @@ Meteor.methods({
 			limit: Ols.MESSAGE_PAGE_SIZE,
 			sort: {createdAt: -1}
 		});
-		//Meteor._sleepForMs(2000);
+		Meteor._sleepForMs(2000);
 		return messages.fetch();
 	},
 

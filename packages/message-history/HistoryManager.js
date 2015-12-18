@@ -1,5 +1,5 @@
 Ols.HistoryManager = {
-	loadingInitialMessages: false,
+	loadingInitialMessages: new ReactiveVar(false),
 	loadingMessages: false,
 	projectId: null,
 	boardId: null,
@@ -52,19 +52,21 @@ Ols.HistoryManager = {
 		});
 	},
 
+	isLoadingInitialMessages: function() {
+		return this.loadingInitialMessages.get();
+	},
+
 	loadInitialMessages: function() {
 		var self = this;
-		if(this.loadingInitialMessages == false) {
-			this.loadingInitialMessages = true;
+		if(this.loadingInitialMessages.get() == false) {
+			$("#messageHistory .empty-msg").hide();
+			this.loadingInitialMessages.set(true);
 			this.loadingMessages = true;
 			//If load takes a while, show busy
 			this.busyTimeout = setTimeout(function() {
 				//console.log("SHOWING BUSY")
 				self.showBusyIcon();
 			}, 300);
-
-			console.log("> loadInitialMessages");
-
 
 			Ols.ClientMessage._removeAllRaw();
 			//console.log("CLIENT MESSAGES DELETED: Num client msgs: " + Ols.ClientMessage.find().count());
@@ -77,7 +79,7 @@ Ols.HistoryManager = {
 					self.scrollBottom();
 					self.hideBusyIcon();
 					self.loadingMessages = false;
-					self.loadingInitialMessages = false;
+					self.loadingInitialMessages.set(false);
 				}
 			});
 		}
@@ -116,7 +118,7 @@ Ols.HistoryManager = {
 		console.log("> moreMessagesOnServer");
 		console.log("    boardId: " + this.boardId);
 		console.log("    itemId: " + this.itemId);
-		if(!this.loadingInitialMessages) {
+		if(!this.loadingInitialMessages.get()) {
 			var clientMsgCount = Ols.ClientMessage._countRaw();
 			console.log("    clientMsgCount: " + clientMsgCount);
 			var serverMsgCount = -1;
