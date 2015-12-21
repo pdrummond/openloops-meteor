@@ -36,7 +36,6 @@ html:not(.touch) {
 }
 
 #app #top-banner {
-	padding-top:10px;
 	height:top-banner-height;
 	background-color: #455a64;
 
@@ -89,6 +88,7 @@ html:not(.touch) {
 #app {
 	height 100%
 	.right-sidebar {
+		transition: all 0.5s ease;
 		height "calc(100% - %s)" % (top-baner-height + header-height);
 		top top-banner-height + header-height + 20;
 		right 0
@@ -110,6 +110,7 @@ html:not(.touch) {
 	}
 
 	.left-sidebar {
+		transition: all 0.5s ease;
 		height "calc(100% - %s)" % top-baner-height;
 		top top-banner-height;
 		left 0
@@ -157,6 +158,9 @@ html:not(.touch) {
 		}
 	}
 	.main {
+		position:relative;
+		top:0;
+		transition: all 0.5s ease;
 		height 100%
 		padding-left left-sidebar-width
 		padding-right right-sidebar-width
@@ -1106,6 +1110,28 @@ footer
 		color:black;
 	}
 
+	#explore-link {
+		cursor:pointer;
+		padding: 5px;
+		background-color: #3B454A;
+		color: #fff;
+		width: 30px;
+		text-align: center;
+		vertical-align: center;
+		height: 35px;
+		margin: 10px;
+		border-radius: 5px;
+
+		i {
+			font-size: 2em;
+			margin-top: 3px;
+		}
+	}
+
+	#explore-link.active {
+		background-color: orange;
+	}
+
 	#create-link {
 		cursor:pointer;
 		padding: 5px;
@@ -1476,4 +1502,46 @@ border-radius: 0;
 
 #active-item-msg {
 	float:right;
+}
+
+
+.explore-page {
+	position: absolute;	
+    top: top-banner-height + 10;
+    height: 100%;
+    width:900px;
+	margin:auto auto;
+	padding-left: 300px;
+	padding-right: 30px;
+	overflow-y:auto;
+
+	h1,h2 {
+		margin-top:50px;
+		font-weight:100;
+		color: orange;
+	}
+}
+
+#box-list {
+	display:flex;
+	width:100%;
+	overflow-x:auto;
+	margin:0;
+	padding:0;
+
+}
+
+.box-item {
+	list-style-type:none;
+	width:200px;
+	background-color:whitesmoke;
+	text-align:center;
+	vertical-align:middle;
+	margin-right:20px;
+	padding:40px;
+}
+
+.box-item:hover {
+	cursor:pointer;
+	background-color: lightgray;
 }

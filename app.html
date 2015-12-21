@@ -6,40 +6,6 @@
 	{{/if}}
 </template>
 
-<template name="topBanner">
-	{{> fullScreenEditor}}
-	{{> boardChooserMenu}}
-	<div id="top-banner">
-		<div class="left">
-			{{> openLoopsEye}}
-			<span style="margin-left:10px" id="main-title">
-				<span class="project-key">{{headerProjectTitle}}</span><br/>
-				<a href="" class="project-title">{{headerBoardTitle}}</a>
-				<i id="boards-dropdown-button" class="fa fa-caret-down" style="position:relative;top:-5px;left:5px"></i>
-			</span>
-			<div id="top-header">
-				<input id="search-input" class="search-input" placeholder="Type here to search">
-				<a id="create-link"><i class="fa fa-plus fx-2x"></i></a>
-			</div>
-		</div>
-		<div class="right">
-			<div style="position:relative;top:-35px">
-				<div id="logged-in-user"><strong>{{currentUser.username}}</strong></div>
-				{{#if currentUser}}
-					<a href="" id="logout-link" style="display:block;text-align:right;color:white;font-size:12px">logout</a>
-				{{/if}}
-			</div>
-		</div>		
-	</div>
-</template>
-
-<template name="openLoopsEye">
-	<a href="/">
-		<img src="/images/openloops-o.png" style="position:relative;top:8px;left:10px;width:30px"/>
-		<div id="connection-status" class="{{connectionStatus}}" title="Server {{connectionStatus}}"></div>
-	</a>
-</template>
-
 <template name = "dashboardFeedPage">
 	{{#onlyIfLoggedIn}}
 		{{> topBanner}}
@@ -52,6 +18,7 @@
 <template name="feedPage">
 	{{#onlyIfProjectAccess}}
 		{{> topBanner}}
+		{{> explorePage}}
 		{{> leftSidebar}}
 		{{> feed}}
 		{{> rightSidebar}}

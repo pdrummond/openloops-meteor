@@ -3,6 +3,10 @@ OpenLoops = {};
 
 if(Meteor.isClient) {
 
+	Meteor.startup(function() {
+		Session.set('exploreMode', false);
+	});
+
 	/*OpenLoops.onSearchInput = function() {
 		var self = this;
 		if(this.searchInputKeyTimer) {
@@ -103,68 +107,6 @@ if(Meteor.isClient) {
 			FlowRouter.go("/");
 		}
 	});
-
-	Template.topBanner.events({
-
-		'click .project-breadcrumb': function() {
-			FlowRouter.go("/project/" + Session.get('currentProjectId'));
-		},
-
-		'click #boards-dropdown-button': function() {
-			$("#board-chooser-menu").slideToggle();
-		},
-
-		'click #create-link': function() {
-			Ols.Router.showCreateItemPage();
-		}
-	});
-
-	Template.topBanner.helpers({
-
-		headerProjectTitle: function() {
-			var project = Projects.findOne(Session.get('currentProjectId'));
-			return project?project.title:'';
-		},
-
-		headerBoardTitle: function() {
-			var board = Boards.findOne(Session.get('currentBoardId'));
-			return board?board.title:'';
-		},
-
-		filterLinkActiveClass: function(filterLink) {
-			var active = false;
-			var query = Session.get('filterQuery');
-			switch (filterLink) {
-				case 'all-link':
-				active = query == null || query == '';
-				break;
-				case 'issues-link':
-				active = query == 'type:issue open:true';
-				break;
-				case 'bugs-link':
-				active = query == 'type:bug';
-				break;
-				case 'discussions-link':
-				active = query == 'type:discussion';
-				break;
-				case 'articles-link':
-				active = query == 'type:article';
-				break;
-				case 'assigned-to-me-link':
-				active = query == 'assignee:' + Meteor.user().username + " open:true";
-				break;
-				case 'now-issues-link':
-				active = query == 'label:now type:issue';
-				break;
-				case 'closed-link':
-				active = query == 'closed:true';
-				break;
-			}
-			return active?"active":"";
-		}
-
-	});
-
 
 	/*
 	var previousMessageDate = null;
