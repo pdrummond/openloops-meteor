@@ -3,7 +3,7 @@ OpenLoops = {};
 
 if(Meteor.isClient) {
 
-	OpenLoops.onSearchInput = function() {
+	/*OpenLoops.onSearchInput = function() {
 		var self = this;
 		if(this.searchInputKeyTimer) {
 			console.log("CANCELLED KEY TIMER");
@@ -12,7 +12,7 @@ if(Meteor.isClient) {
 		this.searchInputKeyTimer = setTimeout(function() {
 			Session.setPersistent('filterQuery', $('#search-input').val());
 		}, 500);
-	}
+	}*/
 
 	OpenLoops.removeSidebarNewMessages = function(itemId) {
 		var $itemMsgCount;
@@ -116,10 +116,6 @@ if(Meteor.isClient) {
 
 		'click #create-link': function() {
 			Ols.Router.showCreateItemPage();
-		},
-
-		'keyup #search-input': function() {
-			OpenLoops.onSearchInput();
 		},
 
 		'click #all-link': function() {

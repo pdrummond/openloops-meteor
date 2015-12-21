@@ -82,6 +82,9 @@ if(Meteor.isClient) {
 			console.log("labelListItem click");
 			Session.set('filterQuery', 'label:' + this.title + " open:true");
 			Session.set('leftSidebarActiveTab', 'items-tab');
+			Session.set('filterSentence', 'Showing all <i class="fa fa-tag" style="margin-left:5px;color:' +
+				this.color + '"></i> <strong style="margin-right:5px;color:' + this.color + '">' + this.title + '</strong> items' +
+				' <i id="clear-active-filter-icon" class="fa fa-times" title="Clear filter"></i>');
 		},
 
 		'click #delete-label-link': function() {

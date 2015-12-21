@@ -6,8 +6,8 @@
 			<a id="filters-tab" class="{{activeTabClass 'filters-tab'}} tab"> <i class="fa fa-filter"></i> Filters</a>
 		</div>
 		<div id="items-tab" class="tab-body {{activeTabClass 'items-tab'}}">
-			<div class="filter-sentence">
-				<i class="fa fa-eye-slash"></i> Showing all items. <span id="active-item-msg" class="{{showActiveItemMsgClass}}"><strong>#{{currentItemKey}}</strong> is active <i id="clear-active-item-icon" class="fa fa-times" title="Clear active item"></i></span>
+			<div class="filter-sentence-wrapper">
+				<span id="filter-sentence">{{{filterSentence}}}</span> <span id="active-item-msg" class="{{showActiveItemMsgClass}}"><strong>#{{currentItemKey}}</strong> is active <i id="clear-active-item-icon" class="fa fa-times" title="Clear active item"></i></span>
 			</div>
 			{{> itemList}}
 		</div>

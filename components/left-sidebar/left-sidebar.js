@@ -27,6 +27,15 @@ if(Meteor.isClient) {
 
 	Template.leftSidebar.helpers({
 
+		filterSentence: function() {
+			var str = '<i class="fa fa-circle"></i> Showing all items.';
+			var filterSentence = Session.get('filterSentence');
+			if(filterSentence != null) {
+				str = filterSentence;
+			}
+			return str;
+		},
+
 		noItems: function() {
 			return Ols.Item.find(OpenLoops.getFilterQuery(Session.get('filterQuery'))).count() == 0;
 		},
@@ -99,6 +108,11 @@ if(Meteor.isClient) {
 
 		'click #clear-active-item-icon': function() {
 			Ols.Router.showBoardMessages();
+		},
+
+		'click #clear-active-filter-icon': function() {
+			Session.set('filterQuery', null);
+			Session.set('filterSentence', null);			
 		}
 	});
 }
