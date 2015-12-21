@@ -93,6 +93,10 @@ if(Meteor.isClient) {
 			Session.set('leftSidebarActiveTab', 'labels-tab');
 		},
 
+		'click .tabs-header #filters-tab': function() {
+			Session.set('leftSidebarActiveTab', 'filters-tab');
+		},
+
 		'click #board-item': function() {
 			Ols.Router.showHomeMessages();
 		},
@@ -112,7 +116,7 @@ if(Meteor.isClient) {
 
 		'click #clear-active-filter-icon': function() {
 			Session.set('filterQuery', null);
-			Session.set('filterSentence', null);			
+			Session.set('filterSentence', null);
 		}
 	});
 }

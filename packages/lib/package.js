@@ -22,6 +22,7 @@ Package.onUse(function(api) {
 	  'sub-item-api.js',
 	  'user-api.js',
 	  'router-api.js',
+	  'filter-api.js',
 	  'message-history-api.js'
   ]);
   api.export(['Ols', 'Streamy']);

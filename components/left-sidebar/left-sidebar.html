@@ -7,12 +7,15 @@
 		</div>
 		<div id="items-tab" class="tab-body {{activeTabClass 'items-tab'}}">
 			<div class="filter-sentence-wrapper">
-				<span id="filter-sentence">{{{filterSentence}}}</span> <span id="active-item-msg" class="{{showActiveItemMsgClass}}"><strong>#{{currentItemKey}}</strong> is active <i id="clear-active-item-icon" class="fa fa-times" title="Clear active item"></i></span>
+				<span id="filter-sentence">{{{filterSentence}}}</span> <span id="active-item-msg" class="{{showActiveItemMsgClass}}">#{{currentItemKey}} is active <i id="clear-active-item-icon" class="fa fa-times" title="Clear active item"></i></span>
 			</div>
 			{{> itemList}}
 		</div>
 		<div id="labels-tab" class="tab-body {{activeTabClass 'labels-tab'}}">
 			{{> labelsList}}
+		</div>
+		<div id="filters-tab" class="tab-body {{activeTabClass 'filters-tab'}}">
+			{{> filterList}}
 		</div>
 	</div>
 </template>

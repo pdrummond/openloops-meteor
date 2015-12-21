@@ -116,38 +116,6 @@ if(Meteor.isClient) {
 
 		'click #create-link': function() {
 			Ols.Router.showCreateItemPage();
-		},
-
-		'click #all-link': function() {
-			Session.set('filterQuery', '');
-		},
-
-		'click #issues-link': function() {
-			Session.set('filterQuery', 'type:issue open:true');
-		},
-
-		'click #bugs-link': function() {
-			Session.set('filterQuery', 'type:bug');
-		},
-
-		'click #discussions-link': function() {
-			Session.set('filterQuery', 'type:discussion');
-		},
-
-		'click #articles-link': function() {
-			Session.set('filterQuery', 'type:article');
-		},
-
-		'click #now-issues-link': function() {
-			Session.set('filterQuery', 'label:now type:issue');
-		},
-
-		'click #assigned-to-me-link': function() {
-			Session.set('filterQuery', 'assignee:' + Meteor.user().username + " open:true");
-		},
-
-		'click #closed-link': function() {
-			Session.set('filterQuery', 'closed:true');
 		}
 	});
 
