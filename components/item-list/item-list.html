@@ -1,0 +1,15 @@
+<template name="itemList">	
+	<ul class="item-list">
+		{{#if noItems}}
+		{{#if noFilter}}
+		<p class="empty-msg">No items found. Click <a href="" id="new-item-link">here</a> to create a new item</p>
+		{{else}}
+		<p class="empty-msg">No items found using current filter.  Click <a href="" id="clear-filter-link">here</a> to clear filter</p>
+		{{/if}}
+		{{else}}
+		{{#each items}}
+		{{> itemItemView}}
+		{{/each}}
+		{{/if}}
+	</ul>
+</template>
