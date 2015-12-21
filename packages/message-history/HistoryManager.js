@@ -59,7 +59,6 @@ Ols.HistoryManager = {
 	loadInitialMessages: function() {
 		var self = this;
 		if(this.loadingInitialMessages.get() == false) {
-			$("#messageHistory .empty-msg").hide();
 			this.loadingInitialMessages.set(true);
 			this.loadingMessages = true;
 			//If load takes a while, show busy
