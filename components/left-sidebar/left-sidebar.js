@@ -59,6 +59,10 @@ if(Meteor.isClient) {
 
 		isBoardItemActive: function() {
 			return Session.get('currentItemId')?'':'active';
+		},
+
+		showActiveItemMsgClass: function() {
+			return Session.get('currentItemId')?'':'hide';
 		}
 	});
 
@@ -91,6 +95,10 @@ if(Meteor.isClient) {
 		'click #back-arrow-link': function() {
 			Session.set('showSidebarTabs', true);
 			Session.set('filterQuery', null);
+		},
+
+		'click #clear-active-item-icon': function() {
+			Ols.Router.showBoardMessages();
 		}
 	});
 }

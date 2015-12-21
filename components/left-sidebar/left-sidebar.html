@@ -3,17 +3,11 @@
 		<div class="tabs-header">
 			<a id="items-tab" class="{{activeTabClass 'items-tab'}} tab"> <i class="fa fa-circle"></i> Items</a>
 			<a id="labels-tab" class="{{activeTabClass 'labels-tab'}} tab"> <i class="fa fa-tag"></i> Labels</a>
+			<a id="filters-tab" class="{{activeTabClass 'filters-tab'}} tab"> <i class="fa fa-filter"></i> Filters</a>
 		</div>
 		<div id="items-tab" class="tab-body {{activeTabClass 'items-tab'}}">
-			<div id="board-item">
-				<a class="item {{isBoardItemActive}}">
-					<i id="type-icon" class="fa fa-th-large" style="color:black"></i>
-					<div id="content">
-						Activity Feed
-					</div>
-					<div class="item-msg-count" data-msg-count="0">
-					</div>
-				</a>
+			<div class="filter-sentence">
+				<i class="fa fa-eye-slash"></i> Showing all items. <span id="active-item-msg" class="{{showActiveItemMsgClass}}"><strong>#{{currentItemKey}}</strong> is active <i id="clear-active-item-icon" class="fa fa-times" title="Clear active item"></i></span>
 			</div>
 			{{> itemList}}
 		</div>

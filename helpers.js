@@ -118,6 +118,21 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.registerHelper('currentItemKey', function () {
+		var currentItemKey = '??';
+		var currentItemId = Session.get("currentItemId");
+		if(currentItemId) {
+			var currentItem = Ols.Item.findOne(currentItemId);
+			if(currentItem) {
+				var project = Ols.Project.findOne(currentItem.projectId);
+				if(project != null) {
+					currentItemKey = project.key + "-" + currentItem.pid;
+				}
+			}
+		}
+		return currentItemKey;
+	});
+
 	Template.registerHelper('currentItemTitle', function () {
 		var currentItemTitle = '';
 		var currentItemId = Session.get("currentItemId");
