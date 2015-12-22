@@ -46,18 +46,6 @@ if(Meteor.isClient) {
 		}
 	});
 
-	FlowRouter.route('/project/:projectId', {
-		name: 'projectMessages',
-		action: function(params, queryParams) {
-			Session.set('currentProjectId', params.projectId);
-			Session.set('currentBoardId', null);
-			Session.set('currentItemId', null);
-			BlazeLayout.render("app", {currentPage: "feedPage"});
-			Session.set('numIncomingMessages', 0);
-			OpenLoops.removeSidebarNewMessages();
-		}
-	});
-
 	FlowRouter.route('/project/:projectId/board/:boardId', {
 		name: 'boardMessages',
 		action: function(params, queryParams) {

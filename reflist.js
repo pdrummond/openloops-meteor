@@ -79,7 +79,7 @@ if(Meteor.isClient) {
 			var projectKey = '???';
 			var item = Ols.Item.findOne(this.refItemId);
 			if(item) {
-				var project = Projects.findOne(item.projectId);
+				var project = Ols.Project.findOne(item.projectId);
 				if(project) {
 					projectKey = project.key;
 				}

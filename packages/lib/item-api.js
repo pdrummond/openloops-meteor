@@ -1,6 +1,7 @@
 Ols.Item = {
 
 	find: function(selector, options) {
+		selector = selector || {};
 		return Items.find(selector, options);
 	},
 

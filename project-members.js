@@ -30,7 +30,7 @@ if(Meteor.isClient) {
 if(Meteor.isClient) {
 	Template.projectMembersList.helpers({
 		projectMembers: function() {
-			var project = Projects.findOne(Session.get('currentProjectId'))
+			var project = Ols.Project.findOne(Session.get('currentProjectId'))
 			return project && project.members?project.members:[];
 		}
 	});
@@ -58,7 +58,7 @@ if(Meteor.isClient) {
 	Template.editProjectMemberForm.helpers({
 		currentProjectMember: function() {
 			var result = {};
-			var project = Projects.findOne(Session.get('currentProjectId'));
+			var project = Ols.Project.findOne(Session.get('currentProjectId'));
 			if (project && project.members) {
 				var member = _.findWhere(project.members, {username: Session.get('currentProjectMemberUsername')});
 				if(member != null) {
@@ -70,7 +70,7 @@ if(Meteor.isClient) {
 
 		isSelectedRole: function(role) {
 			var result = '';
-			var project = Projects.findOne(Session.get('currentProjectId'));
+			var project = Ols.Project.findOne(Session.get('currentProjectId'));
 			if (project && project.members) {
 				var member = _.findWhere(project.members, {username: Session.get('currentProjectMemberUsername')});
 				result = member.role == role ? 'selected':'';
@@ -92,30 +92,4 @@ if(Meteor.isClient) {
 			});
 		}
 	})
-}
-
-if(Meteor.isServer) {
-
-	Meteor.methods({
-
-		insertProjectMember: function(projectId, member) {
-			if(Projects.findOne({members: member.username}) != null) {
-				throw new Meteor.Error("insert-project-member-error-001", 'Member ' + member.username + ' already exists');
-			}
-			Projects.update(projectId, {$addToSet: {members: member}});
-		},
-
-		updateProjectMember: function(projectId, projectMemberUsername, member) {
-			Projects.update({_id: projectId, 'members.username': projectMemberUsername}, {$set: {'members.$': member}});
-		},
-
-		removeProjectMember: function(projectId, projectMemberUsername) {
-			console.log("removeProjectMember projectId: "+ projectId + ", username: " + projectMemberUsername);
-			var updates = Projects.update(projectId, {$pull: {members: {username: projectMemberUsername}}});
-			console.log("removeProjectMember numUpdates: " + updates);
-		}
-	});
-
-
-
 }

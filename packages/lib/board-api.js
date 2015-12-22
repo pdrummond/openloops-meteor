@@ -1,7 +1,8 @@
 Ols.Board = {
 
 	find: function(selector, options) {
-	return Boards.find(selector, options);
+		selector = selector || {};
+		return Boards.find(selector, options);
 	},
 
 	findOne: function(selector, options) {

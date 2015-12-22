@@ -98,7 +98,7 @@ if(Meteor.isClient) {
 		},
 
 		'click #board-item': function() {
-			Ols.Router.showHomeMessages();
+			Ols.Router.showBoardMessages();
 		},
 
 		'click #search-link': function() {

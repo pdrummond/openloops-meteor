@@ -20,6 +20,7 @@ Package.onUse(function(api) {
 		'server/messages.js',
 		'server/items.js',
 		'server/filters.js',
-		'server/users.js'
+		'server/users.js',
+		'server/projects.js'
 	], 'server');
 });

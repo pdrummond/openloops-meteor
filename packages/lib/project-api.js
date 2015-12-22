@@ -1,7 +1,8 @@
 Ols.Project = {
 
 	find: function(selector, options) {
-	return Projects.find(selector, options);
+		selector = selector || {};
+		return Projects.find(selector, options);
 	},
 
 	findOne: function(selector, options) {

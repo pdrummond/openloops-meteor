@@ -1,23 +1,13 @@
 if(Meteor.isClient) {
 
+	Template.topBanner.onCreated(function() {
+		Ols.Explore.initExploreMode(this);
+	});
+
 	Template.topBanner.events({
 
 		'click #explore-link': function() {
-			var exploreMode = Session.get('exploreMode');
-			Session.set('exploreMode', !exploreMode);
-			if(exploreMode == true) {
-				$("#explore-link").removeClass("active");
-				$(".explore-page").css({opacity:'0', 'z-index':'0'});
-				$(".main").css({'opacity':'1'});
-				$(".right-sidebar").css({'opacity':'1'});
-				$(".left-sidebar").css({'opacity':'1'});
-			} else {
-				$("#explore-link").addClass("active");
-				$(".main").css({'opacity':'0'});
-				$(".right-sidebar").css({'opacity':'0'});
-				$(".left-sidebar").css({'opacity':'0'});
-				$(".explore-page").css({opacity:'1', 'z-index':'999999999'});
-			}
+			var exploreMode = Ols.Explore.toggleExploreMode();
 		},
 
 		'click .project-breadcrumb': function() {
@@ -36,7 +26,7 @@ if(Meteor.isClient) {
 	Template.topBanner.helpers({
 
 		headerProjectTitle: function() {
-			var project = Projects.findOne(Session.get('currentProjectId'));
+			var project = Ols.Project.findOne(Session.get('currentProjectId'));
 			return project?project.title:'';
 		},
 

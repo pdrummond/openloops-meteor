@@ -3,18 +3,19 @@ if(Meteor.isClient) {
 	Template.projectList.helpers({
 		projects: function() {
 			if(Ols.User.userIsAdmin()) {
-				return Projects.find();
+				return Ols.Project.find();
 			} else {
-				return Projects.find({'members.username': Meteor.user().username});
+				return Ols.Project.find({'members.username': Meteor.user().username});
 			}
+			return Ols.Project.find();
 		},
 
 		projectsListEmpty: function() {
 			var projects;
 			if(Ols.User.userIsAdmin()) {
-				projects = Projects.find();
+				projects = Ols.Project.find();
 			} else {
-				projects = Projects.find({'members.username': Meteor.user().username});
+				projects = Ols.Project.find({'members.username': Meteor.user().username});
 			}
 			return projects.count() == 0;
 		}
@@ -31,7 +32,7 @@ if(Meteor.isClient) {
 	Template.editProjectForm.helpers({
 		currentProject: function() {
 			console.log("current project id: " + Session.get('currentProjectId'));
-			var project = Projects.findOne(Session.get('currentProjectId'));
+			var project = Ols.Project.findOne(Session.get('currentProjectId'));
 			return project?project:{};
 		}
 	});
@@ -76,7 +77,7 @@ if(Meteor.isClient) {
 			e.preventDefault();
 			var title = $("#deleteProjectForm input[name='project-title']").val();
 			var currentProjectId = Session.get('currentProjectId');
-			var project = Projects.findOne(currentProjectId);
+			var project = Ols.Project.findOne(currentProjectId);
 			if(title != project.title) {
 				Ols.Error.showError("That name doesn't match the title of the project");
 			} else {
@@ -90,80 +91,4 @@ if(Meteor.isClient) {
 			}
 		}
 	});
-}
-
-Projects = new Meteor.Collection("projects");
-
-if(Meteor.isServer) {
-
-	Meteor.publish("projects", function() {
-		return Projects.find();
-	});
-
-	Meteor.methods({
-
-		insertProject: function(newProject) {
-			check(newProject, {
-				title: String,
-				key: String,
-				description: Match.Optional(String),
-				defaultBoardId: Match.Optional(String),
-			});
-
-			if(newProject.key.length == 0) {
-				throw new Meteor.Error("insert-project-failure-001", "Project key cannot be empty");
-			}
-
-			newProject.key = newProject.key.toUpperCase();
-
-			if(Projects.findOne({key:newProject.key}) != null) {
-				throw new Meteor.Error("insert-project-failure-002", "Project with key '" + newProject.key + "' already exists");
-			}
-
-			var now = new Date().getTime();
-			newProject = _.extend({
-				createdAt: now,
-				createdBy: Meteor.user().username,
-				updatedAt: now,
-				members: [],
-				numMessages: 0
-			}, newProject);
-
-			var projectId = Projects.insert(newProject);
-			return projectId;
-		},
-
-		updateProject: function(projectId, attrs) {
-			check(projectId, String);
-			check(attrs, {
-				title: String,
-				key: String,
-				description: Match.Optional(String),
-				defaultBoardId: Match.Optional(String)
-			});
-			var project = Projects.findOne(projectId);
-
-			if(attrs.key != project.key) {
-
-				if(attrs.key.length == 0) {
-					throw new Meteor.Error("insert-project-failure-001", "Project key cannot be empty");
-				}
-
-				attrs.key = attrs.key.toUpperCase();
-
-				if(Projects.findOne({key:attrs.key}) != null) {
-					throw new Meteor.Error("insert-project-failure-002", "Project with key '" + attrs.key + "' already exists");
-				}
-			}
-
-			Projects.update(projectId, {$set: attrs});
-		},
-
-		deleteProject: function(projectId) {
-			Ols.Item.remove({projectId: projectId});
-			Ols.ServerMessage.remove({projectId: projectId});
-			Ols.Board.remove({projectId: projectId});
-			Ols.Project.remove(projectId);
-		}
-	})
 }

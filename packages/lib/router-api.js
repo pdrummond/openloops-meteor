@@ -1,17 +1,8 @@
 Ols.Router = {
 
-	showHomeMessages: function() {
-		var boardId = Session.get('currentBoardId');
-		var queryParams = this._getQueryParams();
-		if(boardId) {
-			FlowRouter.go('boardMessages', {projectId: Session.get('currentProjectId'), boardId: boardId}, queryParams);
-		} else {
-			FlowRouter.go('dashboardMessages', {}, queryParams);
-		}
-	},
-
-	showBoardMessages: function() {
-		return this.showHomeMessages(); //FIXME: Get rid of 'showHomeMessages and just use this name going forward.
+	showBoardMessages: function(boardId) {
+		boardId = boardId || Session.get('currentBoardId');
+		FlowRouter.go('boardMessages', {projectId: Session.get('currentProjectId'), boardId: boardId}, this._getQueryParams());
 	},
 
 	showItemMessages: function(item) {

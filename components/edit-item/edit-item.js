@@ -89,7 +89,7 @@ if(Meteor.isClient) {
 		},
 		'click #cancel-button': function(e) {
 			e.preventDefault();
-			Ols.Router.showHomeMessages();
+			Ols.Router.showBoardMessages();
 		},
 
 		'click #save-button': function(e, template) {

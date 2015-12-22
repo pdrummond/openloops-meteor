@@ -1,25 +1,32 @@
 <template name="explorePage">
 	<div class="explore-page" style="opacity:0">
-		<h1>Explore OpenLoops</h1>
-		<h2>Your Projects</h2>
+		<h1>Explore</h1>
+		<h2>{{currentProjectTitle}}</h2>
 		<ul id="box-list">
-			<li class="box-item">Project One</li>
-			<li class="box-item">Project Two</li>
-			<li class="box-item">Project Three</li>
-			<li class="box-item">Project Four</li>
+			{{#each currentProjectBoards}}
+				{{> boardBoxItem}}
+			{{/each}}
+		</ul>
+		<h2>All Your Projects</h2>
+		<ul id="box-list">
+			{{#each allUserProjects}}
+				{{> projectBoxItem}}
+			{{/each}}
 		</ul>
 		<h2>Your Favourite Boards</h2>
-		<ul id="box-list">
-			<li class="box-item">Board One</li>
-			<li class="box-item">Board Two</li>
-			<li class="box-item">Board Three</li>
-			<li class="box-item">Board Four</li>
-			<li class="box-item">Board Five</li>			
-		</ul>
+		<p>Coming Soon</p>
 		<h2>Recommended Boards</h2>
 		<p>Coming soon</p>
 		<h2>Team Members</h2>
 		<p>Coming soon</p>
 
 	</div>
+</template>
+
+<template name="boardBoxItem">
+	<li class="board box-item">{{truncateString title 200}}</li>
+</template>
+
+<template name="projectBoxItem">
+	<li class="project box-item">{{truncateString title 200}}</li>
 </template>

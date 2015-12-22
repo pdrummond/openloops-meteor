@@ -1,3 +1,4 @@
+Projects = new Meteor.Collection("projects");
 Items = new Meteor.Collection('items');
 Settings = new Meteor.Collection('settings');
 Counters = new Mongo.Collection('counters');

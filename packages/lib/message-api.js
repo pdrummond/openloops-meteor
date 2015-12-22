@@ -1,5 +1,6 @@
 Ols.ClientMessage = {
 	find: function(selector, options) {
+		selector = selector || {};
 		return ClientMessages.find(selector, options);
 	},
 
@@ -28,6 +29,7 @@ Ols.ClientMessage = {
 
 Ols.ServerMessage = {
 	find: function(selector, options) {
+		selector = selector || {};
 		return ServerMessages.find(selector, options);
 	},
 

@@ -585,7 +585,7 @@ if(Meteor.isClient) {
 					Ols.Error.showError('Error moving item: ', err);
 				}
 			});
-			Ols.Router.showHomeMessages();
+			Ols.Router.showBoardMessages();
 		}
 	});
 

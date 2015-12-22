@@ -55,7 +55,7 @@ if(Meteor.isClient) {
 						if(err) {
 							Ols.Error.showError("Error inserting label: ", err);
 						} else {
-							FlowRouter.go("projectMessages", {projectId: Session.get('currentProjectId')});
+							Ols.Router.showBoardMessages();
 						}
 					});
 				} else {
@@ -63,7 +63,7 @@ if(Meteor.isClient) {
 						if(err) {
 							Ols.Error.showError("Error updating label: ", err);
 						} else {
-							FlowRouter.go("projectMessages", {projectId: Session.get('currentProjectId')});
+							Ols.Router.showBoardMessages();
 						}
 					});
 				}
