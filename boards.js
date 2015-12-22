@@ -25,6 +25,21 @@ if(Meteor.isClient) {
 
 Boards = new Meteor.Collection("boards");
 
+Meteor.methods({
+	toggleBoardFavourite: function(boardId) {
+		check(boardId, String);
+
+		var board = Boards.findOne(boardId);
+
+		var favourite = false;
+		if(board.favourite) {
+			favourite = board.favourite;
+		}
+		favourite = !favourite;
+		Boards.update(boardId, {$set: {favourite: favourite}});
+	}
+});
+
 if(Meteor.isServer) {
 
 	Meteor.publish("boards", function() {
@@ -51,6 +66,6 @@ if(Meteor.isServer) {
 			});
 
 			return boardId;
-		},
+		}
 	})
 }

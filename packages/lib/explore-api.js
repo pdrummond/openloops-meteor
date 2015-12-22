@@ -8,7 +8,7 @@ Ols.Explore = {
 				$(".main").css({'opacity':'0'});
 				$(".right-sidebar").css({'opacity':'0'});
 				$(".left-sidebar").css({'opacity':'0'});
-				$(".explore-page").css({opacity:'1', 'z-index':'999999999'});
+				$(".explore-page").css({opacity:'1', 'z-index':'9999'});
 			} else {
 				$("#explore-link").removeClass("active");
 				$(".explore-page").css({opacity:'0', 'z-index':'0'});

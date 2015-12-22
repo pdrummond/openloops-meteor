@@ -2,7 +2,8 @@ Ols.Router = {
 
 	showBoardMessages: function(boardId) {
 		boardId = boardId || Session.get('currentBoardId');
-		FlowRouter.go('boardMessages', {projectId: Session.get('currentProjectId'), boardId: boardId}, this._getQueryParams());
+		var projectId = boardId ? Ols.Board.findOne(boardId).projectId : Session.get('currentProjectId');
+		FlowRouter.go('boardMessages', {projectId: projectId, boardId: boardId}, this._getQueryParams());
 	},
 
 	showItemMessages: function(item) {

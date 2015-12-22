@@ -555,7 +555,14 @@ if(Meteor.isClient) {
 
 	Template.boardChooserMenu.helpers({
 		boards: function() {
-			return Boards.find({projectId: Session.get('currentProjectId')});
+			return Boards.find({favourite:true});
+		}
+	});
+
+	Template.boardChooserItem.helpers({
+		projectTitle: function() {
+			var project = Ols.Project.get(this.projectId);
+			return project.title?project.title:'';
 		}
 	});
 
@@ -564,8 +571,8 @@ if(Meteor.isClient) {
 		'click': function() {
 			var self = this;
 			$("#board-chooser-menu").slideUp();
-			FlowRouter.go("/project/" + Session.get('currentProjectId') + "/board/" + this._id);
-
+			Ols.Router.showBoardMessages(this._id);
+			Ols.Explore.setExploreMode(false);
 		}
 	});
 

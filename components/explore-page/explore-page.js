@@ -1,4 +1,5 @@
 if(Meteor.isClient) {
+
 	Template.explorePage.helpers({
 		currentProjectBoards: function() {
 			return Ols.Board.find({projectId: Session.get('currentProjectId')});
@@ -13,8 +14,30 @@ if(Meteor.isClient) {
 		}
 	});
 
+	Template.projectExploreItem.helpers({
+		boards: function() {
+			return Ols.Board.find({projectId: this._id});
+		}
+	});
+
+	Template.boardBoxItem.helpers({
+		favouriteClass: function() {
+			return this.favourite?'favourite':'';
+		}
+	});
+
 	Template.boardBoxItem.events({
-		'click': function() {
+		'click .board-star-icon': function(e) {
+			e.preventDefault();
+			Meteor.call('toggleBoardFavourite', this._id, function(err) {
+				if(err) {
+					Ols.Error.showError('Error toggling favourite', err);
+				}
+			});
+		},
+
+		'click .title': function(e) {
+			e.preventDefault();
 			Ols.Router.showBoardMessages(this._id);
 			Ols.Explore.setExploreMode(false);
 		}
