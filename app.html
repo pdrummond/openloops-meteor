@@ -76,7 +76,7 @@
 		</div>-->
 		{{else}}
 		<div id="header-main-title" title="{{currentItemTitle}}"><i class="fa {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}} <span class="item-key">#{{projectKey}}-{{itemPid}}</span></div>
-		<div id="header-status-bar" style="position: relative;top: 5px;">			
+		<div id="header-status-bar" style="position: relative;top: 5px;">
 			<div class="item-tab-bar-wrapper">
 				<div class="item-tab-bar">
 					{{#each tabs}}
@@ -95,9 +95,9 @@
 	{{/each}}
 	<footer>
 		{{#if isTeamFeed}}
-		<div style="display:flex;margin-top:25px;margin-left:20px;">
+		<div style="display:flex;margin-top:25px;margin-left:20px;margin-right: 400px;">
 			<i class="fa fa-info-circle fa-3x" style="color:orange;margin-right:20px"></i>
-			<p style="position:relative;top:-5px;color:gray">To start a conversation with your team, create a discussion or maybe a task from the action bar on the right.</p>
+			<p style="position:relative;top:5px;color:gray;padding:0;margin:0;">To get started, either select an existing item from the left sidebar to contribute to, or create a new discussion by clickin the 'New Discussion' button in the right sidebar. </p>
 		</div>
 		{{else}}
 		{{> messageBox}}
