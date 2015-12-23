@@ -6,6 +6,12 @@ if(Meteor.isClient) {
 
 	Template.topBanner.events({
 
+		'click #header-title': function() {
+			Session.set('filterQuery', null);
+			Session.set('filterSentence', null);
+			Session.set('currentItemId', null);
+		},
+
 		'click #explore-link': function() {
 			var exploreMode = Ols.Explore.toggleExploreMode();
 		},
