@@ -2,7 +2,8 @@ if(Meteor.isClient) {
 
 	Template.nowList.onCreated(function() {
 		this.filter = {
-			assignee: Ols.User.currentUserName()
+			assignee: Ols.User.currentUserName(),
+			isOpen: true
 	 	}
 	});
 
