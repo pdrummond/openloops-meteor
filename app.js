@@ -490,11 +490,6 @@ if(Meteor.isClient) {
 			return item?item.labels:[];
 		},
 
-		openStatus: function() {
-			var item = Ols.Item.findOne(Session.get('currentItemId'));
-			return item?(item.isOpen?'Open':'Closed'):'Open';
-		},
-
 		boardTitle: function() {
 			return Boards.findOne(Ols.Item.findOne(Session.get('currentItemId')).boardId).title;
 		},

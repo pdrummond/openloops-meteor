@@ -76,10 +76,7 @@
 		</div>-->
 		{{else}}
 		<div id="header-main-title" title="{{currentItemTitle}}"><i class="fa {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}} <span class="item-key">#{{projectKey}}-{{itemPid}}</span></div>
-		<div id="header-status-bar" style="position: relative;top: 5px;">
-			<div id="header-open-status">
-				<strong id="open-status-link" class="{{#if currentItemIsOpen}}open{{else}}closed{{/if}}"><i class="fa {{currentItemIcon}}"></i> {{openStatus}}</strong>
-			</div>
+		<div id="header-status-bar" style="position: relative;top: 5px;">			
 			<div class="item-tab-bar-wrapper">
 				<div class="item-tab-bar">
 					{{#each tabs}}

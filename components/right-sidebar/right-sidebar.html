@@ -8,6 +8,10 @@
 			<li id="create-article-link" class="action-button"><a href=""><i class="fa fa-book"></i> New Article</a></li>
 		</ul>
 		{{else}}
+		<span class="header-text">STATUS</span>
+		<div id="header-open-status">
+			<strong id="open-status-link" class="{{#if currentItemIsOpen}}open{{else}}closed{{/if}}"><i class="fa {{currentItemIcon}}"></i> {{openStatus}}</strong>
+		</div>
 		{{#if userIsItemOwnerOrProjectAdmin}}
 		<span class="header-text">ACTIONS</span>
 		<ul class="action-buttons">

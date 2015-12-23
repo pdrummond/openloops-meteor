@@ -3,6 +3,11 @@ if(Meteor.isClient) {
 		assigneeLabel: function() {
 			var item = Ols.Item.findOne(Session.get('currentItemId'));
 			return item && item.assignee?item.assignee:"Unassigned";
+		},
+
+		openStatus: function() {
+			var item = Ols.Item.findOne(Session.get('currentItemId'));
+			return item?(item.isOpen?'Open':'Closed'):'Open';
 		}
 	});
 
