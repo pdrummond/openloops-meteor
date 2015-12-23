@@ -1,0 +1,11 @@
+<template name="nowList">
+	<ul class="now-list">
+		{{#if noItems}}
+			<p class="empty-msg">Your Now List is empty.  Congratulations - you officially have nothing to do :-)</p>
+		{{else}}
+			{{#each nowItems}}
+				{{> itemItemView}}
+			{{/each}}
+		{{/if}}
+	</ul>
+</template>

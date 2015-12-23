@@ -10,6 +10,10 @@ Ols.User = {
 		return this.currentUserRole() == Ols.ROLE_ADMIN;
 	},
 
+	currentUserName: function() {
+		return Meteor.user().username;
+	},
+
 	currentUserRole: function() {
 		var canShow = false;
 		var user = Meteor.user();
