@@ -192,9 +192,8 @@
 		<a class="item {{isActive}} {{isClosedClass}}" href="">
 		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
 		<div id="content">
-			<span id="title">{{title}} </span>
+			<a href="" id="title">{{title}}</a>
 			<div id="meta">
-
 				<span class="item-key">#{{projectKey this}}-{{pid}}</span> ●
 				{{timeAgo createdAt}}
 				{{#if itemHasAssignee this}}
@@ -203,8 +202,8 @@
 			</div>
 			<div id="meta"> {{truncateString description 80}}</div>
 			<div id="item-labels">
-				{{#each itemLabels}}
-					<span class="label-item" style="background-color:{{labelColor this}}">{{labelTitle this}}</span>
+				{{#each itemLabelIds}}
+					<span class="label-item" data-color="{{labelColor this}}" style="background-color:{{labelColor this}}">{{labelTitle this}}</span>
 				{{/each}}
 			</div>
 		</div>

@@ -351,7 +351,7 @@ if(Meteor.isClient) {
 			return OpenLoops.getItemTypeIconColor(this);
 		},
 
-		itemLabels: function() {
+		itemLabelIds: function() {
 			var item = Ols.Item.findOne(this._id);
 			return item?item.labels:[];
 		},
@@ -362,8 +362,20 @@ if(Meteor.isClient) {
 	});
 
 	Template.itemItemView.events({
-		'click': function() {
+		'click #title': function() {
 			Ols.Router.showItemMessages(this);
+		},
+
+		'click .label-item': function(e) {
+			//FIXME: this should be merged with same code in labels.js
+			var labelTitle = $(e.target).text();
+			var labelColor = $(e.target).data('color');
+			Session.set('filterQuery', 'label:' + labelTitle);
+			Session.set('leftSidebarActiveTab', 'items-tab');
+			Session.set('filterSentence', Ols.Filter.generateFilterSentenceFromLabel({
+				title: labelTitle,
+				color: labelColor
+			}));
 		}
 	});
 
