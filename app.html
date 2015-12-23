@@ -127,8 +127,10 @@
 		{{/each}}
 		<footer>
 			{{#if isTeamFeed}}
-				<p>TODO: Need to fill this with something like board stats or maybe some kind of 'tip of the day' from loopy?  It could include board stats too?</p>
-				<p>Maybe I can include links to creating a discussion here?</p>
+				<div style="display:flex;margin-top:25px;margin-left:20px;">
+				<i class="fa fa-info-circle fa-3x" style="color:orange;margin-right:20px"></i>
+				<p style="position:relative;top:-5px;color:gray">To start a conversation with your team, create a discussion or maybe a task from the action bar on the right.</p>
+			</div>
 			{{else}}
 				{{> messageBox}}
 			{{/if}}
