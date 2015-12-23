@@ -6,7 +6,12 @@ if(Meteor.isClient) {
 
 	Template.messageBox.events({
 		'keypress #messageBox': function(e) {
-			Streamy.broadcast('userTyping', { username: Meteor.user().username });
+			Streamy.broadcast('userTyping', {
+				username: Meteor.user().username,
+				projectId: Session.get('currentProjectId'),
+				boardId: Session.get('currentBoardId'),
+				itemId: Session.get('currentItemId')
+			});
 
 			var inputVal = $('#messageBox').val().trim();
 

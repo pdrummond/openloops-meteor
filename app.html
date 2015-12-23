@@ -2,26 +2,26 @@
 	{{#if Template.subscriptionsReady}}
 	{{> Template.dynamic template=currentPage}}
 	{{else}}
-		<p>OpenLoops is Loading...</p>
+	<p>OpenLoops is Loading...</p>
 	{{/if}}
 </template>
 
 <template name = "dashboardFeedPage">
 	{{#onlyIfLoggedIn}}
-		{{> topBanner}}
-		{{> leftSidebar}}
-		{{> feed}}
-		{{> rightSidebar}}
+	{{> topBanner}}
+	{{> leftSidebar}}
+	{{> feed}}
+	{{> rightSidebar}}
 	{{/onlyIfLoggedIn}}
 </template>
 
 <template name="feedPage">
 	{{#onlyIfProjectAccess}}
-		{{> topBanner}}
-		{{> explorePage}}
-		{{> leftSidebar}}
-		{{> feed}}
-		{{> rightSidebar}}
+	{{> topBanner}}
+	{{> explorePage}}
+	{{> leftSidebar}}
+	{{> feed}}
+	{{> rightSidebar}}
 	{{/onlyIfProjectAccess}}
 </template>
 
@@ -41,35 +41,6 @@
 			</fieldset>
 			<button id="create-button">Create Filter</button>
 		</form>
-	</div>
-</template>
-
-<template name="userCard">
-	<div class="user-card" data-username={{username}}>
-		<div class="top-section">
-		<img src="{{userImageUrl}}"/>
-		<div class="content">
-			<span class="heading">{{username}}</span>
-			<span class="meta">
-				<span class="online-status">
-					<span class="online-status-dot {{state}}" title="{{state}}"></span>
-						<span class="online-status-text">{{state}}</span>
-						<span class="online-status-typing">Typing...</span>
-					</span>
-				</span>
-		</div>
-		</div>
-		<div class='bottom-section'>
-			{{#if noWorkingOn}}
-			{{#if isCurrentUser}}
-				<div class="meta"><a class="working-on-link">What are you working on?</a></div>
-			{{else}}
-				<div class="meta"><i class='fa fa-circle'></i> Doing nothing</div>
-			{{/if}}
-			{{else}}
-				<div class="meta"><i class='fa fa-circle'></i> <a class="working-on-link">{{workingOn}}</a></div>
-			{{/if}}
-		</div>
 	</div>
 </template>
 
@@ -96,55 +67,56 @@
 	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}} {{leftSidebarActiveTab}}">
 		<header class="{{currentItemType}} {{currentItemIssueType}}">
 			{{#if isTeamFeed}}
-				<h1 style="margin:0;padding:0;margin-left:20px;margin-top:15px;font-weight:100"><i class="fa fa-th-large"></i> {{currentBoardTitle}} <span style="font-weight:100;text-transform:uppercase;font-size:16px;color:lightgray">All Messages</span></h1>
+			<h1 style="margin:0;padding:0;margin-left:20px;margin-top:15px;font-weight:100"><i class="fa fa-th-large"></i> {{currentBoardTitle}} <span style="font-weight:100;text-transform:uppercase;font-size:16px;color:lightgray">All Messages</span></h1>
 
-				<!--<div class="user-cards">
-					{{#each projectUsers}}
-						{{> userCard}}
+			<!--<div class="user-cards">
+			{{#each projectUsers}}
+			{{> userCard}}
+			{{/each}}
+		</div>-->
+		{{else}}
+		<div id="header-main-title" title="{{currentItemTitle}}"><i class="fa {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}} <span class="item-key">#{{projectKey}}-{{itemPid}}</span></div>
+		<div id="header-status-bar" style="position: relative;top: 5px;">
+			<div id="header-open-status">
+				<strong id="open-status-link" class="{{#if currentItemIsOpen}}open{{else}}closed{{/if}}"><i class="fa {{currentItemIcon}}"></i> {{openStatus}}</strong>
+			</div>
+			<div class="item-tab-bar-wrapper">
+				<div class="item-tab-bar">
+					{{#each tabs}}
+					{{> tabHeader}}
 					{{/each}}
-				</div>-->
-			{{else}}
-			<div id="header-main-title" title="{{currentItemTitle}}"><i class="fa {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}} <span class="item-key">#{{projectKey}}-{{itemPid}}</span></div>
-			<div id="header-status-bar" style="position: relative;top: 5px;">
-				<div id="header-open-status">
-					<strong id="open-status-link" class="{{#if currentItemIsOpen}}open{{else}}closed{{/if}}"><i class="fa {{currentItemIcon}}"></i> {{openStatus}}</strong>
-				</div>
-				<div class="item-tab-bar-wrapper">
-					<div class="item-tab-bar">
-						{{#each tabs}}
-							{{> tabHeader}}
-						{{/each}}
-					</div>
 				</div>
 			</div>
-			{{/if}}
-		</header>
-		{{#if isTeamFeed}}
-			{{> messageHistory}}
+		</div>
 		{{/if}}
-		{{#each tabs}}
-			{{> tabBody}}
-		{{/each}}
-		<footer>
-			{{#if isTeamFeed}}
-				<div style="display:flex;margin-top:25px;margin-left:20px;">
-				<i class="fa fa-info-circle fa-3x" style="color:orange;margin-right:20px"></i>
-				<p style="position:relative;top:-5px;color:gray">To start a conversation with your team, create a discussion or maybe a task from the action bar on the right.</p>
-			</div>
-			{{else}}
-				{{> messageBox}}
-			{{/if}}
-		</footer>
-	</div>
+	</header>
+	{{#if isTeamFeed}}
+	{{> messageHistory}}
+	{{/if}}
+	{{#each tabs}}
+	{{> tabBody}}
+	{{/each}}
+	<footer>
+		{{#if isTeamFeed}}
+		<div style="display:flex;margin-top:25px;margin-left:20px;">
+			<i class="fa fa-info-circle fa-3x" style="color:orange;margin-right:20px"></i>
+			<p style="position:relative;top:-5px;color:gray">To start a conversation with your team, create a discussion or maybe a task from the action bar on the right.</p>
+		</div>
+		{{else}}
+		{{> messageBox}}
+		<p class="user-typing-footer-msg" style="display:none">pdrummond is typing...</p>
+		{{/if}}
+	</footer>
+</div>
 </template>
 
 <template name="itemLabels">
 	{{#if currentItemLabelsEmpty}}
-		<span class="empty-item-msg">No labels</span>
+	<span class="empty-item-msg">No labels</span>
 	{{else}}
-		{{#each currentItemLabels}}
-			<div class="label-item" style="background-color:{{labelColor this}}">{{labelTitle this}}</div>
-		{{/each}}
+	{{#each currentItemLabels}}
+	<div class="label-item" style="background-color:{{labelColor this}}">{{labelTitle this}}</div>
+	{{/each}}
 	{{/if}}
 </template>
 
@@ -190,25 +162,27 @@
 <template name="itemItemView">
 	<li  data-id={{_id}} >
 		<a class="item {{isActive}} {{isClosedClass}}" href="">
-		<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
-		<div id="content">
-			<a href="" id="title">{{title}}</a>
-			<div id="meta">
-				<span class="item-key">#{{projectKey this}}-{{pid}}</span> ●
-				{{timeAgo createdAt}}
-				{{#if itemHasAssignee this}}
-					● <span><img src={{assigneeImageUrl this}} class="assignee-item" title="Assigned to {{assigneeUsername this}}"/></span>
-				{{/if}}
-			</div>
-			<div id="meta"> {{truncateString description 80}}</div>
-			<div id="item-labels">
-				{{#each itemLabelIds}}
+			<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
+			<div id="content">
+				<div id="top-content">
+					<a href="" id="title">{{title}}</a>
+					<div id="meta">
+						<span class="item-key">#{{projectKey this}}-{{pid}}</span> ●
+						{{timeAgo createdAt}}
+						{{#if itemHasAssignee this}}
+						● <span><img src={{assigneeImageUrl this}} class="assignee-item" title="Assigned to {{assigneeUsername this}}"/></span>
+						{{/if}}
+					</div>
+					<div id="meta"> {{truncateString description 80}}</div>
+				</div>
+				<div id="item-labels">
+					{{#each itemLabelIds}}
 					<span class="label-item" data-color="{{labelColor this}}" style="background-color:{{labelColor this}}">{{labelTitle this}}</span>
-				{{/each}}
+					{{/each}}
+				</div>
 			</div>
-		</div>
-		<div class="item-msg-count" data-msg-count="0">
-		</div>
+			<div class="item-msg-count" data-msg-count="0">
+			</div>
 		</a>
 	</li>
 </template>
@@ -221,7 +195,7 @@
 	<ul id="board-chooser-menu" style="display:none">
 		<div class="menu-item-header">Select Board</div>
 		{{#each boards}}
-			{{> boardChooserItem}}
+		{{> boardChooserItem}}
 		{{/each}}
 	</ul>
 </template>
@@ -234,7 +208,7 @@
 	<ul id="move-to-board-list" style="display:none">
 		<div class="menu-item-header">Move to</div>
 		{{#each boards}}
-			{{> moveToBoardItem}}
+		{{> moveToBoardItem}}
 		{{/each}}
 	</ul>
 </template>
@@ -250,14 +224,14 @@
 
 <template name="welcomePage">
 	<div class="alert message">
-	<h1>Welcome</h1>
-	{{#if currentUser}}
+		<h1>Welcome</h1>
+		{{#if currentUser}}
 		This screen is a work in progress - eventually it will say great things about OLS.
 		<p>Click <a href="/projects">here</a> for your projects</p>
 		<p>Click <a href="/team-members">here</a> to configure your team</p>
-	{{else}}
+		{{else}}
 		<p>Please <a href="/login">login</a> or <a href="/signup">sign-up</a> to continue</p>
-	{{/if}}
+		{{/if}}
 	</div>
 </template>
 
@@ -268,42 +242,42 @@
 </template>
 
 <template name="onlyIfProjectAccess">
-  {{#if authInProcess}}
-    <p>Loading ...</p>
-  {{else}}
-    {{#if canShow}}
-      {{> UI.contentBlock }}
-    {{else}}
-      <p>You are not authorized to access this project.</p>
-      <p>Click <a href="/">here</a> to return home</p>
-    {{/if}}
-  {{/if}}
+	{{#if authInProcess}}
+	<p>Loading ...</p>
+	{{else}}
+	{{#if canShow}}
+	{{> UI.contentBlock }}
+	{{else}}
+	<p>You are not authorized to access this project.</p>
+	<p>Click <a href="/">here</a> to return home</p>
+	{{/if}}
+	{{/if}}
 </template>
 
 <template name="onlyIfLoggedIn">
-  {{#if authInProcess}}
-    <p>Loading ...</p>
-  {{else}}
-    {{#if canShow}}
-      {{> UI.contentBlock }}
-    {{else}}
-      <p>You are not authorized to view this page.</p>
-      <p>Please <a href="/login">login</a> to view this page</p>
-    {{/if}}
-  {{/if}}
+	{{#if authInProcess}}
+	<p>Loading ...</p>
+	{{else}}
+	{{#if canShow}}
+	{{> UI.contentBlock }}
+	{{else}}
+	<p>You are not authorized to view this page.</p>
+	<p>Please <a href="/login">login</a> to view this page</p>
+	{{/if}}
+	{{/if}}
 </template>
 
 <template name="onlyIfAdminUser">
-  {{#if authInProcess}}
-    <p>Loading ...</p>
-  {{else}}
-    {{#if canShow}}
-      {{> UI.contentBlock }}
-	  {{else}}
-	  <div class="alert message"><i class="fa fa-exclamation-triangle"></i>
-		  Ooops, sorry - only admins are allowed here
-		  <p>Click <a href="/">here</a> to return.</p>
-	  </div>
-	  {{/if}}
-  {{/if}}
+	{{#if authInProcess}}
+	<p>Loading ...</p>
+	{{else}}
+	{{#if canShow}}
+	{{> UI.contentBlock }}
+	{{else}}
+	<div class="alert message"><i class="fa fa-exclamation-triangle"></i>
+		Ooops, sorry - only admins are allowed here
+		<p>Click <a href="/">here</a> to return.</p>
+	</div>
+	{{/if}}
+	{{/if}}
 </template>

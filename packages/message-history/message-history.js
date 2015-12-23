@@ -20,11 +20,18 @@ if(Meteor.isClient) {
 
 		Meteor.setInterval(function() {
 			$(".user-card").removeClass("user-typing");
-		}, 1000);
+			$(".user-typing-footer-msg").hide();
+		}, 3000);
 
-		Streamy.on('userTyping', function(user) {
-			if(user.username != Meteor.user().username) {
-				$(".user-card[data-username='" + user.username + "']").addClass("user-typing");
+		Streamy.on('userTyping', function(ctx) {
+			if(ctx.username != Meteor.user().username) {
+				if(ctx.projectId == Session.get('currentProjectId')) {
+					$(".user-card[data-username='" + ctx.username + "']").addClass("user-typing");
+				}
+				if(ctx.itemId == Session.get('currentItemId')) {
+					$(".user-typing-footer-msg").text(ctx.username + " is typing");
+					$(".user-typing-footer-msg").show();
+				}
 			}
 		});
 		Streamy.on('sendMessage', function(incomingMessage) {

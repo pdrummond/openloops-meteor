@@ -1,0 +1,25 @@
+<template name="memberList">
+	<ul class="member-list">
+		{{#each projectUsers}}
+		{{> userCard}}
+		{{/each}}
+	</ul>
+</template>
+
+<template name="userCard">
+	<div class="user-card" data-username={{username}}>
+		<div class="top-section">
+			<img src="{{userImageUrl}}"/>
+			<div class="content">
+				<span class="heading">{{username}}</span>
+				<span class="meta">
+					<span class="online-status">
+						<span class="online-status-dot {{state}}" title="{{state}}"></span>
+						<span class="online-status-text">{{state}}</span>
+						<span class="online-status-typing">Typing...</span>
+					</span>
+				</span>
+			</div>
+		</div>
+	</div>
+</template>

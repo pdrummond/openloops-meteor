@@ -97,6 +97,10 @@ if(Meteor.isClient) {
 			Session.set('leftSidebarActiveTab', 'filters-tab');
 		},
 
+		'click .tabs-header #members-tab': function() {
+			Session.set('leftSidebarActiveTab', 'members-tab');
+		},
+
 		'click #board-item': function() {
 			Ols.Router.showBoardMessages();
 		},

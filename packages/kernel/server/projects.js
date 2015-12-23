@@ -64,19 +64,19 @@ Meteor.methods({
 	},
 
 	insertProjectMember: function(projectId, member) {
-		if(Ols.ProjectfindOne({members: member.username}) != null) {
+		if(Ols.Project.findOne({members: member.username}) != null) {
 			throw new Meteor.Error("insert-project-member-error-001", 'Member ' + member.username + ' already exists');
 		}
-		Ols.Projectupdate(projectId, {$addToSet: {members: member}});
+		Ols.Project.update(projectId, {$addToSet: {members: member}});
 	},
 
 	updateProjectMember: function(projectId, projectMemberUsername, member) {
-		Ols.Projectupdate({_id: projectId, 'members.username': projectMemberUsername}, {$set: {'members.$': member}});
+		Ols.Project.update({_id: projectId, 'members.username': projectMemberUsername}, {$set: {'members.$': member}});
 	},
 
 	removeProjectMember: function(projectId, projectMemberUsername) {
 		console.log("removeProjectMember projectId: "+ projectId + ", username: " + projectMemberUsername);
-		var updates = Ols.Projectupdate(projectId, {$pull: {members: {username: projectMemberUsername}}});
+		var updates = Ols.Project.update(projectId, {$pull: {members: {username: projectMemberUsername}}});
 		console.log("removeProjectMember numUpdates: " + updates);
 	}
 });

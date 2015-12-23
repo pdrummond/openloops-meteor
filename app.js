@@ -132,36 +132,6 @@ if(Meteor.isClient) {
 		}
 	});
 
-	Template.userCard.helpers( {
-
-		noWorkingOn: function() {
-			return this.workingOn == null || this.workingOn.length == 0;
-		},
-
-		isCurrentUser: function() {
-			return this.username == Meteor.user().username;
-		},
-
-		userImageUrl: function() {
-			return Ols.User.getProfileImageUrl(this.username);
-		},
-
-		state: function() {
-			var state = 'offline';
-			/*var state='offline';
-			var presence = Presences.findOne({userId: this._id});
-			if(presence) {
-			state = presence.state;
-			}
-			return state;*/
-			var user = Meteor.users.findOne({username:this.username});
-			if(user && user.status) {
-				state = user.status.online?'online':'offline';
-			}
-			return state;
-		}
-	});
-
 	Template.chatMessageItemView.events({
 		'click .board-title': function() {
 			FlowRouter.go('boardMessages', {projectId: this.projectId, boardId: this.boardId});
@@ -362,7 +332,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.itemItemView.events({
-		'click #title': function() {
+		'click #top-content': function() {
 			Ols.Router.showItemMessages(this);
 		},
 
@@ -479,18 +449,6 @@ if(Meteor.isClient) {
 		tabs: function() {
 			var item = Ols.Item.getCurrent();
 			return item && item.tabs ? item.tabs : [];
-		},
-
-		projectUsers: function() {
-			var project = Ols.Project.getCurrent();
-
-			var projectUsers = [];
-			Meteor.users.find().forEach(function(user) {
-				if(_.findWhere(project.members, {username: user.username}) != null) {
-					projectUsers.push(user);
-				}
-			});
-			return projectUsers;
 		},
 
 		filterQuery: function() {

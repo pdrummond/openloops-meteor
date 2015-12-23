@@ -4,6 +4,7 @@
 			<a id="items-tab" class="{{activeTabClass 'items-tab'}} tab"> <i class="fa fa-circle"></i> Items</a>
 			<a id="labels-tab" class="{{activeTabClass 'labels-tab'}} tab"> <i class="fa fa-tag"></i> Labels</a>
 			<a id="filters-tab" class="{{activeTabClass 'filters-tab'}} tab"> <i class="fa fa-filter"></i> Filters</a>
+			<a id="members-tab" class="{{activeTabClass 'members-tab'}} tab"> <i class="fa fa-users"></i> Members</a>
 		</div>
 		<div id="items-tab" class="tab-body {{activeTabClass 'items-tab'}}">
 			<div class="filter-sentence-wrapper">
@@ -16,6 +17,9 @@
 		</div>
 		<div id="filters-tab" class="tab-body {{activeTabClass 'filters-tab'}}">
 			{{> filterList}}
+		</div>
+		<div id="members-tab" class="tab-body {{activeTabClass 'members-tab'}}">
+			{{> memberList}}
 		</div>
 	</div>
 </template>

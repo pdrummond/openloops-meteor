@@ -484,11 +484,13 @@ label
 footer
 	padding 10px
 
-#messageBox
+#messageBox {
 	border: 2px solid #d3d3d3;
 	margin-top:5px;
-	width calc(100% - 440px);
-	resize none
+	width: calc(100% - 440px);
+	resize: none;
+	min-height: 60px;
+}
 
 .team-feed #header-main-title {
 	margin-top: 5px;
@@ -881,15 +883,13 @@ footer
 }
 
 .user-card {
-	min-height: 60px;
-	min-width:180px;
-	max-width: 250px;
-	background-color:#455A64;
-	margin-right:10px;
+	padding:10px;
 
 	img {
 		 width:40px;
 		 height:40px;
+		 border-radius: 40px;
+    	margin-right: 20px;
 	}
 
 	.content {
@@ -905,8 +905,8 @@ footer
 	}
 
 	.online-status {
-		color:gray;
-		font-size:12px;
+		color:#555;
+		font-size:14px;
 	}
 
 	.online-status-dot.online {
@@ -927,10 +927,11 @@ footer
 	}
 
 	.heading {
-		color:lightgray;
+		color:black;
 		text-transform:uppercase;
 		overflow:ellipsis;
 		font-size:12px;
+		font-weight:bold;
 	}
 
 	.bottom-section {
@@ -1236,7 +1237,7 @@ footer
 }
 
 .user-card .online-status-typing {
-	color:white;
+	color:orange;
 	font-weight:bold;
 }
 
@@ -1284,7 +1285,8 @@ footer
 	}
 
 	a {
-		margin-right:10px;
+		margin-right: 30px;
+		margin-left: 20px;
 	}
 }
 
@@ -1568,4 +1570,16 @@ border-radius: 0;
 
 .board-star-icon.favourite {
 	color:#F8C618;
+}
+
+
+.member-list {
+	padding:0;
+	margin:0;
+}
+
+.user-typing-footer-msg {
+	margin: 0;
+    padding: 0;
+    font-size: 12px;    
 }
