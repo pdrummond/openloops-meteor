@@ -120,7 +120,8 @@ if(Meteor.isClient) {
 			Session.set('currentItemId', null);
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
-			BlazeLayout.render("app", {currentPage: "editItemPage"});
+			//BlazeLayout.render("app", {currentPage: "editItemPage"});
+			BlazeLayout.render("app", {currentPage: "newItemPage"});
 		}
 	});
 

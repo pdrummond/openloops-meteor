@@ -1,0 +1,54 @@
+<template name="newItemPage">
+	<div class="new-item-page">
+		{{#onlyIfLoggedIn}}
+		{{#if isBusy}}
+		{{> spinner}}
+		{{else}}
+		{{> topBanner}}
+		{{> leftSidebar}}
+		<div class="main" style="padding-right:0px">
+			<div class="header" style="background:#3e9047;padding:10px;height:60px;">
+				<i class="fa fa-exclamation-circle fa-2x" style="color:#6cc644"></i>
+				<input autofocus="autofocus" name="title" style="width:calc(100% - 150px);background-color:#3e9047;color:white;padding: 5px;font-size: 1.2rem;font-weight:bold" placeholder="Enter item title here"/>
+			</div>
+
+			<div class="body" style="padding:30px;padding-right:250px">
+				<textarea name="description" rows="20" style="border:none;" placeholder="Enter description here"></textarea>
+
+			</div>
+			<div class="new-item-sidebar" style="top: 175px;right: 0;bottom:0px;position: fixed;display: block;width: 200px;color: #222;background-color: #fff;z-index: 10;border-left: 1px solid #d3d3d3;">
+				<div style="padding:10px">
+
+					<span class="header-text">ACTIONS</span>
+					<ul class="action-buttons">
+						<li id="create-item-link" class="action-button"><a href=""><i class="fa fa-plus"></i> Create </a></li>
+					</ul>
+					<span class="header-text">TYPE</span>
+					<ul class="action-buttons">
+						<li id="discussion-type-link" class="action-button"><a href=""><i class="fa fa-comments-o"></i> Discussion </a></li>
+						<li id="task-type-link" class="action-button"><a href=""><i class="fa fa-exclamation-circle"></i> Task </a></li>
+						<li id="bug-type-link" class="action-button"><a href=""><i class="fa fa-bug"></i> Bug </a></li>
+						<li id="enhancement-type-link" class="action-button"><a href=""><i class="fa fa-bullseye"></i> Enhancement </a></li>
+					</ul>
+					<span class="header-text" style="margin-top:10px">LABELS
+						<i id="show-label-chooser-button" class="fa fa-cog"></i>
+					</span>
+					<ul class="label-buttons">
+						{{> itemLabels}}
+					</ul>
+
+					<span class="header-text">ASSIGNEE</span>
+					<ul class="assignee-buttons">
+						{{#if itemHasAssignee}}
+						<span><img src={{assigneeImageUrl}} class="assignee-item"/> {{assigneeUsername}}</span>
+						{{else}}
+						Not Assigned
+						{{/if}}
+					</ul>
+				</div>
+			</div>
+		</div>
+		{{/if}}
+		{{/onlyIfLoggedIn}}
+	</div>
+</template>

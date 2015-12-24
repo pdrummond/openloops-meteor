@@ -19,11 +19,7 @@ Ols.Router = {
 
 	showCreateItemPage: function(queryParams) {
 		var boardId = Session.get('currentBoardId');
-		if(boardId) {
-			FlowRouter.go('createBoardItem', {projectId: Session.get('currentProjectId'), boardId: boardId}, _.extend(this._getQueryParams(), queryParams));
-		} else {
-			FlowRouter.go('createProjectItem', {projectId: Session.get('currentProjectId')}, _.extend(this._getQueryParams(), queryParams));
-		}
+		FlowRouter.go('createBoardItem', {projectId: Session.get('currentProjectId'), boardId: boardId}, _.extend(this._getQueryParams(), queryParams));
 	},
 
 	showEditItemPage: function(itemId) {
