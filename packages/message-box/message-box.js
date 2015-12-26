@@ -30,6 +30,7 @@ if(Meteor.isClient) {
 							itemId: Session.get('currentItemId')
 						});
 						$("#messageBox").val('');
+						Session.set('activeItemTab', 'messages');
 						Session.set('messageBox.content', "");
 						Meteor.call('saveMessage', newMessage, function(err, result) {
 							if(err) {

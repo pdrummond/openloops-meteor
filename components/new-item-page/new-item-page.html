@@ -7,9 +7,9 @@
 		{{> topBanner}}
 		{{> leftSidebar}}
 		<div class="main" style="padding-right:0px">
-			<div class="header" style="background:#3e9047;padding:10px;height:60px;">
-				<i class="fa fa-exclamation-circle fa-2x" style="color:#6cc644"></i>
-				<input autofocus="autofocus" name="title" style="width:calc(100% - 150px);background-color:#3e9047;color:white;padding: 5px;font-size: 1.2rem;font-weight:bold" placeholder="Enter item title here"/>
+			<div class="header" style="background-color:{{headerColor}};padding:10px;height:60px;">
+				<i class="fa {{typeIconClass}} fa-2x" style="color:{{typeIconColor}}"></i>
+				<input autofocus="autofocus" name="title" style="width:calc(100% - 150px);background-color:transparent;color:white;padding: 5px;font-size: 1.2rem;font-weight:bold" placeholder="Enter item title here"/>
 			</div>
 
 			<div class="body" style="padding:30px;padding-right:250px">
@@ -24,9 +24,10 @@
 						<li id="create-item-link" class="action-button"><a href=""><i class="fa fa-plus"></i> Create </a></li>
 					</ul>
 					<span class="header-text">TYPE</span>
-					<ul class="action-buttons">
+					<ul class="action-buttons item-type-buttons">
 						<li id="discussion-type-link" class="action-button"><a href=""><i class="fa fa-comments-o"></i> Discussion </a></li>
 						<li id="task-type-link" class="action-button"><a href=""><i class="fa fa-exclamation-circle"></i> Task </a></li>
+						<li id="article-type-link" class="action-button"><a href=""><i class="fa fa-book"></i> Article </a></li>
 						<li id="bug-type-link" class="action-button"><a href=""><i class="fa fa-bug"></i> Bug </a></li>
 						<li id="enhancement-type-link" class="action-button"><a href=""><i class="fa fa-bullseye"></i> Enhancement </a></li>
 					</ul>

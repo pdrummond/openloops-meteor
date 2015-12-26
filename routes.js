@@ -95,7 +95,7 @@ if(Meteor.isClient) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', params.itemId);
-			Session.set('activeItemTab', 'messages');
+			Session.set('activeItemTab', tabName);
 			BlazeLayout.render("app", {currentPage: "feedPage"});
 			Session.set('numIncomingMessages', 0);
 			OpenLoops.removeSidebarNewMessages(params.itemId);

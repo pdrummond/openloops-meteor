@@ -6,13 +6,13 @@ Ols.Router = {
 		FlowRouter.go('boardMessages', {projectId: projectId, boardId: boardId}, this._getQueryParams());
 	},
 
-	showItemMessages: function(item) {
-		var params = {
+	showItemMessages: function(item, params) {
+		params = _.extend({
 			projectId: item.projectId,
 			boardId: item.boardId,
-			itemId: item._id
-		};
-		params.tabName = 'messages';
+			itemId: item._id,
+			tabName: 'messages'
+		}, params);
 
 		FlowRouter.go('boardItemMessages', params, this._getQueryParams());
 	},
