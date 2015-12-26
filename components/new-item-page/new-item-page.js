@@ -33,6 +33,18 @@ if(Meteor.isClient) {
 			return template.isBusy.get();
 		},
 
+		itemType: function() {
+			var type = '??';
+
+			var t = Template.instance();
+			type = t.itemType.get();
+			if(type == Ols.Item.ITEM_TYPE_ISSUE) {
+				type = t.issueType.get();
+			}
+
+			return type;
+		},
+
 		typeIconClass: function() {
 			var t = Template.instance();
 			return Ols.Item.getTypeIconClass({type: t.itemType.get(), issueType: t.issueType.get()});

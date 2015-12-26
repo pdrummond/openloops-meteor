@@ -1,7 +1,7 @@
 <template name="nowList">
 	<ul class="now-list">
 		{{#if noItems}}
-			<p class="empty-msg">Your Now List is empty.  Congratulations - you officially have nothing to do :-)</p>
+			<p class="empty-msg">No items found</p>
 		{{else}}
 			{{#each nowItems}}
 				{{> itemItemView}}
