@@ -1,4 +1,5 @@
-<template name="itemList">	
+<template name="itemList">
+	<input id="filter-input" style="font-size:12px;border:1px solid lightgray;border-radius:5px;padding:5px;position:relative;top:10px;left:10px;width:90%;margin-bottom:20px" placeholder="Enter filter here" value={{filterQuery}}>
 	<ul class="item-list">
 		{{#if noItems}}
 		{{#if noFilter}}

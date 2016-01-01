@@ -7,17 +7,6 @@ if(Meteor.isClient) {
 		Session.set('exploreMode', false);
 	});
 
-	/*OpenLoops.onSearchInput = function() {
-		var self = this;
-		if(this.searchInputKeyTimer) {
-			console.log("CANCELLED KEY TIMER");
-			clearTimeout(this.searchInputKeyTimer);
-		}
-		this.searchInputKeyTimer = setTimeout(function() {
-			Session.setPersistent('filterQuery', $('#search-input').val());
-		}, 500);
-	}*/
-
 	OpenLoops.removeSidebarNewMessages = function(itemId) {
 		var $itemMsgCount;
 		if(itemId) {

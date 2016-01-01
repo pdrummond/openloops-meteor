@@ -1,6 +1,6 @@
 if(Meteor.isClient) {
-	Template.filterList.events({
 
+	Template.filterList.events({
 		'click #issues-link': function() {
 			Session.set('filterQuery', 'type:issue open:true');
 			Session.set('leftSidebarActiveTab', 'items-tab');
