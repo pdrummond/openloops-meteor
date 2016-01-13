@@ -48,6 +48,12 @@ if(Meteor.isServer) {
 			order: 2,
 		});
 
+		Cards.insert({
+			title: 'Q3 Card One',
+			queue: 3,
+			order: 1,
+		});
+
 	}
 
 	Meteor.publish("cards", function() {
@@ -64,20 +70,10 @@ if(Meteor.isClient) {
 
 		cardsOptions: {
 			sortField: 'order',  // defaults to 'order' anyway
-			/*group: {
+			group: {
 				name: 'queue',
-				pull: false,
-				put: false
-			},*/
-
-			// Event when you move an item in the list or between lists
-			onMove: function (/**Event*/evt) {
-				var draggedCardId = $(evt.dragged).data("card-id");
-				var toQueue = $(evt.to).data("queue");
-				var num = Cards.update(draggedCardId, {
-					$set: {queue: toQueue}
-				});
-				console.log("updated card " + draggedCardId + " to queue " + toQueue + ": " + num);
+				pull: true,
+				put: true
 			}
 		},
 
