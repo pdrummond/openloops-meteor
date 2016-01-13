@@ -6,25 +6,6 @@
 	{{/if}}
 </template>
 
-<template name = "dashboardFeedPage">
-	{{#onlyIfLoggedIn}}
-	{{> topBanner}}
-	{{> leftSidebar}}
-	{{> feed}}
-	{{> rightSidebar}}
-	{{/onlyIfLoggedIn}}
-</template>
-
-<template name="feedPage">
-	{{#onlyIfProjectAccess}}
-	{{> topBanner}}
-	{{> explorePage}}
-	{{> leftSidebar}}
-	{{> feed}}
-	{{> rightSidebar}}
-	{{/onlyIfProjectAccess}}
-</template>
-
 <template name="createFilterPage">
 	{{> leftSidebar}}
 	{{> createFilterForm}}
@@ -61,44 +42,6 @@
 
 <template name="tabHeader">
 	<div class="tab-item {{itemTabActiveClass this}}"><a href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{currentItemId}}/messages"><i class="fa {{icon}}"></i> {{label}}</a></div>
-</template>
-
-<template name="feed">
-	<div class="main {{#if isTeamFeed}}team-feed{{else}}item-feed{{/if}} {{leftSidebarActiveTab}}">
-		<header class="{{currentItemType}} {{currentItemIssueType}}">
-			{{#if isTeamFeed}}
-			<h1 style="margin:0;padding:0;margin-left:20px;margin-top:15px;font-weight:100"><i class="fa fa-th-large"></i> {{currentBoardTitle}} <span style="font-weight:100;text-transform:uppercase;font-size:16px;color:lightgray">All Messages</span></h1>
-		{{else}}
-		<div id="header-main-title" title="{{currentItemTitle}}"><i class="fa {{currentItemIcon}}" style="color:{{currentItemIconColor}}"></i> {{currentItemTitle}} <span class="item-key">#{{projectKey}}-{{itemPid}}</span></div>
-		<div id="header-status-bar" style="position: relative;top: 5px;">
-			<div class="item-tab-bar-wrapper">
-				<div class="item-tab-bar">
-					{{#each tabs}}
-					{{> tabHeader}}
-					{{/each}}
-				</div>
-			</div>
-		</div>
-		{{/if}}
-	</header>
-	{{#if isTeamFeed}}
-	{{> messageHistory}}
-	{{/if}}
-	{{#each tabs}}
-	{{> tabBody}}
-	{{/each}}
-	<footer>
-		{{#if isTeamFeed}}
-		<div style="display:flex;margin-top:25px;margin-left:20px;margin-right: 400px;">
-			<i class="fa fa-info-circle fa-3x" style="color:orange;margin-right:20px"></i>
-			<p style="position:relative;top:5px;color:gray;padding:0;margin:0;">To get started, either select an existing item from the left sidebar to contribute to, or create a new discussion by selecting the 'New Discussion' button in the right sidebar. </p>
-		</div>
-		{{else}}
-		{{> messageBox}}
-		<p class="user-typing-footer-msg" style="display:none">pdrummond is typing...</p>
-		{{/if}}
-	</footer>
-</div>
 </template>
 
 <template name="itemLabels">

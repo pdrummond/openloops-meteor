@@ -1,0 +1,37 @@
+
+<template name="workspacePage">
+	{{#onlyIfProjectAccess}}
+	{{> topBanner}}
+	{{> leftSidebar}}
+	{{> workspace}}
+	{{/onlyIfProjectAccess}}
+</template>
+
+<template name="workspace">
+	<div class="workspace-container">
+
+		{{>cardList title = 'pdrummond' queue = 1 }}
+		{{>cardList title = 'harold' queue = 2 }}
+		{{>cardList title = 'bob' queue = 3}}
+
+	</div>
+</template>
+
+<template name="cardList">
+	<div class="card-list-container">
+		<div class="card-list-header">
+			<div class="title" style="float:left;color:white;text-transform:uppercase;">{{title}} ({{queue}})</div>
+			<div class="buttons" style="float:right;color:white">
+				<i id="resize-button" class="card-button fa fa-arrow-circle-o-right"></i>
+			</div>
+		</div>
+		<div class="card-list"  style="clear:both">
+			{{#sortable items=cards options=cardsOptions}}
+			<div class="card">
+				<p>{{title}}</p>
+			</div>
+			{{/sortable}}
+
+		</div>
+	</div>
+</template>

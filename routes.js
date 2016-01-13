@@ -52,7 +52,7 @@ if(Meteor.isClient) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', null);
-			BlazeLayout.render("app", {currentPage: "feedPage"});
+			BlazeLayout.render("app", {currentPage: "workspacePage"});
 			Session.set('numIncomingMessages', 0);
 			OpenLoops.removeSidebarNewMessages();
 
@@ -78,7 +78,7 @@ if(Meteor.isClient) {
 			Session.set('currentProjectId', params.projectId);
 			Session.set('currentBoardId', null);
 			Session.set('currentItemId', params.itemId);
-			BlazeLayout.render("app", {currentPage: "feedPage"});
+			BlazeLayout.render("app", {currentPage: "workspacePage"});
 			Session.set('numIncomingMessages', 0);
 			OpenLoops.removeSidebarNewMessages(params.itemId);
 		}
@@ -96,7 +96,7 @@ if(Meteor.isClient) {
 			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', params.itemId);
 			Session.set('activeItemTab', tabName);
-			BlazeLayout.render("app", {currentPage: "feedPage"});
+			BlazeLayout.render("app", {currentPage: "workspacePage"});
 			Session.set('numIncomingMessages', 0);
 			OpenLoops.removeSidebarNewMessages(params.itemId);
 		}

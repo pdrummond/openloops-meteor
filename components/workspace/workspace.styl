@@ -1,0 +1,42 @@
+.workspace-container {
+	position: fixed;
+    top: 75px;
+    left: 400px;
+	display:flex;
+	width:calc(100% - 400px);
+	overflow-x:auto;
+	height: calc(100% - 75px);
+	background:#d13f19;
+}
+
+.card-list-container {
+	flex-shrink:0;
+	flex-grow:0;
+	width: 350px;
+	xheight: calc(100% - 40px);
+	margin: 10px;
+	padding: 10px;
+	transition: all 0.5s ease;
+	background: #ef6155;
+}
+
+.card-list-header {
+	height:30px;
+}
+
+.card-list {
+	height:calc(100% - 20px);
+	overflow-y:auto;
+}
+
+.card {
+	width:100%;
+	background:#FFACAC;
+	height:100px;
+	border-radius:4px;
+	margin-bottom:10px;
+}
+
+.card-button :hover {
+	cursor:pointer;
+}

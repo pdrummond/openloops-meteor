@@ -88,6 +88,7 @@ if(Meteor.isClient) {
 		this.subscribe('boards');
 		this.subscribe('teamMembers');
 		this.subscribe('labels');
+		this.subscribe('cards');
 	});
 
 	Template.app.events({
@@ -430,72 +431,6 @@ if(Meteor.isClient) {
 		itemDescription: function() {
 			var item = Ols.Item.getCurrent();
 			return item && item.description && item.description.length > 0 ? item.description : '*No Description*';
-		}
-	});
-
-	Template.feed.helpers({
-
-		tabs: function() {
-			var item = Ols.Item.getCurrent();
-			return item && item.tabs ? item.tabs : [];
-		},
-
-		filterQuery: function() {
-			return Session.get('filterQuery');
-		},
-
-		isActive: function(tabName) {
-			var active = false;
-			var query = Session.get('filterQuery');
-			switch(tabName) {
-				case '': active = (!query || query.length == 0); break;
-				case 'discussion': active = (query == 'type:discussion'); break;
-				case 'issue': active = (query == 'type:issue'); break;
-				case 'article': active = (query == 'type:article'); break;
-			}
-			return active?'active':'';
-		},
-
-		currentItemIcon: function() {
-			return OpenLoops.getItemTypeIcon(Ols.Item.findOne(Session.get('currentItemId')));
-		},
-
-		currentItemIconColor: function() {
-			return OpenLoops.getItemTypeIconColor(Ols.Item.findOne(Session.get('currentItemId')));
-		},
-
-		currentItemType: function() {
-			var item = Ols.Item.findOne(Session.get('currentItemId'));
-			return item?item.type:'';
-		},
-
-		currentItemIssueType: function() {
-			var item = Ols.Item.findOne(Session.get('currentItemId'));
-			return item?item.issueType:'';
-		},
-
-		currentItemLabels: function() {
-			var item = Ols.Item.findOne(Session.get('currentItemId'));
-			return item?item.labels:[];
-		},
-
-		boardTitle: function() {
-			return Boards.findOne(Ols.Item.findOne(Session.get('currentItemId')).boardId).title;
-		},
-
-		isTabActive: function(tabName) {
-			if(!Session.get('currentItemId') && tabName == 'messages') {
-				return 'active';
-			} else {
-				return Session.get('activeItemTab') == tabName?'active':'';
-			}
-		}
-	});
-
-	Template.feed.events({
-		'click #header-new-messages-toast': function() {
-			Session.set("numIncomingMessages", 0);
-			Ols.HistoryManager.scrollBottom();
 		}
 	});
 
