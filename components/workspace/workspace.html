@@ -25,9 +25,9 @@
 				<i id="resize-button" class="card-button fa fa-arrow-circle-o-right"></i>
 			</div>
 		</div>
-		<div class="card-list"  style="clear:both">
+		<div class="card-list"  style="clear:both" data-queue={{queue}}>
 			{{#sortable items=cards options=cardsOptions}}
-			<div class="card">
+			<div class="card" data-card-id={{_id}}>
 				<p>{{title}}</p>
 			</div>
 			{{/sortable}}
