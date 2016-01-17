@@ -204,7 +204,7 @@ if(Meteor.isClient) {
 	});
 
 	Template.registerHelper('projectKey', function (item) {
-		console.log("> projectKey helper");
+		//console.log("> projectKey helper");
 		if(item ==null) {
 			item = Ols.Item.findOne(Session.get('currentItemId'));
 		}

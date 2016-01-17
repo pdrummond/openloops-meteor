@@ -22,7 +22,7 @@ Ols.HistoryManager = {
 
 	getOldestClientMessageDate: function() {
 		var date;
-		var existingMessages = Ols.ClientMessage.find({}, {sort:{createdAt:1}}).fetch();
+		var existingMessages = Ols.ClientMessage.find({itemId: this.itemId}, {sort:{createdAt:1}}).fetch();
 		if(existingMessages.length > 0) {
 			date = existingMessages[0].createdAt;
 		}
@@ -67,7 +67,7 @@ Ols.HistoryManager = {
 				self.showBusyIcon();
 			}, 300);
 
-			Ols.ClientMessage._removeAllRaw();
+			Ols.ClientMessage._removeAllRaw({itemId: this.itemId});
 			//console.log("CLIENT MESSAGES DELETED: Num client msgs: " + Ols.ClientMessage.find().count());
 
 			var self = this;

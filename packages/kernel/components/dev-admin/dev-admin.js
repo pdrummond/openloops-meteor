@@ -131,6 +131,19 @@ if(Meteor.isClient) {
 				}
 			});
 		},
+
+    'click #add-order-field-to-items': function() {
+			$("#status").text("Working...");
+			Meteor.call('addOrderFieldToItems', function(err, results) {
+				if(err) {
+					$("#status").text("Error " + err.reason);
+				} else {
+					$("#status").text("Completed Successfully.");
+				}
+			});
+		},
+
+
 	});
 }
 
@@ -271,6 +284,12 @@ if(Meteor.isServer) {
 				var projectId = Ols.Board.findOne(activityMsg.boardId).projectId;
 				Ols.ServerMessage.update(activityMsg._id, {$set: {projectId: projectId}});
 			});
-		}
+		},
+
+    addOrderFieldToItems: function() {
+      Items.find().forEach(function(item) {
+        Items.update(item._id, {$set: {order: 1}});
+      });
+    }
 	})
 }

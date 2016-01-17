@@ -1,0 +1,40 @@
+<template name="newCardDialog">
+  <div id="new-card-dialog" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">New Card</h4>
+        </div>
+        <div class="modal-body">
+          <form style="padding-top:0px">
+            <fieldset>
+              <label style="margin-top:30px">Title</label>
+              <input style="width:100%" name="title" placeholder="Enter title" autofocus>
+
+              <label style="margin-top:30px">To</label>
+              <input style="width:100%"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)">
+
+              <label style="margin-top:30px">Description</label>
+              <textarea  style="width:100%" name="description" placeholder="Enter description"></textarea>
+              <label style="display:inline;margin-right:10px">Type</label>
+
+              <select name="type" style="margin-top:30px">
+                <option value="task">Task</option>
+                <option value="discussion">Discussion</option>
+                <option value="article">Article</option>
+                <option value="enhancement">Enhancement</option>
+                <option value="bug">Bug</option>
+              </select>
+
+            </fieldset>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button id="save-button" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+</template>

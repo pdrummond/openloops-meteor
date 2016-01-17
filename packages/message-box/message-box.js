@@ -5,15 +5,16 @@ if(Meteor.isClient) {
 	});
 
 	Template.messageBox.events({
-		'keypress #messageBox': function(e) {
+		'keypress #messageBox': function(e, t) {
+      var self = this;
 			Streamy.broadcast('userTyping', {
 				username: Meteor.user().username,
 				projectId: Session.get('currentProjectId'),
 				boardId: Session.get('currentBoardId'),
-				itemId: Session.get('currentItemId')
+				itemId: self.currentItemId
 			});
 
-			var inputVal = $('#messageBox').val().trim();
+			var inputVal = t.$('#messageBox').val().trim();
 
 			var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
 			if(charCode == 13 && (inputVal == null || inputVal.length == 0)) {
@@ -27,9 +28,9 @@ if(Meteor.isClient) {
 					if(inputVal.length > 0) {
 						var newMessage = Ols.Message.insertClientMessage({
 							text:inputVal,
-							itemId: Session.get('currentItemId')
+							itemId: self.currentItemId,
 						});
-						$("#messageBox").val('');
+						t.$("#messageBox").val('');
 						Session.set('activeItemTab', 'messages');
 						Session.set('messageBox.content', "");
 						Meteor.call('saveMessage', newMessage, function(err, result) {

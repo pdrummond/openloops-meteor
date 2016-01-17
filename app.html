@@ -65,7 +65,6 @@
 			<span class="header">
 				<strong class="header-item">{{createdBy}}</strong>
 				<span id="created-at" class="header-item" title={{formatTime createdAt}}>{{timeAgo createdAt}}</span>
-				<span id="item-link" class="header-item {{showItemLink}}"><a class="item-link" href="/project/{{currentProjectId}}/board/{{currentBoardId}}/item/{{itemId}}/messages">{{itemTitle}}</a></span>
 			</span>
 			<div id="text" class="markdown-content">
 				{{#markdown}}{{text}}{{/markdown}}
@@ -96,10 +95,12 @@
 <template name="itemItemView">
 	<li  data-id={{_id}} >
 		<a class="item {{isActive}} {{isClosedClass}}" href="">
-			<i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
 			<div id="content">
 				<div id="top-content">
-					<a href="" id="title">{{title}}</a>
+					<a href="" id="title">
+            <i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
+            {{title}}
+          </a>
 					<div id="meta">
 						<span class="item-key">#{{projectKey this}}-{{pid}}</span> ●
 						{{timeAgo createdAt}}
@@ -109,11 +110,11 @@
 					</div>
 					<div id="meta"> {{truncateString description 80}}</div>
 				</div>
-				<div id="item-labels">
+				<!--<div id="item-labels">
 					{{#each itemLabelIds}}
 					<span class="label-item" data-color="{{labelColor this}}" style="background-color:{{labelColor this}}">{{labelTitle this}}</span>
 					{{/each}}
-				</div>
+				</div>-->
 			</div>
 			<div class="item-msg-count" data-msg-count="0">
 			</div>

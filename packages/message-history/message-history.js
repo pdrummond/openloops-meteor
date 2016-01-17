@@ -1,11 +1,11 @@
 if(Meteor.isClient) {
 
 	Template.messageHistory.onCreated(function() {
+    var self = this;
 		Tracker.autorun(function(computation) {
-			//console.trace("MessageHistory.autorun on currentItemId and filterQuery");
 			Ols.HistoryManager.projectId = Session.get('currentProjectId');
 			Ols.HistoryManager.boardId = Session.get('currentBoardId');
-			Ols.HistoryManager.itemId = Session.get('currentItemId');
+			Ols.HistoryManager.itemId = self.data.selectedItemId;
 			Ols.HistoryManager.filterQuery = Session.get("filterQuery");
 
 			//console.log("mesage-history filterQuery: " + Ols.HistoryManager.filterQuery);
@@ -28,7 +28,8 @@ if(Meteor.isClient) {
 				if(ctx.projectId == Session.get('currentProjectId')) {
 					$(".user-card[data-username='" + ctx.username + "']").addClass("user-typing");
 				}
-				if(ctx.itemId == Session.get('currentItemId')) {
+        console.trace("user typing");
+				if(ctx.itemId == this.selectedItemId) {
 					$(".user-typing-footer-msg").text(ctx.username + " is typing");
 					$(".user-typing-footer-msg").show();
 				}
@@ -40,12 +41,12 @@ if(Meteor.isClient) {
 				Ols.Message.insertClientMessage(incomingMessage);
 				if(Ols.HistoryManager.atBottom) {
 					Ols.HistoryManager.scrollBottom();
-				} else if(incomingMessage.itemId == Session.get('currentItemId')) {
+				} else if(incomingMessage.itemId == this.selectedItemId) {
 					Session.set('numIncomingMessages', Session.get('numIncomingMessages')+1);
 				}
 
 				//FIXME: An event should be fired here which the sidebar can handle.
-				if(incomingMessage.itemId != Session.get('currentItemId')) {
+				if(incomingMessage.itemId != this.selectedItemId) {
 					var $itemMsgCount;
 					if(incomingMessage.itemId != null) {
 						$itemMsgCount = $(".left-sidebar .item-list li[data-id='" + incomingMessage.itemId + "'] .item-msg-count");
@@ -85,7 +86,7 @@ if(Meteor.isClient) {
 
 		noMessages: function() {
 			var filter = {};
-			var itemId = Session.get('currentItemId');
+			var itemId = this.selectedItemId;
 			if(itemId) {
 				filter.itemId = itemId;
 			}
@@ -99,7 +100,8 @@ if(Meteor.isClient) {
 
 		messages: function() {
 			var filter = {};
-			var itemId = Session.get('currentItemId');
+			var itemId = this.selectedItemId;
+
 			if(itemId) {
 				filter.itemId = itemId;
 			}

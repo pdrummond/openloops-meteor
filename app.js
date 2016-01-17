@@ -323,7 +323,15 @@ if(Meteor.isClient) {
 
 	Template.itemItemView.events({
 		'click #top-content': function() {
-			Ols.Router.showItemMessages(this);
+			var assignee = this.assignee;
+			assignee = prompt("Enter username of member to assign to:", assignee);
+			if(assignee != null) {
+				Meteor.call('updateItemAssignee', this._id, assignee, function(err, result) {
+					if(err) {
+						Ols.Error.showError('Error assigning item: ', err);
+					}
+				});
+			}
 		},
 
 		'click .label-item': function(e) {

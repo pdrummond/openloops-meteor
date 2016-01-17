@@ -4,34 +4,85 @@
 	{{> topBanner}}
 	{{> leftSidebar}}
 	{{> workspace}}
+  {{> newCardDialog}}
 	{{/onlyIfProjectAccess}}
 </template>
 
 <template name="workspace">
 	<div class="workspace-container">
 
-		{{>cardList title = 'pdrummond' queue = 1 }}
-		{{>cardList title = 'harold' queue = 2 }}
-		{{>cardList title = 'bob' queue = 3}}
+		{{>queue title = 'pdrummond' username = 'pdrummond' queue = 1 }}
+		{{>queue title = 'harold' username = 'harold' queue = 2 }}
+		{{>queue title = 'bob' username = 'bob' queue = 3}}
 
 	</div>
 </template>
 
-<template name="cardList">
-	<div class="card-list-container">
-		<div class="card-list-header">
-			<div class="title" style="float:left;color:white;text-transform:uppercase;">{{title}} ({{queue}})</div>
-			<div class="buttons" style="float:right;color:white">
-				<i id="resize-button" class="card-button fa fa-arrow-circle-o-right"></i>
+<template name="queue">
+	<div class="queue-container" style="position:relative">
+		<div class="queue-header">
+			<div class="title" style="float:left;color:black;font-weight:bold;text-transform:uppercase;">
+        {{title}}'s {{queueTitle}}
+        {{#if isCardSelected}}
+          / {{selectedCardKey}}
+        {{/if}}
+      </div>
+			<div class="buttons" style="float:right;color:gray">
+        {{#if isCardSelected}}
+        <i id="edit-button" title="Edit card details" class="cursor-pointer queue-header-button fa fa-pencil"></i>
+        <i id="send-button" title="Send to another user" class="cursor-pointer queue-header-button fa fa-paper-plane"></i>
+        <i id="send-to-backlog-button" title="Move to backlog" class="cursor-pointer queue-header-button fa fa-rocket"></i>
+        <i id="done-button" title="Close Card" class="cursor-pointer queue-header-button fa fa-check-circle-o"></i>
+        {{/if}}
+				<i id="resize-button" class="cursor-pointer queue-header-button fa fa-arrow-circle-o-right"></i>
 			</div>
 		</div>
-		<div class="card-list"  style="clear:both">
-			{{#sortable items=cards options=cardsOptions}}
-			<div class="card">
-				<p>{{title}}</p>
+		{{#if isCardSelected}}
+		<div class="item-detail" style="height: calc(100% - 30px);">
+			<div class="item-header">
+				<i id="item-detail-back-button" class="cursor-pointer fa fa-arrow-left"></i> {{selectedItemTitle}}
 			</div>
-			{{/sortable}}
+			{{> messageHistory selectedItemId=selectedItemId}}
+			<div class="item-footer" style="position:absolute;bottom:0;width: calc(100% - 10px);">
+				{{> messageBox currentItemId=selectedItemId}}
+			</div>
+		</div>
+		{{else}}
+		<ul class="queue-list sortable"  style="clear:both;margin:0;padding:0">
+			{{#each items}}
+				{{> cardView card=this selectedCardId=_getSelectedCardId}}
+			{{/each}}
+      <button id="quick-add-card" class="btn btn-link" style="color:gray"><i class="fa fa-plus"></i> Add Card</button>
+		</ul>
+		{{/if}}
 
-		</div>
 	</div>
+</template>
+
+
+<template name="cardView">
+	<li  data-id={{card._id}} >
+		<a class="item {{isActive}} {{isClosedClass}}" href="">
+			<div id="content">
+				<div id="top-content">
+					<a href="" id="title">
+            <i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
+            {{card.title}} ({{card.order}})
+          </a>
+					<div id="meta">
+						<span class="item-key">#{{projectKey this.card}}-{{card.pid}}</span> ●
+						{{timeAgo card.createdAt}}
+					</div>
+					<div id="meta"> {{truncateString card.description 200}}</div>
+				</div>
+				<!--<div id="item-labels">
+					{{#each itemLabelIds}}
+					<span class="label-item" data-color="{{labelColor this}}" style="background-color:{{labelColor this}}">{{labelTitle this}}</span>
+					{{/each}}
+				</div>-->
+			</div>
+			<div class="item-msg-count" data-msg-count="0">
+			</div>
+		</a>
+	</li>
 </template>

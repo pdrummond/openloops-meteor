@@ -26,13 +26,15 @@ html:not(.touch) {
 }
 
 #messageHistory {
-	xbackground-color: gray;
-    top: header-height - 15px;
+	padding:0;
+	margin:0;
+	background-color: white;
+    top: 0;
     position: relative;
-    height: "calc(100% - %s)" % (top-banner-height+header-height+footer-height+20);
-	overflow: auto;
+	overflow: scroll;
 	padding-left:10px;
 	padding-right:10px;
+	height:calc(100% - 120px);
 }
 
 #app #top-banner {
@@ -142,13 +144,6 @@ html:not(.touch) {
 			}
 		}
 
-		.item-list, .now-list {
-			margin:0
-			padding: 0
-			list-style: none
-			overflow: auto;
-			height: calc(100% - 86px);
-		}
 	}
 	.main {
 		position:relative;
@@ -161,13 +156,19 @@ html:not(.touch) {
 	}
 }
 
+.item-list, .now-list {
+	margin:0
+	padding: 0
+	list-style: none
+	overflow: auto;
+	height: calc(100% - 86px);
+}
+
 #app .left-sidebar #board-item {
 	cursor:pointer;
 	height:60px;
 
-	.item {
-		height:30px;
-	}
+
 
 	.item-msg-count {
 		top: 20px;
@@ -187,24 +188,23 @@ html:not(.touch) {
 
 }
 
-#app .left-sidebar a.item
+#app a.item {
 	text-decoration: none;
+}
 
 
-#app .left-sidebar .item.closed #content #title {
+#app .item.closed #content #title {
 	text-decoration: line-through;
 }
 
-#app .left-sidebar .item
+#app .item
 	position:relative;
 	display: block
 	padding:10px;
 	padding-bottom:20px;
 
 	#type-icon {
-		float: left;
-		font-size:2.5rem;
-		margin-right: 10px;
+		margin-right: 2px;
 		color: #ccc;
 	}
 
@@ -233,8 +233,8 @@ html:not(.touch) {
 	}
 
 	#content
-		padding-left:50px;
-		padding-right:50px;
+		padding-left:2px;
+		padding-right:5px;
 
 	#title
 		font-size:14px;
@@ -247,9 +247,9 @@ html:not(.touch) {
 		xoverflow: ellipsis;
 
 
-#app .left-sidebar .item:hover
+#app .item:hover
 	background-color:#e7edf3;
-#app .left-sidebar .item.active
+#app .item.active
 	background-color:#e7edf3;
 
 #show-more-link {
@@ -258,10 +258,8 @@ html:not(.touch) {
 }
 
 .message {
-	padding-top: 10px;
-	padding-left: 10px;
-	padding-bottom: 15px;
 	list-style-type none;
+  margin-bottom: 20px;
 
 	.header-item {
 		font-size:12px;
@@ -279,15 +277,15 @@ html:not(.touch) {
 
 
 	.profile-image {
-		width:34px;
-		height:34px;
+		width:16px;
+		height:16px;
 		margin-top:5px;
 		float:left;
 		border-radius:30px;
 	}
 
 	.content {
-		padding-left:50px;
+		padding-left:25px;
 		color: #000000;
 		font-size: 15px;
 	}
@@ -480,7 +478,7 @@ footer
 #messageBox {
 	border: 2px solid #d3d3d3;
 	margin-top:5px;
-	width: calc(100% - 440px);
+	width: calc(100% - 10px);
 	resize: none;
 	min-height: 60px;
 }
@@ -1303,7 +1301,17 @@ footer
 .tabs-header .tab {
 	padding:5px;
 	font-size:12px;
+  color:gray;
 
+}
+
+.tabs-header .tab :hover {
+  color:black;
+
+}
+
+.tabs-header a:hover {
+  text-decoration:none;
 }
 
 .tabs-header .tab-active {

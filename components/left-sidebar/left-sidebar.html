@@ -1,20 +1,25 @@
 <template name="leftSidebar">
 	<div class="left-sidebar">
 		<div class="tabs-header">
-			<a id="now-tab" class="{{activeTabClass 'now-tab'}} tab"> <i class="fa fa-exclamation-circle"></i> My List</a>
-			<a id="items-tab" class="{{activeTabClass 'items-tab'}} tab"> <i class="fa fa-circle"></i> All Items</a>
-			<a id="labels-tab" class="{{activeTabClass 'labels-tab'}} tab"> <i class="fa fa-tag"></i> Labels</a>
-			<a id="filters-tab" class="{{activeTabClass 'filters-tab'}} tab"> <i class="fa fa-filter"></i> Filters</a>
+      <a id="items-tab" class="{{activeTabClass 'items-tab'}} tab"> <i class="fa fa-exclamation-circle"></i> Backlog</a>
+      <a id="done-tab" class="{{activeTabClass 'done-tab'}} tab"> <i class="fa fa-check-circle"></i> Done</a>
+      <a id="discussions-tab" class="{{activeTabClass 'discussions-tab'}} tab"> <i class="fa fa-comments-o"></i> Discussions</a>
+      <a id="articles-tab" class="{{activeTabClass 'articles-tab'}} tab"> <i class="fa fa-book"></i> Articles</a>
+			<!--<a id="labels-tab" class="{{activeTabClass 'labels-tab'}} tab"> <i class="fa fa-tag"></i> Labels</a>
+			<a id="filters-tab" class="{{activeTabClass 'filters-tab'}} tab"> <i class="fa fa-filter"></i> Filters</a>-->
 			<a id="members-tab" class="{{activeTabClass 'members-tab'}} tab"> <i class="fa fa-users"></i> Members</a>
 		</div>
 		<div id="now-tab" class="tab-body {{activeTabClass 'now-tab'}}">
 			{{> nowList}}
 		</div>
 		<div id="items-tab" class="tab-body {{activeTabClass 'items-tab'}}">
-			<div class="filter-sentence-wrapper">
+			<!--<div class="filter-sentence-wrapper">
 				<span id="filter-sentence">{{{filterSentence}}}</span> <span id="active-item-msg" class="{{showActiveItemMsgClass}}">#{{currentItemKey}} is active <i id="clear-active-item-icon" class="fa fa-times" title="Clear active item"></i></span>
-			</div>
+			</div>-->
 			{{> itemList}}
+		</div>
+    <div id="done-tab" class="tab-body {{activeTabClass 'done-tab'}}">
+			{{> doneList}}
 		</div>
 		<div id="labels-tab" class="tab-body {{activeTabClass 'labels-tab'}}">
 			{{> labelsList}}

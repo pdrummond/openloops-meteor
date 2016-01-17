@@ -26,7 +26,7 @@ if(Meteor.isClient) {
 
 		'click #create-link': function() {
 			Ols.Router.showCreateItemPage();
-		}
+		}    
 	});
 
 	Template.topBanner.helpers({

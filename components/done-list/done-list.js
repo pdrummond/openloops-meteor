@@ -1,6 +1,6 @@
 if(Meteor.isClient) {
 
-	Template.itemList.events({
+	Template.doneList.events({
 		'keyup #filter-input': function() {
 			var self = this;
 			if(this.filterInputKeyTimer) {
@@ -14,7 +14,7 @@ if(Meteor.isClient) {
 		},
 	});
 
-	Template.itemList.helpers({
+	Template.doneList.helpers({
 
 		noItems: function() {
 			return Ols.Item.find(OpenLoops.getFilterQuery(Session.get('filterQuery'))).count() == 0;
@@ -22,8 +22,7 @@ if(Meteor.isClient) {
 
 		items: function() {
       var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
-      filter.assignee = {$exists: false};
-      filter.isOpen = true;
+      filter.isOpen = false;
 			return Ols.Item.find(filter, {sort: {updatedAt: -1}});
 		}
 	});

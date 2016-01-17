@@ -16,8 +16,8 @@ Ols.ClientMessage = {
 
 	//TODO: Figure out if _collection is required for HistoryManager. If not,
 	//remove this.
-	_removeAllRaw: function() {
-		ClientMessages._collection.remove({});
+	_removeAllRaw: function(selector, callback) {
+		ClientMessages._collection.remove(selector, callback);
 	},
 
 	//TODO: Figure out if _collection is required for HistoryManager. If not,
