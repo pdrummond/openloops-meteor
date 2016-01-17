@@ -136,6 +136,25 @@ if(Meteor.isClient) {
       return title;
     },
 
+    selectedCardDescription: function() {
+      var desc = "No Description";
+      item = Ols.Item.findOne(Template.instance().selectedCardId.get());
+      if(item && item.description) {
+        desc = item.description;
+      }
+      return desc;
+    },
+
+    selectedItemIcon: function() {
+      item = Ols.Item.findOne(Template.instance().selectedCardId.get());
+      return OpenLoops.getItemTypeIcon(item);
+    },
+
+    selectedItemIconColor: function() {
+      item = Ols.Item.findOne(Template.instance().selectedCardId.get());
+      return OpenLoops.getItemTypeIconColor(item);
+    },
+
     selectedCardKey: function() {
       var cardKey = '???';
 			item = Ols.Item.findOne(Template.instance().selectedCardId.get());
@@ -257,7 +276,7 @@ if(Meteor.isClient) {
       });
     },
 
-    'click #item-detail-back-button': function(e, t) {
+    'click #back-button': function(e, t) {
       t.selectedCardId.set(null);
     }
   });

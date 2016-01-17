@@ -22,13 +22,14 @@
 	<div class="queue-container" style="position:relative">
 		<div class="queue-header">
 			<div class="title" style="float:left;color:black;font-weight:bold;text-transform:uppercase;">
-        {{title}}'s {{queueTitle}}
+        {{title}}
         {{#if isCardSelected}}
           / {{selectedCardKey}}
         {{/if}}
       </div>
 			<div class="buttons" style="float:right;color:gray">
         {{#if isCardSelected}}
+        <i id="back-button" class="cursor-pointer fa fa-arrow-left"></i>
         <i id="edit-button" title="Edit card details" class="cursor-pointer queue-header-button fa fa-pencil"></i>
         <i id="send-button" title="Send to another user" class="cursor-pointer queue-header-button fa fa-paper-plane"></i>
         <i id="send-to-backlog-button" title="Move to backlog" class="cursor-pointer queue-header-button fa fa-rocket"></i>
@@ -40,7 +41,7 @@
 		{{#if isCardSelected}}
 		<div class="item-detail" style="height: calc(100% - 30px);">
 			<div class="item-header">
-				<i id="item-detail-back-button" class="cursor-pointer fa fa-arrow-left"></i> {{selectedItemTitle}}
+         <i style="color:{{selectedItemIconColor}}" class="fa {{selectedItemIcon}}"></i> {{selectedItemTitle}}      
 			</div>
 			{{> messageHistory selectedItemId=selectedItemId}}
 			<div class="item-footer" style="position:absolute;bottom:0;width: calc(100% - 10px);">
