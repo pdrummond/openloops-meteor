@@ -91,7 +91,7 @@ if(Meteor.isClient) {
     sortableList.sortable();
     sortableList.sortable().off( 'sortupdate' );
     sortableList.sortable().on( 'sortupdate', () => {
-      updateIndexes( '.sortable' );
+      updateIndexes( '.sortable', template );
     });
   };
 

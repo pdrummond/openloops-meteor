@@ -4,6 +4,10 @@ Meteor.methods({
     var now = new Date().getTime();
     console.log("new item project id " + newItem.projectId);
 
+    /*let itemCount = Items.find().count();
+    let order     = itemCount + 1;*/
+    let order = 99999;
+
     newItem = _.extend({
       pid: newItem.projectId?incrementCounter('counters', newItem.projectId):0,
       createdAt: now,
@@ -11,7 +15,7 @@ Meteor.methods({
       updatedAt: now,
       isOpen: true,
       numMessages: 0,
-      order: 99999,
+      order: order,
       tabs: [
         {_id: "description", icon: 'fa-book', label: "Description", type: Ols.Item.Tab.TAB_TYPE_ITEM_DESCRIPTION},
         {_id: "messages", icon: 'fa-comments-o', label: "Messages", type: Ols.Item.Tab.TAB_TYPE_MESSAGE_HISTORY},

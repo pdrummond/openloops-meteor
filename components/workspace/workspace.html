@@ -67,11 +67,11 @@
 				<div id="top-content">
 					<a href="" id="title">
             <i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
-            {{card.title}} ({{card.order}})
+            {{card.title}}
           </a>
 					<div id="meta">
 						<span class="item-key">#{{projectKey this.card}}-{{card.pid}}</span> ●
-						{{timeAgo card.createdAt}}
+						{{timeAgo card.createdAt}} ● {{card.order}}
 					</div>
 					<div id="meta"> {{truncateString card.description 200}}</div>
 				</div>
