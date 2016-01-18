@@ -39,7 +39,7 @@ html:not(.touch) {
 
 #app #top-banner {
 	height:top-banner-height;
-	background-color: #455a64;
+	background-color: #952A16;
 
 	#main-title {
 		a {
@@ -107,7 +107,7 @@ html:not(.touch) {
 	.left-sidebar {
 		transition: all 0.5s ease;
 		height "calc(100% - %s)" % top-baner-height;
-		top top-banner-height;
+		top 0px;
 		left 0
 		bottom 0
 		position fixed
@@ -116,8 +116,8 @@ html:not(.touch) {
 		color gray
 		background-color white
 		z-index:999
-		border-right: 1px solid lightgray;
-		box-shadow: 0 6px 6px rgba(0,0,0,0.35);
+		border-right: 1px solid black;
+		box-shadow: 0 6px 6px black;
 
 		#active-list {
 			cursor:pointer;
@@ -978,8 +978,8 @@ footer
 
 #connection-status {
 	position: absolute;
-	left: 22px;
-	top: 30px;
+	left: 10px;
+	top: 9px;
 	width: 2px;
 	height: 2px;
 	padding: 2px;
@@ -987,11 +987,11 @@ footer
 }
 
 #connection-status.connecting {
-	background-color: white;
+	background-color: gray;
 }
 
 #connection-status.connected {
-	background-color: green;
+  display:none;
 }
 #connection-status.failed {
 	background-color: red;
@@ -1275,8 +1275,10 @@ footer
 .tabs-header {
 	display:flex;
 	cursor:pointer;
+  background-color:#952A16;
 	border-bottom: 1px solid lightgray;
 	padding:10px 5px 10px 5px;
+  height:75px;
 
 	i {
 		display: block;
@@ -1301,12 +1303,11 @@ footer
 .tabs-header .tab {
 	padding:5px;
 	font-size:12px;
-  color:gray;
-
+  color:#E18989;
 }
 
 .tabs-header .tab :hover {
-  color:black;
+  color:white;
 
 }
 
@@ -1315,7 +1316,7 @@ footer
 }
 
 .tabs-header .tab-active {
-	color:black;
+	color:white;
 }
 
 

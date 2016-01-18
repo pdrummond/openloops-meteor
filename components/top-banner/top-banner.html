@@ -1,36 +1,26 @@
 
 <template name="topBanner">
-	{{> fullScreenEditor}}
-	{{> boardChooserMenu}}
-	<div id="top-banner">
-		<div style="padding-top:10px">
-			<div class="left">
-				{{> openLoopsEye}}
-				<span style="margin-left:10px" id="main-title">
-					<div id="header-title">
-					<span class="project-key">{{headerProjectTitle}}</span><br/>
-					<a href="" class="project-title">{{headerBoardTitle}}</a>
-					<i id="boards-dropdown-button" class="fa fa-caret-down" style="position:relative;top:-5px;left:5px"></i>
-					</div>
-				</span>
-				<div id="top-header">
-					<a id="explore-link"><i class="fa fa-compass fx-2x"></i></a>
-					<input id="search-input" class="search-input" placeholder="Type here to search">
-					<!--<a id="create-link"><i class="fa fa-plus fx-2x"></i></a>-->
-          <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#new-card-dialog">
-  <i class="fa fa-plus fx-2x"></i> Create
-</button>
-				</div>
-			</div>
-			<div class="right">
-				<div style="position:relative;top:-35px">
-					<div id="logged-in-user"><strong>{{currentUser.username}}</strong></div>
-					{{#if currentUser}}
-					<a href="" id="logout-link" style="display:block;text-align:right;color:white;font-size:12px">logout</a>
-					{{/if}}
-				</div>
-			</div>
-		</div>
-	</div>
+  {{> boardChooserMenu}}
+  <div id="top-banner">
+    <div style="padding-top:10px">
+      <div class="left">
+        {{> openLoopsEye}}
+        <span style="margin-left:10px" id="main-title"></span>
+        <!--<a id="create-link"><i class="fa fa-plus fx-2x"></i></a>-->
+        <!-- Button trigger modal -->
+      </div>
+    </div>
+    <div class="right">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-card-dialog" style="margin-right:10px">
+        <i class="fa fa-plus fx-2x"></i> Create
+      </button>
+      <div style="position:relative;top:-3px">
+        <div id="logged-in-user"><strong>{{currentUser.username}}</strong></div>
+        {{#if currentUser}}
+        <a href="" id="logout-link" style="display:block;text-align:right;color:white;font-size:12px">logout</a>
+        {{/if}}
+      </div>
+    </div>
+
+  </div>
 </template>
