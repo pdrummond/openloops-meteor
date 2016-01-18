@@ -8,7 +8,7 @@
   {{/onlyIfProjectAccess}}
 </template>
 
-<template name="workspace">  
+<template name="workspace">
   <div class="workspace-container">
 
     {{>queue title = 'pdrummond' username = 'pdrummond' queue = 1 }}
@@ -68,12 +68,13 @@
         <div id="top-content">
           <a href="" id="title">
             <i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
+            <span class="item-key" style="color:gray;font-weight:300">#{{projectKey this.card}}-{{card.pid}}: </span>
             {{card.title}}
           </a>
-          <div id="meta">
-            <span class="item-key">#{{projectKey this.card}}-{{card.pid}}</span> ●
+          <!--<div id="meta">
+             ●
             {{timeAgo card.createdAt}} ● {{card.order}}
-          </div>
+          </div>-->
         </div>
         <!--<div id="item-labels">
         {{#each itemLabelIds}}
