@@ -107,7 +107,7 @@ if(Meteor.isClient) {
         alert( error.reason );
       }
     });
-};
+  };
 
   Template.queue.onCreated(function() {
     var self = this;
@@ -157,14 +157,14 @@ if(Meteor.isClient) {
 
     selectedCardKey: function() {
       var cardKey = '???';
-			item = Ols.Item.findOne(Template.instance().selectedCardId.get());
-			if(item) {
-				var project = Ols.Project.findOne(item.projectId);
-				if(project) {
-					cardKey = project.key + "-" + item.pid;
-				}
-			}
-			return cardKey;
+      item = Ols.Item.findOne(Template.instance().selectedCardId.get());
+      if(item) {
+        var project = Ols.Project.findOne(item.projectId);
+        if(project) {
+          cardKey = project.key + "-" + item.pid;
+        }
+      }
+      return cardKey;
     },
 
     selectedItemId: function() {
@@ -225,7 +225,7 @@ if(Meteor.isClient) {
               Ols.Error.showError('Error assigning item: ', err);
             } else {
               t.selectedCardId.set(null);
-               updateIndexes( '.sortable' );
+              updateIndexes( '.sortable' );
             }
           });
         }
@@ -238,7 +238,7 @@ if(Meteor.isClient) {
           Ols.Error.showError('Error un-assigning item: ', err);
         } else {
           t.selectedCardId.set(null);
-           updateIndexes( '.sortable' );
+          updateIndexes( '.sortable' );
         }
       });
     },

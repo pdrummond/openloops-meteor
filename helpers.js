@@ -209,7 +209,7 @@ if(Meteor.isClient) {
 			item = Ols.Item.findOne(Session.get('currentItemId'));
 		}
 		var project = Ols.Project.findOne(item.projectId);
-		console.log("< projectKey helper");
+		//console.log("< projectKey helper");
 		return project?(project.key?project.key:project.title.substring(0, 3)):null;
 	});
 
