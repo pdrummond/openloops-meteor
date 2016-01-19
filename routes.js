@@ -15,7 +15,14 @@ if(Meteor.isClient) {
 		}
 	});
 
-	FlowRouter.route('/', {
+  FlowRouter.route('/', {
+    name: 'workspacePage',
+		action: function(params, queryParams) {
+			BlazeLayout.render("app", {currentPage: "workspacePage"});
+    }
+  });
+
+	FlowRouter.route('/welcome', {
 		name: "welcome",
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', null);
@@ -41,7 +48,7 @@ if(Meteor.isClient) {
 		} else if(Meteor.userId()){
 			var route = FlowRouter.current();
 			if(route.path == "/login") {
-				FlowRouter.go("welcome");
+				FlowRouter.go("workspacePage");
 			}
 		}
 	});
@@ -125,21 +132,9 @@ if(Meteor.isClient) {
 		}
 	});
 
-	FlowRouter.route('/project/:projectId/edit-item/:itemId', {
-		name:'editProjectItem',
+	FlowRouter.route('/edit-item/:itemId', {
+		name:'editItemPage',
 		action: function(params, queryParams) {
-			Session.set('currentProjectId', params.projectId);
-			Session.set('currentBoardId', null);
-			Session.set('currentItemId', params.itemId);
-			BlazeLayout.render("app", {currentPage: "editItemPage"});
-		}
-	});
-
-	FlowRouter.route('/project/:projectId/board/:boardId/edit-item/:itemId', {
-		name:'editBoardItem',
-		action: function(params, queryParams) {
-			Session.set('currentProjectId', params.projectId);
-			Session.set('currentBoardId', params.boardId);
 			Session.set('currentItemId', params.itemId);
 			BlazeLayout.render("app", {currentPage: "editItemPage"});
 		}

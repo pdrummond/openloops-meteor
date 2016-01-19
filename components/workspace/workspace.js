@@ -1,5 +1,5 @@
 
-Queues = new Meteor.Collection('queues');
+Workspaces = new Meteor.Collection('workspace');
 Cards = new Meteor.Collection('cards');
 
 Cards.allow({
@@ -15,15 +15,48 @@ Cards.allow({
 });
 
 if(Meteor.isServer) {
+  /*
+  if(Workspaces.find().count() == 0) {
+    Workspaces.insert({
+      username: 'pdrummond',
+      title: 'pdrummond',
+      queues: [
+                {title:'pdrummond', 'type': 'USER_QUEUE', 'username': 'pdrummond'},
+                {title:'harold', 'type': 'USER_QUEUE', 'username': 'harold'},
+              ]
+    });
+  }*/
+
+  Meteor.publish("workspaces", function() {
+    return Workspaces.find();
+  });
+
+  Meteor.methods({
+    addQueue: function(workspaceId, queue) {
+      if(Workspaces.findOne({queues: queue.username}) != null) {
+  			throw new Meteor.Error("insert-queue-queue-error-001", 'Queue for ' + queue.username + ' already exists');
+  		}
+  		Workspaces.update(workspaceId, {$addToSet: {queues: queue}});
+    },
+
+    removeQueue: function(workspaceId, queue) {
+  		Workspaces.update(workspaceId, {$pull: {queues: {username: queue.username}}});
+    }
+  });
+
 }
 
 if(Meteor.isClient) {
 
   Template.workspace.onCreated(function() {
+    var self = this;
 		Tracker.autorun(function() {
 			var opts = {};
 			opts.filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
-			Meteor.subscribe('items', opts, function(err, result) {
+      Tracker.nonreactive(function() {
+        opts.username = Meteor.user().username;
+      });
+			self.subscribe('items', opts, function(err, result) {
 				if(err) {
 					Ols.Error.showError("Items Subscription error", err);
 				}
@@ -32,6 +65,11 @@ if(Meteor.isClient) {
 	});
 
   Template.workspace.helpers({
+
+    queues: function() {
+      var workspace = Workspaces.findOne({username: Meteor.user().username});
+      return workspace.queues;
+    },
 
     tabs: function() {
       var item = Ols.Item.getCurrent();
@@ -123,6 +161,7 @@ if(Meteor.isClient) {
 
   Template.queue.onCreated(function() {
     var self = this;
+    this.selectedWidth = new ReactiveVar('370px');
     this.selectedCardId = new ReactiveVar();
     Meteor.setTimeout(function() {
       console.log("ENABLING SORTABLE");
@@ -132,7 +171,9 @@ if(Meteor.isClient) {
 
   Template.queue.helpers({
     items: function () {
-      return Items.find({assignee:this.username}, {sort: {order: 1}});
+      var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
+      filter.assignee = this.username;
+      return Items.find(filter, {sort: {order: 1}});
     },
 
     isCardSelected: function() {
@@ -203,18 +244,32 @@ if(Meteor.isClient) {
         inInbox = item.inInbox;
       }
       return inInbox?"INBOX":"QUEUE";
+    },
+
+    queueWidth: function() {
+      return Template.instance().selectedWidth.get();
     }
 
   });
 
   Template.queue.events({
+
+    'click #remove-queue': function() {
+      var queue = this;
+      Meteor.call('removeQueue', Session.get('currentWorkspaceId'), queue, function(err, res) {
+        if(err) {
+          alert("Error - unable to remove queue: " + err);
+        }
+      });
+    },
+
     'click #resize-button': function(e, t) {
       var containerEl = t.find(".queue-container");
-      var width = $(containerEl).css('width');
+      var width = t.selectedWidth.get();
       switch(width) {
-        case '350px': width = '700px'; icon = 'fa-arrow-circle-o-right'; break;
-        case '700px': width = '1200px'; icon = 'fa-arrow-circle-o-left'; break;
-        case '1200px': width = '350px'; icon = 'fa-arrow-circle-o-right'; break;
+        case '370px': t.selectedWidth.set('700px'); icon = 'fa-arrow-circle-o-right'; break;
+        case '700px': t.selectedWidth.set('1200px'); icon = 'fa-arrow-circle-o-right'; break;
+        case '1200px': t.selectedWidth.set('370px'); icon = 'fa-arrow-circle-o-left'; break;
       }
       $(containerEl).css('width', width);
       $(containerEl).find('#resize-button').attr('class', 'fa ' + icon);
@@ -228,7 +283,7 @@ if(Meteor.isClient) {
       item = Ols.Item.findOne(t.selectedCardId.get());
       if(item) {
         var assignee = item.assignee;
-        assignee = prompt("Enter username of member to assign to:", item.assignee);
+        assignee = prompt("Enter username of queue to assign to:", item.assignee);
         assignee = assignee.trim();
         if(assignee != null && assignee.length > 0) {
           Meteor.call('updateItemAssignee', item._id, assignee, function(err, result) {

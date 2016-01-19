@@ -1,9 +1,7 @@
 Ols.Router = {
 
-	showBoardMessages: function(boardId) {
-		boardId = boardId || Session.get('currentBoardId');
-		var projectId = boardId ? Ols.Board.findOne(boardId).projectId : Session.get('currentProjectId');
-		FlowRouter.go('boardMessages', {projectId: projectId, boardId: boardId}, this._getQueryParams());
+	showWorkspace: function(boardId) {
+		FlowRouter.go('workspacePage');
 	},
 
 	showItemMessages: function(item, params) {
@@ -23,12 +21,7 @@ Ols.Router = {
 	},
 
 	showEditItemPage: function(itemId) {
-		var boardId = Session.get('currentBoardId');
-		if(boardId) {
-			FlowRouter.go('editBoardItem', {projectId: Session.get('currentProjectId'), boardId: boardId, itemId:itemId}, this._getQueryParams());
-		} else {
-			FlowRouter.go('editProjectItem', {projectId: Session.get('currentProjectId'), itemId:itemId}, this._getQueryParams());
-		}
+			FlowRouter.go('editItemPage', {itemId:itemId}, this._getQueryParams());
 	},
 
 	_getQueryParams: function() {

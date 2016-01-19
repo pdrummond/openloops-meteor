@@ -158,6 +158,19 @@ Meteor.publish("items", function(opts) {
   if(opts && opts.filter) {
     filter = _.extend(filter, opts.filter);
   }
+  var projectIds = [];
+
+  if(opts.username) {
+
+    Projects.find({'members.username': opts.username}).forEach(function(project) {
+      projectIds.push(project._id);
+    });
+    //User can see this card if they are a member or if they are the assignee or if they are the creator.
+    filter['$or'] = [{projectId: {$in:projectIds}}, {assignee: opts.username}, {createdBy: opts.username}];
+  } else {
+    filter.projectId = {$in: projectIds};
+  }
+
   console.log("ITEM filter: " + JSON.stringify(filter));
   return Ols.Item.find(filter, {sort: {updatedAt: -1}});
 });

@@ -63,27 +63,6 @@ Meteor.methods({
 
 	saveMessage: function(newMessage) {
 		console.log("saveMessage: " + JSON.stringify(newMessage));
-		check(newMessage, {
-			_id: Match.Optional(String),
-			projectId: String,
-			boardId: String,
-			type: String,
-			text: Match.Optional(String),
-			activityType: Match.Optional(String),
-			webHookType: Match.Optional(String),
-			eventType: Match.Optional(String),
-			event: Match.Optional(Match.Any),
-			createdAt: Match.Optional(Number),
-			createdBy: Match.Optional(String),
-			issueType: Match.Optional(String),
-			item: Match.Optional(Match.Any),
-			itemId: Match.Optional(Match.Any), //FIXME - item should be enough - need to get rid of other item fields here.
-			itemType: Match.Optional(String),
-			toBoard: Match.Optional(Match.Any),
-			fromBoard: Match.Optional(Match.Any),
-			activityImageUrl: Match.Optional(String)
-		});
-		console.log("check passed");
 		newMessage.createdAt = new Date().getTime();
 		newMessage.createdBy = newMessage.createdBy || Meteor.user().username;
 

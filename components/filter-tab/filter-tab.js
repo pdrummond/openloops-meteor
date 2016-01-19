@@ -1,7 +1,7 @@
 if(Meteor.isClient) {
   Template.filterTab.helpers({
     projects: function() {
-      return Projects.find();
+      return Ols.Project.find({'members.username': Meteor.user().username});
     }
   });
 

@@ -65,6 +65,10 @@ if(Meteor.isClient) {
 			Session.set('filterQuery', '');
 		},
 
+    'click .tabs-header #feed-tab': function() {
+      Session.set('leftSidebarActiveTab', 'feed-tab');
+    },
+
 		'click .tabs-header #items-tab': function() {
 			Session.set('leftSidebarActiveTab', 'items-tab');
 		},

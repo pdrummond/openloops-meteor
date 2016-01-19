@@ -5,6 +5,10 @@ if(Meteor.isClient) {
   });
 
   Template.newCardDialog.helpers({
+    projects: function() {
+		    return Ols.Project.find({'members.username': Meteor.user().username});
+    },
+
     createButtonLabel: function() {
       var label = 'Send to Backlog';
       var assignee = Template.instance().toField.get();
@@ -34,6 +38,7 @@ if(Meteor.isClient) {
       if(title != null && title.length > 0) {
         var description = $("#new-card-dialog textarea[name='description']").val();
         var type = $("#new-card-dialog select[name='type']").val();
+        var project = $("#new-card-dialog select[name='project']").val();
         var issueType;
         switch(type) {
           case 'task':
@@ -49,14 +54,12 @@ if(Meteor.isClient) {
           issueType = 'bug';
           break;
         };
-
         var item = {
           title: title,
           description: description,
           type: type,
           issueType: issueType,
-          projectId: Session.get('currentProjectId'),
-          boardId: Session.get('currentBoardId'),
+          projectId: project
         };
         var assignee = $("#new-card-dialog input[name='to']").val();
         if(assignee && assignee.trim().length > 0) {
@@ -70,7 +73,7 @@ if(Meteor.isClient) {
             $("#new-card-dialog input[name='title']").val('');
             $("#new-card-dialog textarea[name='description']").val('');
             $("#new-card-dialog input[name='to']").val('');
-            initSortable( '.sortable', t);
+            //initSortable( '.sortable', t);
           }
         });
       }

@@ -54,20 +54,29 @@ if(Meteor.isServer) {
 	Accounts.onCreateUser(function(options, user) {
 		console.log("newUser: " + JSON.stringify(user));
 
+    var username = user.username;
 		var email = user.emails[0].address;
-		console.log("number of team members: " + TeamMembers.find({}).count());
-		if(TeamMembers.find({}).count() == 0) {
-			var id = TeamMembers.insert({
-				email: email,
-				role: Ols.ROLE_ADMIN,
-			});
-			console.log("Added Team Member " + email + "(" + id + ")");
-		} else {
-			var teamMember = TeamMembers.findOne({email:email});
-			if(teamMember == null) {
-				throw new Meteor.Error("create-user-failed-001", "Sorry, but you aren't a member of this OpenLoops Team yet");
-			}
-		}
+    Workspaces.insert({
+      username: username,
+      title: username,
+      queues: [
+                {title:username, 'type': 'USER_QUEUE', 'username': username},
+              ]
+    });
+    Projects.insert({
+      title: "Default",
+      key: username.toUpperCase(),
+      description: "Your very own personal space - only you can see the cards in here",
+      members: [{
+          role: 'ADMIN',
+          username: username,
+      }]
+    });
+    var email = user.emails[0].address;
+    TeamMembers.insert({
+      email: email,
+      role: "ADMIN",
+    });
 
 		user.profileImage = Gravatar.imageUrl(email, {size: 50,default: 'wavatar'});
 

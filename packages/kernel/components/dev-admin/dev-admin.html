@@ -1,5 +1,5 @@
 <template name="devAdminPage">
-	{{#onlyIfAdminUser}}
+	{{#onlyIfLoggedIn}}
 	<div style="padding:10px;margin:50px;background-color:whitesmoke;board-radius:10px">
 		<h1>Dev Admin Functions</h1>
 		<ul>
@@ -15,8 +15,10 @@
 			<li id="add-item-tabs"><a href="">Add Tabs To Items</a></li>
 			<li id="add-prj-to-new-board-activity-msg"><a href="">Add Project to Board Activity Message</a></li>
       <li id="add-order-field-to-items"><a href="">Add Order Field To Items</a></li>
+      <li id="add-workspace-for-existing-users"><a href="">Add workspace for existing users</a></li>
+      <li id="add-default-project-for-existing-users"><a href="">Add default project for existing users</a></li>
 		</ul>
 		<p id="status"></p>
 	</div>
-	{{/onlyIfAdminUser}}
+	{{/onlyIfLoggedIn}}
 </template>

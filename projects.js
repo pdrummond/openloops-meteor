@@ -6,8 +6,7 @@ if(Meteor.isClient) {
 				return Ols.Project.find();
 			} else {
 				return Ols.Project.find({'members.username': Meteor.user().username});
-			}
-			return Ols.Project.find();
+			}		
 		},
 
 		projectsListEmpty: function() {

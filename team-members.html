@@ -1,12 +1,12 @@
 <template name="teamMembersList">
-	{{#onlyIfAdminUser}}
+	{{#onlyIfLoggedIn}}
 	<a href="/team-members/create">Add Team Member</a>
 	<ul>
 		{{#each teamMembers}}
 			{{> teamMemberItem}}
 		{{/each}}
 	</ul>
-	{{/onlyIfAdminUser}}
+	{{/onlyIfLoggedIn}}
 </template>
 
 <template name="teamMemberItem">
@@ -18,7 +18,7 @@
 </template>
 
 <template name="editTeamMemberForm">
-	{{#onlyIfAdminUser}}
+	{{#onlyIfLoggedIn}}
 	<div id="editTeamMemberForm" class="main">
 		<form>
 			<fieldset>
@@ -37,5 +37,5 @@
 			<button id="save-button">Save Member</button>
 		</form>
 	</div>
-	{{/onlyIfAdminUser}}
+	{{/onlyIfLoggedIn}}
 </template>

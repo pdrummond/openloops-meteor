@@ -109,14 +109,12 @@ if(Meteor.isClient) {
 				};
 				var currentItemId = Session.get('currentItemId');
 				if(currentItemId == null) {
-					item.projectId = Session.get('currentProjectId');
-					item.boardId = Session.get('currentBoardId');
 					Meteor.call('insertItem', item, function(err, newItem) {
 						if(err) {
 							Ols.Error.showError("Error adding item",  err);
-							Ols.Router.showBoardMessages();
+							Ols.Router.showWorkspace();
 						} else {
-							Ols.Router.showItemMessages(newItem);
+							Ols.Router.showWorkspace();
 						}
 					});
 
@@ -124,9 +122,9 @@ if(Meteor.isClient) {
 					Meteor.call('updateItem', currentItemId, item, function(err, newItem) {
 						if(err) {
 							Ols.Error.showError("Error updating item",  err);
-							Ols.Router.showBoardMessages();
+							Ols.Router.showWorkspace();
 						} else {
-							Ols.Router.showItemMessages(newItem);
+							Ols.Router.showWorkspace();
 						}
 					});
 				}

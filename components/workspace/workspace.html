@@ -1,26 +1,26 @@
 
 <template name="workspacePage">
-  {{#onlyIfProjectAccess}}
+  {{#onlyIfLoggedIn}}
   {{> topBanner}}
   {{> leftSidebar}}
   {{> workspace}}
   {{> rightSidebar}}
   {{> newCardDialog}}
-  {{/onlyIfProjectAccess}}
+  {{/onlyIfLoggedIn}}
 </template>
 
 <template name="workspace">
   <div class="workspace-container">
 
-    {{>queue title = 'pdrummond' username = 'pdrummond' queue = 1 }}
-    {{>queue title = 'harold' username = 'harold' queue = 2 }}
-    {{>queue title = 'bob' username = 'bob' queue = 3}}
+    {{#each queues}}
+      {{>queue}}
+    {{/each}}
 
   </div>
 </template>
 
 <template name="queue">
-  <div class="queue-container" style="position:relative">
+  <div class="queue-container" style="position:relative;width={{queueWidth}}">
     <div class="queue-header">
       <div class="title" style="float:left;color:black;font-weight:bold;text-transform:uppercase;">
         {{title}}
@@ -37,6 +37,7 @@
         <i id="done-button" title="Close Card" class="cursor-pointer queue-header-button fa fa-check-circle-o"></i>
         {{/if}}
         <i id="resize-button" class="cursor-pointer queue-header-button fa fa-arrow-circle-o-right"></i>
+        <i id="remove-queue" title="Remove Queue" class="cursor-pointer queue-header-button fa fa-times"></i>
       </div>
     </div>
     {{#if isCardSelected}}
@@ -54,7 +55,7 @@
       {{#each items}}
       {{> cardView card=this selectedCardId=_getSelectedCardId}}
       {{/each}}
-      <button id="quick-add-card" class="btn btn-link" style="color:gray"><i class="fa fa-plus"></i> Add Card</button>
+      <!--<button id="quick-add-card" class="btn btn-link" style="color:gray"><i class="fa fa-plus"></i> Add Card</button>-->
     </ul>
     {{/if}}
 
@@ -69,13 +70,11 @@
         <div id="top-content">
           <a href="" id="title">
             <i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
-            <span class="item-key" style="color:gray;font-weight:300">#{{projectKey this.card}}-{{card.pid}}: </span>
             {{card.title}}
           </a>
-          <!--<div id="meta">
-             ●
-            {{timeAgo card.createdAt}} ● {{card.order}}
-          </div>-->
+          <div id="meta">
+            <span class="item-key">#{{projectKey this.card}}-{{card.pid}} created {{timeAgo card.createdAt}}</span>
+          </div>
         </div>
         <!--<div id="item-labels">
         {{#each itemLabelIds}}

@@ -143,6 +143,27 @@ if(Meteor.isClient) {
 			});
 		},
 
+    'click #add-workspace-for-existing-users': function() {
+      $("#status").text("Working...");
+      Meteor.call('addWorkspaceForExistingUsers', function(err, results) {
+        if(err) {
+          $("#status").text("Error " + err.reason);
+        } else {
+          $("#status").text("Completed Successfully.");
+        }
+      });
+    },
+
+    'click #add-default-project-for-existing-users': function() {
+      $("#status").text("Working...");
+      Meteor.call('addDefaultProjectForExistingUsers', function(err, results) {
+        if(err) {
+          $("#status").text("Error " + err.reason);
+        } else {
+          $("#status").text("Completed Successfully.");
+        }
+      });
+    }
 
 	});
 }
@@ -289,6 +310,39 @@ if(Meteor.isServer) {
     addOrderFieldToItems: function() {
       Items.find().forEach(function(item) {
         Items.update(item._id, {$set: {order: 1}});
+      });
+    },
+
+    addWorkspaceForExistingUsers: function() {
+      Meteor.users.find().forEach(function(user) {
+        var username = user.username;
+        Workspaces.insert({
+          username: username,
+          title: username,
+          queues: [
+                    {title:username, 'type': 'USER_QUEUE', 'username': username},
+                  ]
+        });
+      });
+    },
+
+    addDefaultProjectForExistingUsers: function() {
+      Meteor.users.find().forEach(function(user) {
+        var username = user.username;
+        var projectId = Projects.insert({
+          title: "Default",
+          key: username.toUpperCase(),
+          description: "",
+          members: [{
+              role: 'ADMIN',
+              username: username,
+          }]
+        });
+        var email = user.emails[0].address;
+        TeamMembers.insert({
+          email: email,
+          role: "ADMIN",
+        });
       });
     }
 	})

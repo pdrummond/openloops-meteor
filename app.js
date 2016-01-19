@@ -30,8 +30,7 @@ if(Meteor.isClient) {
 			remainingText = remainingText.replace(field, '');
 			remainingText = remainingText.replace(value, '');
 			remainingText = remainingText.replace(/:/g, '');
-      if(field == 'projectId') {
-        console.log("BOOM!!### " + value);
+      if(field == 'projectId') {        
         value = {$in: value.split('-') };
       } else if(field == "label") {
 				field = "labels";
@@ -85,6 +84,10 @@ if(Meteor.isClient) {
 	});
 
 	Template.app.onCreated(function() {
+    this.subscribe('workspaces', function() {
+      var workspace = Workspaces.findOne({username: Meteor.user().username});
+      Session.set('currentWorkspaceId', workspace._id);
+    });
 		this.subscribe('allUsernames');
 		this.subscribe('userStatus');
 		this.subscribe('projects');

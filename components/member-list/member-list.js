@@ -3,15 +3,7 @@ if(Meteor.isClient) {
 	Template.memberList.helpers({
 
 		projectUsers: function() {
-			var project = Ols.Project.getCurrent();
-
-			var projectUsers = [];
-			Meteor.users.find().forEach(function(user) {
-				if(_.findWhere(project.members, {username: user.username}) != null) {
-					projectUsers.push(user);
-				}
-			});
-			return projectUsers;
+			return Meteor.users.find();
 		}
 	});
 
@@ -34,4 +26,15 @@ if(Meteor.isClient) {
 			return state;
 		}
 	});
+
+  Template.userCard.events({
+    'click #add-queue': function() {
+      var queue = {title:this.username, 'type': 'USER_QUEUE', 'username': this.username};
+      Meteor.call('addQueue', Session.get('currentWorkspaceId'), queue, function(err, res) {
+        if(err) {
+          alert("Error - unable to add queue: " + err);
+        }
+      });
+    }
+  })
 }

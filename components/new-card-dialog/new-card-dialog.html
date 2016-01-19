@@ -17,8 +17,9 @@
 
               <label style="margin-top:30px">Description</label>
               <textarea  style="width:100%" name="description" placeholder="Enter description"></textarea>
-              <label style="display:inline;margin-right:10px">Type</label>
-
+              <div class="row" style="display:flex">
+                <div>
+                <label style="display:inline;margin-right:10px">Type</label>
               <select name="type" style="margin-top:30px">
                 <option value="task">Task</option>
                 <option value="discussion">Discussion</option>
@@ -26,6 +27,16 @@
                 <option value="enhancement">Enhancement</option>
                 <option value="bug">Bug</option>
               </select>
+            </div>
+            <div>
+                <label style="display:inline;margin-right:10px">Project</label>
+              <select name="project" style="margin-top:30px">
+                  {{#each projects}}
+                    <option value="{{_id}}">{{title}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            </div>
 
             </fieldset>
           </form>
