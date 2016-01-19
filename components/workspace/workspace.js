@@ -2,19 +2,22 @@
 Workspaces = new Meteor.Collection('workspace');
 Cards = new Meteor.Collection('cards');
 
-Cards.allow({
-  insert: function (userId, card) {
+Items.allow({
+  insert: function (userId, item) {
     return true;
   },
-  update: function (userId, card) {
+  update: function (userId, item) {
     return true;
   },
-  remove: function (userId, card) {
+  remove: function (userId, item) {
     return true;
   },
 });
 
 if(Meteor.isServer) {
+
+  Sortable.collections = ['items'];
+
   /*
   if(Workspaces.find().count() == 0) {
     Workspaces.insert({
@@ -135,7 +138,7 @@ if(Meteor.isClient) {
     }
   });
 
-  let initSortable = ( sortableClass, template ) => {
+  /*let initSortable = ( sortableClass, template ) => {
     let sortableList = template.$( sortableClass );
     sortableList.sortable( 'destroy' );
     sortableList.sortable();
@@ -157,7 +160,7 @@ if(Meteor.isClient) {
         alert( error.reason );
       }
     });
-  };
+  };*/
 
   Template.queue.onCreated(function() {
     var self = this;
@@ -165,7 +168,7 @@ if(Meteor.isClient) {
     this.selectedCardId = new ReactiveVar();
     Meteor.setTimeout(function() {
       console.log("ENABLING SORTABLE");
-      initSortable( '.sortable', self);
+      //initSortable( '.sortable', self);
     }, 1000);
   });
 
@@ -229,12 +232,12 @@ if(Meteor.isClient) {
     },
 
     itemsOptions: {
-      sortField: 'order',  // defaults to 'order' anyway
+      /*sortField: 'order',  // defaults to 'order' anyway
       group: {
         name: 'queue',
         pull: true,
         put: true
-      }
+      }*/      
     },
 
     queueTitle: function() {
@@ -305,7 +308,7 @@ if(Meteor.isClient) {
           Ols.Error.showError('Error un-assigning item: ', err);
         } else {
           t.selectedCardId.set(null);
-          updateIndexes( '.sortable' );
+          //updateIndexes( '.sortable' );
         }
       });
     },
@@ -316,7 +319,7 @@ if(Meteor.isClient) {
           Ols.Error.showError("Error toggling item status: ", err);
         } else {
           t.selectedCardId.set(null);
-          updateIndexes( '.sortable' );
+          //updateIndexes( '.sortable' );
         }
       });
     },
@@ -338,7 +341,7 @@ if(Meteor.isClient) {
           Ols.Router.showBoardMessages();
         } else {
           Ols.Router.showItemMessages(newItem, {tabName: 'description'});
-          initSortable( '.sortable', t);
+          //initSortable( '.sortable', t);
         }
       });
     },
@@ -350,29 +353,29 @@ if(Meteor.isClient) {
 
   Template.cardView.helpers({
     isClosedClass: function() {
-      return this.card.isOpen?'':'closed';
+      return this.isOpen?'':'closed';
     },
 
     numMessages: function() {
-      return this.card.numMessages - 1; //to remove the description
+      return this.numMessages - 1; //to remove the description
     },
 
     typeIcon: function() {
-      return OpenLoops.getItemTypeIcon(this.card);
+      return OpenLoops.getItemTypeIcon(this);
     },
 
     typeIconColor: function() {
-      return OpenLoops.getItemTypeIconColor(this.card);
+      return OpenLoops.getItemTypeIconColor(this);
     },
 
     isActive: function() {
-      return this.card._id == Session.get('currentItemId')?'active':'';
+      return this._id == Session.get('currentItemId')?'active':'';
     }
   });
 
   Template.cardView.events({
     'click #top-content': function(e, t) {
-      this.selectedCardId.set(this.card._id);
+      //this.selectedCardId.set(this.card._id);
     },
 
     'click .label-item': function(e) {

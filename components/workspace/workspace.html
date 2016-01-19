@@ -52,9 +52,11 @@
     </div>
     {{else}}
     <ul class="queue-list sortable"  style="clear:both;margin:0;padding:0">
-      {{#each items}}
-      {{> cardView card=this selectedCardId=_getSelectedCardId}}
-      {{/each}}
+      {{#sortable items=items options=itemsOptions}}
+      <!--{{#each items}}-->
+      {{> cardView}}
+      {{/sortable}}
+      <!--{{/each}}-->
       <!--<button id="quick-add-card" class="btn btn-link" style="color:gray"><i class="fa fa-plus"></i> Add Card</button>-->
     </ul>
     {{/if}}
@@ -64,16 +66,16 @@
 
 
 <template name="cardView">
-  <li  data-id={{card._id}} >
+  <li  data-id={{_id}} >
     <a class="item {{isActive}} {{isClosedClass}}" href="">
       <div id="content">
         <div id="top-content">
           <a href="" id="title">
             <i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
-            {{card.title}}
+            {{title}}
           </a>
           <div id="meta">
-            <span class="item-key">#{{projectKey this.card}}-{{card.pid}} created {{timeAgo card.createdAt}}</span>
+            <span class="item-key">#{{projectKey this}}-{{pid}} created {{timeAgo createdAt}}</span>
           </div>
         </div>
         <!--<div id="item-labels">

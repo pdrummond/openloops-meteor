@@ -172,7 +172,7 @@ Meteor.publish("items", function(opts) {
   }
 
   console.log("ITEM filter: " + JSON.stringify(filter));
-  return Ols.Item.find(filter, {sort: {updatedAt: -1}});
+  return Ols.Item.find(filter, {sort: {order: 1}});
 });
 
 Meteor.publish("articles", function(opts) {
