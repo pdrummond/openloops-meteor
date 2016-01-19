@@ -4,9 +4,9 @@ Meteor.methods({
     var now = new Date().getTime();
     console.log("new item project id " + newItem.projectId);
 
-    /*let itemCount = Items.find().count();
-    let order     = itemCount + 1;*/
-    let order = 99999;
+    let itemCount = Items.find().count();
+    let order     = itemCount + 1;
+
 
     newItem = _.extend({
       pid: newItem.projectId?incrementCounter('counters', newItem.projectId):0,

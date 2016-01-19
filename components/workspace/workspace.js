@@ -237,7 +237,7 @@ if(Meteor.isClient) {
         name: 'queue',
         pull: true,
         put: true
-      }*/      
+      }*/
     },
 
     queueTitle: function() {
@@ -376,6 +376,8 @@ if(Meteor.isClient) {
   Template.cardView.events({
     'click #top-content': function(e, t) {
       //this.selectedCardId.set(this.card._id);
+      //UGH!  This depends on the specific structure of the workspace html
+      t.view.parentView.parentView.parentView.parentView.parentView.parentView.templateInstance().selectedCardId.set(this._id);      
     },
 
     'click .label-item': function(e) {

@@ -163,7 +163,19 @@ if(Meteor.isClient) {
           $("#status").text("Completed Successfully.");
         }
       });
-    }
+    },
+
+
+    'click #reset-item-order': function() {
+      $("#status").text("Working...");
+      Meteor.call('resetItemOrder', function(err, results) {
+        if(err) {
+          $("#status").text("Error " + err.reason);
+        } else {
+          $("#status").text("Completed Successfully.");
+        }
+      });
+    },
 
 	});
 }
@@ -344,6 +356,14 @@ if(Meteor.isServer) {
           role: "ADMIN",
         });
       });
+    },
+
+    resetItemOrder: function() {
+      var count = 0;
+      Items.find().forEach(function(item) {
+        Items.update(item._id, {$set: {order: count++}});
+      });
     }
-	})
+
+	});
 }
