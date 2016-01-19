@@ -1,48 +1,30 @@
 <template name="rightSidebar">
 	<div class="right-sidebar">
-		{{#if isTeamFeed}}
-		<span class="header-text">ACTIONS</span>
-		<ul class="action-buttons">
-			<li id="create-discussion-link" class="action-button"><a href=""><i class="fa fa-comments-o"></i> New Discussion</a></li>
-			<li id="create-issue-link" class="action-button"><a href=""><i class="fa fa-exclamation-circle"></i> New Issue</a></li>
-			<li id="create-article-link" class="action-button"><a href=""><i class="fa fa-book"></i> New Article</a></li>
-		</ul>
-		{{else}}
-		<span class="header-text">STATUS</span>
-		<div id="header-open-status">
-			<strong id="open-status-link" class="{{#if currentItemIsOpen}}open{{else}}closed{{/if}}"><i class="fa {{currentItemIcon}}"></i> {{openStatus}}</strong>
+		<div class="tabs-header">
+      <a id="done-tab" class="{{activeTabClass 'done-tab'}} tab"> <i class="fa fa-check-circle"></i> Done</a>
+			<a id="filters-tab" class="{{activeTabClass 'filters-tab'}} tab"> <i class="fa fa-filter"></i> Filters</a>
+			<a id="members-tab" class="{{activeTabClass 'members-tab'}} tab"> <i class="fa fa-users"></i> Members</a>
 		</div>
-		{{#if userIsItemOwnerOrProjectAdmin}}
-		<span class="header-text">ACTIONS</span>
-		<ul class="action-buttons">
-				<li id="edit-link" class="action-button"><a href=""><i class="fa fa-pencil"></i> Edit</a></li>
-				<li id="open-close-link" class="action-button"><a href=""><i class="fa fa-times"></i> {{#if currentItemIsOpen}}Close{{else}}Open{{/if}}</a></li>
-				<li id="move-link" class="action-button"><a href=""><i class="fa fa-arrow-right"></i> Move</a></li>
-
-		</ul>
-		{{> moveToBoardList}}
-		{{/if}}
-		<span class="header-text">LABELS
-			{{#if userIsProjectAdmin}}
-			<i id="show-label-chooser-button" class="fa fa-cog"></i>
-			{{/if}}
-		</span>
-		{{> labelChooserMenu}}
-		<ul class="label-buttons">
-			{{> itemLabels}}
-		</ul>
-
-		{{#if isIssue}}
-			<span class="header-text">ASSIGNEE</span>
-			<ul class="assignee-buttons">
-				{{#if itemHasAssignee}}
-					<span><img src={{assigneeImageUrl}} class="assignee-item"/> {{assigneeUsername}}</span>
-				{{else}}
-					Not Assigned
-				{{/if}}
-			</ul>
-		{{/if}}
-
-		{{/if}}
+		<div id="now-tab" class="tab-body {{activeTabClass 'now-tab'}}">
+			{{> nowList}}
+		</div>
+		<div id="items-tab" class="tab-body {{activeTabClass 'items-tab'}}">
+			<!--<div class="filter-sentence-wrapper">
+				<span id="filter-sentence">{{{filterSentence}}}</span> <span id="active-item-msg" class="{{showActiveItemMsgClass}}">#{{currentItemKey}} is active <i id="clear-active-item-icon" class="fa fa-times" title="Clear active item"></i></span>
+			</div>-->
+			{{> itemList}}
+		</div>
+    <div id="done-tab" class="tab-body {{activeTabClass 'done-tab'}}">
+			{{> doneList}}
+		</div>
+		<div id="labels-tab" class="tab-body {{activeTabClass 'labels-tab'}}">
+			{{> labelsList}}
+		</div>
+		<div id="filters-tab" class="tab-body {{activeTabClass 'filters-tab'}}">
+			{{> filterList}}
+		</div>
+		<div id="members-tab" class="tab-body {{activeTabClass 'members-tab'}}">
+			{{> memberList}}
+		</div>
 	</div>
 </template>

@@ -88,25 +88,26 @@ html:not(.touch) {
 }
 
 #app {
-	height 100%
+	height: 100%;
 	.right-sidebar {
 		transition: all 0.5s ease;
-		height "calc(100% - %s)" % (top-baner-height + header-height);
-		top top-banner-height + header-height + 20;
-		right 0
-		bottom footer-height + 42px;
-		position fixed
-		display block
-		width right-sidebar-width
-		color black
-		background-color white;
-		z-index:10
-		border-left: 1px solid lightgray;
-	}
+		height: 100%;
+		top: 0px;
+		right: 0;
+		bottom: footer-height + 42px;
+		position: fixed;
+		display: block;
+		width: 400px;
+		color: black;
+		background-color: white;
+		z-index:10;
+    border-right: 1px solid black;
+    box-shadow: 0 6px 8px black;
+  }
 
 	.left-sidebar {
 		transition: all 0.5s ease;
-		height "calc(100% - %s)" % top-baner-height;
+		height: 100%;
 		top 0px;
 		left 0
 		bottom 0
