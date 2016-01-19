@@ -30,7 +30,10 @@ if(Meteor.isClient) {
 			remainingText = remainingText.replace(field, '');
 			remainingText = remainingText.replace(value, '');
 			remainingText = remainingText.replace(/:/g, '');
-			if(field == "label") {
+      if(field == 'projectId') {
+        console.log("BOOM!!### " + value);
+        value = {$in: value.split('-') };
+      } else if(field == "label") {
 				field = "labels";
 				var label = Labels.findOne({title: value});
 				if(label != null) {

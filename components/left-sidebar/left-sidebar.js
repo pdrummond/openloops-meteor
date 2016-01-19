@@ -1,26 +1,6 @@
 if(Meteor.isClient) {
 	Session.setDefault('leftSidebarActiveTab', 'items-tab');
 
-	Template.leftSidebar.onCreated(function() {
-		Tracker.autorun(function() {
-			var opts = {};
-			opts.filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
-			var currentProjectId = Session.get('currentProjectId');
-			if(currentProjectId) {
-				opts.filter.projectId = currentProjectId;
-			}
-			var currentBoardId = Session.get('currentBoardId');
-			if(currentBoardId) {
-				opts.filter.boardId = currentBoardId;
-			}
-			Meteor.subscribe('items', opts, function(err, result) {
-				if(err) {
-					Ols.Error.showError("Items Subscription error", err);
-				}
-			});
-		});
-	});
-
 	Template.leftSidebar.onRendered(function() {
 		console.trace("leftSidebar.onRendered");
 	});

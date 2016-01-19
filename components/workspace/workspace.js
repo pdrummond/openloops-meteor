@@ -19,6 +19,18 @@ if(Meteor.isServer) {
 
 if(Meteor.isClient) {
 
+  Template.workspace.onCreated(function() {
+		Tracker.autorun(function() {
+			var opts = {};
+			opts.filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
+			Meteor.subscribe('items', opts, function(err, result) {
+				if(err) {
+					Ols.Error.showError("Items Subscription error", err);
+				}
+			});
+		});
+	});
+
   Template.workspace.helpers({
 
     tabs: function() {

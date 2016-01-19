@@ -1,0 +1,14 @@
+<template name="filterTab">
+  <div class="filter-tab">
+    <form>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Projects</label>
+        <select id="project-chooser" multiple style="width:100%;height:200px;overflow-y:auto;">
+          {{#each projects}}
+            <option value="{{_id}}">{{title}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </form>
+  </div>
+</template>
