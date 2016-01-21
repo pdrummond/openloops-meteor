@@ -4,7 +4,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <input class="card-title modal-title" placeholder="Enter subject here" style="width: calc(100% - 20px);font-size: 25px;font-weight: 100;">
+          <input name="title" class="card-title modal-title" placeholder="Enter subject here" style="width: calc(100% - 20px);font-size: 25px;font-weight: 100;">
         </div>
         <div class="modal-body" style="padding:0;margin:0">
           <div style="display:flex;padding:10px;border-bottom:1px solid lightgray">
@@ -34,7 +34,7 @@
                 <option value="{{_id}}">{{title}}</option>
                 {{/each}}
               </select>
-            </div>
+            </div>            
           </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
           <button id="save-button" type="button" class="btn btn-success" data-dismiss="modal">{{createButtonLabel}}</button>

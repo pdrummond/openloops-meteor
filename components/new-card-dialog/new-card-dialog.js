@@ -64,7 +64,11 @@ if(Meteor.isClient) {
         var assignee = $("#new-card-dialog input[name='to']").val();
         if(assignee && assignee.trim().length > 0) {
           item.assignee = assignee.trim();
+          item.inInbox = assignee !== Meteor.user().username;
+        } else {
+          item.inInBox = false;
         }
+
 
         Meteor.call('insertItem', item, function(err, newItem) {
           if(err) {

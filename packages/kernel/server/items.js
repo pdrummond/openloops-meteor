@@ -72,6 +72,40 @@ Meteor.methods({
     });
   },
 
+  moveItemToInbox: function(itemId) {
+    var item = Ols.Item.findOne(itemId);
+    Ols.Item.update(itemId, {
+      $set: {
+        inInbox: true,
+        updatedAt: Date.now(),
+        updatedBy: Meteor.userId(),
+      }
+    });
+  },
+
+  acceptItem: function(itemId) {
+    var item = Ols.Item.findOne(itemId);
+    Ols.Item.update(itemId, {
+      $set: {
+        inInbox: false,
+        updatedAt: Date.now(),
+        updatedBy: Meteor.userId(),
+      }
+    });
+  },
+
+  rejectItem: function(itemId) {
+    var item = Ols.Item.findOne(itemId);
+    Ols.Item.update(itemId, {
+      $set: {
+        inInbox: false,
+        updatedAt: Date.now(),
+        updatedBy: Meteor.userId(),
+      },
+      $unset: { assignee : "" }
+    });
+  },
+
   updateItemsOrder( items ) {
     check( items, [{
       _id: String,

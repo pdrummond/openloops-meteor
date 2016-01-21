@@ -3,15 +3,18 @@
   <div id="card-detail-dialog" class="modal fade">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <div class="modal-header" style="display:flex">
+        <div class="modal-header" style="display:flex;position:relative">
           <i class="fa fa-comments-o fa-3x" style="margin-right:10px"></i>
-          <input name="title" class="card-title modal-title" placeholder="Enter subject here" style="width: calc(100% - 50px);font-size: 25px;font-weight: 100;" value="{{title}}">
+          <span style="position:absolute;top: 10px;color:gray;margin-right:10px;">#{{selectedCardKey}}</span>
+          <input name="title" class="card-title modal-title" placeholder="Enter subject here" style="position:relative;top:10px;width: calc(100% - 50px);font-size: 25px;font-weight: 100;" value="{{title}}">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         </div>
         <div class="modal-body" style="padding:0;margin:0">
-          <div style="display:flex;padding:10px;border-bottom:1px solid lightgray">
+          <div style="display:flex;justify-content:space-around;padding:10px;border-bottom:1px solid lightgray">
             <span style="margin-right:10px">TO:</span>
-            <input style="width:100%"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)" value="{{assignee}}">
+            <input style="width: calc(100% - 280px);position: relative;top: -2px;"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)" value="{{assignee}}">
+            <span style="margin-right:10px;color:gray">CREATED BY:</span>
+            <span style="margin-right:10px;color:gray">{{createdBy}}</span>
             <button id="status-button" class="btn {{statusClass}} btn-xs">{{statusLabel}}</button>
           </div>
           <div class="card-detail-tabs" style="padding:10px">
@@ -20,7 +23,7 @@
             <ul class="nav nav-pills" role="tablist">
               <li role="presentation" class="active"><a href="#description" aria-controls="description" role="tab" data-toggle="tab"><i class="fa fa-book"></i> Description</a></li>
               <li role="presentation"><a href="#discussion" aria-controls="discussion" role="tab" data-toggle="tab"><i class="fa fa-comments-o"></i> Discussion</a></li>
-              <li role="presentation"><a href="#cards" aria-controls="cards" role="tab" data-toggle="tab"><i class="fa fa-check-square-o"></i> Cards</a></li>
+              <li role="presentation"><a href="#cards" aria-controls="cards" role="tab" data-toggle="tab"><i class="fa fa-check-square-o"></i> Todo</a></li>
             </ul>
 
             <div class="tab-content">
@@ -66,6 +69,9 @@
               </select>
             </div>
           </div>
+          {{#if notInInbox}}
+            <button id="inbox-button" type="button" class="btn btn-warning" data-dismiss="modal"><i class="fa fa-inbox"></i> Move to Inbox</button>
+          {{/if}}
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
           <button id="save-button" type="button" class="btn btn-success" data-dismiss="modal">{{saveButtonLabel}}</button>
         </div>

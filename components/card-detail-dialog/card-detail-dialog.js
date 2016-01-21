@@ -26,12 +26,26 @@ if(Meteor.isClient) {
 
   Template.cardDetailDialog.helpers({
 
+    selectedCardKey: function() {
+      var cardKey = '???';
+      item = Ols.Item.findOne(Session.get('currentItemId'));
+      if(item) {
+        var project = Ols.Project.findOne(item.projectId);
+        if(project) {
+          cardKey = project.key + "-" + item.pid;
+        }
+      }
+      return cardKey;
+    },
+
     statusLabel: function() {
-      return Items.findOne(Session.get('currentItemId')).isOpen?'OPEN':'CLOSED';
+      var item = Items.findOne(Session.get('currentItemId'));
+      return item?item.isOpen?'OPEN':'CLOSED':'OPEN';
     },
 
     statusClass: function() {
-      return Items.findOne(Session.get('currentItemId')).isOpen?'btn-primary':'btn-danger';
+      var item = Items.findOne(Session.get('currentItemId'));
+      return item?item.isOpen?'btn-primary':'btn-danger':'btn-primary';
     },
 
     currentItem: function() {
@@ -60,6 +74,11 @@ if(Meteor.isClient) {
         }
       }
       return label;
+    },
+
+    notInInbox: function() {
+      var item = Items.findOne(Session.get('currentItemId'));
+      return item?!item.inInbox:false;
     }
   })
 
@@ -76,6 +95,14 @@ if(Meteor.isClient) {
 
     'keyup input[name="to"]': function(e, t) {
       t.toField.set($(e.target).val());
+    },
+
+    'click #inbox-button': function() {
+      Meteor.call('moveItemToInbox', Session.get('currentItemId'), function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error moving item to inbox: ", err);
+        }
+      });
     },
 
     'click #save-button': function() {
@@ -109,6 +136,9 @@ if(Meteor.isClient) {
         var assignee = $("#card-detail-dialog input[name='to']").val();
         if(assignee && assignee.trim().length > 0) {
           item.assignee = assignee.trim();
+          item.inInbox = assignee !== Meteor.user().username
+        } else {
+          item.inInBox = false;
         }
 
         Meteor.call('updateItem', Session.get('currentItemId'), item, function(err, newItem) {

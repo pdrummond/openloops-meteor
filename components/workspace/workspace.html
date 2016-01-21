@@ -24,12 +24,10 @@
   <div class="queue-container" style="position:relative;width={{queueWidth}}">
     <div class="queue-header">
       <div class="title" style="float:left;color:black;font-weight:bold;text-transform:uppercase;">
-        {{title}}
-        {{#if isCardSelected}}
-        / {{selectedCardKey}}
-        {{/if}}
+        {{title}}'s {{queueTitle}}
       </div>
       <div class="buttons" style="float:right;color:gray">
+        <btn id="switch-queue" class="btn btn-link btn-xs"><i class="fa {{queueSwitchIcon}}"></i> Show {{queueSwitchTitle}}</btn>
         {{#if isCardSelected}}
         <i id="back-button" class="cursor-pointer fa fa-arrow-left"></i>
         <i id="edit-button" title="Edit card details" class="cursor-pointer queue-header-button fa fa-pencil"></i>
@@ -79,6 +77,12 @@
             <span class="item-key">#{{projectKey this}}-{{pid}} created {{timeAgo createdAt}} {{order}}</span>
           </div>
         </div>
+        {{#if inInbox}}
+        <div class="actions" style="display:flex">
+          <button id="accept-link" class="btn btn-link btn-xs"><i class="fa fa-check" style="color:green"></i> Accept</button>
+          <button id="reject-link" class="btn btn-link btn-xs"><i class="fa fa-times" style="color:red"></i> Reject</button>
+        </div>
+        {{/if}}
         <!--<div id="item-labels">
         {{#each itemLabelIds}}
         <span class="label-item" data-color="{{labelColor this}}" style="background-color:{{labelColor this}}">{{labelTitle this}}</span>

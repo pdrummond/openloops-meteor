@@ -164,6 +164,7 @@ if(Meteor.isClient) {
 
   Template.queue.onCreated(function() {
     var self = this;
+    this.queueType = new ReactiveVar("WORK");
     this.selectedWidth = new ReactiveVar('370px');
     this.selectedCardId = new ReactiveVar();
     Meteor.setTimeout(function() {
@@ -176,6 +177,7 @@ if(Meteor.isClient) {
     items: function () {
       var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
       filter.assignee = this.username;
+      filter.inInbox = Template.instance().queueType.get() == "INBOX";
       return Items.find(filter, {sort: {order: 1}});
     },
 
@@ -240,13 +242,19 @@ if(Meteor.isClient) {
       }*/
     },
 
+    queueSwitchIcon: function() {      
+      var t = Template.instance();
+      return t.queueType.get() === "WORK"?"fa-inbox":"fa-bars";
+    },
+
     queueTitle: function() {
-      inInbox = false;
-      var item = Ols.Item.findOne(Template.instance().selectedCardId.get());
-      if(item) {
-        inInbox = item.inInbox;
-      }
-      return inInbox?"INBOX":"QUEUE";
+      var t = Template.instance();
+      return t.queueType.get() === "WORK"?"QUEUE":"INBOX";
+    },
+
+    queueSwitchTitle: function() {
+      var t = Template.instance();
+      return t.queueType.get() === "WORK"?"Inbox":"Work Queue";
     },
 
     queueWidth: function() {
@@ -256,6 +264,15 @@ if(Meteor.isClient) {
   });
 
   Template.queue.events({
+
+    'click #switch-queue': function(e, t) {
+      var type = t.queueType.get();
+      if(type === 'INBOX') {
+        t.queueType.set('WORK');
+      } else {
+        t.queueType.set('INBOX');
+      }
+    },
 
     'click #remove-queue': function() {
       var queue = this;
@@ -374,6 +391,22 @@ if(Meteor.isClient) {
   });
 
   Template.cardView.events({
+    'click #accept-link': function() {
+      Meteor.call('acceptItem', this._id, function(err) {
+        if(err) {
+          alert("Error accepting card");
+        }
+      });
+    },
+
+    'click #reject-link': function() {
+      Meteor.call('rejectItem', this._id, function(err) {
+        if(err) {
+          alert("Error rejecting card");
+        }
+      });
+    },
+
     'click #top-content': function(e, t) {
       //this.selectedCardId.set(this.card._id);
       //UGH!  This depends on the specific structure of the workspace html
