@@ -29,7 +29,7 @@ if(Meteor.isClient) {
     },
 
     projects: function() {
-		    return Ols.Project.find({'members.username': Meteor.user().username});
+      return Ols.Project.find({'members.username': Meteor.user().username});
     },
 
     saveButtonLabel: function() {
@@ -92,6 +92,14 @@ if(Meteor.isClient) {
         Meteor.call('updateItem', Session.get('currentItemId'), item, function(err, newItem) {
           if(err) {
             Ols.Error.showError("Error adding item",  err);
+          } else {
+            if(assignee.trim().length == 0) {
+              Meteor.call('removeItemAssignee', Session.get('currentItemId'), function(err, result) {
+                if(err) {
+                  Ols.Error.showError('Error un-assigning item: ', err);
+                }
+              });
+            }
           }
         });
       }
