@@ -30,7 +30,7 @@ if(Meteor.isClient) {
 			remainingText = remainingText.replace(field, '');
 			remainingText = remainingText.replace(value, '');
 			remainingText = remainingText.replace(/:/g, '');
-      if(field == 'projectId') {        
+      if(field == 'projectId') {
         value = {$in: value.split('-') };
       } else if(field == "label") {
 				field = "labels";
@@ -329,15 +329,11 @@ if(Meteor.isClient) {
 
 	Template.itemItemView.events({
 		'click #top-content': function() {
-			var assignee = this.assignee;
-			assignee = prompt("Enter username of member to assign to:", assignee);
-			if(assignee != null) {
-				Meteor.call('updateItemAssignee', this._id, assignee, function(err, result) {
-					if(err) {
-						Ols.Error.showError('Error assigning item: ', err);
-					}
-				});
-			}
+      Session.set('currentItemId', this._id);
+
+      $("#card-detail-dialog").modal({
+          backdrop: 'static'
+      });
 		},
 
 		'click .label-item': function(e) {
