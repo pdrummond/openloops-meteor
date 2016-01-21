@@ -10,17 +10,17 @@ if(Meteor.isClient) {
     },
 
     createButtonLabel: function() {
-      var label = 'Send to Backlog';
+      var label = 'Save to Backlog';
       var assignee = Template.instance().toField.get();
 
       if(assignee) {
         assignee = assignee.trim();
         if(assignee.length === 0) {
-          label = 'Send to Backlog';
+          label = 'Save to Backlog';
         } else if(assignee === Meteor.user().username) {
           label = 'Save to my queue';
         } else {
-          label = 'Send to ' + assignee + '\'s queue';
+          label = 'Save to ' + assignee + '\'s queue';
         }
       }
       return label;

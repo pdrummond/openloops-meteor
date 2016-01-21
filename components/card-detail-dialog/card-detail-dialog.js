@@ -56,7 +56,7 @@ if(Meteor.isClient) {
         } else if(assignee === Meteor.user().username) {
           label = 'Save to my queue';
         } else {
-          label = 'Send to ' + assignee + '\'s queue';
+          label = 'Save to ' + assignee + '\'s queue';
         }
       }
       return label;
