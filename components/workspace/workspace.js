@@ -377,7 +377,12 @@ if(Meteor.isClient) {
     'click #top-content': function(e, t) {
       //this.selectedCardId.set(this.card._id);
       //UGH!  This depends on the specific structure of the workspace html
-      t.view.parentView.parentView.parentView.parentView.parentView.parentView.templateInstance().selectedCardId.set(this._id);      
+      //t.view.parentView.parentView.parentView.parentView.parentView.parentView.templateInstance().selectedCardId.set(this._id);
+      Session.set('currentItemId', this._id);
+
+      $("#card-detail-dialog").modal({
+          backdrop: 'static'
+      });
     },
 
     'click .label-item': function(e) {

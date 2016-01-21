@@ -118,6 +118,10 @@ if(Meteor.isClient) {
 		}
 	});
 
+  Template.registerHelper('currentItemId', function () {
+    return Session.get('currentItemId');
+  });
+
 	Template.registerHelper('currentItemKey', function () {
 		var currentItemKey = '??';
 		var currentItemId = Session.get("currentItemId");

@@ -5,6 +5,7 @@
   {{> leftSidebar}}
   {{> workspace}}
   {{> rightSidebar}}
+  {{> cardDetailDialog}}
   {{> newCardDialog}}
   {{/onlyIfLoggedIn}}
 </template>
@@ -75,7 +76,7 @@
             {{title}}
           </a>
           <div id="meta">
-            <span class="item-key">#{{projectKey this}}-{{pid}} created {{timeAgo createdAt}} {{order}}</span> 
+            <span class="item-key">#{{projectKey this}}-{{pid}} created {{timeAgo createdAt}} {{order}}</span>
           </div>
         </div>
         <!--<div id="item-labels">

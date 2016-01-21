@@ -1,0 +1,75 @@
+<template name="cardDetailDialog">
+  {{#with currentItem}}
+  <div id="card-detail-dialog" class="modal fade">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" style="display:flex">
+          <i class="fa fa-comments-o fa-3x" style="margin-right:10px"></i>
+          <input class="card-title modal-title" placeholder="Enter subject here" style="width: calc(100% - 50px);font-size: 25px;font-weight: 100;" value="{{title}}">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body" style="padding:0;margin:0">
+          <div style="display:flex;padding:10px;border-bottom:1px solid lightgray">
+            <span style="margin-right:10px">TO:</span>
+            <input style="width:100%"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)" value="{{assignee}}">
+          </div>
+          <div class="card-detail-tabs" style="padding:10px">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-pills" role="tablist">
+              <li role="presentation" class="active"><a href="#description" aria-controls="description" role="tab" data-toggle="tab"><i class="fa fa-book"></i> Description</a></li>
+              <li role="presentation"><a href="#discussion" aria-controls="discussion" role="tab" data-toggle="tab"><i class="fa fa-comments-o"></i> Discussion</a></li>
+              <li role="presentation"><a href="#cards" aria-controls="cards" role="tab" data-toggle="tab"><i class="fa fa-check-square-o"></i> Cards</a></li>
+            </ul>
+
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane fade in active" id="description">
+                <div class="card-description" contenteditable style="height:500px;overflow-y: auto;outline:none;padding:30px;font-size:18px" autofocus>
+                  {{description}}
+                </div>
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="discussion">
+                <div class="messages-component" style="height:500px">
+                  {{> messageHistory selectedItemId=currentItemId}}
+                </div>
+                <div class="item-footer" style="position:absolute;bottom:0;width: calc(100% - 10px);">
+                  {{> messageBox currentItemId=currentItemId}}
+                </div>
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="cards">
+                  <div class="checklist-component" style="height:500px">
+                    {{> checkList}}
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="row" style="float:left;display:flex;margin:0;margin-top: 8px;">
+            <div>
+              <label style="display:inline;margin-right:10px">Type</label>
+              <select name="type">
+                <option value="task">Task</option>
+                <option value="discussion">Discussion</option>
+                <option value="article">Article</option>
+                <option value="enhancement">Enhancement</option>
+                <option value="bug">Bug</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:inline;margin-left:30px;margin-right:10px">Project</label>
+              <select name="project" disabled>
+                {{#each projects}}
+                <option value="{{_id}}">{{title}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button id="save-button" type="button" class="btn btn-success" data-dismiss="modal"><i class="fa fa-save"></i> Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/with}}
+</template>

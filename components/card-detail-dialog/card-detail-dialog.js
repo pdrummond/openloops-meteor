@@ -1,10 +1,29 @@
 if(Meteor.isClient) {
 
-  Template.newCardDialog.onCreated(function() {
+  Template.cardDetailDialog.onCreated(function() {
     this.toField = new ReactiveVar();
   });
 
-  Template.newCardDialog.helpers({
+  Template.cardDetailDialog.onRendered(function() {
+      this.$('#card-detail-dialog').on('shown.bs.modal', function () {
+        var item = Items.findOne(Session.get('currentItemId'));
+        var type = item.type;
+        if(type == 'issue') {
+          type = item.issueType;
+        }
+        $('#card-detail-dialog select[name="type"]').val(type);
+
+        $('#card-detail-dialog select[name="project"]').val(item.projectId);
+
+      });
+  })
+
+  Template.cardDetailDialog.helpers({
+
+    currentItem: function() {
+      return Items.findOne(Session.get('currentItemId')) || {};
+    },
+
     projects: function() {
 		    return Ols.Project.find({'members.username': Meteor.user().username});
     },
@@ -27,7 +46,7 @@ if(Meteor.isClient) {
     }
   })
 
-  Template.newCardDialog.events({
+  Template.cardDetailDialog.events({
 
     'keyup input[name="to"]': function(e, t) {
       t.toField.set($(e.target).val());

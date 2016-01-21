@@ -31,10 +31,10 @@ html:not(.touch) {
 	background-color: white;
     top: 0;
     position: relative;
-	overflow: scroll;
+	overflow-y: auto;
 	padding-left:10px;
 	padding-right:10px;
-	height:calc(100% - 120px);
+	height: calc(100% - 65px);
 }
 
 #app #top-banner {
@@ -1371,13 +1371,10 @@ text-transform: uppercase;
 }
 
 #checklist-wrapper, #reflist-wrapper {
-	xbackground-color: gray;
-    top: header-height;
-    position: relative;
-    height: "calc(100% - %s)" % (top-banner-height+header-height+footer-height+40);
-	overflow: auto;
-	padding-left:10px;
-	padding-right:10px;
+  top: 10px;
+  height: 100%;
+  overflow-y: auto;
+
 }
 
 #checklist-input {
@@ -1393,8 +1390,8 @@ border-radius: 0;
 .checkitem-list {
 	margin:0;
 	padding:0;
-	padding-left:30px;
-	padding-right:30px;
+	padding-left:10px;
+	padding-right:10px;
 }
 
 
@@ -1417,7 +1414,7 @@ border-radius: 0;
 }
 
 .checklist-header {
-	margin-left: 30px;
+	margin-left: 10px;
 	text-transform: uppercase;
 	color: gray;
 	font-size: 12px;

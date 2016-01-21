@@ -4,6 +4,7 @@ if(Meteor.isClient) {
 		var self = this;
 		this.autorun(function() {
 			self.subscribe('subItems', {
+        itemId: Session.get('currentItemId'), 
 				itemTab: Session.get('activeItemTab'),
 				type: Ols.SubItem.SUB_ITEM_TYPE_CHECKITEM
 			});
