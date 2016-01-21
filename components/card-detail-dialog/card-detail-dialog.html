@@ -5,7 +5,7 @@
       <div class="modal-content">
         <div class="modal-header" style="display:flex">
           <i class="fa fa-comments-o fa-3x" style="margin-right:10px"></i>
-          <input class="card-title modal-title" placeholder="Enter subject here" style="width: calc(100% - 50px);font-size: 25px;font-weight: 100;" value="{{title}}">
+          <input name="title" class="card-title modal-title" placeholder="Enter subject here" style="width: calc(100% - 50px);font-size: 25px;font-weight: 100;" value="{{title}}">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         </div>
         <div class="modal-body" style="padding:0;margin:0">
@@ -66,7 +66,7 @@
             </div>
           </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button id="save-button" type="button" class="btn btn-success" data-dismiss="modal"><i class="fa fa-save"></i> Save</button>
+          <button id="save-button" type="button" class="btn btn-success" data-dismiss="modal">{{saveButtonLabel}}</button>
         </div>
       </div>
     </div>
