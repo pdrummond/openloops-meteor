@@ -1,15 +1,15 @@
 <template name="cardDetailDialog">
   {{#with currentItem}}
-  <div id="card-detail-dialog" class="modal fade">
+  <div id="card-detail-dialog" class="modal fade" style="height:100%">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content">
+      <div class="modal-content" style="height:100%">
         <div class="modal-header" style="display:flex;position:relative">
           <i class="fa {{cardIconClass}} fa-3x" style="margin-right:10px"></i>
           <span style="position:absolute;top: 10px;color:gray;margin-right:10px;">#{{selectedCardKey}}</span>
           <input tabindex="1" name="title" class="card-title modal-title" placeholder="Enter subject here" style="position:relative;top:10px;width: calc(100% - 50px);font-size: 25px;font-weight: 100;" value="{{title}}">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         </div>
-        <div class="modal-body" style="padding:0;margin:0">
+        <div class="modal-body" style="padding:0;margin:0;height:100%">
           <div style="display:flex;justify-content:space-around;padding:10px;border-bottom:1px solid lightgray">
             <span style="margin-right:10px">TO:</span>
             <input tabindex="2" style="width: calc(100% - 280px);position: relative;top: -2px;"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)" value="{{assignee}}">
@@ -17,7 +17,7 @@
             <span style="margin-right:10px;color:gray">{{createdBy}}</span>
             <button id="status-button" class="btn {{statusClass}} btn-xs">{{statusLabel}}</button>
           </div>
-          <div class="card-detail-tabs" style="padding:10px">
+          <div class="card-detail-tabs" style="padding:10px;height=100%">
 
             <!-- Nav tabs -->
             <ul class="nav nav-pills" role="tablist">
@@ -26,13 +26,13 @@
               <li role="presentation"><a href="#cards" aria-controls="cards" role="tab" data-toggle="tab"><i class="fa fa-check-square-o"></i> Todo</a></li>
             </ul>
 
-            <div class="tab-content">
+            <div class="tab-content" style="height:100%">
               <div tabindex="3" role="tabpanel" class="tab-pane fade in active" id="description">
                 <div  class="card-description" contenteditable style="height:500px;overflow-y: auto;outline:none;padding:30px;font-size:18px" autofocus>
                   {{description}}
                 </div>
               </div>
-              <div role="tabpanel" class="tab-pane fade" id="discussion">
+              <div role="tabpanel" class="tab-pane fade" id="discussion"  style="height:100%">
                 <div class="messages-component" style="height:500px">
                   {{> messageHistory selectedItemId=currentItemId}}
                 </div>

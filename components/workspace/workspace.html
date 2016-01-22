@@ -39,17 +39,6 @@
         <i id="remove-queue" title="Remove Queue" class="cursor-pointer queue-header-button fa fa-times"></i>
       </div>
     </div>
-    {{#if isCardSelected}}
-    <div class="item-detail" style="height: calc(100% - 30px);">
-      <div class="item-header">
-        <i style="color:{{selectedItemIconColor}}" class="fa {{selectedItemIcon}}"></i> {{selectedItemTitle}}
-      </div>
-      {{> messageHistory selectedItemId=selectedItemId}}
-      <div class="item-footer" style="position:absolute;bottom:0;width: calc(100% - 10px);">
-        {{> messageBox currentItemId=selectedItemId}}
-      </div>
-    </div>
-    {{else}}
     <ul class="queue-list sortable"  style="clear:both;margin:0;padding:0">
       {{#sortable items=items options=itemsOptions}}
       <!--{{#each items}}-->
@@ -58,8 +47,6 @@
       <!--{{/each}}-->
       <!--<button id="quick-add-card" class="btn btn-link" style="color:gray"><i class="fa fa-plus"></i> Add Card</button>-->
     </ul>
-    {{/if}}
-
   </div>
 </template>
 

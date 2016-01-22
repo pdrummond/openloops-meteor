@@ -1,11 +1,12 @@
 if(Meteor.isClient) {
 
 	Template.messageHistory.onCreated(function() {
+    console.log(">> messageHistory.onCreated");
     var self = this;
 		Tracker.autorun(function(computation) {
-			Ols.HistoryManager.projectId = Session.get('currentProjectId');
+      Ols.HistoryManager.projectId = Session.get('currentProjectId');
 			Ols.HistoryManager.boardId = Session.get('currentBoardId');
-			Ols.HistoryManager.itemId = self.data.selectedItemId;
+			Ols.HistoryManager.itemId = Session.get('currentItemId');
 			Ols.HistoryManager.filterQuery = Session.get("filterQuery");
 
 			//console.log("mesage-history filterQuery: " + Ols.HistoryManager.filterQuery);

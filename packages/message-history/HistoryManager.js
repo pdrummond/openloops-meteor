@@ -7,6 +7,7 @@ Ols.HistoryManager = {
 	filterQuery: '',
 
 	checkScroll: function() {
+    console.log("> checkScroll");
 		if(Ols.HistoryManager.loadingMessages == false) {
 			if($("#messageHistory").scrollTop() == 0) {
 				console.log(">> SCROLL IS AT TOP");
@@ -163,14 +164,14 @@ Ols.HistoryManager = {
 
 	scrollBottom: function() {
 		//console.log(">> scrollBottom");
-		Meteor.defer(function() {
+		Meteor.setTimeout(function() {
 		var $messageList = $("#messageHistory");
 		if($messageList.length > 0) {
 			console.log("scrollBottom");
 			$messageList.scrollTop($messageList[0].scrollHeight);
 		}
 		Ols.HistoryManager.atBottom = true;
-		});
+  }, 200);
 		//console.log("<< scrollBottom");
 	},
 
