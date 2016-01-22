@@ -171,7 +171,8 @@ Ols.HistoryManager = {
 			$messageList.scrollTop($messageList[0].scrollHeight);
 		}
 		Ols.HistoryManager.atBottom = true;
-  }, 200);
+    Session.set('numIncomingMessages', 0);
+  }, 500);
 		//console.log("<< scrollBottom");
 	},
 

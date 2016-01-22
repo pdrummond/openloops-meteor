@@ -116,6 +116,11 @@ if(Meteor.isClient) {
     'keyup input[name="to"]': function(e, t) {
       t.toField.set($(e.target).val());
     },
+    
+    'click #header-new-messages-toast': function() {
+      Session.set("numIncomingMessages", 0);
+      Ols.HistoryManager.scrollBottom();
+    },
 
     'click #save-button': function() {
       var title = $("#card-detail-dialog input[name='title']").val();

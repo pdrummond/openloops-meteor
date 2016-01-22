@@ -131,13 +131,6 @@ if(Meteor.isClient) {
     }
   });
 
-  Template.workspace.events({
-    'click #header-new-messages-toast': function() {
-      Session.set("numIncomingMessages", 0);
-      Ols.HistoryManager.scrollBottom();
-    }
-  });
-
   /*let initSortable = ( sortableClass, template ) => {
     let sortableList = template.$( sortableClass );
     sortableList.sortable( 'destroy' );

@@ -4,6 +4,7 @@ OpenLoops = {};
 if(Meteor.isClient) {
 
 	Meteor.startup(function() {
+    Session.set('numIncomingMessages', 0);
 		Session.set('exploreMode', false);
 	});
 

@@ -30,7 +30,7 @@ if(Meteor.isClient) {
 					$(".user-card[data-username='" + ctx.username + "']").addClass("user-typing");
 				}
         console.trace("user typing");
-				if(ctx.itemId == this.selectedItemId) {
+				if(ctx.itemId == Session.get('currentItemId')) {
 					$(".user-typing-footer-msg").text(ctx.username + " is typing");
 					$(".user-typing-footer-msg").show();
 				}
@@ -42,12 +42,14 @@ if(Meteor.isClient) {
 				Ols.Message.insertClientMessage(incomingMessage);
 				if(Ols.HistoryManager.atBottom) {
 					Ols.HistoryManager.scrollBottom();
-				} else if(incomingMessage.itemId == this.selectedItemId) {
-					Session.set('numIncomingMessages', Session.get('numIncomingMessages')+1);
+				} else if(incomingMessage.itemId == Session.get('currentItemId')) {
+          var numIncomingMessages = Session.get('numIncomingMessages')+1;
+          console.log("INCOMING MESSAGES: " + numIncomingMessages);
+					Session.set('numIncomingMessages', numIncomingMessages);
 				}
 
 				//FIXME: An event should be fired here which the sidebar can handle.
-				if(incomingMessage.itemId != this.selectedItemId) {
+				if(incomingMessage.itemId != Session.get('currentItemId')) {
 					var $itemMsgCount;
 					if(incomingMessage.itemId != null) {
 						$itemMsgCount = $(".left-sidebar .item-list li[data-id='" + incomingMessage.itemId + "'] .item-msg-count");
@@ -87,7 +89,7 @@ if(Meteor.isClient) {
 
 		noMessages: function() {
 			var filter = {};
-			var itemId = this.selectedItemId;
+			var itemId = Session.get('currentItemId');
 			if(itemId) {
 				filter.itemId = itemId;
 			}
@@ -101,7 +103,7 @@ if(Meteor.isClient) {
 
 		messages: function() {
 			var filter = {};
-			var itemId = this.selectedItemId;
+			var itemId = Session.get('currentItemId');
 
 			if(itemId) {
 				filter.itemId = itemId;
