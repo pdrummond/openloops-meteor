@@ -12,7 +12,29 @@
         <div class="modal-body" style="padding:0;margin:0;height:100%">
           <div style="display:flex;justify-content:space-around;padding:10px;border-bottom:1px solid lightgray">
             <span style="margin-right:10px">TO:</span>
-            <input tabindex="2" style="width: calc(100% - 280px);position: relative;top: -2px;"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)" value="{{assignee}}">
+            <input tabindex="2" style="width: 200px;position: relative;top: -2px;"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)" value="{{assignee}}">
+            <div class="row" style="float:left;display:flex;margin:0;margin-top: 0px;">
+              <div>
+                <span style="display:inline;margin-right:10px;color:gray">TYPE:</span>
+                <select tabindex="4" name="type">
+                  <option value="post">Post</option>
+                  <option value="discussion">Discussion</option>
+                  <option value="question">Question</option>
+                  <option value="task">Task</option>
+                  <option value="enhancement">Enhancement</option>
+                  <option value="bug">Bug</option>
+                  <option value="req">Requirement</option>
+                </select>
+              </div>
+              <div>
+                <span style="display:inline;margin-left:30px;margin-right:10px;color:gray">PROJECT:</span>
+                <select tabindex="5" name="project" disabled>
+                  {{#each projects}}
+                  <option value="{{_id}}">{{title}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            </div>
             <span style="margin-right:10px;color:gray">CREATED BY:</span>
             <span style="margin-right:10px;color:gray">{{createdBy}}</span>
             <button id="status-button" class="btn {{statusClass}} btn-xs">{{statusLabel}}</button>
@@ -50,29 +72,13 @@
           </div>
         </div>
         <div class="modal-footer">
-          <div class="row" style="float:left;display:flex;margin:0;margin-top: 8px;">
-            <div>
-              <label style="display:inline;margin-right:10px">Type</label>
-              <select tabindex="4" name="type">
-                <option value="post">Post</option>
-                <option value="discussion">Discussion</option>
-                <option value="question">Question</option>
-                <option value="task">Task</option>
-                <option value="enhancement">Enhancement</option>
-                <option value="bug">Bug</option>
-                <option value="req">Requirement</option>
-              </select>
-            </div>
-            <div>
-              <label style="display:inline;margin-left:30px;margin-right:10px">Project</label>
-              <select tabindex="5" name="project" disabled>
-                {{#each projects}}
-                <option value="{{_id}}">{{title}}</option>
-                {{/each}}
-              </select>
-            </div>
+          <div class="users-viewing-card pull-left">
+            {{#each viewingUsers}}
+              <img style="border-radius:20px;border:2px solid green;width:30px" src="{{profileImage}}" title="{{username}} is viewing this card right now"/>
+            {{/each}}
           </div>
-          <button tabindex="6" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+          <button tabindex="6" id="close-button" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button tabindex="7" id="save-button" type="button" class="btn btn-success" data-dismiss="modal">{{saveButtonLabel}}</button>
         </div>
       </div>

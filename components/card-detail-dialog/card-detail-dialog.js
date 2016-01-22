@@ -22,11 +22,18 @@ if(Meteor.isClient) {
       self.toField.set(item.assignee);
       self.statusField.set(item.isOpen);
 
-        self.$('#new-card-dialog .card-description').focus();
+      self.$('#new-card-dialog .card-description').focus();
+
+      Meteor.call('updateUserSetViewingCard', Meteor.userId(), item._id);
+
     });
   })
 
   Template.cardDetailDialog.helpers({
+
+    viewingUsers: function() {
+      return Meteor.users.find({_id: {$ne: Meteor.userId()}, viewingItemId: Session.get('currentItemId')});
+    },
 
     cardIconClass: function() {
       var t = Template.instance();
@@ -116,10 +123,16 @@ if(Meteor.isClient) {
     'keyup input[name="to"]': function(e, t) {
       t.toField.set($(e.target).val());
     },
-    
+
     'click #header-new-messages-toast': function() {
       Session.set("numIncomingMessages", 0);
       Ols.HistoryManager.scrollBottom();
+    },
+
+    'click #close-button': function() {
+      Meteor.defer(function() {
+        Meteor.call('updateUserUnSetViewingCard', Meteor.userId());
+      })
     },
 
     'click #save-button': function() {
@@ -157,7 +170,6 @@ if(Meteor.isClient) {
         } else {
           item.inInBox = false;
         }
-
         Meteor.call('updateItem', Session.get('currentItemId'), item, function(err, newItem) {
           if(err) {
             Ols.Error.showError("Error adding item",  err);
@@ -171,6 +183,9 @@ if(Meteor.isClient) {
             }
           }
         });
+        Meteor.defer(function() {
+          Meteor.call('updateUserUnSetViewingCard', Meteor.userId());
+        })
       }
     }
   });

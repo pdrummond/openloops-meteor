@@ -66,8 +66,12 @@
         </div>
         {{#if inInbox}}
         <div class="actions" style="display:flex">
-          <button id="accept-link" class="btn btn-link btn-xs"><i class="fa fa-check" style="color:green"></i> Accept</button>
-          <button id="reject-link" class="btn btn-link btn-xs"><i class="fa fa-times" style="color:red"></i> Reject</button>
+          <button id="accept-link" class="btn btn-link btn-xs" title="Accept card and move it to your work queue">
+            <i class="fa fa-check" style="color:green"></i> Accept
+          </button>
+          <button id="reject-link" class="btn btn-link btn-xs" title="Reject card and move it into the backlog">
+            <i class="fa fa-times" style="color:red"></i> Reject
+          </button>
         </div>
         {{/if}}
         <!--<div id="item-labels">
