@@ -73,20 +73,20 @@ if(Meteor.isClient) {
 			Session.set('leftSidebarActiveTab', 'items-tab');
 		},
 
-    'click .tabs-header #done-tab': function() {
-			Session.set('leftSidebarActiveTab', 'done-tab');
+    'click .tabs-header #discussions-tab': function() {
+			Session.set('leftSidebarActiveTab', 'discussions-tab');
 		},
 
-		'click .tabs-header #labels-tab': function() {
-			Session.set('leftSidebarActiveTab', 'labels-tab');
+		'click .tabs-header #posts-tab': function() {
+			Session.set('leftSidebarActiveTab', 'posts-tab');
 		},
 
-		'click .tabs-header #filters-tab': function() {
-			Session.set('leftSidebarActiveTab', 'filters-tab');
+		'click .tabs-header #questions-tab': function() {
+			Session.set('leftSidebarActiveTab', 'questions-tab');
 		},
 
-		'click .tabs-header #members-tab': function() {
-			Session.set('leftSidebarActiveTab', 'members-tab');
+		'click .tabs-header #requirements-tab': function() {
+			Session.set('leftSidebarActiveTab', 'requirements-tab');
 		},
 
 		'click .tabs-header #now-tab': function() {

@@ -9,26 +9,23 @@
 			<!--<a id="labels-tab" class="{{activeTabClass 'labels-tab'}} tab"> <i class="fa fa-tag"></i> Labels</a>
 			<a id="filters-tab" class="{{activeTabClass 'filters-tab'}} tab"> <i class="fa fa-filter"></i> Filters</a>-->
 		</div>
-		<div id="feed-tab" class="tab-body {{activeTabClass 'feed-tab'}}">
-			{{> activityList}}
-		</div>
 		<div id="items-tab" class="tab-body {{activeTabClass 'items-tab'}}">
 			<!--<div class="filter-sentence-wrapper">
 				<span id="filter-sentence">{{{filterSentence}}}</span> <span id="active-item-msg" class="{{showActiveItemMsgClass}}">#{{currentItemKey}} is active <i id="clear-active-item-icon" class="fa fa-times" title="Clear active item"></i></span>
 			</div>-->
 			{{> itemList}}
 		</div>
-    <div id="done-tab" class="tab-body {{activeTabClass 'done-tab'}}">
-			{{> doneList}}
+    <div id="discussions-tab" class="tab-body {{activeTabClass 'discussions-tab'}}">
+			{{> discussionList}}
 		</div>
-		<div id="labels-tab" class="tab-body {{activeTabClass 'labels-tab'}}">
-			{{> labelsList}}
+		<div id="questions-tab" class="tab-body {{activeTabClass 'questions-tab'}}">
+			{{> questionList}}
 		</div>
-		<div id="filters-tab" class="tab-body {{activeTabClass 'filters-tab'}}">
-			{{> filterList}}
+		<div id="posts-tab" class="tab-body {{activeTabClass 'posts-tab'}}">
+			{{> postList}}
 		</div>
-		<div id="members-tab" class="tab-body {{activeTabClass 'members-tab'}}">
-			{{> memberList}}
+		<div id="requirements-tab" class="tab-body {{activeTabClass 'requirements-tab'}}">
+			{{> reqList}}
 		</div>
 	</div>
 </template>

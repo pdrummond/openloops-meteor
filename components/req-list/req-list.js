@@ -1,6 +1,6 @@
 if(Meteor.isClient) {
 
-	Template.discussionList.events({
+	Template.reqList.events({
 		'keyup #filter-input': function() {
 			var self = this;
 			if(this.filterInputKeyTimer) {
@@ -14,13 +14,12 @@ if(Meteor.isClient) {
 		},
 	});
 
-	Template.discussionList.helpers({
+	Template.reqList.helpers({
 
 		noItems: function() {
-      var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
       filter.assignee = {$exists: false};
       filter.isOpen = true;
-      filter.type = Ols.Item.ITEM_TYPE_DISCUSSION;
+      filter.type = Ols.Item.ITEM_TYPE_REQ;
 			return Ols.Item.find(filter).count() == 0;
 		},
 
@@ -28,7 +27,7 @@ if(Meteor.isClient) {
       var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
       filter.assignee = {$exists: false};
       filter.isOpen = true;
-      filter.type = Ols.Item.ITEM_TYPE_DISCUSSION;
+      filter.type = Ols.Item.ITEM_TYPE_REQ;
 			return Ols.Item.find(filter, {sort: {updatedAt: -1}});
 		}
 	});

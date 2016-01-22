@@ -1,9 +1,9 @@
-<template name="discussionList">
+<template name="questionList">
 	<!--<input id="filter-input" style="font-size:12px;border:1px solid lightgray;border-radius:5px;padding:5px;position:relative;top:10px;left:10px;width:90%;margin-bottom:20px" placeholder="Enter filter here" value={{filterQuery}}>-->
 	<ul class="item-list">
 		{{#if noItems}}
 		{{#if noFilter}}
-		<p class="empty-msg">No discussions found</p>
+		<p class="empty-msg">No questions found. </p>
 		{{/if}}
 		{{else}}
 		{{#each items}}

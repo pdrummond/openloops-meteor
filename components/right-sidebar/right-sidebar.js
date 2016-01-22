@@ -89,6 +89,10 @@ if(Meteor.isClient) {
 			Session.set('rightSidebarActiveTab', 'items-tab');
 		},
 
+    'click .tabs-header #feed-tab': function() {
+      Session.set('rightSidebarActiveTab', 'feed-tab');
+    },
+
     'click .tabs-header #done-tab': function() {
 			Session.set('rightSidebarActiveTab', 'done-tab');
 		},

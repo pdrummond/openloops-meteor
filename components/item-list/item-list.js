@@ -17,13 +17,17 @@ if(Meteor.isClient) {
 	Template.itemList.helpers({
 
 		noItems: function() {
-			return Ols.Item.find(OpenLoops.getFilterQuery(Session.get('filterQuery'))).count() == 0;
+      filter.assignee = {$exists: false};
+      filter.isOpen = true;
+      filter.type = Ols.Item.ITEM_TYPE_ISSUE;
+			return Ols.Item.find(filter).count() == 0;
 		},
 
 		items: function() {
       var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
       filter.assignee = {$exists: false};
       filter.isOpen = true;
+      filter.type = Ols.Item.ITEM_TYPE_ISSUE;
 			return Ols.Item.find(filter, {sort: {updatedAt: -1}});
 		}
 	});
