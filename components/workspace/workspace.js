@@ -242,6 +242,24 @@ if(Meteor.isClient) {
       }*/
     },
 
+    queueSwitchCount: function() {
+      var t = Template.instance();
+      var queueType = Template.instance().queueType.get();
+      var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
+      filter.assignee = this.username;
+      filter.inInbox = queueType === "WORK";
+      var count = Items.find(filter).count();
+      if(count > 0) {
+        if(queueType === 'WORK') {
+          return '<span class="notification-badge">' + count + '</span>';
+        } else {
+          return "(" + count + ")";
+        }
+      } else {
+        return "";
+      }
+    },
+
     queueSwitchIcon: function() {
       var t = Template.instance();
       return t.queueType.get() === "WORK"?"fa-inbox":"fa-bars";

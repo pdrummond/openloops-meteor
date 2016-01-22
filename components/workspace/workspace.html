@@ -27,7 +27,7 @@
         {{title}}'s {{queueTitle}}
       </div>
       <div class="buttons" style="float:right;color:gray">
-        <btn id="switch-queue" class="btn btn-link btn-xs"><i class="fa {{queueSwitchIcon}}"></i> Show {{queueSwitchTitle}}</btn>
+        <btn id="switch-queue" class="btn btn-link btn-xs"><i class="fa {{queueSwitchIcon}}"></i> Show {{queueSwitchTitle}}{{{queueSwitchCount}}}</btn>
         {{#if isCardSelected}}
         <i id="back-button" class="cursor-pointer fa fa-arrow-left"></i>
         <i id="edit-button" title="Edit card details" class="cursor-pointer queue-header-button fa fa-pencil"></i>
