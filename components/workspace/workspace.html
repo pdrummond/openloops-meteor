@@ -65,7 +65,7 @@
           </div>
         </div>
         {{#if inInbox}}
-        <div class="actions" style="display:flex">
+        <div class="actions {{showAcceptRejectIfCurrentUser}}" style="display:flex">
           <button id="accept-link" class="btn btn-link btn-xs" title="Accept card and move it to your work queue">
             <i class="fa fa-check" style="color:green"></i> Accept
           </button>

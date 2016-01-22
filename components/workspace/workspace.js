@@ -243,7 +243,7 @@ if(Meteor.isClient) {
       filter.inInbox = queueType === "WORK";
       var count = Items.find(filter).count();
       if(count > 0) {
-        if(queueType === 'WORK') {
+        if(queueType === 'WORK' && Meteor.user().username === this.username) {
           return '<span class="notification-badge">' + count + '</span>';
         } else {
           return "(" + count + ")";
@@ -380,6 +380,10 @@ if(Meteor.isClient) {
   });
 
   Template.cardView.helpers({
+    showAcceptRejectIfCurrentUser: function() {
+        return this.assignee == Meteor.user().username?'':'hide';
+    },
+
     isClosedClass: function() {
       return this.isOpen?'':'closed';
     },
