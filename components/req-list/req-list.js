@@ -17,6 +17,7 @@ if(Meteor.isClient) {
 	Template.reqList.helpers({
 
 		noItems: function() {
+      var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
       filter.assignee = {$exists: false};
       filter.isOpen = true;
       filter.type = Ols.Item.ITEM_TYPE_REQ;

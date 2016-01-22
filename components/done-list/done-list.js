@@ -17,7 +17,9 @@ if(Meteor.isClient) {
 	Template.doneList.helpers({
 
 		noItems: function() {
-			return Ols.Item.find(OpenLoops.getFilterQuery(Session.get('filterQuery'))).count() == 0;
+      var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
+      filter.isOpen = false;
+			return Ols.Item.find(filter).count() == 0;
 		},
 
 		items: function() {

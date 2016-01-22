@@ -4,23 +4,22 @@
       <div class="modal-content">
         <div class="modal-header">
           <i class="fa {{cardIconClass}} fa-3x" style="margin-right:10px"></i>
-          <input name="title" class="card-title modal-title" placeholder="Enter subject here" style="width: calc(100% - 80px);font-size: 25px;font-weight: 100;">
+          <input tabindex="1" name="title" class="card-title modal-title" placeholder="Enter subject here" style="width: calc(100% - 80px);font-size: 25px;font-weight: 100;">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         </div>
         <div class="modal-body" style="padding:0;margin:0">
           <div style="display:flex;padding:10px;border-bottom:1px solid lightgray">
             <span style="margin-right:10px">TO:</span>
-            <input style="width:100%"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)">
+            <input  tabindex="2" style="width:100%"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)">
           </div>
-          <div class="card-description" contenteditable style="min-height:500px; outline:none;padding:10px;font-size:18px" autofocus>
-
+          <div tabindex="3" class="card-description" contenteditable style="min-height:500px; outline:none;padding:10px;font-size:18px">
           </div>
         </div>
         <div class="modal-footer">
           <div class="row" style="float:left;display:flex;margin:0;margin-top: 8px;">
             <div>
               <label style="display:inline;margin-right:10px">Type</label>
-              <select name="type">
+              <select  tabindex="4" name="type">
                 <option value="post">Post</option>
                 <option value="discussion">Discussion</option>
                 <option value="question">Question</option>
@@ -32,15 +31,15 @@
             </div>
             <div>
               <label style="display:inline;margin-left:30px;margin-right:10px">Project</label>
-              <select name="project">
+              <select  tabindex="5" name="project">
                 {{#each projects}}
                 <option value="{{_id}}">{{title}}</option>
                 {{/each}}
               </select>
             </div>
           </div>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button id="save-button" type="button" class="btn btn-success" data-dismiss="modal">{{createButtonLabel}}</button>
+          <button tabindex="6" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button tabindex="7" id="save-button" type="button" class="btn btn-success" data-dismiss="modal">{{createButtonLabel}}</button>
         </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

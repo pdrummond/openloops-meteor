@@ -6,13 +6,13 @@
         <div class="modal-header" style="display:flex;position:relative">
           <i class="fa {{cardIconClass}} fa-3x" style="margin-right:10px"></i>
           <span style="position:absolute;top: 10px;color:gray;margin-right:10px;">#{{selectedCardKey}}</span>
-          <input name="title" class="card-title modal-title" placeholder="Enter subject here" style="position:relative;top:10px;width: calc(100% - 50px);font-size: 25px;font-weight: 100;" value="{{title}}">
+          <input tabindex="1" name="title" class="card-title modal-title" placeholder="Enter subject here" style="position:relative;top:10px;width: calc(100% - 50px);font-size: 25px;font-weight: 100;" value="{{title}}">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         </div>
         <div class="modal-body" style="padding:0;margin:0">
           <div style="display:flex;justify-content:space-around;padding:10px;border-bottom:1px solid lightgray">
             <span style="margin-right:10px">TO:</span>
-            <input style="width: calc(100% - 280px);position: relative;top: -2px;"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)" value="{{assignee}}">
+            <input tabindex="2" style="width: calc(100% - 280px);position: relative;top: -2px;"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)" value="{{assignee}}">
             <span style="margin-right:10px;color:gray">CREATED BY:</span>
             <span style="margin-right:10px;color:gray">{{createdBy}}</span>
             <button id="status-button" class="btn {{statusClass}} btn-xs">{{statusLabel}}</button>
@@ -27,8 +27,8 @@
             </ul>
 
             <div class="tab-content">
-              <div role="tabpanel" class="tab-pane fade in active" id="description">
-                <div class="card-description" contenteditable style="height:500px;overflow-y: auto;outline:none;padding:30px;font-size:18px" autofocus>
+              <div tabindex="3" role="tabpanel" class="tab-pane fade in active" id="description">
+                <div  class="card-description" contenteditable style="height:500px;overflow-y: auto;outline:none;padding:30px;font-size:18px" autofocus>
                   {{description}}
                 </div>
               </div>
@@ -52,7 +52,7 @@
           <div class="row" style="float:left;display:flex;margin:0;margin-top: 8px;">
             <div>
               <label style="display:inline;margin-right:10px">Type</label>
-              <select name="type">
+              <select tabindex="4" name="type">
                 <option value="post">Post</option>
                 <option value="discussion">Discussion</option>
                 <option value="question">Question</option>
@@ -64,15 +64,15 @@
             </div>
             <div>
               <label style="display:inline;margin-left:30px;margin-right:10px">Project</label>
-              <select name="project" disabled>
+              <select tabindex="5" name="project" disabled>
                 {{#each projects}}
                 <option value="{{_id}}">{{title}}</option>
                 {{/each}}
               </select>
             </div>
           </div>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button id="save-button" type="button" class="btn btn-success" data-dismiss="modal">{{saveButtonLabel}}</button>
+          <button tabindex="6" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button tabindex="7" id="save-button" type="button" class="btn btn-success" data-dismiss="modal">{{saveButtonLabel}}</button>
         </div>
       </div>
     </div>
