@@ -3,6 +3,7 @@ if(Meteor.isClient) {
   Template.cardDetailDialog.onCreated(function() {
     this.toField = new ReactiveVar();
     this.statusField = new ReactiveVar();
+    this.selectedType = new ReactiveVar("post");
   });
 
   Template.cardDetailDialog.onRendered(function() {
@@ -21,10 +22,24 @@ if(Meteor.isClient) {
       self.toField.set(item.assignee);
       self.statusField.set(item.isOpen);
 
+        self.$('#new-card-dialog .card-description').focus();
     });
   })
 
   Template.cardDetailDialog.helpers({
+
+    cardIconClass: function() {
+      var t = Template.instance();
+      switch(t.selectedType.get()) {
+        case 'post': return 'fa-envelope-o';
+        case 'discussion': return 'fa-comments-o';
+        case 'task': return 'fa-exclamation-circle';
+        case 'bug': return 'fa-bug';
+        case 'enhancement': return 'fa-bullseye';
+        case 'question': return 'fa-question-circle';
+        case 'req': return 'fa-fire';
+      }
+    },
 
     selectedCardKey: function() {
       var cardKey = '???';
@@ -76,13 +91,18 @@ if(Meteor.isClient) {
       return label;
     },
 
-    notInInbox: function() {
+    inInboxAttr: function() {
       var item = Items.findOne(Session.get('currentItemId'));
-      return item?!item.inInbox:false;
+      return item && item.inInbox?'checked':'';
     }
   })
 
   Template.cardDetailDialog.events({
+
+    'change select[name="type"]': function(e, t) {
+      var type = $("#card-detail-dialog select[name='type']").val();
+      t.selectedType.set(type);
+    },
 
     'click #status-button': function(e, t) {
       t.statusField.set(!t.statusField.get());
@@ -95,14 +115,6 @@ if(Meteor.isClient) {
 
     'keyup input[name="to"]': function(e, t) {
       t.toField.set($(e.target).val());
-    },
-
-    'click #inbox-button': function() {
-      Meteor.call('moveItemToInbox', Session.get('currentItemId'), function(err, result) {
-        if(err) {
-          Ols.Error.showError("Error moving item to inbox: ", err);
-        }
-      });
     },
 
     'click #save-button': function() {

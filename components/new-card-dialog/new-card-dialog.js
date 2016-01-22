@@ -2,9 +2,31 @@ if(Meteor.isClient) {
 
   Template.newCardDialog.onCreated(function() {
     this.toField = new ReactiveVar();
+    this.selectedType = new ReactiveVar("post");
+  });
+
+  Template.newCardDialog.onRendered(function() {
+    var self = this;
+    this.$('#new-card-dialog').on('shown.bs.modal', function () {
+      self.$('#new-card-dialog input[name="title"]').focus();
+    });
   });
 
   Template.newCardDialog.helpers({
+
+    cardIconClass: function() {
+      var t = Template.instance();
+      switch(t.selectedType.get()) {
+        case 'post': return 'fa-envelope-o';
+        case 'discussion': return 'fa-comments-o';
+        case 'task': return 'fa-exclamation-circle';
+        case 'bug': return 'fa-bug';
+        case 'enhancement': return 'fa-bullseye';
+        case 'question': return 'fa-question-circle';
+        case 'req': return 'fa-fire';
+      }
+    },
+
     projects: function() {
 		    return Ols.Project.find({'members.username': Meteor.user().username});
     },
@@ -28,6 +50,11 @@ if(Meteor.isClient) {
   })
 
   Template.newCardDialog.events({
+
+    'change select[name="type"]': function(e, t) {
+      var type = $("#new-card-dialog select[name='type']").val();
+      t.selectedType.set(type);
+    },
 
     'keyup input[name="to"]': function(e, t) {
       t.toField.set($(e.target).val());

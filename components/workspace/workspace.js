@@ -242,7 +242,7 @@ if(Meteor.isClient) {
       }*/
     },
 
-    queueSwitchIcon: function() {      
+    queueSwitchIcon: function() {
       var t = Template.instance();
       return t.queueType.get() === "WORK"?"fa-inbox":"fa-bars";
     },
@@ -378,11 +378,11 @@ if(Meteor.isClient) {
     },
 
     typeIcon: function() {
-      return OpenLoops.getItemTypeIcon(this);
+      return Ols.Item.getTypeIconClass(this);
     },
 
     typeIconColor: function() {
-      return OpenLoops.getItemTypeIconColor(this);
+      return Ols.Item.getTypeIconColor(this);
     },
 
     isActive: function() {

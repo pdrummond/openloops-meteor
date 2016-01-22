@@ -3,15 +3,16 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
+          <i class="fa {{cardIconClass}} fa-3x" style="margin-right:10px"></i>
+          <input name="title" class="card-title modal-title" placeholder="Enter subject here" style="width: calc(100% - 80px);font-size: 25px;font-weight: 100;">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <input name="title" class="card-title modal-title" placeholder="Enter subject here" style="width: calc(100% - 20px);font-size: 25px;font-weight: 100;">
         </div>
         <div class="modal-body" style="padding:0;margin:0">
           <div style="display:flex;padding:10px;border-bottom:1px solid lightgray">
             <span style="margin-right:10px">TO:</span>
             <input style="width:100%"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)">
           </div>
-          <div class="card-description" contenteditable style="min-height:200px; outline:none;padding:10px;font-size:18px" autofocus>
+          <div class="card-description" contenteditable style="min-height:500px; outline:none;padding:10px;font-size:18px" autofocus>
 
           </div>
         </div>
@@ -20,11 +21,13 @@
             <div>
               <label style="display:inline;margin-right:10px">Type</label>
               <select name="type">
-                <option value="task">Task</option>
+                <option value="post">Post</option>
                 <option value="discussion">Discussion</option>
-                <option value="article">Article</option>
+                <option value="question">Question</option>
+                <option value="task">Task</option>
                 <option value="enhancement">Enhancement</option>
                 <option value="bug">Bug</option>
+                <option value="req">Requirement</option>
               </select>
             </div>
             <div>
@@ -34,7 +37,7 @@
                 <option value="{{_id}}">{{title}}</option>
                 {{/each}}
               </select>
-            </div>            
+            </div>
           </div>
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
           <button id="save-button" type="button" class="btn btn-success" data-dismiss="modal">{{createButtonLabel}}</button>

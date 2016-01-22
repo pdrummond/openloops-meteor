@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header" style="display:flex;position:relative">
-          <i class="fa fa-comments-o fa-3x" style="margin-right:10px"></i>
+          <i class="fa {{cardIconClass}} fa-3x" style="margin-right:10px"></i>
           <span style="position:absolute;top: 10px;color:gray;margin-right:10px;">#{{selectedCardKey}}</span>
           <input name="title" class="card-title modal-title" placeholder="Enter subject here" style="position:relative;top:10px;width: calc(100% - 50px);font-size: 25px;font-weight: 100;" value="{{title}}">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -53,11 +53,13 @@
             <div>
               <label style="display:inline;margin-right:10px">Type</label>
               <select name="type">
-                <option value="task">Task</option>
+                <option value="post">Post</option>
                 <option value="discussion">Discussion</option>
-                <option value="article">Article</option>
+                <option value="question">Question</option>
+                <option value="task">Task</option>
                 <option value="enhancement">Enhancement</option>
                 <option value="bug">Bug</option>
+                <option value="req">Requirement</option>
               </select>
             </div>
             <div>
@@ -69,10 +71,7 @@
               </select>
             </div>
           </div>
-          {{#if notInInbox}}
-            <button id="inbox-button" type="button" class="btn btn-warning" data-dismiss="modal"><i class="fa fa-inbox"></i> Move to Inbox</button>
-          {{/if}}
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button id="save-button" type="button" class="btn btn-success" data-dismiss="modal">{{saveButtonLabel}}</button>
         </div>
       </div>

@@ -57,7 +57,10 @@ Ols.Item = {
 			switch(item.type) {
 				case Ols.Item.ITEM_TYPE_DISCUSSION: icon = 'fa-comments-o'; break;
 				case Ols.Item.ITEM_TYPE_ISSUE: icon = 'fa-exclamation-circle'; break;
-				case Ols.Item.ITEM_TYPE_ARTICLE: icon = 'fa-book'; break;
+        case Ols.Item.ITEM_TYPE_ARTICLE: icon = 'fa-book'; break;
+        case Ols.Item.ITEM_TYPE_POST: icon = 'fa-envelope-o'; break;
+        case Ols.Item.ITEM_TYPE_QUESTION: icon = 'fa-question-circle'; break;
+        case Ols.Item.ITEM_TYPE_REQ: icon = 'fa-fire'; break;
 			}
 			if(item.type == Ols.ITEM_TYPE_ISSUE && item.issueType != null) {
 				switch(item.issueType) {
@@ -83,6 +86,10 @@ Ols.Item = {
 				case Ols.Item.ITEM_TYPE_DISCUSSION: color = '#90BEF2'; break;
 				case Ols.Item.ITEM_TYPE_ISSUE: color = '#6cc644'; break;
 				case Ols.Item.ITEM_TYPE_ARTICLE: color = 'orange'; break;
+        case Ols.Item.ITEM_TYPE_POST: color = '#808000'; break;
+        case Ols.Item.ITEM_TYPE_QUESTION: color = '#808000'; break;
+        case Ols.Item.ITEM_TYPE_REQ: color = '#808000'; break;
+
 			}
 			if(item.type == Ols.Item.ITEM_TYPE_ISSUE && item.issueType != null) {
 				switch(item.issueType) {
@@ -110,6 +117,9 @@ Ols.Item = {
 	ITEM_TYPE_DISCUSSION: 'discussion',
 	ITEM_TYPE_ISSUE: 'issue',
 	ITEM_TYPE_ARTICLE: 'article',
+  ITEM_TYPE_POST: 'post',
+  ITEM_TYPE_QUESTION: 'question',
+  ITEM_TYPE_REQ: 'req',
 
 	ISSUE_TYPE_BUG: 'bug',
 	ISSUE_TYPE_TASK: 'task',

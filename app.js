@@ -310,11 +310,11 @@ if(Meteor.isClient) {
 		},
 
 		typeIcon: function() {
-			return OpenLoops.getItemTypeIcon(this);
+			return Ols.Item.getTypeIconClass(this);
 		},
 
 		typeIconColor: function() {
-			return OpenLoops.getItemTypeIconColor(this);
+			return Ols.Item.getTypeIconColor(this);
 		},
 
 		itemLabelIds: function() {
@@ -365,43 +365,6 @@ if(Meteor.isClient) {
 		}
 		return type;
 	},
-
-	OpenLoops.getItemTypeIcon = function(item) {
-		var icon = 'fa-square';
-		if(item) {
-			switch(item.type) {
-				case Ols.ITEM_TYPE_DISCUSSION: icon = 'fa-comments-o'; break;
-				case Ols.ITEM_TYPE_ISSUE: icon = 'fa-exclamation-circle'; break;
-				case Ols.ITEM_TYPE_ARTICLE: icon = 'fa-book'; break;
-			}
-			if(item.type == Ols.ITEM_TYPE_ISSUE && item.issueType != null) {
-				switch(item.issueType) {
-					case Ols.ISSUE_TYPE_BUG: icon = 'fa-bug'; break;
-					case Ols.ISSUE_TYPE_TASK: icon = 'fa-exclamation-circle'; break;
-					case Ols.ISSUE_TYPE_ENHANCEMENT: icon = 'fa-bullseye'; break;
-				}
-			}
-		}
-		return icon;
-	},
-
-	OpenLoops.getItemTypeIconColor = function(item) {
-		var color = '#ccc';
-		if(item) {
-			switch(item.type) {
-				case Ols.ITEM_TYPE_DISCUSSION: color = '#90BEF2'; break;
-				case Ols.ITEM_TYPE_ISSUE: color = '#6cc644'; break;
-				case Ols.ITEM_TYPE_ARTICLE: color = 'orange'; break;
-			}
-			if(item.type == Ols.ITEM_TYPE_ISSUE && item.issueType != null) {
-				switch(item.issueType) {
-					case Ols.ISSUE_TYPE_BUG: color = 'brown'; break;
-					case Ols.ISSUE_TYPE_ENHANCEMENT: color = 'purple'; break;
-				}
-			}
-		}
-		return color;
-	}
 
 	Template.tabHeader.events({
 		'click': function() {
