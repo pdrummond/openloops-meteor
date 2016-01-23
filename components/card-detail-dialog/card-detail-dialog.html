@@ -9,13 +9,10 @@
               <i class="fa {{cardIconClass}} fa-3x" style="margin-right:10px"></i>
             </button>
             <ul class="dropdown-menu">
-              <li id="set-type-post-button"><a href="#"><i class='fa fa-envelope-o'></i> Post</a></li>
-              <li id="set-type-discussion-button"><a href="#"><i class='fa fa-comments-o'></i> Discussion</a></li>
-              <li id="set-type-question-button"><a href="#"><i class='fa fa-question-circle'></i> Question</a></li>
               <li id="set-type-task-button"><a href="#"><i class='fa fa-exclamation-circle'></i> Task</a></li>
-              <li id="set-type-enhancement-button"><a href="#"><i class='fa fa-bullseye'></i> Enhancement</a></li>
+              <li id="set-type-feature-button"><a href="#"><i class='fa fa-bullseye'></i> Feature</a></li>
               <li id="set-type-bug-button"><a href="#"><i class='fa fa-bug'></i> Bug</a></li>
-              <li id="set-type-requirement-button"><a href="#"><i class='fa fa-fire'></i> Requirement</a></li>
+              <li id="set-type-discussion-button"><a href="#"><i class='fa fa-comments-o'></i> Discussion</a></li>
             </ul>
           </div>
 
@@ -25,7 +22,7 @@
         <div class="modal-body" style="padding:0;margin:0;height:100%">
           <div style="padding:10px;border-bottom:1px solid lightgray;height:40px">
             <div class="pull-left">
-              <span style="margin-right:10px">TO:</span>
+              <span style="margin-right:10px">ASSIGN TO:</span>
               <span class="card-to-field" tabindex="2" style="width: 400px;position: relative;top: 0px;" name="to">{{{assigneeLabel}}}</span>
             </div>
             <div class="pull-right">
@@ -44,69 +41,12 @@
 
             <!-- Nav tabs -->
             <ul class="nav nav-pills" role="tablist">
-              <li role="presentation" class="active"><a href="#description" aria-controls="description" role="tab" data-toggle="tab"><i class="fa fa-adjust"></i> Overview</a></li>
-              <li role="presentation"><a href="#discussion" aria-controls="discussion" role="tab" data-toggle="tab"><i class="fa fa-comments-o"></i> Discussion</a></li>
-              <li role="presentation"><a href="#cards" aria-controls="cards" role="tab" data-toggle="tab"><i class="fa fa-check-square-o"></i> Todo</a></li>
+              <li role="presentation" class="active"><a href="#discussion" aria-controls="discussion" role="tab" data-toggle="tab"><i class="fa fa-comments-o"></i> Discuss</a></li>
+              <li role="presentation"><a href="#cards" aria-controls="cards" role="tab" data-toggle="tab"><i class="fa fa-check-square-o"></i> Breakdown</a></li>
             </ul>
 
             <div class="tab-content" style="height:100%;margin-top:5px">
-              <div tabindex="3" role="tabpanel" class="tab-pane fade in active" id="description">
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                  <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingOne">
-                      <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                          Description
-                        </a>
-                      </h4>
-                    </div>
-                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                      <div class="panel-body">
-                        <div class="description-viewer {{hideDescriptionViewerClass}}">
-                          <button id="edit-description-button" class="btn btn-link pull-right" style="position: relative;top: -50px;">Edit</button>
-                          <div style="min-height:200px;overflow-y: auto;outline:none;padding:10px;font-size:18px">{{#markdown}}{{description}}{{/markdown}}</div>
-                        </div>
-                        <div class="description-editor {{hideDescriptionEditorClass}}">
-                          <textarea class="card-description-textarea" style="min-height:200px;overflow-y: auto;outline:none;padding:10px;font-size:18px" autofocus>{{description}}</textarea>
-                          <div class="editor-buttons pull-right" style="display:flex">
-                            <button id="cancel-description-button" class="btn btn-default" style="margin-right:10px">Cancel</button>
-                            <button id="save-description-button" class="btn btn-success">Save</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingTwo">
-                      <h4 class="panel-title">
-                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                          Recent Activity
-                        </a>
-                      </h4>
-                    </div>
-                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                      <div class="panel-body">
-                        <i>Recent activity will go here</i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingThree">
-                      <h4 class="panel-title">
-                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                          Lastest Sub-Cards
-                        </a>
-                      </h4>
-                    </div>
-                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                      <div class="panel-body">
-                        <i>Latest sub-cards will go here</i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div role="tabpanel" class="tab-pane fade" id="discussion"  style="height:100%">
+              <div role="tabpanel" class="tab-pane fade in active" id="discussion"  style="height:100%">
                 <div class="messages-component" style="height:500px">
                   {{> messageHistory selectedItemId=currentItemId}}
                 </div>

@@ -142,6 +142,7 @@ if(Meteor.isClient) {
 	});
 
 	FlowRouter.route('/projects', {
+    name:'projectsPage',
 		action: function(params, queryParams) {
 			BlazeLayout.render("app", {currentPage: "projectList"});
 		}

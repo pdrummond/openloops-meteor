@@ -107,7 +107,7 @@ if(Meteor.isClient) {
 
     assigneeLabel: function() {
       var item = Ols.Item.getCurrent();
-      return item && item.assignee?'<b>' + item.assignee + '</b>':'<i>Click here to assign this to a team member</i>';
+      return item && item.assignee?'<b>' + item.assignee + '</b>':'<i>Click to assign to a team member</i>';
     },
 
     hideDescriptionViewerClass: function() {
@@ -175,32 +175,9 @@ if(Meteor.isClient) {
       }
     },
 
-    'click #set-type-post-button': function() {
-      Meteor.call('updateItemType', Session.get('currentItemId'), Ols.Item.ITEM_TYPE_POST, function(err) {
-        if(err) {
-          Ols.Error.showError("Error changing item type: ", err);
-        }
-      });
-    },
 
     'click #set-type-discussion-button': function() {
       Meteor.call('updateItemType', Session.get('currentItemId'), Ols.Item.ITEM_TYPE_DISCUSSION, function(err) {
-        if(err) {
-          Ols.Error.showError("Error changing item type: ", err);
-        }
-      });
-    },
-
-    'click #set-type-question-button': function() {
-      Meteor.call('updateItemType', Session.get('currentItemId'), Ols.Item.ITEM_TYPE_QUESTION, function(err) {
-        if(err) {
-          Ols.Error.showError("Error changing item type: ", err);
-        }
-      });
-    },
-
-    'click #set-type-requirement-button': function() {
-      Meteor.call('updateItemType', Session.get('currentItemId'), Ols.Item.ITEM_TYPE_REQ, function(err) {
         if(err) {
           Ols.Error.showError("Error changing item type: ", err);
         }
@@ -215,7 +192,7 @@ if(Meteor.isClient) {
       });
     },
 
-    'click #set-type-enhancement-button': function() {
+    'click #set-type-feature-button': function() {
       Meteor.call('updateItemIssueType', Session.get('currentItemId'), Ols.Item.ISSUE_TYPE_ENHANCEMENT, function(err) {
         if(err) {
           Ols.Error.showError("Error changing item type: ", err);
@@ -288,7 +265,7 @@ if(Meteor.isClient) {
           item.assignee = assignee.trim();
           item.inInbox = assignee !== Meteor.user().username
         } else {
-          item.inInBox = false;
+          item.inInbox = false;
         }
         Meteor.call('updateItem', Session.get('currentItemId'), item, function(err, newItem) {
           if(err) {

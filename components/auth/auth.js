@@ -63,21 +63,20 @@ if(Meteor.isServer) {
                 {title:username, 'type': 'USER_QUEUE', 'username': username},
               ]
     });
-    Projects.insert({
-      title: "Default",
-      key: username.toUpperCase(),
-      description: "Your very own personal space - only you can see the cards in here",
-      members: [{
-          role: 'ADMIN',
-          username: username,
-      }]
-    });
-    var email = user.emails[0].address;
-    TeamMembers.insert({
-      email: email,
-      role: "ADMIN",
-    });
 
+    console.log("number of team members: " + TeamMembers.find({}).count());
+		if(TeamMembers.find({}).count() == 0) {
+			var id = TeamMembers.insert({
+				email: email,
+				role: Ols.ROLE_ADMIN,
+			});
+			console.log("Added Team Member " + email + "(" + id + ")");
+		} else {
+			var teamMember = TeamMembers.findOne({email:email});
+			if(teamMember == null) {
+				throw new Meteor.Error("create-user-failed-001", "Sorry, but you don't have an invite to OpenLoops yet");
+			}
+		}
 		user.profileImage = Gravatar.imageUrl(email, {size: 50,default: 'wavatar'});
 
 		// We still want the default hook's 'profile' behavior.

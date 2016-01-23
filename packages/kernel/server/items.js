@@ -62,15 +62,18 @@ Meteor.methods({
   },
 
   updateItemAssignee: function(itemId, newAssignee) {
-
+    var item = Ols.Item.findOne(itemId);
+    if(item.assignee === newAssignee) {
+      throw new Meteor.Error('update-assignee-failed-001', "Assignee is same as current assignee");
+    }
     if(Meteor.users.find({username: newAssignee}).count() == 0) {
-      throw new Meteor.Error('update-assignee-failed-001', "User '" + newAssignee + "' doesn't exist");
+      throw new Meteor.Error('update-assignee-failed-002', "User '" + newAssignee + "' doesn't exist");
     }
 
-    var item = Ols.Item.findOne(itemId);
     Ols.Item.update(itemId, {
       $set: {
         assignee: newAssignee,
+        inInbox: true,
         updatedAt: Date.now(),
         updatedBy: Meteor.userId(),
       }
@@ -96,7 +99,7 @@ Meteor.methods({
         updatedAt: Date.now(),
         updatedBy: Meteor.userId(),
       }
-    });    
+    });
   },
 
   updateItemType: function(itemId, newType) {
@@ -244,7 +247,8 @@ Meteor.publish("items", function(opts) {
   }
   var projectIds = [];
 
-  if(opts.username) {
+  //FOR NOW EVERYONE CAN SEE ALL ITEMS
+  /*if(opts.username) {
 
     Projects.find({'members.username': opts.username}).forEach(function(project) {
       projectIds.push(project._id);
@@ -253,7 +257,7 @@ Meteor.publish("items", function(opts) {
     filter['$or'] = [{projectId: {$in:projectIds}}, {assignee: opts.username}, {createdBy: opts.username}];
   } else {
     filter.projectId = {$in: projectIds};
-  }
+  }*/
 
   console.log("ITEM filter: " + JSON.stringify(filter));
   return Ols.Item.find(filter, {sort: {order: 1}});

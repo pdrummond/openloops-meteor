@@ -40,11 +40,14 @@
       </div>
     </div>
     <ul class="queue-list sortable"  style="clear:both;margin:0;padding:0">
+      {{#if noCards}}
+        <p class="empty-msg">{{queueTitle}} is empty</p>
+      {{else}}
       {{#sortable items=items options=itemsOptions}}
-      <!--{{#each items}}-->
       {{> cardView}}
       {{/sortable}}
-      <!--{{/each}}-->
+      {{/if}}
+
       <!--<button id="quick-add-card" class="btn btn-link" style="color:gray"><i class="fa fa-plus"></i> Add Card</button>-->
     </ul>
   </div>

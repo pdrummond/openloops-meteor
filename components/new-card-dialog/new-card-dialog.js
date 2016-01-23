@@ -2,13 +2,14 @@ if(Meteor.isClient) {
 
   Template.newCardDialog.onCreated(function() {
     this.toField = new ReactiveVar();
-    this.selectedType = new ReactiveVar("post");
+    this.selectedType = new ReactiveVar("task");
   });
 
   Template.newCardDialog.onRendered(function() {
     var self = this;
     this.$('#new-card-dialog').on('shown.bs.modal', function () {
       self.$('#new-card-dialog input[name="title"]').focus();
+      self.$('#new-card-dialog select[name="project"]').val(Session.get('currentProjectId'));
     });
   });
 
@@ -51,20 +52,35 @@ if(Meteor.isClient) {
 
   Template.newCardDialog.events({
 
-    'change select[name="type"]': function(e, t) {
-      var type = $("#new-card-dialog select[name='type']").val();
-      t.selectedType.set(type);
-    },
-
     'keyup input[name="to"]': function(e, t) {
       t.toField.set($(e.target).val());
     },
 
-    'click #save-button': function() {
+    'click #set-type-task-button': function(e, t) {
+      t.selectedType.set("task");
+    },
+
+    'click #set-type-bug-button': function(e, t) {
+      t.selectedType.set("bug");
+    },
+
+    'click #set-type-feature-button': function(e, t) {
+      t.selectedType.set("enhancement");
+    },
+
+    'click #set-type-task-button': function(e, t) {
+      t.selectedType.set("task");
+    },
+
+    'click #set-type-discussion-button': function(e, t) {
+      t.selectedType.set("discussion");
+    },
+
+    'click #save-button': function(e, t) {
       var title = $("#new-card-dialog input[name='title']").val();
       if(title != null && title.length > 0) {
         var description = $("#new-card-dialog .card-description").text();
-        var type = $("#new-card-dialog select[name='type']").val();
+        var type = t.selectedType.get();
         var project = $("#new-card-dialog select[name='project']").val();
         var issueType;
         switch(type) {
@@ -93,7 +109,7 @@ if(Meteor.isClient) {
           item.assignee = assignee.trim();
           item.inInbox = assignee !== Meteor.user().username;
         } else {
-          item.inInBox = false;
+          item.inInbox = false;
         }
 
 

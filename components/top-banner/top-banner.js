@@ -6,6 +6,10 @@ if(Meteor.isClient) {
 
 	Template.topBanner.events({
 
+    'click #current-project-title': function() {
+      Ols.Router.showProjectsPage();
+    },
+
 		'click #header-title': function() {
 			Session.set('filterQuery', null);
 			Session.set('filterSentence', null);

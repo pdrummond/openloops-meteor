@@ -54,12 +54,11 @@ if(Meteor.isClient) {
   Template.workspace.onCreated(function() {
     var self = this;
 		Tracker.autorun(function() {
-			var opts = {};
+			var opts = {currentProjectId: Session.get('currentProjectId')};
 			opts.filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
       Tracker.nonreactive(function() {
         opts.username = Meteor.user().username;
       });
-      opts.filter.projectId = Session.get('currentProjectId');
 			self.subscribe('items', opts, function(err, result) {
 				if(err) {
 					Ols.Error.showError("Items Subscription error", err);
@@ -69,6 +68,8 @@ if(Meteor.isClient) {
 	});
 
   Template.workspace.helpers({
+
+
 
     queues: function() {
       var workspace = Workspaces.findOne({username: Meteor.user().username});
@@ -168,10 +169,35 @@ if(Meteor.isClient) {
   });
 
   Template.queue.helpers({
+
+    noCards: function() {
+      var queueType = Template.instance().queueType.get();
+      var filter = {
+        assignee: this.username,
+        inInbox: queueType === "INBOX"
+      };
+      /*if(queueType === "WORK") {
+        //Show the card in the queue if it's in the current project.
+        //But even if it isn't in the current project, if it's been assigned to me then show it.
+        filter.$or = [{projectId: Session.get('currentProjectId')}, {assignee:Meteor.user().username}];
+      }*/
+      console.log(">!>>!>!>!> FILTER: " + JSON.stringify(filter, null, 4))
+      var items = Items.find(filter);
+      return items.count() == 0;
+    },
+
     items: function () {
-      var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
-      filter.assignee = this.username;
-      filter.inInbox = Template.instance().queueType.get() == "INBOX";
+
+      var queueType = Template.instance().queueType.get();
+      var filter = {
+        assignee: this.username,
+        inInbox: queueType === "INBOX"
+      };
+      /*if(queueType === "WORK") {
+        //Show the card in the queue if it's in the current project.
+        //But even if it isn't in the current project, if it's been assigned to me then show it.
+        filter.$or = [{projectId: Session.get('currentProjectId')}, {assignee:Meteor.user().username}];
+      }*/
       return Items.find(filter, {sort: {order: 1}});
     },
 
@@ -261,12 +287,12 @@ if(Meteor.isClient) {
 
     queueTitle: function() {
       var t = Template.instance();
-      return t.queueType.get() === "WORK"?"QUEUE":"INBOX";
+      return t.queueType.get() === "WORK"?"Queue":"Inbox";
     },
 
     queueSwitchTitle: function() {
       var t = Template.instance();
-      return t.queueType.get() === "WORK"?"Inbox":"Work Queue";
+      return t.queueType.get() === "WORK"?"Inbox":"Queue";
     },
 
     queueWidth: function() {

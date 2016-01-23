@@ -84,10 +84,13 @@ if(Meteor.isClient) {
 		}
 	});
 
-	Template.app.onCreated(function() {
-    this.subscribe('workspaces', function() {
-      var workspace = Workspaces.findOne({username: Meteor.user().username});
-      Session.set('currentWorkspaceId', workspace._id);
+  Template.app.onCreated(function() {
+    var self = this;
+    Meteor.defer(function() {
+      self.subscribe('workspaces', function() {
+        var workspace = Workspaces.findOne({username: Meteor.user().username});
+        Session.set('currentWorkspaceId', workspace._id);
+      });
     });
 		this.subscribe('allUsernames');
 		this.subscribe('userStatus');

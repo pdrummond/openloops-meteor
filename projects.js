@@ -2,11 +2,12 @@
 if(Meteor.isClient) {
 	Template.projectList.helpers({
 		projects: function() {
-			if(Ols.User.userIsAdmin()) {
+			/*if(Ols.User.userIsAdmin()) {
 				return Ols.Project.find();
 			} else {
 				return Ols.Project.find({'members.username': Meteor.user().username});
-			}
+			}*/
+      return Ols.Project.find();
 		},
 
 		projectsListEmpty: function() {

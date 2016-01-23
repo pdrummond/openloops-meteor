@@ -120,4 +120,14 @@ Meteor.methods({
 	_getOldestBoardMessage: function(projectId, boardId) {
 		return Ols.ServerMessage.findOne({boardId: boardId}, {sort: {DateTime: 1, limit: 1}});
 	}
+
+});
+
+
+Meteor.publish("latestActivityMessages", function(opts) {
+  var filter = {};
+  if(opts && opts.filter) {
+    filter = _.extend(filter, opts.filter);
+  }
+  return ServerMessages.find(filter, {sort: {createdAt: -1}, limit:10});
 });

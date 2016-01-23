@@ -1,11 +1,8 @@
 <template name="leftSidebar">
 	<div class="left-sidebar">
 		<div class="tabs-header">
-      <a id="items-tab" class="{{activeTabClass 'items-tab'}} tab"> <i class="fa fa-exclamation-circle"></i> Backlog</a>
-      <a id="posts-tab" class="{{activeTabClass 'posts-tab'}} tab"> <i class="fa fa-envelope-o"></i> Posts</a>
+      <a id="items-tab" class="{{activeTabClass 'items-tab'}} tab"> <i class="fa fa-exclamation-circle"></i> Issues</a>
       <a id="discussions-tab" class="{{activeTabClass 'discussions-tab'}} tab"> <i class="fa fa-comments-o"></i> Discussions</a>
-      <a id="questions-tab" class="{{activeTabClass 'questions-tab'}} tab"> <i class="fa fa-question-circle"></i> Questions</a>
-      <a id="requirements-tab" class="{{activeTabClass 'requirements-tab'}} tab"> <i class="fa fa-fire"></i> Requirements</a>
 			<!--<a id="labels-tab" class="{{activeTabClass 'labels-tab'}} tab"> <i class="fa fa-tag"></i> Labels</a>
 			<a id="filters-tab" class="{{activeTabClass 'filters-tab'}} tab"> <i class="fa fa-filter"></i> Filters</a>-->
 		</div>
@@ -17,15 +14,6 @@
 		</div>
     <div id="discussions-tab" class="tab-body {{activeTabClass 'discussions-tab'}}">
 			{{> discussionList}}
-		</div>
-		<div id="questions-tab" class="tab-body {{activeTabClass 'questions-tab'}}">
-			{{> questionList}}
-		</div>
-		<div id="posts-tab" class="tab-body {{activeTabClass 'posts-tab'}}">
-			{{> postList}}
-		</div>
-		<div id="requirements-tab" class="tab-body {{activeTabClass 'requirements-tab'}}">
-			{{> reqList}}
 		</div>
 	</div>
 </template>

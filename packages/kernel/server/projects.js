@@ -22,7 +22,7 @@ Meteor.methods({
 			createdAt: now,
 			createdBy: Meteor.user().username,
 			updatedAt: now,
-			members: [],
+			members: [{username:Meteor.user().username, role:'ADMIN'}],
 			numMessages: 0
 		}, newProject);
 
