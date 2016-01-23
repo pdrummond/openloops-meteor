@@ -4,54 +4,106 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content" style="height:100%">
         <div class="modal-header" style="display:flex;position:relative">
-          <i class="fa {{cardIconClass}} fa-3x" style="margin-right:10px"></i>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border:none;padding: 2px;margin-right: 5px;padding-left: 10px;">
+              <i class="fa {{cardIconClass}} fa-3x" style="margin-right:10px"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li id="set-type-post-button"><a href="#"><i class='fa fa-envelope-o'></i> Post</a></li>
+              <li id="set-type-discussion-button"><a href="#"><i class='fa fa-comments-o'></i> Discussion</a></li>
+              <li id="set-type-question-button"><a href="#"><i class='fa fa-question-circle'></i> Question</a></li>
+              <li id="set-type-task-button"><a href="#"><i class='fa fa-exclamation-circle'></i> Task</a></li>
+              <li id="set-type-enhancement-button"><a href="#"><i class='fa fa-bullseye'></i> Enhancement</a></li>
+              <li id="set-type-bug-button"><a href="#"><i class='fa fa-bug'></i> Bug</a></li>
+              <li id="set-type-requirement-button"><a href="#"><i class='fa fa-fire'></i> Requirement</a></li>
+            </ul>
+          </div>
+
           <span style="position:absolute;top: 10px;color:gray;margin-right:10px;">#{{selectedCardKey}}</span>
-          <input tabindex="1" name="title" class="card-title modal-title" placeholder="Enter subject here" style="position:relative;top:10px;width: calc(100% - 50px);font-size: 25px;font-weight: 100;" value="{{title}}">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 tabindex="1" name="title" class="card-title modal-title" style="font-size: 28px;position: relative;top: 10px;">{{title}}</h4>
         </div>
         <div class="modal-body" style="padding:0;margin:0;height:100%">
-          <div style="display:flex;justify-content:space-around;padding:10px;border-bottom:1px solid lightgray">
-            <span style="margin-right:10px">TO:</span>
-            <input tabindex="2" style="width: 200px;position: relative;top: -2px;"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)" value="{{assignee}}">
-            <div class="row" style="float:left;display:flex;margin:0;margin-top: 0px;">
-              <div>
-                <span style="display:inline;margin-right:10px;color:gray">TYPE:</span>
-                <select tabindex="4" name="type">
-                  <option value="post">Post</option>
-                  <option value="discussion">Discussion</option>
-                  <option value="question">Question</option>
-                  <option value="task">Task</option>
-                  <option value="enhancement">Enhancement</option>
-                  <option value="bug">Bug</option>
-                  <option value="req">Requirement</option>
-                </select>
-              </div>
-              <div>
-                <span style="display:inline;margin-left:30px;margin-right:10px;color:gray">PROJECT:</span>
-                <select tabindex="5" name="project" disabled>
-                  {{#each projects}}
-                  <option value="{{_id}}">{{title}}</option>
-                  {{/each}}
-                </select>
-              </div>
+          <div style="padding:10px;border-bottom:1px solid lightgray;height:40px">
+            <div class="pull-left">
+              <span style="margin-right:10px">TO:</span>
+              <span class="card-to-field" tabindex="2" style="width: 400px;position: relative;top: 0px;" name="to">{{{assigneeLabel}}}</span>
             </div>
-            <span style="margin-right:10px;color:gray">CREATED BY:</span>
-            <span style="margin-right:10px;color:gray">{{createdBy}}</span>
-            <button id="status-button" class="btn {{statusClass}} btn-xs">{{statusLabel}}</button>
+            <div class="pull-right">
+              <div class="row" style="float:left;display:flex;margin:0;margin-top: 0px;">
+                <div>
+                  <span style="display:inline;margin-left:30px;margin-right:10px;color:gray">PROJECT:</span>
+                  <span style="margin-right:10px;color:gray;font-weight:bold">{{projectTitle}}</span>
+                </div>
+              </div>
+              <span style="margin-right:10px;color:gray">CREATED BY:</span>
+              <span style="margin-right:10px;color:gray;font-weight:bold">{{createdBy}}</span>
+              <button id="status-button" class="btn {{statusClass}} btn-xs">{{statusLabel}}</button>
+            </div>
           </div>
-          <div class="card-detail-tabs" style="padding:10px;height=100%">
+          <div class="card-detail-tabs" style="clear:both;padding:10px;height=100%">
 
             <!-- Nav tabs -->
             <ul class="nav nav-pills" role="tablist">
-              <li role="presentation" class="active"><a href="#description" aria-controls="description" role="tab" data-toggle="tab"><i class="fa fa-book"></i> Description</a></li>
+              <li role="presentation" class="active"><a href="#description" aria-controls="description" role="tab" data-toggle="tab"><i class="fa fa-adjust"></i> Overview</a></li>
               <li role="presentation"><a href="#discussion" aria-controls="discussion" role="tab" data-toggle="tab"><i class="fa fa-comments-o"></i> Discussion</a></li>
               <li role="presentation"><a href="#cards" aria-controls="cards" role="tab" data-toggle="tab"><i class="fa fa-check-square-o"></i> Todo</a></li>
             </ul>
 
-            <div class="tab-content" style="height:100%">
+            <div class="tab-content" style="height:100%;margin-top:5px">
               <div tabindex="3" role="tabpanel" class="tab-pane fade in active" id="description">
-                <div  class="card-description" contenteditable style="height:500px;overflow-y: auto;outline:none;padding:30px;font-size:18px" autofocus>
-                  {{description}}
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                  <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                      <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          Description
+                        </a>
+                      </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                      <div class="panel-body">
+                        <div class="description-viewer {{hideDescriptionViewerClass}}">
+                          <button id="edit-description-button" class="btn btn-link pull-right" style="position: relative;top: -50px;">Edit</button>
+                          <div style="min-height:200px;overflow-y: auto;outline:none;padding:10px;font-size:18px">{{#markdown}}{{description}}{{/markdown}}</div>
+                        </div>
+                        <div class="description-editor {{hideDescriptionEditorClass}}">
+                          <textarea class="card-description-textarea" style="min-height:200px;overflow-y: auto;outline:none;padding:10px;font-size:18px" autofocus>{{description}}</textarea>
+                          <div class="editor-buttons pull-right" style="display:flex">
+                            <button id="cancel-description-button" class="btn btn-default" style="margin-right:10px">Cancel</button>
+                            <button id="save-description-button" class="btn btn-success">Save</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingTwo">
+                      <h4 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          Recent Activity
+                        </a>
+                      </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                      <div class="panel-body">
+                        <i>Recent activity will go here</i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingThree">
+                      <h4 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                          Lastest Sub-Cards
+                        </a>
+                      </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                      <div class="panel-body">
+                        <i>Latest sub-cards will go here</i>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div role="tabpanel" class="tab-pane fade" id="discussion"  style="height:100%">
@@ -64,9 +116,9 @@
                 </div>
               </div>
               <div role="tabpanel" class="tab-pane fade" id="cards">
-                  <div class="checklist-component" style="height:500px">
-                    {{> checkList}}
-                  </div>
+                <div class="checklist-component" style="height:500px">
+                  {{> checkList}}
+                </div>
               </div>
             </div>
           </div>
@@ -74,12 +126,10 @@
         <div class="modal-footer">
           <div class="users-viewing-card pull-left">
             {{#each viewingUsers}}
-              <img style="border-radius:20px;border:2px solid green;width:30px" src="{{profileImage}}" title="{{username}} is viewing this card right now"/>
+            <img style="border-radius:20px;border:2px solid green;width:30px" src="{{profileImage}}" title="{{username}} is viewing this card right now"/>
             {{/each}}
           </div>
-
           <button tabindex="6" id="close-button" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button tabindex="7" id="save-button" type="button" class="btn btn-success" data-dismiss="modal">{{saveButtonLabel}}</button>
         </div>
       </div>
     </div>

@@ -62,10 +62,60 @@ Meteor.methods({
   },
 
   updateItemAssignee: function(itemId, newAssignee) {
+
+    if(Meteor.users.find({username: newAssignee}).count() == 0) {
+      throw new Meteor.Error('update-assignee-failed-001', "User '" + newAssignee + "' doesn't exist");
+    }
+
     var item = Ols.Item.findOne(itemId);
     Ols.Item.update(itemId, {
       $set: {
         assignee: newAssignee,
+        updatedAt: Date.now(),
+        updatedBy: Meteor.userId(),
+      }
+    });
+  },
+
+  updateItemTitle: function(itemId, newTitle) {
+    var item = Ols.Item.findOne(itemId);
+    Ols.Item.update(itemId, {
+      $set: {
+        title: newTitle,
+        updatedAt: Date.now(),
+        updatedBy: Meteor.userId(),
+      }
+    });
+  },
+
+  updateItemDesc: function(itemId, newDesc) {
+    var item = Ols.Item.findOne(itemId);
+    Ols.Item.update(itemId, {
+      $set: {
+        description: newDesc,
+        updatedAt: Date.now(),
+        updatedBy: Meteor.userId(),
+      }
+    });    
+  },
+
+  updateItemType: function(itemId, newType) {
+    var item = Ols.Item.findOne(itemId);
+    Ols.Item.update(itemId, {
+      $set: {
+        type: newType,
+        updatedAt: Date.now(),
+        updatedBy: Meteor.userId(),
+      }
+    });
+  },
+
+  updateItemIssueType: function(itemId, newIssueType) {
+    var item = Ols.Item.findOne(itemId);
+    Ols.Item.update(itemId, {
+      $set: {
+        type: Ols.Item.ITEM_TYPE_ISSUE,
+        issueType: newIssueType,
         updatedAt: Date.now(),
         updatedBy: Meteor.userId(),
       }

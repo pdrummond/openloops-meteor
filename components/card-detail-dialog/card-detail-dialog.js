@@ -3,7 +3,7 @@ if(Meteor.isClient) {
   Template.cardDetailDialog.onCreated(function() {
     this.toField = new ReactiveVar();
     this.statusField = new ReactiveVar();
-    this.selectedType = new ReactiveVar("post");
+    this.editMode = new ReactiveVar(false);
   });
 
   Template.cardDetailDialog.onRendered(function() {
@@ -31,21 +31,23 @@ if(Meteor.isClient) {
 
   Template.cardDetailDialog.helpers({
 
+    projectTitle: function() {
+      var item = Ols.Item.getCurrent();
+      if(item) {
+        var project = Ols.Project.findOne(item.projectId);
+        return project.title;
+      } else {
+        return '';
+      }
+    },
+
     viewingUsers: function() {
       return Meteor.users.find({_id: {$ne: Meteor.userId()}, viewingItemId: Session.get('currentItemId')});
     },
 
     cardIconClass: function() {
-      var t = Template.instance();
-      switch(t.selectedType.get()) {
-        case 'post': return 'fa-envelope-o';
-        case 'discussion': return 'fa-comments-o';
-        case 'task': return 'fa-exclamation-circle';
-        case 'bug': return 'fa-bug';
-        case 'enhancement': return 'fa-bullseye';
-        case 'question': return 'fa-question-circle';
-        case 'req': return 'fa-fire';
-      }
+      var item = Ols.Item.getCurrent();
+      return Ols.Item.getTypeIconClass(item);
     },
 
     selectedCardKey: function() {
@@ -67,7 +69,7 @@ if(Meteor.isClient) {
 
     statusClass: function() {
       var item = Items.findOne(Session.get('currentItemId'));
-      return item?item.isOpen?'btn-primary':'btn-danger':'btn-primary';
+      return item?item.isOpen?'btn-success':'btn-danger':'btn-success';
     },
 
     currentItem: function() {
@@ -101,14 +103,132 @@ if(Meteor.isClient) {
     inInboxAttr: function() {
       var item = Items.findOne(Session.get('currentItemId'));
       return item && item.inInbox?'checked':'';
-    }
+    },
+
+    assigneeLabel: function() {
+      var item = Ols.Item.getCurrent();
+      return item && item.assignee?'<b>' + item.assignee + '</b>':'<i>Click here to assign this to a team member</i>';
+    },
+
+    hideDescriptionViewerClass: function() {
+      return Template.instance().editMode.get() === true ? 'hide':'';
+    },
+
+    hideDescriptionEditorClass: function() {
+      return Template.instance().editMode.get() === true ? '':'hide';
+    },
   })
 
   Template.cardDetailDialog.events({
+    'click #cancel-description-button': function(e, t) {
+      t.editMode.set(false);
+    },
 
-    'change select[name="type"]': function(e, t) {
-      var type = $("#card-detail-dialog select[name='type']").val();
-      t.selectedType.set(type);
+    'click #save-description-button': function(e, t) {
+      var desc = $(".card-description-textarea").val().trim();
+      if(desc != null && desc.length > 0) {
+        Meteor.call('updateItemDesc', Session.get('currentItemId'), desc, function(err) {
+          if(err) {
+            Ols.Error.showError("Error changing item desc: ", err);
+          }
+        });
+        t.editMode.set(false);
+      }
+    },
+
+
+
+    'click #edit-description-button': function(e, t) {
+      e.preventDefault();
+      t.editMode.set(!t.editMode.get());
+    },
+
+    'click .card-title': function() {
+      var item = Ols.Item.getCurrent();
+      var title = prompt("Enter new card title:", item.title);
+      if(title != null) {
+        Meteor.call('updateItemTitle', Session.get('currentItemId'), title, function(err) {
+          if(err) {
+            Ols.Error.showError("Error changing item title: ", err);
+          }
+        });
+      }
+    },
+
+    'click .card-to-field': function() {
+      var item = Ols.Item.getCurrent();
+      var assignee = prompt("Enter username to assign card to:", item.assignee);
+      if(assignee != null) {
+        if(assignee.length == 0) {
+          Meteor.call('removeItemAssignee', Session.get('currentItemId'), function(err) {
+            if(err) {
+              Ols.Error.showError("Error removing assignee: ", err);
+            }
+          });
+        } else {
+          Meteor.call('updateItemAssignee', Session.get('currentItemId'), assignee, function(err) {
+            if(err) {
+              Ols.Error.showError("Error changing assignee: ", err);
+            }
+          });
+        }
+      }
+    },
+
+    'click #set-type-post-button': function() {
+      Meteor.call('updateItemType', Session.get('currentItemId'), Ols.Item.ITEM_TYPE_POST, function(err) {
+        if(err) {
+          Ols.Error.showError("Error changing item type: ", err);
+        }
+      });
+    },
+
+    'click #set-type-discussion-button': function() {
+      Meteor.call('updateItemType', Session.get('currentItemId'), Ols.Item.ITEM_TYPE_DISCUSSION, function(err) {
+        if(err) {
+          Ols.Error.showError("Error changing item type: ", err);
+        }
+      });
+    },
+
+    'click #set-type-question-button': function() {
+      Meteor.call('updateItemType', Session.get('currentItemId'), Ols.Item.ITEM_TYPE_QUESTION, function(err) {
+        if(err) {
+          Ols.Error.showError("Error changing item type: ", err);
+        }
+      });
+    },
+
+    'click #set-type-requirement-button': function() {
+      Meteor.call('updateItemType', Session.get('currentItemId'), Ols.Item.ITEM_TYPE_REQ, function(err) {
+        if(err) {
+          Ols.Error.showError("Error changing item type: ", err);
+        }
+      });
+    },
+
+    'click #set-type-bug-button': function() {
+      Meteor.call('updateItemIssueType', Session.get('currentItemId'), Ols.Item.ISSUE_TYPE_BUG, function(err) {
+        if(err) {
+          Ols.Error.showError("Error changing item type: ", err);
+        }
+      });
+    },
+
+    'click #set-type-enhancement-button': function() {
+      Meteor.call('updateItemIssueType', Session.get('currentItemId'), Ols.Item.ISSUE_TYPE_ENHANCEMENT, function(err) {
+        if(err) {
+          Ols.Error.showError("Error changing item type: ", err);
+        }
+      });
+    },
+
+    'click #set-type-task-button': function() {
+      Meteor.call('updateItemIssueType', Session.get('currentItemId'), Ols.Item.ISSUE_TYPE_TASK, function(err) {
+        if(err) {
+          Ols.Error.showError("Error changing item type: ", err);
+        }
+      });
     },
 
     'click #status-button': function(e, t) {
