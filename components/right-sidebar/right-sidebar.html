@@ -1,17 +1,10 @@
 <template name="rightSidebar">
 	<div class="right-sidebar">
 		<div class="tabs-header">
-      <a id="feed-tab" class="{{activeTabClass 'feed-tab'}} tab"> <i class="fa fa-home"></i> Feed</a>
       <a id="done-tab" class="{{activeTabClass 'done-tab'}} tab"> <i class="fa fa-check-circle"></i> Done</a>
 			<a id="filters-tab" class="{{activeTabClass 'filters-tab'}} tab"> <i class="fa fa-filter"></i> Filters</a>
 			<a id="members-tab" class="{{activeTabClass 'members-tab'}} tab"> <i class="fa fa-users"></i> People</a>
 		</div>
-		<div id="now-tab" class="tab-body {{activeTabClass 'now-tab'}}">
-			{{> nowList}}
-		</div>
-    <div id="feed-tab" class="tab-body {{activeTabClass 'feed-tab'}}">
-      <p>All activity will go here eventually</p>    
-    </div>
 		<div id="items-tab" class="tab-body {{activeTabClass 'items-tab'}}">
 			<!--<div class="filter-sentence-wrapper">
 				<span id="filter-sentence">{{{filterSentence}}}</span> <span id="active-item-msg" class="{{showActiveItemMsgClass}}">#{{currentItemKey}} is active <i id="clear-active-item-icon" class="fa fa-times" title="Clear active item"></i></span>

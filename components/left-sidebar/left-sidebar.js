@@ -1,5 +1,5 @@
 if(Meteor.isClient) {
-	Session.setDefault('leftSidebarActiveTab', 'items-tab');
+	Session.setDefault('leftSidebarActiveTab', 'feed-tab');
 
 	Template.leftSidebar.onRendered(function() {
 		console.trace("leftSidebar.onRendered");

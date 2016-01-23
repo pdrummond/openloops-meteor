@@ -17,6 +17,7 @@ Package.onUse(function(api) {
 		'client/notifications.js'
 	], 'client');
 	api.addFiles([
+    'server/activity.js',
 		'server/messages.js',
 		'server/items.js',
 		'server/filters.js',

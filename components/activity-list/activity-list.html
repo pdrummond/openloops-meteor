@@ -1,11 +1,11 @@
 <template name="activityList">
 	<ul class="item-list">
 		{{#if noItems}}
-		<p class="empty-msg">No activity found.</p>
+		  <p class="empty-msg">No activity found.</p>
 		{{else}}
-		{{#each items}}
-		{{> itemItemView}}
-		{{/each}}
+  		{{#each activityItems}}
+  		{{> messageItemView}}
+  		{{/each}}
 		{{/if}}
 	</ul>
 </template>

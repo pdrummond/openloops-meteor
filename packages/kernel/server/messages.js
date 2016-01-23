@@ -76,6 +76,7 @@ Meteor.methods({
 		}
 		Ols.Board.update(newMessage.boardId, {$inc: {numMessages: 1}});
 		Ols.Project.update(newMessage.projectId, {$inc: {numMessages: 1}});
+    Meteor.call('insertActivityItem', newMessage);
 		Meteor.call('detectMentionsInMessage', newMessage);
 	},
 

@@ -37,6 +37,7 @@ Ols.Activity = {
 			}, activityMessage);
 		}
 		Meteor.call('saveMessage', activityMessage);
+    Meteor.call('insertActivityItem', activityMessage);
 		Streamy.broadcast('sendMessage', activityMessage);
 	},
 
