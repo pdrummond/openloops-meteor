@@ -1,14 +1,76 @@
 <template name="filterTab">
-  <div class="filter-tab">
-    <form>
-      <div class="form-group">
-        <label for="exampleInputEmail1">Projects</label>
-        <select id="project-chooser" multiple style="width:100%;height:200px;overflow-y:auto;">
+  <div class="filter-tab" style="padding:30px">
+    <div class="dropdown-wrapper">
+      <span class="ols-label">Project</span>
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          {{currentProjectTitle}}
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
           {{#each projects}}
-            <option value="{{_id}}">{{title}}</option>
+          {{> projectMenuItem}}
           {{/each}}
-        </select>
+        </ul>
       </div>
-    </form>
+    </div>
+    <div class="dropdown-wrapper">
+      <span class="ols-label">Open Status</span>
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          All
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><a href="#">New</a></li>
+          <li><a href="#">In Progress</a></li>
+          <li><a href="#">Blocked</a></li>
+          <li><a href="#">In Test</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#">All</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="dropdown-wrapper">
+      <span class="ols-label">Resolved Status</span>
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          All
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><a href="#">Completed</a></li>
+          <li><a href="#">Duplicate</a></li>
+          <li><a href="#">Won't do</a></li>
+          <li><a href="#">Need more info</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#">All</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="dropdown-wrapper">
+      <span class="ols-label">Estimate</span>
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          All
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><a href="#">Small</a></li>
+          <li><a href="#">Medium</a></li>
+          <li><a href="#">Large</a></li>
+          <li><a href="#">Unknown</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="#">All</a></li>
+        </ul>
+      </div>
+    </div>
+
   </div>
+</template>
+
+<template name="projectMenuItem">
+  <li><a href="#">{{title}}</a></li>
 </template>

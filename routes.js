@@ -15,14 +15,15 @@ if(Meteor.isClient) {
 		}
 	});
 
-  FlowRouter.route('/', {
+  FlowRouter.route('/project/:projectId', {
     name: 'workspacePage',
 		action: function(params, queryParams) {
+      Session.set('currentProjectId', params.projectId);
 			BlazeLayout.render("app", {currentPage: "workspacePage"});
     }
   });
 
-	FlowRouter.route('/welcome', {
+	FlowRouter.route('/', {
 		name: "welcome",
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', null);

@@ -1,7 +1,7 @@
 Ols.Router = {
 
-	showWorkspace: function(boardId) {
-		FlowRouter.go('workspacePage');
+	showWorkspacePage: function(projectId) {
+		FlowRouter.go('workspacePage', {projectId: projectId});
 	},
 
 	showItemMessages: function(item, params) {

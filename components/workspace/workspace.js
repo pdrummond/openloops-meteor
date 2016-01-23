@@ -59,6 +59,7 @@ if(Meteor.isClient) {
       Tracker.nonreactive(function() {
         opts.username = Meteor.user().username;
       });
+      opts.filter.projectId = Session.get('currentProjectId');
 			self.subscribe('items', opts, function(err, result) {
 				if(err) {
 					Ols.Error.showError("Items Subscription error", err);

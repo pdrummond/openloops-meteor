@@ -4,13 +4,14 @@
   <div id="top-banner">
     <div style="padding-top:10px">
       <div class="left">
-        {{> openLoopsEye}}
+        <span style="font-size:26px;color:white;text-align: center;margin: auto auto;position: relative;top: 10px;">{{currentProjectTitle}}</span>
         <span style="margin-left:10px" id="main-title"></span>
         <!--<a id="create-link"><i class="fa fa-plus fx-2x"></i></a>-->
         <!-- Button trigger modal -->
       </div>
     </div>
     <div class="right">
+      <div id="connection-status" class="{{connectionStatus}}" title="Server {{connectionStatus}}"></div>
       <button type="button" class="btn btn-primary"
         data-toggle="modal"
         data-backdrop="static"

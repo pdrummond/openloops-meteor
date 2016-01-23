@@ -6,7 +6,7 @@ if(Meteor.isClient) {
 				return Ols.Project.find();
 			} else {
 				return Ols.Project.find({'members.username': Meteor.user().username});
-			}		
+			}
 		},
 
 		projectsListEmpty: function() {
@@ -22,9 +22,7 @@ if(Meteor.isClient) {
 
 	Template.projectItem.helpers({
 		projectSelectedLink: function() {
-			var link = "/project/" + this._id;
-			link += this.defaultBoardId && this.defaultBoardId.length > 0?"/board/" + this.defaultBoardId:"/manage-boards";
-			return link;
+			return "/project/" + this._id;
 		}
 	})
 
