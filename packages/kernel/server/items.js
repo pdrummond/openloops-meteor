@@ -245,10 +245,13 @@ Meteor.publish("items", function(opts) {
   if(opts && opts.filter) {
     filter = _.extend(filter, opts.filter);
   }
-  var projectIds = [];
+  if(opts && opts.currentProjectId) {
+    filter.projectId = opts.currentProjectId;
+  }
+  /*var projectIds = [];
 
   //FOR NOW EVERYONE CAN SEE ALL ITEMS
-  /*if(opts.username) {
+  if(opts.username) {
 
     Projects.find({'members.username': opts.username}).forEach(function(project) {
       projectIds.push(project._id);

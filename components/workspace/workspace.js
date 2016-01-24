@@ -176,12 +176,6 @@ if(Meteor.isClient) {
         assignee: this.username,
         inInbox: queueType === "INBOX"
       };
-      /*if(queueType === "WORK") {
-        //Show the card in the queue if it's in the current project.
-        //But even if it isn't in the current project, if it's been assigned to me then show it.
-        filter.$or = [{projectId: Session.get('currentProjectId')}, {assignee:Meteor.user().username}];
-      }*/
-      console.log(">!>>!>!>!> FILTER: " + JSON.stringify(filter, null, 4))
       var items = Items.find(filter);
       return items.count() == 0;
     },
@@ -193,11 +187,6 @@ if(Meteor.isClient) {
         assignee: this.username,
         inInbox: queueType === "INBOX"
       };
-      /*if(queueType === "WORK") {
-        //Show the card in the queue if it's in the current project.
-        //But even if it isn't in the current project, if it's been assigned to me then show it.
-        filter.$or = [{projectId: Session.get('currentProjectId')}, {assignee:Meteor.user().username}];
-      }*/
       return Items.find(filter, {sort: {order: 1}});
     },
 
