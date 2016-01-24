@@ -4,8 +4,39 @@
 		  <p class="empty-msg">No activity found.</p>
 		{{else}}
   		{{#each activityItems}}
-  		{{> messageItemView}}
+        {{> Template.dynamic template=messageTemplate}}
   		{{/each}}
 		{{/if}}
 	</ul>
+</template>
+
+<template name="activityListChatMessageItemView">
+	<li class="chat-message message" data-id={{_id}}>
+		<img class="profile-image" src="{{userImageUrl}}"/>
+		<div class="content">
+			<span class="header">
+				<strong class="header-item">{{createdBy}}</strong>
+				<span id="created-at" class="header-item" title={{formatTime createdAt}}> commented on <a class="card-key" href="">{{cardKey}}</a> {{timeAgo createdAt}}</span>
+			</span>
+			<div id="text" class="markdown-content" style="padding:5px;padding-left:10px;background-color:whitesmoke;border-radius:5px;margin-top:10px">
+				{{#markdown}}{{truncateString text 1000}}{{/markdown}}
+			</div>
+		</div>
+	</li>
+</template>
+
+<template name="activityListActivityItemView">
+	<li class="activity-message message" data-id={{_id}}>
+		<img class="profile-image" src="{{userImageUrl}}"/>
+		<div class="content">
+			<span class="header">
+				<strong class="header-item">{{createdBy}}</strong>
+				<span id="created-at" class="header-item" title={{formatTime createdAt}}>{{{activityMessage}}} {{timeAgo createdAt}}</span>
+			</span>
+
+			<div id="text" class="{{showActivityContentClass}}" style="border:1px solid whitesmoke;padding:10px;margin-top:10px;background-color:whitesmoke">
+				{{#markdown}}{{activityContent}}{{/markdown}}
+			</div>
+		</div>
+	</li>
 </template>

@@ -177,118 +177,15 @@ if(Meteor.isClient) {
 		},
 
 		activityMessage: function() {
-			if(this.item) {
-				var currentBoardId = Session.get('currentBoardId');
-				var currentItemId = Session.get('currentItemId');
-				var itemTitleLink = "";
-				if(this.item != null) {
-					itemTitleLink = '<span id="item-link"><a class="item-link" title="' +  Ols.StringUtils.truncate(this.item.title, 500) + '" href="' +
-					'/project/' + Session.get('currentProjectId') +
-					(currentBoardId?'/board/' + currentBoardId:'') +
-					'/item/' + this.item._id + '/messages">' + Ols.Item.getItemKey({item: this.item}) + '</a></span>';
-				} else {
-					itemTitleLink = "ERR: Cannot find item";
-				}
-
-				var ctx = currentItemId?'this item':itemTitleLink;
-				var msg = '';
-				switch(this.activityType) {
-					case Ols.Activity.ACTIVITY_TYPE_NEW_ITEM:
-					msg = '<b>created</b> ' + ctx;
-					break;
-					case Ols.Activity.ACTIVITY_TYPE_ITEM_TYPE_CHANGE:
-					msg = ('<b>changed</b> ' + ctx + ' to ' + OpenLoops.getItemTypePhrase(this.itemType, this.issueType));
-					break;
-					case Ols.Activity.ACTIVITY_TYPE_ITEM_OPENED:
-					msg = "<b>re-opened</b> " + ctx;
-					break;
-					case Ols.Activity.ACTIVITY_TYPE_ITEM_CLOSED:
-					msg = "<b>closed</b> " + ctx;
-					break;
-					case Ols.Activity.ACTIVITY_TYPE_ITEM_TITLE_CHANGED:
-					msg = "<b>changed</b> title of item to " + itemTitleLink;
-					break;
-					case Ols.Activity.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
-					var itemCtx = currentItemId?"of this item to:":"of " + ctx + " to:";
-					msg = "Set the description " + itemCtx;
-					break;
-					case Ols.Activity.ACTIVITY_TYPE_ITEM_MOVED_TO_BOARD:
-						msg = "<b>moved</b> " + ctx + " to board " + "<a href='/project/" + this.toBoard.projectId + "/board/" + this.toBoard.boardId + "'>" + this.toBoard.title + "</a>";
-						break;
-					case Ols.Activity.ACTIVITY_TYPE_ITEM_MOVED_FROM_BOARD:
-						msg = "<b>moved</b> " + ctx + " here from board " + "<a href='/project/" + this.fromBoard.projectId + "/board/" + this.fromBoard.boardId + "'>" + this.fromBoard.title + "</a>";
-						break;
-					default:
-						msg =  "ERR: activity item " + this.activityType + " not found";
-						break;
-				}
-			} else {
-				switch(this.activityType) {
-					case Ols.ACTIVITY_TYPE_NEW_BOARD:
-					var board = Boards.findOne(this.boardId);
-					if(board != null) {
-						msg = 'created <span class="board-link">' + board.title + '</span>';
-					} else {
-						msg = 'ERR: board is null';
-					}
-					break;
-					//FIXME: Need to find someway to defer to the plugin for this.
-					case Ols.ACTIVITY_TYPE_WEBHOOK_EVENT:
-					switch(this.webHookType) {
-						case "GITHUB_WEBHOOK_EVENT":
-						msg = Ols.GitHub.generateActivityMessage(this);
-						break;
-					}
-					break;
-					default:
-					msg =  ">> activity item " + this.activityType + " not found";
-					break;
-				}
-			}
-			return msg;
+			return Ols.Activity.getActivityMessage(this);
 		},
 
 		activityContent: function() {
-			var activityContent = "";
-			if(this.itemId) {
-				var item = Ols.Item.findOne(this.itemId);
-
-				switch(this.activityType) {
-					case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
-					activityContent = this.item?this.item.description:'ERR: Something went wrong. Cannot find item description';
-					break;
-
-				}
-			} else {
-				switch(this.activityType) {
-					case Ols.ACTIVITY_TYPE_WEBHOOK_EVENT:
-					switch(this.webHookType) {
-						case "GITHUB_WEBHOOK_EVENT":
-						activityContent = Ols.GitHub.generateActivityContent(this);
-						break;
-					}
-					break;
-				}
-			}
-			return activityContent;
+			return Ols.Activity.getActivityContent(this);
 		},
 
 		showActivityContentClass: function() {
-			var show = false;
-			var item = Ols.Item.findOne(this.itemId);
-			switch(this.activityType) {
-				case Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED:
-				show = true;
-				break;
-				case Ols.ACTIVITY_TYPE_WEBHOOK_EVENT:
-				switch(this.webHookType) {
-					case "GITHUB_WEBHOOK_EVENT":
-					show = Ols.GitHub.showActivityContent(this);
-					break;
-				}
-				break;
-			}
-			return show?"":"hide";
+			return Ols.Activity.showActivityContentClass(this);
 		},
 
 		showItemLink: function() {

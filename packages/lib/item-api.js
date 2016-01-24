@@ -33,6 +33,13 @@ Ols.Item = {
 		return Items;
 	},
 
+  showCardDetailDialog: function(itemId) {
+    Session.set('currentItemId', itemId);
+    $("#card-detail-dialog").modal({
+        backdrop: 'static'
+    });
+  },
+
 	/**
 		Given an item or an itemId returns the item key for a project. The item
 		key is made up of the project key and the item PID, for example: OLS-42.

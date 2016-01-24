@@ -453,11 +453,7 @@ if(Meteor.isClient) {
       //this.selectedCardId.set(this.card._id);
       //UGH!  This depends on the specific structure of the workspace html
       //t.view.parentView.parentView.parentView.parentView.parentView.parentView.templateInstance().selectedCardId.set(this._id);
-      Session.set('currentItemId', this._id);
-
-      $("#card-detail-dialog").modal({
-          backdrop: 'static'
-      });
+      Ols.Item.showCardDetailDialog(this._id);
     },
 
     'click .label-item': function(e) {
