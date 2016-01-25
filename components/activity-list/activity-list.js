@@ -8,7 +8,7 @@ if(Meteor.isClient) {
   Template.activityList.onCreated(function() {
     var self = this;
     Tracker.autorun(function() {
-      self.subscribe('activityItems', function(err, result) {
+      self.subscribe('activityItems', {currentProjectId: Session.get('currentProjectId')}, function(err, result) {
         if(err) {
           Ols.Error.showError("Unable to subscribe to activity items", err);
         }

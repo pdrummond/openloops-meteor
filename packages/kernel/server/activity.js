@@ -4,6 +4,6 @@ Meteor.methods({
   }
 });
 
-Meteor.publish('activityItems', function() {
-  return Activity.find({}, {createdAt: -1});
+Meteor.publish('activityItems', function(opts) {
+  return Activity.find({projectId: opts.currentProjectId}, {createdAt: -1});
 });
