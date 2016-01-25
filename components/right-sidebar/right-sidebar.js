@@ -1,5 +1,5 @@
 if(Meteor.isClient) {
-	Session.setDefault('rightSidebarActiveTab', 'done-tab');
+	Session.setDefault('rightSidebarActiveTab', 'filters-tab');
 
 	Template.rightSidebar.onCreated(function() {
 		Tracker.autorun(function() {

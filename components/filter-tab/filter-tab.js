@@ -11,6 +11,28 @@ if(Meteor.isClient) {
     }
   });
 
+  Template.filterTab.events({
+    'keyup .milestone-tag-filter': function(e, t) {
+      var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
+      var inputVal = $(t.find('.milestone-tag-filter')).val().trim();
+      if(charCode == 27) {
+        Session.set('currentMilestoneTag', null);
+        $('.milestone-tag-filter').val('');
+      } else if(charCode == 13 && (inputVal == null || inputVal.length == 0)) {
+        e.preventDefault();
+        e.stopPropagation();
+      } else {
+        if (charCode == 13) {
+          e.preventDefault();
+          e.stopPropagation();
+          if(inputVal.length > 0) {
+            Session.set('currentMilestoneTag', inputVal);
+          }
+        }
+      }
+    },
+  });
+
   Template.projectMenuItem.events({
 
     'click': function() {

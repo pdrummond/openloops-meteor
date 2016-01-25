@@ -1623,7 +1623,7 @@ border-radius: 0;
 }
 
 .ols-label {
-  display:block;
+  display:inline;
   text-transform:uppercase;
   color:gray;
   margin-bottom:5px;
@@ -1631,6 +1631,10 @@ border-radius: 0;
 
 
 .dropdown-wrapper {
+  flex-shrink:0;
+}
+
+.filter-tab .dropdown-wrapper {
   margin-bottom:30px;
 }
 
@@ -1641,4 +1645,13 @@ border-radius: 0;
 
 #feed-tab .item-list {
   padding:10px;
+}
+
+
+.milestone-tag {
+  background: #3177A4;
+  color: white;
+  border-radius: 5px;
+  padding: 2px 5px;
+  font-size: 11px;
 }

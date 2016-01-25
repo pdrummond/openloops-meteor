@@ -17,6 +17,23 @@
       {{>queue}}
     {{/each}}
 
+    <div class="dropdown-wrapper" style="padding:10px">
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <i class="fa fa-plus"></i> Add List
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li><a id="add-backlog" href="#">Add Backlog</a></li>
+          <li><a id="add-done-list" href="#">Add Done List</a></li>
+          <li><a id="add-discussions-list" href="#">Add Discussions List</a></li>
+          <li><a id="add-milestone-list" href="#">Add Milestone List</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a id="add-user-queue" href="#">Add User Queue</a></li>
+        </ul>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -24,10 +41,12 @@
   <div class="queue-container" style="position:relative;width={{queueWidth}}">
     <div class="queue-header">
       <div class="title" style="float:left;color:black;font-weight:bold;text-transform:uppercase;">
-        {{title}}'s {{queueTitle}}
+        {{title}}
       </div>
       <div class="buttons" style="float:right;color:gray">
+        {{#if isUserQueue}}
         <btn id="switch-queue" class="btn btn-link btn-xs"><i class="fa {{queueSwitchIcon}}"></i> Show {{queueSwitchTitle}}{{{queueSwitchCount}}}</btn>
+        {{/if}}
         {{#if isCardSelected}}
         <i id="back-button" class="cursor-pointer fa fa-arrow-left"></i>
         <i id="edit-button" title="Edit card details" class="cursor-pointer queue-header-button fa fa-pencil"></i>
@@ -64,7 +83,7 @@
             {{title}}
           </a>
           <div id="meta">
-            <span class="item-key">#{{projectKey this}}-{{pid}} created {{timeAgo createdAt}} {{order}}</span>
+            <span class="item-key">#{{projectKey this}}-{{pid}} created {{timeAgo createdAt}} <span class="milestone-tag {{hideMilestoneTagClass}}"><i class="fa fa-flag-o"></i> {{milestoneTag}}</span></span>
           </div>
         </div>
         {{#if inInbox}}

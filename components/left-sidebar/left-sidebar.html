@@ -2,22 +2,15 @@
 	<div class="left-sidebar">
 		<div class="tabs-header">
       <a id="feed-tab" class="{{activeTabClass 'feed-tab'}} tab"> <i class="fa fa-home"></i> Feed</a>
-      <a id="items-tab" class="{{activeTabClass 'items-tab'}} tab"> <i class="fa fa-exclamation-circle"></i> Issues</a>
-      <a id="discussions-tab" class="{{activeTabClass 'discussions-tab'}} tab"> <i class="fa fa-comments-o"></i> Discussions</a>
+      <a id="search-tab" class="{{activeTabClass 'search-tab'}} tab"> <i class="fa fa-search"></i> Search</a>
 			<!--<a id="labels-tab" class="{{activeTabClass 'labels-tab'}} tab"> <i class="fa fa-tag"></i> Labels</a>
 			<a id="filters-tab" class="{{activeTabClass 'filters-tab'}} tab"> <i class="fa fa-filter"></i> Filters</a>-->
 		</div>
       <div id="feed-tab" class="tab-body {{activeTabClass 'feed-tab'}}">
         {{> activityList }}
       </div>
-		<div id="items-tab" class="tab-body {{activeTabClass 'items-tab'}}">
-			<!--<div class="filter-sentence-wrapper">
-				<span id="filter-sentence">{{{filterSentence}}}</span> <span id="active-item-msg" class="{{showActiveItemMsgClass}}">#{{currentItemKey}} is active <i id="clear-active-item-icon" class="fa fa-times" title="Clear active item"></i></span>
-			</div>-->
-			{{> itemList}}
-		</div>
-    <div id="discussions-tab" class="tab-body {{activeTabClass 'discussions-tab'}}">
-			{{> discussionList}}
+		<div id="search-tab" class="tab-body {{activeTabClass 'search-tab'}}">
+			<p style="padding:10px">Search will go here eventually!</p>
 		</div>
 	</div>
 </template>

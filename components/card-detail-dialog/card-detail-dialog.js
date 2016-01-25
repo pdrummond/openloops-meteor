@@ -42,7 +42,7 @@ if(Meteor.isClient) {
     },
 
     viewingUsers: function() {
-      return Meteor.users.find({_id: {$ne: Meteor.userId()}, viewingItemId: Session.get('currentItemId')});
+      return Meteor.users.find({_id: {$ne: Meteor.userId()}, 'status.online': true, viewingItemId: Session.get('currentItemId')});
     },
 
     cardIconClass: function() {
@@ -105,9 +105,31 @@ if(Meteor.isClient) {
       return item && item.inInbox?'checked':'';
     },
 
+    listLabel: function() {
+      var item = Ols.Item.getCurrent();
+      var queueTitle = '';
+      if(item.isOpen) {
+        queueTitle = 'Backlog';
+        if(item.type == 'discussion') {
+          queueTitle = 'Discussion List';
+        }
+        if(item.milestoneTag != null && item.milestoneTag.length > 0) {
+          queueTitle = item.milestoneTag;
+        }
+      } else {
+        queueTitle = 'Done List';
+      }
+      return item && item.assignee?'<b>' + item.assignee + '</b>':'<b>' + queueTitle + '</b>';
+    },
+
     assigneeLabel: function() {
       var item = Ols.Item.getCurrent();
-      return item && item.assignee?'<b>' + item.assignee + '</b>':'<i>Click to assign to a team member</i>';
+      return item && item.assignee?'<b>' + item.assignee + '</b>':'<i>Noone</i>';
+    },
+
+    milestoneTagLabel: function() {
+      var item = Ols.Item.getCurrent();
+      return item && item.milestoneTag?'<b>' + item.milestoneTag + '</b>':'<i>None</i>';
     },
 
     hideDescriptionViewerClass: function() {
@@ -152,6 +174,28 @@ if(Meteor.isClient) {
             Ols.Error.showError("Error changing item title: ", err);
           }
         });
+      }
+    },
+
+
+    'click .card-milestone-tag-field': function() {
+      var item = Ols.Item.getCurrent();
+      var milestoneTag = prompt("Enter milestone tag:", item.milestoneTag);
+      if(milestoneTag != null) {
+        milestoneTag = slugify(milestoneTag.trim());
+        if(milestoneTag.length == 0) {
+          Meteor.call('removeItemMilestoneTag', Session.get('currentItemId'), function(err) {
+            if(err) {
+              Ols.Error.showError("Error removing milestone tag: ", err);
+            }
+          });
+        } else {
+          Meteor.call('updateItemMilestoneTag', Session.get('currentItemId'), milestoneTag, function(err) {
+            if(err) {
+              Ols.Error.showError("Error changing milestone tag: ", err);
+            }
+          });
+        }
       }
     },
 

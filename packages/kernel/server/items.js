@@ -61,6 +61,21 @@ Meteor.methods({
     return newItem;
   },
 
+  updateItemMilestoneTag: function(itemId, newMilestoneTag) {
+    var item = Ols.Item.findOne(itemId);
+    if(item.milestoneTag === newMilestoneTag) {
+      throw new Meteor.Error('update-milestone-tag-failed-001', "milestone tag is same as current tag");
+    }
+
+    Ols.Item.update(itemId, {
+      $set: {
+        milestoneTag: newMilestoneTag,
+        updatedAt: Date.now(),
+        updatedBy: Meteor.userId(),
+      }
+    });
+  },
+
   updateItemAssignee: function(itemId, newAssignee) {
     var item = Ols.Item.findOne(itemId);
     if(item.assignee === newAssignee) {
@@ -172,6 +187,10 @@ Meteor.methods({
 
   removeItemAssignee: function(itemId) {
     Items.update( {_id: itemId} , {$unset: { assignee : "" } } );
+  },
+
+  removeItemMilestoneTag: function(itemId) {
+    Items.update( {_id: itemId} , {$unset: { milestoneTag : "" } } );
   },
 
   moveItem: function(itemId, toBoardId) {

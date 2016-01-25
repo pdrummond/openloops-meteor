@@ -54,6 +54,10 @@ if(Meteor.isServer) {
 	Accounts.onCreateUser(function(options, user) {
 		console.log("newUser: " + JSON.stringify(user));
 
+    if(username.indexOf("SPECIAL_") !== -1) {
+      throw new Meteor.Error("create-user-failed-001", "Invalid username.  Please try another name.");
+    }
+
     var username = user.username;
 		var email = user.emails[0].address;
     Workspaces.insert({
@@ -74,7 +78,7 @@ if(Meteor.isServer) {
 		} else {
 			var teamMember = TeamMembers.findOne({email:email});
 			if(teamMember == null) {
-				throw new Meteor.Error("create-user-failed-001", "Sorry, but you don't have an invite to OpenLoops yet");
+				throw new Meteor.Error("create-user-failed-002", "Sorry, but you don't have an invite to OpenLoops yet");
 			}
 		}
 		user.profileImage = Gravatar.imageUrl(email, {size: 50,default: 'wavatar'});

@@ -20,14 +20,14 @@ if(Meteor.isServer) {
 
   /*
   if(Workspaces.find().count() == 0) {
-    Workspaces.insert({
-      username: 'pdrummond',
-      title: 'pdrummond',
-      queues: [
-                {title:'pdrummond', 'type': 'USER_QUEUE', 'username': 'pdrummond'},
-                {title:'harold', 'type': 'USER_QUEUE', 'username': 'harold'},
-              ]
-    });
+  Workspaces.insert({
+  username: 'pdrummond',
+  title: 'pdrummond',
+  queues: [
+  {title:'pdrummond', 'type': 'USER_QUEUE', 'username': 'pdrummond'},
+  {title:'harold', 'type': 'USER_QUEUE', 'username': 'harold'},
+  ]
+  });
   }*/
 
   Meteor.publish("workspaces", function() {
@@ -37,13 +37,19 @@ if(Meteor.isServer) {
   Meteor.methods({
     addQueue: function(workspaceId, queue) {
       if(Workspaces.findOne({queues: queue.username}) != null) {
-  			throw new Meteor.Error("insert-queue-queue-error-001", 'Queue for ' + queue.username + ' already exists');
-  		}
-  		Workspaces.update(workspaceId, {$addToSet: {queues: queue}});
+        throw new Meteor.Error("insert-queue-queue-error-002", 'Queue for ' + queue.username + ' already exists');
+      }
+      Workspaces.update(workspaceId, {$addToSet: {queues: queue}});
     },
 
     removeQueue: function(workspaceId, queue) {
-  		Workspaces.update(workspaceId, {$pull: {queues: {username: queue.username}}});
+      if(queue.type == 'USER_QUEUE') {
+        Workspaces.update(workspaceId, {$pull: {queues: {username: queue.username}}});
+      } else if(queue.type == 'MILESTONE_QUEUE') {
+        Workspaces.update(workspaceId, {$pull: {queues: {type: queue.type, milestoneTag: queue.milestoneTag}}});
+      } else {
+        Workspaces.update(workspaceId, {$pull: {queues: {type: queue.type}}});
+      }
     }
   });
 
@@ -53,19 +59,74 @@ if(Meteor.isClient) {
 
   Template.workspace.onCreated(function() {
     var self = this;
-		Tracker.autorun(function() {
-			var opts = {currentProjectId: Session.get('currentProjectId')};
-			opts.filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
+    Tracker.autorun(function() {
+      var opts = {currentProjectId: Session.get('currentProjectId')};
+      opts.filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
       Tracker.nonreactive(function() {
         opts.username = Meteor.user().username;
       });
-			self.subscribe('items', opts, function(err, result) {
-				if(err) {
-					Ols.Error.showError("Items Subscription error", err);
-				}
-			});
-		});
-	});
+      self.subscribe('items', opts, function(err, result) {
+        if(err) {
+          Ols.Error.showError("Items Subscription error", err);
+        }
+      });
+    });
+  });
+
+  Template.workspace.events({
+    'click #add-backlog': function() {
+      var queue = {title:"Backlog", 'type': 'BACKLOG_QUEUE'};
+      Meteor.call('addQueue', Session.get('currentWorkspaceId'), queue, function(err, res) {
+        if(err) {
+          alert("Error - unable to add queue: " + err);
+        }
+      });
+    },
+
+    'click #add-done-list': function() {
+      var queue = {title:"Closed Cards", 'type': 'DONE_QUEUE'};
+      Meteor.call('addQueue', Session.get('currentWorkspaceId'), queue, function(err, res) {
+        if(err) {
+          alert("Error - unable to add queue: " + err);
+        }
+      });
+    },
+
+    'click #add-discussions-list': function() {
+      var queue = {title:"Discussion Cards", 'type': 'DISCUSSIONS_QUEUE'};
+      Meteor.call('addQueue', Session.get('currentWorkspaceId'), queue, function(err, res) {
+        if(err) {
+          alert("Error - unable to add queue: " + err);
+        }
+      });
+    },
+
+    'click #add-milestone-list': function() {
+      var tag = prompt('Enter milestone tag:');
+      if(tag != null && tag.trim().length > 0) {
+        tag = slugify(tag.trim());
+        var queue = {title:tag, 'type': 'MILESTONE_QUEUE', 'milestoneTag': tag};
+        Meteor.call('addQueue', Session.get('currentWorkspaceId'), queue, function(err, res) {
+          if(err) {
+            alert("Error - unable to add queue: " + err);
+          }
+        });
+      }
+    },
+
+    'click #add-user-queue': function() {
+      var username = prompt('Enter username:');
+      if(username != null && username.trim().length > 0) {
+        username = username.trim();
+        var queue = {title:username + "'s Queue", 'type': 'USER_QUEUE', 'username': username};
+        Meteor.call('addQueue', Session.get('currentWorkspaceId'), queue, function(err, res) {
+          if(err) {
+            alert("Error - unable to add queue: " + err);
+          }
+        });
+      }
+    }
+  })
 
   Template.workspace.helpers({
 
@@ -133,42 +194,18 @@ if(Meteor.isClient) {
     }
   });
 
-  /*let initSortable = ( sortableClass, template ) => {
-    let sortableList = template.$( sortableClass );
-    sortableList.sortable( 'destroy' );
-    sortableList.sortable();
-    sortableList.sortable().off( 'sortupdate' );
-    sortableList.sortable().on( 'sortupdate', () => {
-      updateIndexes( '.sortable', template );
-    });
-  };
-
-  let updateIndexes = ( sortableClass, template ) => {
-    let items = [];
-
-    template.$( `${sortableClass} li` ).each( ( index, element ) => {
-      items.push( { _id: $( element ).data( 'id' ), order: index + 1 } );
-    });
-
-    Meteor.call( 'updateItemsOrder', items, ( error ) => {
-      if ( error ) {
-        alert( error.reason );
-      }
-    });
-  };*/
-
   Template.queue.onCreated(function() {
     var self = this;
     this.queueType = new ReactiveVar("WORK");
     this.selectedWidth = new ReactiveVar('370px');
     this.selectedCardId = new ReactiveVar();
-    Meteor.setTimeout(function() {
-      console.log("ENABLING SORTABLE");
-      //initSortable( '.sortable', self);
-    }, 1000);
   });
 
   Template.queue.helpers({
+
+    isUserQueue: function() {
+      return this.type == 'USER_QUEUE';
+    },
 
     noCards: function() {
       var queueType = Template.instance().queueType.get();
@@ -181,13 +218,50 @@ if(Meteor.isClient) {
     },
 
     items: function () {
+      var filter = {};
+      var currentMilestoneTag = Session.get('currentMilestoneTag');
+      if(currentMilestoneTag != null) {
+        filter.milestoneTag = currentMilestoneTag;
+      }
 
-      var queueType = Template.instance().queueType.get();
-      var filter = {
-        assignee: this.username,
-        inInbox: queueType === "INBOX"
-      };
-      return Items.find(filter, {sort: {order: 1}});
+      switch(this.type) {
+        case 'USER_QUEUE':
+        var queueType = Template.instance().queueType.get();
+        filter.assignee = this.username;
+        filter.inInbox = queueType === "INBOX";
+        return Items.find(filter, {sort: {order: 1}});
+        break;
+        case 'BACKLOG_QUEUE':
+        if(currentMilestoneTag == null) {
+          filter.assignee = {$exists: false};
+          filter.milestoneTag = {$exists: false};
+          filter.isOpen = true;
+          filter.type = Ols.Item.ITEM_TYPE_ISSUE;
+          return Ols.Item.find(filter, {sort: {updatedAt: -1}});
+        } else {
+          return Ols.Item.find({milestoneTag:'XXXXXXXXXXXX'}); //ensure it returns nothing - nasty hack ;-) 
+        }
+        break;
+        case 'DONE_QUEUE':
+        filter.isOpen = false;
+        return Ols.Item.find(filter, {sort: {updatedAt: -1}});
+        break;
+        case 'DISCUSSIONS_QUEUE':
+        filter.assignee = {$exists: false};
+        filter.isOpen = true;
+        filter.type = Ols.Item.ITEM_TYPE_DISCUSSION;
+        return Ols.Item.find(filter, {sort: {updatedAt: -1}});
+        break;
+        case 'MILESTONE_QUEUE':
+        if(currentMilestoneTag == null) {
+          filter.milestoneTag = this.milestoneTag;
+        }
+        filter.isOpen = true;
+        filter.type = Ols.Item.ITEM_TYPE_ISSUE;
+        return Ols.Item.find(filter, {sort: {updatedAt: -1}});
+        break;
+      }
+
     },
 
     isCardSelected: function() {
@@ -243,12 +317,12 @@ if(Meteor.isClient) {
     },
 
     itemsOptions: {
-      /*sortField: 'order',  // defaults to 'order' anyway
+      sortField: 'order',
       group: {
         name: 'queue',
         pull: true,
         put: true
-      }*/
+      }
     },
 
     queueSwitchCount: function() {
@@ -339,7 +413,6 @@ if(Meteor.isClient) {
               Ols.Error.showError('Error assigning item: ', err);
             } else {
               t.selectedCardId.set(null);
-              updateIndexes( '.sortable' );
             }
           });
         }
@@ -352,7 +425,6 @@ if(Meteor.isClient) {
           Ols.Error.showError('Error un-assigning item: ', err);
         } else {
           t.selectedCardId.set(null);
-          //updateIndexes( '.sortable' );
         }
       });
     },
@@ -363,7 +435,6 @@ if(Meteor.isClient) {
           Ols.Error.showError("Error toggling item status: ", err);
         } else {
           t.selectedCardId.set(null);
-          //updateIndexes( '.sortable' );
         }
       });
     },
@@ -385,7 +456,6 @@ if(Meteor.isClient) {
           Ols.Router.showBoardMessages();
         } else {
           Ols.Router.showItemMessages(newItem, {tabName: 'description'});
-          //initSortable( '.sortable', t);
         }
       });
     },
@@ -396,8 +466,13 @@ if(Meteor.isClient) {
   });
 
   Template.cardView.helpers({
+
+    hideMilestoneTagClass: function() {
+      return this.milestoneTag && this.milestoneTag.length > 0 ?'':'hide';
+    },
+
     showAcceptRejectIfCurrentUser: function() {
-        return this.assignee == Meteor.user().username?'':'hide';
+      return this.assignee == Meteor.user().username?'':'hide';
     },
 
     isClosedClass: function() {

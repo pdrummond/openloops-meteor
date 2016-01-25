@@ -29,7 +29,7 @@ if(Meteor.isClient) {
 
   Template.userCard.events({
     'click #add-queue': function() {
-      var queue = {title:this.username, 'type': 'USER_QUEUE', 'username': this.username};
+      var queue = {title:this.username + "'s Queue", 'type': 'USER_QUEUE', 'username': this.username};
       Meteor.call('addQueue', Session.get('currentWorkspaceId'), queue, function(err, res) {
         if(err) {
           alert("Error - unable to add queue: " + err);

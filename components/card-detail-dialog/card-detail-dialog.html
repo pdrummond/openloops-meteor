@@ -15,26 +15,78 @@
               <li id="set-type-discussion-button"><a href="#"><i class='fa fa-comments-o'></i> Discussion</a></li>
             </ul>
           </div>
-
-          <span style="position:absolute;top: 10px;color:gray;margin-right:10px;">#{{selectedCardKey}}</span>
+          <span style="position:absolute;top: 10px;color:gray;margin-right:10px;">
+            #{{selectedCardKey}}
+          </span>
+          <div style="position:absolute;top: 10px;color:gray;margin-right:10px;right:0px">
+            <div class="row" style="float:left;display:flex;margin:0;margin-top: 0px;">
+              <div>
+                <span style="display:inline;margin-left:10px;margin-right:10px;color:gray">LIST:</span>
+                <span style="margin-right:10px;color:gray;font-weight:bold">{{{listLabel}}}</span>
+              </div>
+            </div>
+            <div class="row" style="float:left;display:flex;margin:0;margin-top: 0px;">
+              <div>
+                <span style="display:inline;margin-left:10px;margin-right:10px;color:gray">PROJECT:</span>
+                <span style="margin-right:10px;color:gray;font-weight:bold">{{projectTitle}}</span>
+              </div>
+            </div>
+            <span style="margin-right:10px;color:gray">CREATED BY:</span>
+            <span style="margin-right:10px;color:gray;font-weight:bold">{{createdBy}}</span>
+          </div>
           <h4 tabindex="1" name="title" class="card-title modal-title" style="font-size: 28px;position: relative;top: 10px;">{{title}}</h4>
         </div>
         <div class="modal-body" style="padding:0;margin:0;height:100%">
-          <div style="padding:10px;border-bottom:1px solid lightgray;height:40px">
-            <div class="pull-left">
-              <span style="margin-right:10px">ASSIGN TO:</span>
-              <span class="card-to-field" tabindex="2" style="width: 400px;position: relative;top: 0px;" name="to">{{{assigneeLabel}}}</span>
-            </div>
-            <div class="pull-right">
-              <div class="row" style="float:left;display:flex;margin:0;margin-top: 0px;">
-                <div>
-                  <span style="display:inline;margin-left:30px;margin-right:10px;color:gray">PROJECT:</span>
-                  <span style="margin-right:10px;color:gray;font-weight:bold">{{projectTitle}}</span>
-                </div>
+          <div style="padding:10px;border-bottom:1px solid lightgray;">
+            <div style="display:flex;justify-content:space-between">
+              <div class="dropdown-wrapper">
+              <span class="ols-label">Assign To: </span>
+              <span class="card-to-field" tabindex="2" style="width: 200px;position: relative;top: 0px;" name="to">{{{assigneeLabel}}}</span>
               </div>
-              <span style="margin-right:10px;color:gray">CREATED BY:</span>
-              <span style="margin-right:10px;color:gray;font-weight:bold">{{createdBy}}</span>
-              <button id="status-button" class="btn {{statusClass}} btn-xs">{{statusLabel}}</button>
+              <div class="dropdown-wrapper">
+              <span class="ols-label">Milestone Tag: </span>
+              <span class="card-milestone-tag-field" tabindex="2" style="width: 200px;position: relative;top: 0px;" name="to">{{{milestoneTagLabel}}}</span>
+              </div>
+              <div class="dropdown-wrapper">
+                <span class="ols-label">Status: </span>
+                <span class="dropdown">
+                  <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    New
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#">Open - New</a></li>
+                    <li><a href="#">Open - In Progress</a></li>
+                    <li><a href="#">Open - Blocked</a></li>
+                    <li><a href="#">Open - In Test</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Closed - Completed</a></li>
+                    <li><a href="#">Closed - Rejected</a></li>
+                    <li><a href="#">Closed - Duplicate</a></li>
+                    <li><a href="#">Closed - Out of Scope</a></li>
+                  </ul>
+                </span>
+              </div>
+              <div class="dropdown-wrapper">
+                <span class="ols-label">Estimate: </span>
+                <span class="dropdown">
+                  <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    No Estimate
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#">Small</a></li>
+                    <li><a href="#">Medium</a></li>
+                    <li><a href="#">Large</a></li>
+                    <li><a href="#">Unknown</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">No Estimate</a></li>
+                  </ul>
+                </span>
+              </div>
+              <div class="dropdown-wrapper">
+                <button id="status-button" class="pull-right btn {{statusClass}} btn-xs">{{statusLabel}}</button>
+              </div>
             </div>
           </div>
           <div class="card-detail-tabs" style="clear:both;padding:10px;height=100%">
