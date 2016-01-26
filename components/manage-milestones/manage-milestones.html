@@ -1,0 +1,20 @@
+<template name="milestoneList">
+	{{#onlyIfLoggedIn}}
+	<h1 style="margin-left:100px;margin-top:50px">Manage Milestones</h1>
+	<button id="create-milestone">Create Milestone</button>
+	<hr>
+	<table style="margin-top:10px;padding-left:100px;padding-right:100px" width="100%">
+		{{#each milestones}}
+			{{> milestoneItem}}
+		{{/each}}
+	</table>
+	<hr>
+	{{/onlyIfLoggedIn}}
+</template>
+
+<template name="milestoneItem">
+	<tr>
+		<td>{{title}}</td>
+		<td><button id="delete-milestone">Delete Milestone</button></td>
+	</tr>
+</template>

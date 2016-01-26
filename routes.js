@@ -169,6 +169,13 @@ if(Meteor.isClient) {
 		}
 	});
 
+  FlowRouter.route('/project/:projectId/manage-milestones', {
+		action: function(params, queryParams) {
+			Session.set('currentProjectId', params.projectId);
+			BlazeLayout.render("app", {currentPage: "milestoneList"});
+		}
+	});
+
 	FlowRouter.route('/project/:projectId/manage-boards', {
 		action: function(params, queryParams) {
 			Session.set('currentProjectId', params.projectId);

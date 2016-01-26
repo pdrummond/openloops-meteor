@@ -44,8 +44,20 @@
               <span class="card-to-field" tabindex="2" style="width: 200px;position: relative;top: 0px;" name="to">{{{assigneeLabel}}}</span>
               </div>
               <div class="dropdown-wrapper">
-              <span class="ols-label">Milestone Tag: </span>
-              <span class="card-milestone-tag-field" tabindex="2" style="width: 200px;position: relative;top: 0px;" name="to">{{{milestoneTagLabel}}}</span>
+              <span class="ols-label">Milestone: </span>
+              <span class="dropdown">
+                <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  {{milestoneTag}}
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                  {{#each milestones}}
+                    {{> cardDetailMilestoneMenuItem}}
+                  {{/each}}
+                  <li role="separator" class="divider"></li>
+                  <li><a id="set-no-milestone" href="">No Milestone</a></li>
+                </ul>
+              </span>
               </div>
               <div class="dropdown-wrapper">
                 <span class="ols-label">Status: </span>
@@ -127,4 +139,8 @@
     </div>
   </div>
   {{/with}}
+</template>
+
+<template name="cardDetailMilestoneMenuItem">
+  <li><a href="">{{title}}</a></li>
 </template>

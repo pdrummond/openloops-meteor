@@ -1,5 +1,5 @@
 if(Meteor.isClient) {
-	Session.setDefault('leftSidebarActiveTab', 'feed-tab');
+	Session.setDefault('leftSidebarActiveTab', 'project-summary-tab');
 
 	Template.leftSidebar.onRendered(function() {
 		console.trace("leftSidebar.onRendered");
@@ -64,6 +64,10 @@ if(Meteor.isClient) {
 		'click #clear-filter-link': function() {
 			Session.set('filterQuery', '');
 		},
+
+    'click .tabs-header #project-summary-tab': function() {
+      Session.set('leftSidebarActiveTab', 'project-summary-tab');
+    },
 
     'click .tabs-header #feed-tab': function() {
       Session.set('leftSidebarActiveTab', 'feed-tab');

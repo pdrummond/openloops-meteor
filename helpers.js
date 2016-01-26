@@ -222,9 +222,13 @@ if(Meteor.isClient) {
 		return project?(project.key?project.key:project.title.substring(0, 3)):null;
 	});
 
-	Template.registerHelper('currentProjectTitle', function () {
+  Template.registerHelper('currentProjectTitle', function () {
 		var project = Ols.Project.findOne(Session.get('currentProjectId'));
 		return project?project.title:'';
+	});
+  Template.registerHelper('currentProjectDesc', function () {
+		var project = Ols.Project.findOne(Session.get('currentProjectId'));
+		return project?project.desc:'';
 	});
 
 	Template.registerHelper('currentBoardId', function () {

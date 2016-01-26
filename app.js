@@ -100,6 +100,7 @@ if(Meteor.isClient) {
 		this.subscribe('labels');
 		this.subscribe('cards');
     this.subscribe('activity');
+    this.subscribe('milestones');
 	});
 
 	Template.app.events({

@@ -53,6 +53,28 @@ if(Meteor.isServer) {
     }
   });
 
+  Meteor.publish("milestones", function() {
+		return Milestones.find();
+	});
+
+	Meteor.methods({
+		insertMilestone: function(newMilestone) {
+			var now = new Date().getTime();
+			newMilestone = _.extend({
+				createdAt: now,
+				createdBy: Meteor.user().username,
+				updatedAt: now
+			}, newMilestone);
+
+			var milestoneId = Milestones.insert(newMilestone);
+			return milestoneId;
+		},
+
+    deleteMilestone: function(milestoneId) {
+      	Milestones.remove(milestoneId);
+    }
+	});
+
 }
 
 if(Meteor.isClient) {
@@ -181,8 +203,8 @@ if(Meteor.isClient) {
       return item?item.labels:[];
     },
 
-    boardTitle: function() {
-      return Boards.findOne(Ols.Item.findOne(Session.get('currentItemId')).boardId).title;
+    milestoneTitle: function() {
+      return Milestones.findOne(Ols.Item.findOne(Session.get('currentItemId')).milestoneId).title;
     },
 
     isTabActive: function(tabName) {
@@ -227,6 +249,7 @@ if(Meteor.isClient) {
       switch(this.type) {
         case 'USER_QUEUE':
         var queueType = Template.instance().queueType.get();
+        filter.milestoneTag = {$exists: false};
         filter.assignee = this.username;
         filter.inInbox = queueType === "INBOX";
         return Items.find(filter, {sort: {order: 1}});
@@ -239,7 +262,7 @@ if(Meteor.isClient) {
           filter.type = Ols.Item.ITEM_TYPE_ISSUE;
           return Ols.Item.find(filter, {sort: {updatedAt: -1}});
         } else {
-          return Ols.Item.find({milestoneTag:'XXXXXXXXXXXX'}); //ensure it returns nothing - nasty hack ;-) 
+          return Ols.Item.find({milestoneTag:'XXXXXXXXXXXX'}); //ensure it returns nothing - nasty hack ;-)
         }
         break;
         case 'DONE_QUEUE':
@@ -446,14 +469,14 @@ if(Meteor.isClient) {
         type: Ols.Item.ITEM_TYPE_ISSUE,
         issueType: Ols.Item.ISSUE_TYPE_TASK,
         projectId: Session.get('currentProjectId'),
-        boardId: Session.get('currentBoardId'),
+        milestoneId: Session.get('currentMilestoneId'),
         assignee: this.username
       };
 
       Meteor.call('insertItem', item, function(err, newItem) {
         if(err) {
           Ols.Error.showError("Error adding item",  err);
-          Ols.Router.showBoardMessages();
+          Ols.Router.showMilestoneMessages();
         } else {
           Ols.Router.showItemMessages(newItem, {tabName: 'description'});
         }

@@ -1,11 +1,15 @@
 <template name="leftSidebar">
 	<div class="left-sidebar">
 		<div class="tabs-header">
-      <a id="feed-tab" class="{{activeTabClass 'feed-tab'}} tab"> <i class="fa fa-home"></i> Feed</a>
+      <a id="project-summary-tab" class="{{activeTabClass 'project-summary-tab'}} tab"> <i class="fa fa-home"></i> Project</a>
+      <a id="feed-tab" class="{{activeTabClass 'feed-tab'}} tab"> <i class="fa fa-bars"></i> Feed</a>
       <a id="search-tab" class="{{activeTabClass 'search-tab'}} tab"> <i class="fa fa-search"></i> Search</a>
 			<!--<a id="labels-tab" class="{{activeTabClass 'labels-tab'}} tab"> <i class="fa fa-tag"></i> Labels</a>
 			<a id="filters-tab" class="{{activeTabClass 'filters-tab'}} tab"> <i class="fa fa-filter"></i> Filters</a>-->
 		</div>
+    <div id="project-summary-tab" class="tab-body {{activeTabClass 'project-summary-tab'}}">
+      {{> projectSummary }}
+    </div>
       <div id="feed-tab" class="tab-body {{activeTabClass 'feed-tab'}}">
         {{> activityList }}
       </div>

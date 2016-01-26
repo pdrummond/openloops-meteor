@@ -1,0 +1,57 @@
+<template name="projectSummary">
+  <div class="project-summary" style="padding:10px">
+    <h4>{{currentProjectTitle}} <span class="label label-success pull-right">Open</span></h4>
+    <p>{{currentProjectDesc}}</p>
+    <hr>
+    <span class="ols-label">LISTS</span>
+    <div class="list-group">
+      <li id="backlog" class="list-group-item">
+        <span class="badge" style="background-color:orange">{{backLogCount}}</span>
+        <i class="fa fa-check" style="visibility:{{backLogVisibility}}"></i> Backlog
+      </li>
+      <li id="done-list" class="list-group-item">
+        <span class="badge" style="background-color:green">{{doneListCount}}</span>
+        <i class="fa fa-check" style="visibility:{{doneListVisibility}}"></i> Done List
+      </li>
+    </div>
+    <span class="ols-label">MILESTONES</span>
+    <div class="list-group">
+      {{#each projectMilestones}}
+      {{> projectSummaryMilestoneItem}}
+      {{/each}}
+    </div>
+    <span class="ols-label">MEMBERS</span>
+    <div class="list-group">
+      {{#each projectMembers}}
+      {{> projectSummaryMemberItem}}
+      {{/each}}
+    </div>
+    <div class="list-group">
+      <span class="ols-label">Other</span>
+      <li id="discussion-list" class="list-group-item">
+        <span class="badge">{{discussionListCount}}</span>
+        <i class="fa fa-check" style="visibility:{{discussionListVisibility}}"></i> Discussions List
+      </li>
+    </div>
+  </div>
+</template>
+
+<template name="projectSummaryMemberItem">
+  <li class="list-group-item">
+    <span class="badge">{{cardCount}}</span>
+    <i class="fa fa-check" style="visibility:{{userListVisibility}}"></i> {{username}}
+  </li>
+</template>
+
+
+<template name="projectSummaryMilestoneItem">
+  <li class="list-group-item">
+    <span class="badge">{{numOpenCards}}</span>
+    <i class="fa fa-check" style="visibility:{{milestoneListVisibility}}"></i> {{title}}
+    <div class="progress" style="margin-top:10px">
+      <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" style="width: {{percentage}}%">
+        <span>{{numOpenCards}} open / {{numClosedCards}} closed </span>
+      </div>
+    </div>
+  </li>
+</template>
