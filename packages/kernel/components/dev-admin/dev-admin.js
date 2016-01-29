@@ -177,7 +177,18 @@ if(Meteor.isClient) {
       });
     },
 
-	});
+    'click #add-in-inbox-field': function() {
+      $("#status").text("Working...");
+      Meteor.call('addItemInInboxField', function(err, results) {
+        if(err) {
+          $("#status").text("Error " + err.reason);
+        } else {
+          $("#status").text("Completed Successfully.");
+        }
+      });
+    },
+
+  });
 }
 
 if(Meteor.isServer) {
@@ -363,7 +374,13 @@ if(Meteor.isServer) {
       Items.find().forEach(function(item) {
         Items.update(item._id, {$set: {order: count++}});
       });
-    }
+    },
 
-	});
+    addItemInInboxField: function() {
+      var count = 0;
+      Items.find().forEach(function(item) {
+        Items.update(item._id, {$set: {inInbox: false}});
+      });
+    },
+  });
 }
