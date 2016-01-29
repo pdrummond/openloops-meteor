@@ -1,6 +1,24 @@
 <template name="projectSummary">
   <div class="project-summary" style="padding:10px">
-    <h4>{{currentProjectTitle}} <span class="label label-success pull-right">Open</span></h4>
+    <div class="dropdown-wrapper" style="position:relative">
+      <div class="dropdown">
+        <button style="border:none" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          <span style="font-size:18px">{{currentProjectTitle}}</span>
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          {{#each projects}}
+          {{> projectMenuItem}}
+          {{/each}}
+        </ul>
+      </div>
+       <span class="label label-success" style="position:absolute;top:10px;right:10px">Open</span>
+    </div>
+    <div class="progress" style="margin-top:5px;margin-bottom:5px;margin-left:10px;margin-right:10px">
+      <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" style="width: {{percentage}}%">
+      </div>
+    </div>
+    <span style="margin-left:10px;font-size:12px;color:gray">{{numOpenCards}} open / {{numClosedCards}} closed</span>
     <p>{{currentProjectDesc}}</p>
     <hr>
     <span class="ols-label">LISTS</span>
@@ -48,10 +66,10 @@
   <li class="list-group-item">
     <span class="badge">{{numOpenCards}}</span>
     <i class="fa fa-check" style="visibility:{{milestoneListVisibility}}"></i> {{title}}
-    <div class="progress" style="margin-top:10px">
+    <div class="progress" style="margin-top: 5px;margin-bottom: 5px;">
       <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" style="width: {{percentage}}%">
-        <span>{{numOpenCards}} open / {{numClosedCards}} closed </span>
       </div>
     </div>
+    <span style="color:gray;font-size:12px">{{numOpenCards}} open / {{numClosedCards}} closed </span>
   </li>
 </template>

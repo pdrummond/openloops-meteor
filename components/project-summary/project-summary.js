@@ -1,5 +1,30 @@
 if(Meteor.isClient) {
   Template.projectSummary.helpers({
+    numOpenCards: function() {
+      return Items.find({isOpen: true, projectId: Session.get('currentProjectId')}).count();
+    },
+
+    numClosedCards: function() {
+      return Items.find({isOpen: false, projectId: Session.get('currentProjectId')}).count();
+    },
+
+    percentage: function() {
+      var numClosed = Items.find({isOpen: false, projectId: Session.get('currentProjectId')}).count();
+      var numTotal = Items.find({projectId: Session.get('currentProjectId')}).count();
+      var p =  (numClosed / numTotal) * 100;
+      return p;
+    },
+
+    projects: function() {
+//      return Ols.Project.find({'members.username': Meteor.user().username});
+      return Ols.Project.find();
+    },
+
+    currentProjectTitle: function() {
+      var project = Ols.Project.getCurrent(Session.get('currentProjectId'));
+      return project && project.title?project.title:'';
+    },
+
     backLogVisibility: function() {
       var backlog = Workspaces.findOne({username: Meteor.user().username, 'queues.type': 'BACKLOG_QUEUE'});
       return backlog != null? 'visible':'hidden';

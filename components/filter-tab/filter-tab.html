@@ -1,19 +1,5 @@
 <template name="filterTab">
-  <div class="filter-tab" style="padding:30px">
-    <div class="dropdown-wrapper">
-      <span class="ols-label">Project</span>
-      <div class="dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          {{currentProjectTitle}}
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-          {{#each projects}}
-          {{> projectMenuItem}}
-          {{/each}}
-        </ul>
-      </div>
-    </div>
+  <div class="filter-tab" style="padding:30px">  
     <div class="dropdown-wrapper">
       <span class="ols-label">Milestone</span>
       <div>

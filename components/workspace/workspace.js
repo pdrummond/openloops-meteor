@@ -341,242 +341,246 @@ if(Meteor.isClient) {
     },
 
     itemsOptions: {
-      sortField: 'order',
-      group: {
-        name: 'queue',
-        pull: true,
-        put: true
-      },
+      sortField: 'order',      
       onSort: function(/**Event*/event) {
         console.log('Moved card  #%d from %d to %d',
-        event.data.order, event.oldIndex, event.newIndex
-      );
-    }
+        event.data.order, event.oldIndex, event.newIndex);
+      },
 
-  },
+      onMove: function(evt) {
+        // Example: http://jsbin.com/tuyafe/1/edit?js,output
+        evt.dragged; // dragged HTMLElement
+        evt.draggedRect; // TextRectangle {left, top, right и bottom}
+        evt.related; // HTMLElement on which have guided
+        evt.relatedRect; // TextRectangle
+        // return false; — for cancel
+        console.log("onMove");
+      }
 
-  queueSwitchCount: function() {
-    var t = Template.instance();
-    var queueType = Template.instance().queueType.get();
-    var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
-    filter.assignee = this.username;
-    filter.inInbox = queueType === "WORK";
-    var count = Items.find(filter).count();
-    if(count > 0) {
-      if(queueType === 'WORK' && Meteor.user().username === this.username) {
-        return '<span class="notification-badge">' + count + '</span>';
+    },
+
+    queueSwitchCount: function() {
+      var t = Template.instance();
+      var queueType = Template.instance().queueType.get();
+      var filter = OpenLoops.getFilterQuery(Session.get('filterQuery'));
+      filter.assignee = this.username;
+      filter.inInbox = queueType === "WORK";
+      var count = Items.find(filter).count();
+      if(count > 0) {
+        if(queueType === 'WORK' && Meteor.user().username === this.username) {
+          return '<span class="notification-badge">' + count + '</span>';
+        } else {
+          return "(" + count + ")";
+        }
       } else {
-        return "(" + count + ")";
+        return "";
       }
-    } else {
-      return "";
+    },
+
+    queueSwitchIcon: function() {
+      var t = Template.instance();
+      return t.queueType.get() === "WORK"?"fa-inbox":"fa-bars";
+    },
+
+    queueTitle: function() {
+      var t = Template.instance();
+      return t.queueType.get() === "WORK"?"Queue":"Inbox";
+    },
+
+    queueSwitchTitle: function() {
+      var t = Template.instance();
+      return t.queueType.get() === "WORK"?"Inbox":"Queue";
+    },
+
+    queueWidth: function() {
+      return Template.instance().selectedWidth.get();
+    },
+
+    queueHeight: function() {
+      return Template.instance().selectedHeight.get();
     }
-  },
 
-  queueSwitchIcon: function() {
-    var t = Template.instance();
-    return t.queueType.get() === "WORK"?"fa-inbox":"fa-bars";
-  },
+  });
 
-  queueTitle: function() {
-    var t = Template.instance();
-    return t.queueType.get() === "WORK"?"Queue":"Inbox";
-  },
+  Template.queue.events({
 
-  queueSwitchTitle: function() {
-    var t = Template.instance();
-    return t.queueType.get() === "WORK"?"Inbox":"Queue";
-  },
-
-  queueWidth: function() {
-    return Template.instance().selectedWidth.get();
-  },
-
-  queueHeight: function() {
-    return Template.instance().selectedHeight.get();
-  }
-
-});
-
-Template.queue.events({
-
-  'click #switch-queue': function(e, t) {
-    var type = t.queueType.get();
-    if(type === 'INBOX') {
-      t.queueType.set('WORK');
-    } else {
-      t.queueType.set('INBOX');
-    }
-  },
-
-  'click #remove-queue': function() {
-    var queue = this;
-    Meteor.call('removeQueue', Session.get('currentWorkspaceId'), queue, function(err, res) {
-      if(err) {
-        alert("Error - unable to remove queue: " + err);
-      }
-    });
-  },
-
-  'click #resize-width-button': function(e, t) {
-    var containerEl = t.find(".queue-container");
-    var width = t.selectedWidth.get();
-    switch(width) {
-      case '370px': width = '600px'; icon = 'fa-arrow-circle-o-right'; break;
-      case '600px': width = '1200px'; icon = 'fa-arrow-circle-o-left'; break;
-      case '1200px': width = '370px'; icon = 'fa-arrow-circle-o-right'; break;
-    }
-    t.selectedWidth.set(width);
-    $(containerEl).find('#resize-width-button').attr('class', 'fa ' + icon);
-  },
-
-  'click #resize-height-button': function(e, t) {
-    var containerEl = t.find(".queue-container");
-    var height = t.selectedHeight.get();
-    switch(height) {
-      case '700px': height = '300px'; icon = 'fa-arrow-circle-o-down'; break;
-      case '300px': height = '500px'; icon = 'fa-arrow-circle-o-down'; break;
-      case '500px': height = '700px'; icon = 'fa-arrow-circle-o-up'; break;
-    }
-    t.selectedHeight.set(height);
-    $(containerEl).find('#resize-height-button').attr('class', 'fa ' + icon);
-  },
-
-  'click #edit-button': function(e, t) {
-    Ols.Router.showEditItemPage(t.selectedCardId.get());
-  },
-
-  'click #send-button': function(e, t) {
-    item = Ols.Item.findOne(t.selectedCardId.get());
-    if(item) {
-      var assignee = item.assignee;
-      assignee = prompt("Enter username of queue to assign to:", item.assignee);
-      assignee = assignee.trim();
-      if(assignee != null && assignee.length > 0) {
-        Meteor.call('updateItemAssignee', item._id, assignee, function(err, result) {
-
-          if(err) {
-            Ols.Error.showError('Error assigning item: ', err);
-          } else {
-            t.selectedCardId.set(null);
-          }
-        });
-      }
-    }
-  },
-
-  'click #send-to-backlog-button': function(e, t) {
-    Meteor.call('removeItemAssignee', t.selectedCardId.get(), function(err, result) {
-      if(err) {
-        Ols.Error.showError('Error un-assigning item: ', err);
+    'click #switch-queue': function(e, t) {
+      var type = t.queueType.get();
+      if(type === 'INBOX') {
+        t.queueType.set('WORK');
       } else {
-        t.selectedCardId.set(null);
+        t.queueType.set('INBOX');
       }
-    });
-  },
+    },
 
-  'click #done-button': function(e, t) {
-    Meteor.call('toggleItemOpenStatus', t.selectedCardId.get(), function(err, result) {
-      if(err) {
-        Ols.Error.showError("Error toggling item status: ", err);
-      } else {
-        t.selectedCardId.set(null);
+    'click #remove-queue': function() {
+      var queue = this;
+      Meteor.call('removeQueue', Session.get('currentWorkspaceId'), queue, function(err, res) {
+        if(err) {
+          alert("Error - unable to remove queue: " + err);
+        }
+      });
+    },
+
+    'click #resize-width-button': function(e, t) {
+      var containerEl = t.find(".queue-container");
+      var width = t.selectedWidth.get();
+      switch(width) {
+        case '370px': width = '600px'; icon = 'fa-arrow-circle-o-right'; break;
+        case '600px': width = '1200px'; icon = 'fa-arrow-circle-o-left'; break;
+        case '1200px': width = '370px'; icon = 'fa-arrow-circle-o-right'; break;
       }
-    });
-  },
+      t.selectedWidth.set(width);
+      $(containerEl).find('#resize-width-button').attr('class', 'fa ' + icon);
+    },
 
-  'click #quick-add-card': function(e, t) {
-    var item = {
-      title: "New Card",
-      description: "",
-      type: Ols.Item.ITEM_TYPE_ISSUE,
-      issueType: Ols.Item.ISSUE_TYPE_TASK,
-      projectId: Session.get('currentProjectId'),
-      milestoneId: Session.get('currentMilestoneId'),
-      assignee: this.username
-    };
-
-    Meteor.call('insertItem', item, function(err, newItem) {
-      if(err) {
-        Ols.Error.showError("Error adding item",  err);
-        Ols.Router.showMilestoneMessages();
-      } else {
-        Ols.Router.showItemMessages(newItem, {tabName: 'description'});
+    'click #resize-height-button': function(e, t) {
+      var containerEl = t.find(".queue-container");
+      var height = t.selectedHeight.get();
+      switch(height) {
+        case '700px': height = '300px'; icon = 'fa-arrow-circle-o-down'; break;
+        case '300px': height = '500px'; icon = 'fa-arrow-circle-o-down'; break;
+        case '500px': height = '700px'; icon = 'fa-arrow-circle-o-up'; break;
       }
-    });
-  },
+      t.selectedHeight.set(height);
+      $(containerEl).find('#resize-height-button').attr('class', 'fa ' + icon);
+    },
 
-  'click #back-button': function(e, t) {
-    t.selectedCardId.set(null);
-  }
-});
+    'click #edit-button': function(e, t) {
+      Ols.Router.showEditItemPage(t.selectedCardId.get());
+    },
 
-Template.cardView.helpers({
+    'click #send-button': function(e, t) {
+      item = Ols.Item.findOne(t.selectedCardId.get());
+      if(item) {
+        var assignee = item.assignee;
+        assignee = prompt("Enter username of queue to assign to:", item.assignee);
+        assignee = assignee.trim();
+        if(assignee != null && assignee.length > 0) {
+          Meteor.call('updateItemAssignee', item._id, assignee, function(err, result) {
 
-  hideMilestoneTagClass: function() {
-    return this.milestoneTag && this.milestoneTag.length > 0 ?'':'hide';
-  },
-
-  showAcceptRejectIfCurrentUser: function() {
-    return this.assignee == Meteor.user().username?'':'hide';
-  },
-
-  isClosedClass: function() {
-    return this.isOpen?'':'closed';
-  },
-
-  numMessages: function() {
-    return this.numMessages - 1; //to remove the description
-  },
-
-  typeIcon: function() {
-    return Ols.Item.getTypeIconClass(this);
-  },
-
-  typeIconColor: function() {
-    return Ols.Item.getTypeIconColor(this);
-  },
-
-  isActive: function() {
-    return this._id == Session.get('currentItemId')?'active':'';
-  }
-});
-
-Template.cardView.events({
-  'click #accept-link': function() {
-    Meteor.call('acceptItem', this._id, function(err) {
-      if(err) {
-        alert("Error accepting card");
+            if(err) {
+              Ols.Error.showError('Error assigning item: ', err);
+            } else {
+              t.selectedCardId.set(null);
+            }
+          });
+        }
       }
-    });
-  },
+    },
 
-  'click #reject-link': function() {
-    Meteor.call('rejectItem', this._id, function(err) {
-      if(err) {
-        alert("Error rejecting card");
-      }
-    });
-  },
+    'click #send-to-backlog-button': function(e, t) {
+      Meteor.call('removeItemAssignee', t.selectedCardId.get(), function(err, result) {
+        if(err) {
+          Ols.Error.showError('Error un-assigning item: ', err);
+        } else {
+          t.selectedCardId.set(null);
+        }
+      });
+    },
 
-  'click #top-content': function(e, t) {
-    //this.selectedCardId.set(this.card._id);
-    //UGH!  This depends on the specific structure of the workspace html
-    //t.view.parentView.parentView.parentView.parentView.parentView.parentView.templateInstance().selectedCardId.set(this._id);
-    Ols.Item.showCardDetailDialog(this._id);
-  },
+    'click #done-button': function(e, t) {
+      Meteor.call('toggleItemOpenStatus', t.selectedCardId.get(), function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error toggling item status: ", err);
+        } else {
+          t.selectedCardId.set(null);
+        }
+      });
+    },
 
-  'click .label-item': function(e) {
-    //FIXME: this should be merged with same code in labels.js
-    var labelTitle = $(e.target).text();
-    var labelColor = $(e.target).data('color');
-    Session.set('filterQuery', 'label:' + labelTitle);
-    Session.set('leftSidebarActiveTab', 'items-tab');
-    Session.set('filterSentence', Ols.Filter.generateFilterSentenceFromLabel({
-      title: labelTitle,
-      color: labelColor
-    }));
-  }
-});
+    'click #quick-add-card': function(e, t) {
+      var item = {
+        title: "New Card",
+        description: "",
+        type: Ols.Item.ITEM_TYPE_ISSUE,
+        issueType: Ols.Item.ISSUE_TYPE_TASK,
+        projectId: Session.get('currentProjectId'),
+        milestoneId: Session.get('currentMilestoneId'),
+        assignee: this.username
+      };
+
+      Meteor.call('insertItem', item, function(err, newItem) {
+        if(err) {
+          Ols.Error.showError("Error adding item",  err);
+          Ols.Router.showMilestoneMessages();
+        } else {
+          Ols.Router.showItemMessages(newItem, {tabName: 'description'});
+        }
+      });
+    },
+
+    'click #back-button': function(e, t) {
+      t.selectedCardId.set(null);
+    }
+  });
+
+  Template.cardView.helpers({
+
+    hideMilestoneTagClass: function() {
+      return this.milestoneTag && this.milestoneTag.length > 0 ?'':'hide';
+    },
+
+    showAcceptRejectIfCurrentUser: function() {
+      return this.assignee == Meteor.user().username?'':'hide';
+    },
+
+    isClosedClass: function() {
+      return this.isOpen?'':'closed';
+    },
+
+    numMessages: function() {
+      return this.numMessages - 1; //to remove the description
+    },
+
+    typeIcon: function() {
+      return Ols.Item.getTypeIconClass(this);
+    },
+
+    typeIconColor: function() {
+      return Ols.Item.getTypeIconColor(this);
+    },
+
+    isActive: function() {
+      return this._id == Session.get('currentItemId')?'active':'';
+    }
+  });
+
+  Template.cardView.events({
+    'click #accept-link': function() {
+      Meteor.call('acceptItem', this._id, function(err) {
+        if(err) {
+          alert("Error accepting card");
+        }
+      });
+    },
+
+    'click #reject-link': function() {
+      Meteor.call('rejectItem', this._id, function(err) {
+        if(err) {
+          alert("Error rejecting card");
+        }
+      });
+    },
+
+    'click #top-content': function(e, t) {
+      //this.selectedCardId.set(this.card._id);
+      //UGH!  This depends on the specific structure of the workspace html
+      //t.view.parentView.parentView.parentView.parentView.parentView.parentView.templateInstance().selectedCardId.set(this._id);
+      Ols.Item.showCardDetailDialog(this._id);
+    },
+
+    'click .label-item': function(e) {
+      //FIXME: this should be merged with same code in labels.js
+      var labelTitle = $(e.target).text();
+      var labelColor = $(e.target).data('color');
+      Session.set('filterQuery', 'label:' + labelTitle);
+      Session.set('leftSidebarActiveTab', 'items-tab');
+      Session.set('filterSentence', Ols.Filter.generateFilterSentenceFromLabel({
+        title: labelTitle,
+        color: labelColor
+      }));
+    }
+  });
 
 }
