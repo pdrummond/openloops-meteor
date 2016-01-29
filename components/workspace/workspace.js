@@ -249,7 +249,6 @@ if(Meteor.isClient) {
       switch(this.type) {
         case 'USER_QUEUE':
         var queueType = Template.instance().queueType.get();
-        filter.milestoneTag = {$exists: false};
         filter.assignee = this.username;
         filter.inInbox = queueType === "INBOX";
         return Items.find(filter, {sort: {order: 1}});
@@ -279,6 +278,7 @@ if(Meteor.isClient) {
         if(currentMilestoneTag == null) {
           filter.milestoneTag = this.milestoneTag;
         }
+        filter.assignee = {$exists: false}; 
         filter.isOpen = true;
         filter.type = Ols.Item.ITEM_TYPE_ISSUE;
         return Ols.Item.find(filter, {sort: {updatedAt: -1}});
