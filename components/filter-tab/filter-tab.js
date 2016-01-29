@@ -1,9 +1,19 @@
 if(Meteor.isClient) {
+
   Template.filterTab.onCreated(function() {
     this.statusFilter = new ReactiveVar("all");
   });
 
   Template.filterTab.helpers({
+
+    milestoneTagLabel: function() {
+      return Session.get('filterTabCurrentMilestone') || 'All';
+    },
+
+    milestones: function() {
+      return Milestones.find({projectId: Session.get('currentProjectId')});
+    },
+
     currentStatusFilter: function() {
       var t = Template.instance();
       var label = '';
@@ -23,6 +33,16 @@ if(Meteor.isClient) {
   });
 
   Template.filterTab.events({
+
+    'click #set-all-milestones': function() {
+      Session.set('filterTabCurrentMilestone', null);
+      Session.set('filterQuery', null);
+    },
+
+    'click #set-all-statuses': function() {
+      t.statusFilter.set('all');
+      Session.set('filterQuery', null);
+    },
 
     'click #set-status-new': function(e, t) {
       t.statusFilter.set('new');
@@ -105,4 +125,12 @@ if(Meteor.isClient) {
     //   return false;
     // }
   });
+
+
+  Template.filterTabMilestoneMenuItem.events({
+    'click': function() {
+      Session.set('filterTabCurrentMilestone', this.title);
+      Session.set('filterQuery', 'milestoneTag:' + this.title);
+    }
+  })
 }

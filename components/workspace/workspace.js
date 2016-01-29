@@ -152,7 +152,9 @@ if(Meteor.isClient) {
 
   Template.workspace.helpers({
 
-
+    hideFilterLabel: function() {
+      return Session.get('filterQuery') == null? 'hide':'';
+    },
 
     queues: function() {
       var workspace = Workspaces.findOne({username: Meteor.user().username});

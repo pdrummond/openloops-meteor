@@ -1,9 +1,20 @@
 <template name="filterTab">
   <div class="filter-tab" style="padding:30px">
+
     <div class="dropdown-wrapper">
-      <span class="ols-label">Milestone</span>
-      <div>
-        <input class="milestone-tag-filter" placeholder="Type milestone tag here and hit ENTER to apply" style="padding:5px;border-radius:5px;width:100%;border:1px solid lightgray"/>
+      <span class="ols-label">Milestone </span>
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          {{milestoneTagLabel}}
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          {{#each milestones}}
+          {{> filterTabMilestoneMenuItem}}
+          {{/each}}
+          <li role="separator" class="divider"></li>
+          <li><a id="set-all-milestones" href="">All</a></li>
+        </ul>
       </div>
     </div>
     <div class="dropdown-wrapper">
@@ -40,6 +51,8 @@
           <li><a id="set-status-rejected" href="#">Closed - Rejected</a></li>
           <li><a id="set-status-duplicate" href="#">Closed - Duplicate</a></li>
           <li><a id="set-status-out-of-scope" href="#">Closed - Out of Scope</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a id="set-all-statuses" href="#">All</a></li>
         </ul>
       </div>
     </div>
@@ -67,4 +80,10 @@
 
 <template name="projectMenuItem">
   <li><a href="#">{{title}}</a></li>
+</template>
+
+
+
+<template name="filterTabMilestoneMenuItem">
+  <li><a href="">{{title}}</a></li>
 </template>

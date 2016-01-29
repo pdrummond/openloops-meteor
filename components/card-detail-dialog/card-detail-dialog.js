@@ -73,16 +73,18 @@ if(Meteor.isClient) {
 
     statusLabel: function() {
       var item = Items.findOne(Session.get('currentItemId'));
-      var label = '';
-      switch(item.status) {
-        case 'new': label = 'New'; break;
-        case 'in-progress': label = 'In Progress'; break;
-        case 'in-test': label = 'In Test'; break;
-        case 'blocked': label = 'Blocked'; break;
-        case 'completed': label = 'Completed'; break;
-        case 'rejected': label = 'Rejected'; break;
-        case 'duplicate': label = 'Duplicate'; break;
-        case 'out-of-scope': label = 'Out of Scope'; break;
+      var label = 'new';
+      if(item != null) {
+        switch(item.status) {
+          case 'new': label = 'New'; break;
+          case 'in-progress': label = 'In Progress'; break;
+          case 'in-test': label = 'In Test'; break;
+          case 'blocked': label = 'Blocked'; break;
+          case 'completed': label = 'Completed'; break;
+          case 'rejected': label = 'Rejected'; break;
+          case 'duplicate': label = 'Duplicate'; break;
+          case 'out-of-scope': label = 'Out of Scope'; break;
+        }
       }
       return label;
     },

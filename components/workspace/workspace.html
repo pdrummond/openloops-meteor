@@ -12,7 +12,7 @@
 
 <template name="workspace">
   <div class="workspace-container">
-
+    <span class="label label-success {{hideFilterLabel}}" style="position:absolute;top:10px;right:10px;padding:5px 10px"><i class="fa fa-filter"></i> Filter is active</span>
     {{#each queues}}
       {{>queue}}
     {{/each}}
@@ -85,7 +85,7 @@
           </a>
           <div id="meta">
             {{order}} |
-            <span class="item-key">#{{projectKey this}}-{{pid}} created {{timeAgo createdAt}} <span class="milestone-tag {{hideMilestoneTagClass}}"><i class="fa fa-flag-o"></i> {{milestoneTag}}</span></span>
+            <span class="item-key">#{{projectKey this}}-{{pid}} created {{timeAgo createdAt}} <span class="milestone-tag {{hideMilestoneTagClass}}"> | <i class="fa fa-flag-o"></i> {{milestoneTag}}</span></span>
           </div>
         </div>
         {{#if inInbox}}
