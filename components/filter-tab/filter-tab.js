@@ -2,6 +2,7 @@ if(Meteor.isClient) {
 
   Template.filterTab.onCreated(function() {
     this.statusFilter = new ReactiveVar("all");
+    this.estimateFilter = new ReactiveVar("all");
   });
 
   Template.filterTab.helpers({
@@ -12,6 +13,18 @@ if(Meteor.isClient) {
 
     milestones: function() {
       return Milestones.find({projectId: Session.get('currentProjectId')});
+    },
+
+    currentEstimateFilter: function(){
+      var t = Template.instance();
+      var label = 'All';
+      switch(t.estimateFilter.get()) {
+        case 'small': label = 'Small'; break;
+        case 'medium': label = 'Medium'; break;
+        case 'large': label = 'Large'; break;
+        case 'unknown': label = 'Unknown'; break;
+      }
+      return label;
     },
 
     currentStatusFilter: function() {
@@ -34,12 +47,34 @@ if(Meteor.isClient) {
 
   Template.filterTab.events({
 
+    'click #set-all-estimates': function(e, t) {
+      t.estimateFilter.set('all');
+      Session.set('filterQuery', null);
+    },
+
+    'click #set-estimate-small': function(e, t) {
+      t.estimateFilter.set('small');
+      Session.set('filterQuery', 'estimate:small');
+    },
+    'click #set-estimate-medium': function(e, t) {
+      t.estimateFilter.set('medium');
+      Session.set('filterQuery', 'estimate:medium');
+    },
+    'click #set-estimate-large': function(e, t) {
+      t.estimateFilter.set('large');
+      Session.set('filterQuery', 'estimate:large');
+    },
+    'click #set-estimate-unknown': function(e, t) {
+      t.estimateFilter.set('unknown');
+      Session.set('filterQuery', 'estimate:unknown');
+    },
+
     'click #set-all-milestones': function() {
       Session.set('filterTabCurrentMilestone', null);
       Session.set('filterQuery', null);
     },
 
-    'click #set-all-statuses': function() {
+    'click #set-all-statuses': function(e, t) {
       t.statusFilter.set('all');
       Session.set('filterQuery', null);
     },

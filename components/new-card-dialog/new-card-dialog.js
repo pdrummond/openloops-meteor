@@ -4,6 +4,7 @@ if(Meteor.isClient) {
     this.assigneeField = new ReactiveVar();
     this.selectedType = new ReactiveVar("task");
     this.selectedStatus = new ReactiveVar("new");
+    this.selectedEstimate = new ReactiveVar();
   });
 
   Template.newCardDialog.onRendered(function() {
@@ -32,6 +33,18 @@ if(Meteor.isClient) {
       } else {
         return '';
       }
+    },
+
+    estimateLabel: function() {
+      var estimate = Template.instance().selectedEstimate.get();
+      var label = 'No Estimate';
+      switch(estimate) {
+        case 'small': label = 'Small'; break;
+        case 'medium': label = 'Medium'; break;
+        case 'large': label = 'Large'; break;
+        case 'unknown': label = 'Unknown'; break;
+      }
+      return label;
     },
 
     projects: function() {
@@ -86,8 +99,28 @@ if(Meteor.isClient) {
 
   Template.newCardDialog.events({
 
+    'click #set-no-estimate': function(e, t) {
+      t.selectedEstimate.set(null);
+    },
+
     'keyup input[name="to"]': function(e, t) {
       t.assigneeField.set($(e.target).val());
+    },
+
+    'click #set-estimate-small': function(e, t) {
+      t.selectedEstimate.set('small');
+    },
+
+    'click #set-estimate-medium': function(e, t) {
+      t.selectedEstimate.set('medium');
+    },
+
+    'click #set-estimate-large': function(e, t) {
+      t.selectedEstimate.set('large');
+    },
+
+    'click #set-estimate-unknown': function(e, t) {
+      t.selectedEstimate.set('unknown');
     },
 
     'click #set-type-task-button': function(e, t) {
@@ -155,6 +188,10 @@ if(Meteor.isClient) {
           projectId: project,
           status: t.selectedStatus.get()
         };
+        var estimate = t.selectedEstimate.get();
+        if(estimate) {
+          item.estimate = estimate;
+        }
         var milestoneTag = Session.get('newCardMilestoneTag');
         if(milestoneTag) {
           item.milestoneTag = milestoneTag;

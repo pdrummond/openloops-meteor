@@ -43,16 +43,16 @@
                 <span class="ols-label">Estimate: </span>
                 <span class="dropdown">
                   <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    No Estimate
+                    {{estimateLabel}}
                     <span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a href="#">Small</a></li>
-                    <li><a href="#">Medium</a></li>
-                    <li><a href="#">Large</a></li>
-                    <li><a href="#">Unknown</a></li>
+                    <li><a id="set-estimate-small" href="#">Small</a></li>
+                    <li><a id="set-estimate-medium" href="#">Medium</a></li>
+                    <li><a id="set-estimate-large" href="#">Large</a></li>
+                    <li><a id="set-estimate-unknown" href="#">Unknown</a></li>
                     <li role="separator" class="divider"></li>
-                    <li><a href="#">No Estimate</a></li>
+                    <li><a id="set-no-estimate" href="#">No Estimate</a></li>
                   </ul>
                 </span>
               </div>

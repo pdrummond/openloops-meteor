@@ -85,7 +85,9 @@
           </a>
           <div id="meta">
             {{order}} |
-            <span class="item-key">#{{projectKey this}}-{{pid}} created {{timeAgo createdAt}} <span class="milestone-tag {{hideMilestoneTagClass}}"> | <i class="fa fa-flag-o"></i> {{milestoneTag}}</span></span>
+            <span class="item-key">#{{projectKey this}}-{{pid}} created {{timeAgo createdAt}}
+              <span class="estimate-box {{hideEstimateLabel}}">{{estimateLabel}}</span> 
+              <span class="milestone-tag {{hideMilestoneTagClass}}"> | <i class="fa fa-flag-o"></i> {{milestoneTag}}</span></span>
           </div>
         </div>
         {{#if inInbox}}

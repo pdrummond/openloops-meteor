@@ -256,6 +256,18 @@ Meteor.methods({
     Ols.Item.update(itemId, update);
   },
 
+  updateItemEstimate: function(itemId, newEstimate) {
+    var item = Ols.Item.findOne(itemId);
+    Ols.Item.update(itemId, {
+      $set: {estimate: newEstimate}
+    });
+  },
+
+  removeItemEstimate: function(itemId) {
+    var item = Ols.Item.findOne(itemId);
+    Ols.Item.update(itemId, {$unset: {estimate: ''}});
+  },
+
   toggleItemOpenStatus: function(itemId) {
     check(itemId, String);
 

@@ -45,6 +45,20 @@ if(Meteor.isClient) {
       }
     },
 
+    estimateLabel: function() {
+      var item = Items.findOne(Session.get('currentItemId'));
+      var label = 'No Estimate';
+      if(item != null) {
+        switch(item.estimate) {
+          case 'small': label = 'Small'; break;
+          case 'medium': label = 'Medium'; break;
+          case 'large': label = 'Large'; break;
+          case 'unknown': label = 'Unknown'; break;
+        }
+      }
+      return label;
+    },
+
     viewingUsers: function() {
       return Meteor.users.find({_id: {$ne: Meteor.userId()}, 'status.online': true, viewingItemId: Session.get('currentItemId')});
     },
@@ -282,6 +296,46 @@ if(Meteor.isClient) {
       Meteor.call('updateItemIssueType', Session.get('currentItemId'), Ols.Item.ISSUE_TYPE_TASK, function(err) {
         if(err) {
           Ols.Error.showError("Error changing item type: ", err);
+        }
+      });
+    },
+
+    'click #set-estimate-small': function(e, t) {
+      Meteor.call('updateItemEstimate', Session.get('currentItemId'), 'small', function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error changing item estimate: ", err);
+        }
+      });
+    },
+
+    'click #set-estimate-medium': function(e, t) {
+      Meteor.call('updateItemEstimate', Session.get('currentItemId'), 'medium', function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error changing item estimate: ", err);
+        }
+      });
+    },
+
+    'click #set-estimate-large': function(e, t) {
+      Meteor.call('updateItemEstimate', Session.get('currentItemId'), 'large', function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error changing item estimate: ", err);
+        }
+      });
+    },
+
+    'click #set-estimate-unknown': function(e, t) {
+      Meteor.call('updateItemEstimate', Session.get('currentItemId'), 'unknown', function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error changing item estimate: ", err);
+        }
+      });
+    },
+
+    'click #set-no-estimate': function(e, t) {
+      Meteor.call('removeItemEstimate', Session.get('currentItemId'), function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error removing item estimate: ", err);
         }
       });
     },

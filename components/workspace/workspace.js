@@ -575,6 +575,23 @@ if(Meteor.isClient) {
         case 'out-of-scope': label = 'Out of Scope'; break;
       }
       return label;
+    },
+
+    estimateLabel: function() {
+      var label = '';
+      if(this.estimate != null) {
+        switch(this.estimate) {
+          case 'small': label = 'S'; break;
+          case 'medium': label = 'M'; break;
+          case 'large': label = 'L'; break;
+          case 'unknown': label = '?'; break;
+        }
+      }
+      return label;
+    },
+
+    hideEstimateLabel: function() {
+      return this.estimate && this.estimate.length > 0 ? '' : 'hide';
     }
   });
 
