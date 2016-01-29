@@ -14,6 +14,7 @@ Meteor.methods({
       createdBy: Meteor.user().username,
       updatedAt: now,
       isOpen: true,
+      status: 'new',
       numMessages: 0,
       order: order,
       tabs: [
@@ -222,6 +223,32 @@ Meteor.methods({
     }, item);
 
     var num = Ols.ServerMessage.update({itemId: itemId}, {$set: {boardId: toBoardId}}, {multi:true});
+  },
+
+  updateItemStatus: function(itemId, newStatus) {
+    var update = {};
+
+    switch(newStatus) {
+      case 'new': isOpen = true; break;
+      case 'in-progress': isOpen = true; break;
+      case 'blocked': isOpen = true; break;
+      case 'in-test': isOpen = true; break;
+      case 'completed': isOpen = false; break;
+      case 'rejected': isOpen = false; break;
+      case 'duplicate': isOpen = false; break;
+      case 'out-of-scope': isOpen = false; break;
+      default:
+        throw new Meteor.Error('update-item-status-failed-001', 'Status is invalid: ' + newStatus);
+        break;
+    }
+
+    update.$set = {isOpen: isOpen, status: newStatus};
+    if(!isOpen) {
+      update.$unset = { assignee : "" };
+    }
+
+    var item = Ols.Item.findOne(itemId);
+    Ols.Item.update(itemId, update);
   },
 
   toggleItemOpenStatus: function(itemId) {

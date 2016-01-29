@@ -95,7 +95,7 @@ if(Meteor.isClient) {
     'click #done-list': function() {
       var doneList = Workspaces.findOne({username: Meteor.user().username, 'queues.type': 'DONE_QUEUE'});
       if(doneList == null) {
-        var queue = {title:"Done List", 'type': 'DONE_QUEUE'};
+        var queue = {title:"Resolved Cards", 'type': 'DONE_QUEUE'};
         Meteor.call('addQueue', Session.get('currentWorkspaceId'), queue, function(err, res) {
           if(err) {
             alert("Error - unable to add done list: " + err);

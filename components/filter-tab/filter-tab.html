@@ -1,5 +1,5 @@
 <template name="filterTab">
-  <div class="filter-tab" style="padding:30px">  
+  <div class="filter-tab" style="padding:30px">
     <div class="dropdown-wrapper">
       <span class="ols-label">Milestone</span>
       <div>
@@ -27,16 +27,19 @@
       <span class="ols-label">Status</span>
       <div class="dropdown">
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          All
+          {{currentStatusFilter}}
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-          <li><a href="#">New</a></li>
-          <li><a href="#">In Progress</a></li>
-          <li><a href="#">Blocked</a></li>
-          <li><a href="#">In Test</a></li>
+          <li><a id="set-status-new" href="#">Open - New</a></li>
+          <li><a id="set-status-in-progress" href="#">Open - In Progress</a></li>
+          <li><a id="set-status-blocked" href="#">Open - Blocked</a></li>
+          <li><a id="set-status-in-test" href="#">Open - In Test</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="#">All</a></li>
+          <li><a id="set-status-completed" href="#">Closed - Completed</a></li>
+          <li><a id="set-status-rejected" href="#">Closed - Rejected</a></li>
+          <li><a id="set-status-duplicate" href="#">Closed - Duplicate</a></li>
+          <li><a id="set-status-out-of-scope" href="#">Closed - Out of Scope</a></li>
         </ul>
       </div>
     </div>
@@ -49,15 +52,12 @@
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-          <li><a href="#">Open - New</a></li>
-          <li><a href="#">Open - In Progress</a></li>
-          <li><a href="#">Open - Blocked</a></li>
-          <li><a href="#">Open - In Test</a></li>
+          <li><a href="#">Low</a></li>
+          <li><a href="#">Medium</a></li>
+          <li><a href="#">High</a></li>
+          <li><a href="#">Unknown</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="#">Closed - Completed</a></li>
-          <li><a href="#">Closed - Rejected</a></li>
-          <li><a href="#">Closed - Duplicate</a></li>
-          <li><a href="#">Closed - Out of Scope</a></li>
+          <li><a href="#">All</a></li>
         </ul>
       </div>
     </div>

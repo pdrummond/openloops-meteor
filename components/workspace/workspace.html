@@ -78,12 +78,13 @@
     <a class="item {{isActive}} {{isClosedClass}}" href="">
       <div id="content">
         <div id="top-content">
+          <span class="label" style="background-color:{{statusLabelColor}};position: absolute;top:-1px;right:-1px;">{{statusLabel}}</span>
           <a href="" id="title">
             <i id="type-icon" class="fa {{typeIcon}}" style="color:{{typeIconColor}}"></i>
             {{title}}
           </a>
           <div id="meta">
-            {{order}} | 
+            {{order}} |
             <span class="item-key">#{{projectKey this}}-{{pid}} created {{timeAgo createdAt}} <span class="milestone-tag {{hideMilestoneTagClass}}"><i class="fa fa-flag-o"></i> {{milestoneTag}}</span></span>
           </div>
         </div>

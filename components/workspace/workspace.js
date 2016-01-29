@@ -106,7 +106,7 @@ if(Meteor.isClient) {
     },
 
     'click #add-done-list': function() {
-      var queue = {title:"Closed Cards", 'type': 'DONE_QUEUE'};
+      var queue = {title:"Resolved Cards", 'type': 'DONE_QUEUE'};
       Meteor.call('addQueue', Session.get('currentWorkspaceId'), queue, function(err, res) {
         if(err) {
           alert("Error - unable to add queue: " + err);
@@ -341,7 +341,7 @@ if(Meteor.isClient) {
     },
 
     itemsOptions: {
-      sortField: 'order',      
+      sortField: 'order',
       onSort: function(/**Event*/event) {
         console.log('Moved card  #%d from %d to %d',
         event.data.order, event.oldIndex, event.newIndex);
@@ -543,6 +543,36 @@ if(Meteor.isClient) {
 
     isActive: function() {
       return this._id == Session.get('currentItemId')?'active':'';
+    },
+
+    statusLabelColor: function() {
+      var color = 'gray';
+      switch(this.status) {
+        case 'new': color = '#5bc0de'; break;
+        case 'in-progress': color = '#5cb85c'; break;
+        case 'in-test': color = '#f0ad4e'; break;
+        case 'blocked': color = '#d9534f'; break;
+        case 'completed': color = '#5F9A5F'; break;
+        case 'rejected': color = 'black'; break;
+        case 'duplicate': color = 'gray'; break;
+        case 'out-of-scope': color = 'gray'; break;
+      }
+      return color;
+    },
+
+    statusLabel: function() {
+      var label = '';
+      switch(this.status) {
+        case 'new': label = 'New'; break;
+        case 'in-progress': label = 'In Progress'; break;
+        case 'in-test': label = 'In Test'; break;
+        case 'blocked': label = 'Blocked'; break;
+        case 'completed': label = 'Completed'; break;
+        case 'rejected': label = 'Rejected'; break;
+        case 'duplicate': label = 'Duplicate'; break;
+        case 'out-of-scope': label = 'Out of Scope'; break;
+      }
+      return label;
     }
   });
 

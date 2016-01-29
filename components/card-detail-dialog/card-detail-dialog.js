@@ -66,9 +66,25 @@ if(Meteor.isClient) {
       return cardKey;
     },
 
+    milestoneLabel: function() {
+      var item = Items.findOne(Session.get('currentItemId'));
+      return item && item.milestoneTag ? item.milestoneTag : 'No Milestone';
+    },
+
     statusLabel: function() {
       var item = Items.findOne(Session.get('currentItemId'));
-      return item?item.isOpen?'OPEN':'CLOSED':'OPEN';
+      var label = '';
+      switch(item.status) {
+        case 'new': label = 'New'; break;
+        case 'in-progress': label = 'In Progress'; break;
+        case 'in-test': label = 'In Test'; break;
+        case 'blocked': label = 'Blocked'; break;
+        case 'completed': label = 'Completed'; break;
+        case 'rejected': label = 'Rejected'; break;
+        case 'duplicate': label = 'Duplicate'; break;
+        case 'out-of-scope': label = 'Out of Scope'; break;
+      }
+      return label;
     },
 
     statusClass: function() {
@@ -268,11 +284,74 @@ if(Meteor.isClient) {
       });
     },
 
-    'click #status-button': function(e, t) {
+    'click #set-status-new': function(e, t) {
       t.statusField.set(!t.statusField.get());
-      Meteor.call('toggleItemOpenStatus', Session.get('currentItemId'), function(err, result) {
+      Meteor.call('updateItemStatus', Session.get('currentItemId'), 'new', function(err, result) {
         if(err) {
-          Ols.Error.showError("Error toggling item status: ", err);
+          Ols.Error.showError("Error changing item status: ", err);
+        }
+      });
+    },
+
+    'click #set-status-in-progress': function(e, t) {
+      t.statusField.set(!t.statusField.get());
+      Meteor.call('updateItemStatus', Session.get('currentItemId'), 'in-progress', function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error changing item status: ", err);
+        }
+      });
+    },
+
+    'click #set-status-blocked': function(e, t) {
+      t.statusField.set(!t.statusField.get());
+      Meteor.call('updateItemStatus', Session.get('currentItemId'), 'blocked', function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error changing item status: ", err);
+        }
+      });
+    },
+
+    'click #set-status-in-test': function(e, t) {
+      t.statusField.set(!t.statusField.get());
+      Meteor.call('updateItemStatus', Session.get('currentItemId'), 'in-test', function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error changing item status: ", err);
+        }
+      });
+    },
+
+    'click #set-status-completed': function(e, t) {
+      t.statusField.set(!t.statusField.get());
+      Meteor.call('updateItemStatus', Session.get('currentItemId'), 'completed', function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error changing item status: ", err);
+        }
+      });
+    },
+
+    'click #set-status-rejected': function(e, t) {
+      t.statusField.set(!t.statusField.get());
+      Meteor.call('updateItemStatus', Session.get('currentItemId'), 'rejected', function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error changing item status: ", err);
+        }
+      });
+    },
+
+    'click #set-status-duplicate': function(e, t) {
+      t.statusField.set(!t.statusField.get());
+      Meteor.call('updateItemStatus', Session.get('currentItemId'), 'duplicate', function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error changing item status: ", err);
+        }
+      });
+    },
+
+    'click #set-status-out-of-scope': function(e, t) {
+      t.statusField.set(!t.statusField.get());
+      Meteor.call('updateItemStatus', Session.get('currentItemId'), 'out-of-scope', function(err, result) {
+        if(err) {
+          Ols.Error.showError("Error changing item status: ", err);
         }
       });
     },
