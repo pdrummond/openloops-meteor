@@ -7,7 +7,6 @@ Meteor.methods({
     let itemCount = Items.find().count();
     let order     = itemCount + 1;
 
-
     newItem = _.extend({
       pid: newItem.projectId?incrementCounter('counters', newItem.projectId):0,
       createdAt: now,
@@ -35,11 +34,17 @@ Meteor.methods({
     Ols.Activity.insertActivityMessage({
       activityType: Ols.ACTIVITY_TYPE_NEW_ITEM
     }, newItem);
-    if(Ols.StringUtils.notEmpty(newItem.description)) {
-      Ols.Activity.insertActivityMessage({
-        activityType: Ols.ACTIVITY_TYPE_ITEM_DESC_CHANGED
-      }, newItem);
-    }
+
+    if(newItem.description && newItem.description.trim().length > 0)
+    //Insert description as first message
+    Meteor.call('insertMessage', {
+      type: Ols.MSG_TYPE_CHAT,
+      createdAt: new Date().getTime(),
+      createdBy: Meteor.user().username,
+      projectId: newItem.projectId,
+      itemId: newItemId,
+      text: newItem.description.trim()
+    });
 
     return newItem;
   },
@@ -238,8 +243,8 @@ Meteor.methods({
       case 'duplicate': isOpen = false; break;
       case 'out-of-scope': isOpen = false; break;
       default:
-        throw new Meteor.Error('update-item-status-failed-001', 'Status is invalid: ' + newStatus);
-        break;
+      throw new Meteor.Error('update-item-status-failed-001', 'Status is invalid: ' + newStatus);
+      break;
     }
 
     update.$set = {isOpen: isOpen, status: newStatus};
@@ -299,13 +304,13 @@ Meteor.publish("items", function(opts) {
   //FOR NOW EVERYONE CAN SEE ALL ITEMS
   if(opts.username) {
 
-    Projects.find({'members.username': opts.username}).forEach(function(project) {
-      projectIds.push(project._id);
-    });
-    //User can see this card if they are a member or if they are the assignee or if they are the creator.
-    filter['$or'] = [{projectId: {$in:projectIds}}, {assignee: opts.username}, {createdBy: opts.username}];
+  Projects.find({'members.username': opts.username}).forEach(function(project) {
+  projectIds.push(project._id);
+  });
+  //User can see this card if they are a member or if they are the assignee or if they are the creator.
+  filter['$or'] = [{projectId: {$in:projectIds}}, {assignee: opts.username}, {createdBy: opts.username}];
   } else {
-    filter.projectId = {$in: projectIds};
+  filter.projectId = {$in: projectIds};
   }*/
 
   console.log("ITEM filter: " + JSON.stringify(filter));

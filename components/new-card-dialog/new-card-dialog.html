@@ -17,26 +17,63 @@
           <input tabindex="1" name="title" class="card-title modal-title" placeholder="Enter title here" style="width: calc(100% - 80px);font-size: 25px;font-weight: 100;">
         </div>
         <div class="modal-body" style="padding:0;margin:0">
-          <div style="padding:10px;border-bottom:1px solid lightgray;height:40px">
-            <div class="pull-left">
-              <span style="margin-right:10px">ASSIGN TO:</span>
-              <input  tabindex="2" style="width:500px"  name="to" placeholder="Assign to yourself or delegate (or leave empty and it will go in backlog)">
-            </div>
-            <div class="pull-right">
-              <div class="row" style="float:left;display:flex;margin:0;margin-top: 0px;">
-                <div>
-                  <span style="display:inline;margin-left:30px;margin-right:10px;color:gray">PROJECT:</span>
-                  <select  tabindex="4" name="project">
-                    {{#each projects}}
-                    <option value="{{_id}}">{{title}}</option>
-                    {{/each}}
-                  </select>
+          <div style="padding:10px;border-bottom:1px solid lightgray;">
+            <div style="display:flex;justify-content:space-between">
+              <div class="dropdown-wrapper">
+              <span class="ols-label">Assign To: </span>
+              <input  tabindex="2" style="width:250px"  name="assignee" placeholder="Type username here">
+              </div>
+              <div class="dropdown-wrapper">
+              <span class="ols-label">Milestone: </span>
+              <span class="dropdown">
+                <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  {{milestoneTagLabel}}
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                  {{#each milestones}}
+                    {{> newCardMilestoneMenuItem}}
+                  {{/each}}
+                  <li role="separator" class="divider"></li>
+                  <li><a id="set-no-milestone" href="">No Milestone</a></li>
+                </ul>
+              </span>
+              </div>
+              <div class="dropdown-wrapper">
+                <span class="ols-label">Estimate: </span>
+                <span class="dropdown">
+                  <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    No Estimate
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#">Small</a></li>
+                    <li><a href="#">Medium</a></li>
+                    <li><a href="#">Large</a></li>
+                    <li><a href="#">Unknown</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">No Estimate</a></li>
+                  </ul>
+                </span>
+              </div>
+              <div class="dropdown-wrapper">
+                <div class="dropdown">
+                    <span class="ols-label">Status: </span>
+                  <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    {{statusLabel}}
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a id="set-status-new" href="#">New</a></li>
+                    <li><a id="set-status-in-progress" href="#">In Progress</a></li>
+                    <li><a id="set-status-blocked" href="#">Blocked</a></li>
+                    <li><a id="set-status-in-test" href="#">In Test</a></li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
-          <div tabindex="5" class="card-description" contenteditable style="clear:both;min-height:500px; outline:none;padding:10px;font-size:18px">
-          </div>
+          <textarea tabindex="5" class="card-description" style="border:none;clear:both;min-height:500px; outline:none;padding:10px;font-size:18px"></textarea>
         </div>
         <div class="modal-footer">
 
@@ -46,4 +83,9 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
+</template>
+
+
+<template name="newCardMilestoneMenuItem">
+  <li><a href="">{{title}}</a></li>
 </template>
