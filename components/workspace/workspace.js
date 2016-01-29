@@ -220,6 +220,7 @@ if(Meteor.isClient) {
     var self = this;
     this.queueType = new ReactiveVar("WORK");
     this.selectedWidth = new ReactiveVar('370px');
+    this.selectedHeight = new ReactiveVar('700px');
     this.selectedCardId = new ReactiveVar();
   });
 
@@ -278,7 +279,7 @@ if(Meteor.isClient) {
         if(currentMilestoneTag == null) {
           filter.milestoneTag = this.milestoneTag;
         }
-        filter.assignee = {$exists: false}; 
+        filter.assignee = {$exists: false};
         filter.isOpen = true;
         filter.type = Ols.Item.ITEM_TYPE_ISSUE;
         return Ols.Item.find(filter, {sort: {updatedAt: -1}});
@@ -383,6 +384,10 @@ if(Meteor.isClient) {
 
     queueWidth: function() {
       return Template.instance().selectedWidth.get();
+    },
+
+    queueHeight: function() {
+      return Template.instance().selectedHeight.get();
     }
 
   });
@@ -407,16 +412,28 @@ if(Meteor.isClient) {
       });
     },
 
-    'click #resize-button': function(e, t) {
+    'click #resize-width-button': function(e, t) {
       var containerEl = t.find(".queue-container");
       var width = t.selectedWidth.get();
       switch(width) {
-        case '370px': t.selectedWidth.set('700px'); icon = 'fa-arrow-circle-o-right'; break;
-        case '700px': t.selectedWidth.set('1200px'); icon = 'fa-arrow-circle-o-right'; break;
-        case '1200px': t.selectedWidth.set('370px'); icon = 'fa-arrow-circle-o-left'; break;
+        case '370px': width = '600px'; icon = 'fa-arrow-circle-o-right'; break;
+        case '600px': width = '1200px'; icon = 'fa-arrow-circle-o-left'; break;
+        case '1200px': width = '370px'; icon = 'fa-arrow-circle-o-right'; break;
       }
-      $(containerEl).css('width', width);
-      $(containerEl).find('#resize-button').attr('class', 'fa ' + icon);
+      t.selectedWidth.set(width);
+      $(containerEl).find('#resize-width-button').attr('class', 'fa ' + icon);
+    },
+
+    'click #resize-height-button': function(e, t) {
+      var containerEl = t.find(".queue-container");
+      var height = t.selectedHeight.get();
+      switch(height) {
+        case '700px': height = '300px'; icon = 'fa-arrow-circle-o-down'; break;
+        case '300px': height = '500px'; icon = 'fa-arrow-circle-o-down'; break;
+        case '500px': height = '700px'; icon = 'fa-arrow-circle-o-up'; break;
+      }
+      t.selectedHeight.set(height);
+      $(containerEl).find('#resize-height-button').attr('class', 'fa ' + icon);
     },
 
     'click #edit-button': function(e, t) {

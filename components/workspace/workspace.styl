@@ -1,3 +1,8 @@
+
+/*
+
+This one is for trello-style horizontal scroll
+
 .workspace-container {
   position: fixed;
   top: 75px;
@@ -9,6 +14,21 @@
   overflow-y:hidden;
   height: calc(100% - 70px);
   background:#B04632;
+}*/
+
+.workspace-container {
+  display:flex;
+  flex-wrap:wrap;
+  align-content: flex-start;
+  position: fixed;
+  top: 75px;
+  left: 400px;
+  right:400px;
+
+  overflow-x:auto;
+  overflow-y:auto;
+  background:#B04632;
+  height: calc(100% - 75px);
 }
 
 .workspace-header .filter-label {
@@ -18,12 +38,25 @@
   font-size:12px;
 }
 
+/*
 .queue-container {
   border: 1px solid #494949;
 	flex-shrink:0;
 	flex-grow:0;
 	width: 370px;
 	height: calc(100% - 40px);
+	margin: 10px;
+	padding: 10px;
+	transition: all 0.5s ease;
+	background: #E2E4E6;
+  overflow-y:auto;
+} */
+
+.queue-container {
+  border: 1px solid #494949;
+	flex-shrink:0;
+	flex-grow:0;
+	width: 370px;
 	margin: 10px;
 	padding: 10px;
 	transition: all 0.5s ease;

@@ -38,7 +38,7 @@
 </template>
 
 <template name="queue">
-  <div class="queue-container" style="position:relative;width={{queueWidth}}">
+  <div class="queue-container" style="position:relative;width={{queueWidth}};height:{{queueHeight}}">
     <div class="queue-header">
       <div class="title" style="float:left;color:black;font-weight:bold;text-transform:uppercase;">
         {{title}}
@@ -54,8 +54,8 @@
         <i id="send-to-backlog-button" title="Move to backlog" class="cursor-pointer queue-header-button fa fa-rocket"></i>
         <i id="done-button" title="Close Card" class="cursor-pointer queue-header-button fa fa-check-circle-o"></i>
         {{/if}}
-        <i id="resize-button" class="cursor-pointer queue-header-button fa fa-arrow-circle-o-right"></i>
-        <i id="remove-queue" title="Remove Queue" class="cursor-pointer queue-header-button fa fa-times"></i>
+        <i id="resize-width-button" class="cursor-pointer queue-header-button fa fa-arrow-circle-o-right"></i>
+        <i id="resize-height-button" class="cursor-pointer queue-header-button fa fa-arrow-circle-o-up"></i>
       </div>
     </div>
     <ul class="queue-list sortable"  style="clear:both;margin:0;padding:0">
