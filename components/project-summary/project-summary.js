@@ -169,7 +169,6 @@ if(Meteor.isClient) {
       var numClosed = Items.find({milestoneTag: this.title, isOpen: false, projectId: Session.get('currentProjectId')}).count();
       var numTotal = Items.find({milestoneTag: this.title, projectId: Session.get('currentProjectId')}).count();
       var p =  (numClosed / numTotal) * 100;
-      console.log(numClosed + " - " + numTotal + " - p: " + p);
       return p;
     },
 
