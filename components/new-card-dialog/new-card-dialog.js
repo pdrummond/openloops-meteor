@@ -57,10 +57,9 @@ if(Meteor.isClient) {
     },
 
     statusLabel: function() {
-      var item = Items.findOne(Session.get('currentItemId'));
+      var t = Template.instance();
       var label = 'New';
-      if(item != null) {
-        switch(item.status) {
+        switch(t.selectedStatus.get()) {
           case 'new': label = 'New'; break;
           case 'in-progress': label = 'In Progress'; break;
           case 'in-test': label = 'In Test'; break;
@@ -70,7 +69,6 @@ if(Meteor.isClient) {
           case 'duplicate': label = 'Duplicate'; break;
           case 'out-of-scope': label = 'Out of Scope'; break;
         }
-      }
       return label;
     },
 
@@ -98,6 +96,9 @@ if(Meteor.isClient) {
   })
 
   Template.newCardDialog.events({
+    'click #set-no-milestone': function(e, t) {
+      Session.set('newCardMilestoneTag', null);
+    },
 
     'click #set-no-estimate': function(e, t) {
       t.selectedEstimate.set(null);
@@ -209,6 +210,17 @@ if(Meteor.isClient) {
           if(err) {
             Ols.Error.showError("Error adding item",  err);
           } else {
+            var queueName = 'the backlog';
+            if(newItem.assignee != null) {
+              if(newItem.assignee == Meteor.user().username) {
+                queueName = 'your queue';
+              } else {
+                queueName = newItem.assignee + "'s queue";
+              }
+            } else if(newItem.milestoneTag != null) {
+              queueName = 'milestone "' + newItem.milestoneTag + '"';
+            }
+            toastr.success(Ols.Item.getItemKey({itemId: newItem._id}) + " has been created in " + queueName, "Card Successfully Created");
             $("#new-card-dialog input[name='title']").val('');
             $("#new-card-dialog .card-description").val('');
             $("#new-card-dialog input[name='assignee']").val('');
