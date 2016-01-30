@@ -1,16 +1,16 @@
 if(Meteor.isClient) {
   Template.projectSummary.helpers({
     numOpenCards: function() {
-      return Items.find({isOpen: true, projectId: Session.get('currentProjectId')}).count();
+      return Items.find({isOpen: true, type: 'issue', projectId: Session.get('currentProjectId')}).count();
     },
 
     numClosedCards: function() {
-      return Items.find({isOpen: false, projectId: Session.get('currentProjectId')}).count();
+      return Items.find({isOpen: false, type: 'issue', projectId: Session.get('currentProjectId')}).count();
     },
 
     percentage: function() {
-      var numClosed = Items.find({isOpen: false, projectId: Session.get('currentProjectId')}).count();
-      var numTotal = Items.find({projectId: Session.get('currentProjectId')}).count();
+      var numClosed = Items.find({isOpen: false, type: 'issue', projectId: Session.get('currentProjectId')}).count();
+      var numTotal = Items.find({type: 'issue', projectId: Session.get('currentProjectId')}).count();
       var p =  (numClosed / numTotal) * 100;
       return p;
     },
@@ -183,16 +183,16 @@ if(Meteor.isClient) {
 
   Template.projectSummaryMilestoneItem.helpers({
     numOpenCards: function() {
-      return Items.find({milestoneTag: this.title, isOpen: true, projectId: Session.get('currentProjectId')}).count();
+      return Items.find({milestoneTag: this.title, type: 'issue', isOpen: true, projectId: Session.get('currentProjectId')}).count();
     },
 
     numClosedCards: function() {
-      return Items.find({milestoneTag: this.title, isOpen: false, projectId: Session.get('currentProjectId')}).count();
+      return Items.find({milestoneTag: this.title, type: 'issue', isOpen: false, projectId: Session.get('currentProjectId')}).count();
     },
 
     percentage: function() {
-      var numClosed = Items.find({milestoneTag: this.title, isOpen: false, projectId: Session.get('currentProjectId')}).count();
-      var numTotal = Items.find({milestoneTag: this.title, projectId: Session.get('currentProjectId')}).count();
+      var numClosed = Items.find({milestoneTag: this.title, type: 'issue', isOpen: false, projectId: Session.get('currentProjectId')}).count();
+      var numTotal = Items.find({milestoneTag: this.title, type: 'issue', projectId: Session.get('currentProjectId')}).count();
       var p =  (numClosed / numTotal) * 100;
       return p;
     },

@@ -38,7 +38,7 @@
 </template>
 
 <template name="queue">
-  <div class="queue-container" style="position:relative;width={{queueWidth}};height:{{queueHeight}}">
+  <div class="queue-container" style="position:relative;width:{{queueWidth}};height:{{queueHeight}}">
     <div class="queue-header">
       <div class="title" style="float:left;color:black;font-weight:bold;text-transform:uppercase;">
         {{title}}
@@ -84,10 +84,12 @@
             {{title}}
           </a>
           <div id="meta">
-            {{order}} |
             <span class="item-key">#{{projectKey this}}-{{pid}} created {{timeAgo createdAt}}
-              <span class="estimate-box {{hideEstimateLabel}}">{{estimateLabel}}</span> 
-              <span class="milestone-tag {{hideMilestoneTagClass}}"> | <i class="fa fa-flag-o"></i> {{milestoneTag}}</span></span>
+            </span>
+            <span class="estimate-box {{hideEstimateLabel}}">{{estimateLabel}}</span>
+          </div>
+          <div id="meta">
+            <span class="milestone-tag {{hideMilestoneTagClass}}"><i class="fa fa-flag-o"></i> {{milestoneTag}}</span>
           </div>
         </div>
         {{#if inInbox}}
