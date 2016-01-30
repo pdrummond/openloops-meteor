@@ -54,10 +54,6 @@ if(Meteor.isServer) {
 	Accounts.onCreateUser(function(options, user) {
 		console.log("newUser: " + JSON.stringify(user));
 
-    if(username.indexOf("SPECIAL_") !== -1) {
-      throw new Meteor.Error("create-user-failed-001", "Invalid username.  Please try another name.");
-    }
-
     var username = user.username;
 		var email = user.emails[0].address;
     Workspaces.insert({
