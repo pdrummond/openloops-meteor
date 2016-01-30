@@ -51,6 +51,7 @@ if(Meteor.isClient) {
     doneListCount: function() {
       var filter = {};
       filter.isOpen = false;
+      filter.type = Ols.Item.ITEM_TYPE_ISSUE;
       return Ols.Item.find(filter).count();
     },
 
@@ -151,7 +152,7 @@ if(Meteor.isClient) {
 
   Template.projectSummaryMemberItem.helpers({
     cardCount: function() {
-      return Items.find({assignee: this.username, projectId: Session.get('currentProjectId')}).count();
+      return Items.find({assignee: this.username, type: 'issue', projectId: Session.get('currentProjectId')}).count();
     },
 
     userListVisibility: function() {
