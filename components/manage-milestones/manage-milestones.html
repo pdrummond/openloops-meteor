@@ -1,5 +1,5 @@
 <template name="milestoneList">
-	{{#onlyIfLoggedIn}}
+	{{#onlyIfAdminUser}}
 	<h1 style="margin-left:100px;margin-top:50px">Manage Milestones</h1>
 	<button id="create-milestone">Create Milestone</button>
 	<hr>
@@ -9,7 +9,7 @@
 		{{/each}}
 	</table>
 	<hr>
-	{{/onlyIfLoggedIn}}
+	{{/onlyIfAdminUser}}
 </template>
 
 <template name="milestoneItem">

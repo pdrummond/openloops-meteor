@@ -16,8 +16,7 @@ if(Meteor.isClient) {
     },
 
     projects: function() {
-//      return Ols.Project.find({'members.username': Meteor.user().username});
-      return Ols.Project.find();
+      return Ols.Project.find({'members.username': Meteor.user().username});
     },
 
     currentProjectTitle: function() {

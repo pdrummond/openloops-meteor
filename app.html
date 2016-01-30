@@ -163,10 +163,10 @@
 		{{#if currentUser}}
 		This screen is a work in progress - eventually it will say great things about OLS.
 
-    <p>Click <a href="/">HERE</a> to see your cards</p>
-
-		<p>Click <a href="/projects">here</a> for your projects</p>
+		<p style="margin-top:30px">Click <a href="/projects">here</a> for your projects</p>
+    {{#if userIsAdmin}}
 		<p>Click <a href="/team-members">here</a> to configure your team</p>
+    {{/if}}
 		{{else}}
 		<p>Please <a href="/login">login</a> or <a href="/signup">sign-up</a> to continue</p>
 		{{/if}}
